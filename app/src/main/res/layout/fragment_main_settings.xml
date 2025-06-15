@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:overScrollMode="@integer/overScrollMode">
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/mini_player_height">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/buyProContainer"
+            style="@style/MaterialCardViewStroke"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            app:cardCornerRadius="8dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/diamondIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="12dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_diamond"
+                    app:tint="?colorOnSecondary"
+                    tools:tint="?attr/colorAccent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/retro_music_pro"
+                    android:textAppearance="@style/TextViewSubtitle1"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/diamondIcon" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="12dp"
+                    android:text="@string/pro_summary"
+                    android:textAppearance="@style/TextViewBody2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/title" />
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="?attr/dividerHorizontal"
+                    app:layout_constraintTop_toBottomOf="@id/text" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buyPremium"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start|center_vertical"
+                    android:text="@string/buy_now"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/TextViewButton"
+                    android:textColor="?colorAccent"
+                    android:textStyle="bold"
+                    app:backgroundTint="?attr/colorSurface"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <zzh.lifeplayer.music.views.SettingListItemView
+    app:settingListItemIconColor="@color/app_shortcut_default_foreground"
+            android:id="@+id/generalSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:settingListItemIcon="@drawable/ic_palette"
+            app:settingListItemText="@string/general_settings_summary"
+            app:settingListItemTitle="@string/general_settings_title" />
+
+        <zzh.lifeplayer.music.views.SettingListItemView
+    	app:settingListItemIconColor="@color/app_shortcut_default_foreground"
+            android:id="@+id/nowPlayingSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:settingListItemIcon="@drawable/ic_play_circle_filled"
+            app:settingListItemText="@string/now_playing_summary"
+            app:settingListItemTitle="@string/now_playing" />
+
+        <zzh.lifeplayer.music.views.SettingListItemView
+    	app:settingListItemIconColor="@color/app_shortcut_default_foreground"
+            android:id="@+id/audioSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:settingListItemIcon="@drawable/ic_volume_up"
+            app:settingListItemText="@string/audio_settings_summary"
+            app:settingListItemTitle="@string/pref_header_audio" />
+
+        <zzh.lifeplayer.music.views.SettingListItemView
+    	app:settingListItemIconColor="@color/app_shortcut_default_foreground"
+            android:id="@+id/personalizeSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:settingListItemIcon="@drawable/ic_hdr_strong"
+            app:settingListItemText="@string/personalize_settings_summary"
+            app:settingListItemTitle="@string/personalize" />
+
+
+        <zzh.lifeplayer.music.views.SettingListItemView
+    	app:settingListItemIconColor="@color/app_shortcut_default_foreground"
+            android:id="@+id/imageSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:settingListItemIcon="@drawable/ic_image"
+            app:settingListItemText="@string/image_settings_summary"
+            app:settingListItemTitle="@string/pref_header_images" />
+
+        <zzh.lifeplayer.music.views.SettingListItemView
+    	app:settingListItemIconColor="@color/app_shortcut_default_foreground"
+            android:id="@+id/notificationSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:settingListItemIcon="@drawable/ic_notifications_active"
+            app:settingListItemText="@string/notification_settings_summary"
+            app:settingListItemTitle="@string/notification" />
+
+        <zzh.lifeplayer.music.views.SettingListItemView
+    	app:settingListItemIconColor="@color/app_shortcut_default_foreground"
+            android:id="@+id/otherSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:settingListItemIcon="@drawable/ic_testing"
+            app:settingListItemText="@string/other_settings_summary"
+            app:settingListItemTitle="@string/others" />
+
+        <zzh.lifeplayer.music.views.SettingListItemView
+    	app:settingListItemIconColor="@color/app_shortcut_default_foreground"
+            android:id="@+id/backup_restore_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:settingListItemIcon="@drawable/ic_restore"
+            app:settingListItemText="@string/backup_restore_settings_summary"
+            app:settingListItemTitle="@string/backup_restore_title" />
+
+        <zzh.lifeplayer.music.views.SettingListItemView
+    	app:settingListItemIconColor="@color/app_shortcut_default_foreground"
+            android:id="@+id/aboutSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:settingListItemIcon="@drawable/ic_info_outline"
+            app:settingListItemText="@string/about_settings_summary"
+            app:settingListItemTitle="@string/action_about" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

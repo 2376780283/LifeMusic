@@ -1,0 +1,52 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+android {
+    compileSdk 34
+    namespace "com.zmusicfx.musicfx"
+//    buildToolsVersion="35.0.0"
+    defaultConfig {
+        minSdk 30
+        targetSdk 34
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    lint {
+        abortOnError false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+dependencies {
+    implementation libs.androidx.appcompat
+    implementation libs.android.material
+    implementation libs.androidx.preference.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.annotation
+    implementation libs.androidx.constraintLayout
+    implementation libs.androidx.recyclerview
+    implementation libs.androidx.preference.ktx
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.palette.ktx
+    
+    implementation libs.androidx.navigation.runtime.ktx
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
+
+    implementation libs.androidx.room.runtime
+    implementation libs.androidx.room.ktx
+
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.lifecycle.common.java8
+
+}
