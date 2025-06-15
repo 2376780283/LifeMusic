@@ -3,6 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:background="@color/darkColorPrimary"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
     <Switch
         android:layout_height="wrap_content"
@@ -27,12 +29,14 @@
     <ScrollView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_gravity="center"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:gravity="center_vertical"
+            android:layout_gravity="center"
             android:orientation="vertical"
             android:id="@+id/contentSoundEffects">
 
@@ -72,7 +76,11 @@
                     android:id="@+id/bBStrengthText"
                     android:text="@string/bass_boost_strength" />
 
-                <SeekBar
+                <com.google.android.material.slider.Slider
+                    android:background="@android:color/transparent"
+                    style="@style/Widget.Retro.MD3.Custom.Slider"
+                    android:progressDrawable="@drawable/color_progress_seek"
+                    android:splitTrack="false"
                     android:layout_height="wrap_content"
                     android:layout_width="170dip"
                     android:paddingRight="20dip"
@@ -106,7 +114,11 @@
                     android:id="@+id/vIStrengthText"
                     android:text="@string/virtualizer_strength" />
 
-                <SeekBar
+                <com.google.android.material.slider.Slider
+                    android:background="@android:color/transparent"
+                    style="@style/Widget.Retro.MD3.Custom.Slider"
+                    android:progressDrawable="@drawable/color_progress_seek"
+                    android:splitTrack="false"
                     android:layout_height="wrap_content"
                     android:layout_width="170dip"
                     android:paddingRight="20dip"
