@@ -39,7 +39,7 @@ class MainActivity : AbsCastActivity() {
 
         setupNavigationController()
 
-        WhatsNewFragment.showChangeLog(this)
+//        WhatsNewFragment.showChangeLog(this)
     }
 
     private fun setupNavigationController() {

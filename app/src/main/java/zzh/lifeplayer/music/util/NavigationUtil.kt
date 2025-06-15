@@ -50,7 +50,7 @@ object NavigationUtil {
     }
 */
     
-/*
+
     private fun stockEqualizer(activity: Activity) {
         val sessionId = audioSessionId
         if (sessionId == AudioEffect.ERROR_BAD_VALUE) {
@@ -66,20 +66,25 @@ object NavigationUtil {
             }
         }
     }
-*/
 
+// by zzh life
     fun openEqualizer(activity: Activity) {
     val sessionId = audioSessionId
     if (sessionId == AudioEffect.ERROR_BAD_VALUE) {
         activity.showToast(R.string.no_audio_ID, Toast.LENGTH_LONG)
     } else {
         try {
-            val intent = Intent(activity, com.zmusicfx.musicfx.ActivityMusic::class.java)
-            intent.putExtra("audio_session_id", sessionId)
-            activity.startActivity(intent)
-        } catch (e: Exception) {
-            activity.showToast("无法打开自定义均衡器")
-        }
+    val intent = Intent(activity, ActivityMusic::class.java).apply {
+        putExtra(AudioEffect.EXTRA_AUDIO_SESSION, sessionId)
+        putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC)
+    }
+    activity.startActivityForResult(intent, 0)
+     // 使用标准启动方式 okay
+     } catch (e: Exception) {
+    // 回退到系统音效面板
+      stockEqualizer(activity)
+     }
+
        }
     }
 }

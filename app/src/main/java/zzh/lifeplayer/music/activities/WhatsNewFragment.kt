@@ -45,7 +45,7 @@ class WhatsNewFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         try {
             val buf = StringBuilder()
-            val stream = requireContext().assets.open("retro-changelog.html")
+            val stream = requireContext().assets.open("changelog.html")
             stream.reader(StandardCharsets.UTF_8).buffered().use { br ->
                 var str: String?
                 while (br.readLine().also { str = it } != null) {
