@@ -42,12 +42,13 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 import zzh.lifeplayer.music.R;
 import java.util.Formatter;
 import java.util.Locale;
 import java.util.UUID;
 import zzh.lifeplayer.music.helper.MusicPlayerRemote; // xuyao okay
-
+import com.google.android.material.slider.Slider;
 public class ActivityMusic extends Activity implements OnSeekBarChangeListener {
     private final static String TAG = "MusicFXActivityMusic";
 
@@ -280,7 +281,9 @@ public class ActivityMusic extends Activity implements OnSeekBarChangeListener {
             // Set the listener for the main enhancements toggle button.
             // Depending on the state enable the supported effects if they were
             // checked in the setup tab.
-            mToggleSwitch = new Switch(this);
+          //  mToggleSwitch = new Switch(this);
+            mToggleSwitch = findViewById(R.id.smToggleSwitch);
+             // md action bar 废了
             mToggleSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(final CompoundButton buttonView,
@@ -432,22 +435,24 @@ public class ActivityMusic extends Activity implements OnSeekBarChangeListener {
                 mPRPresetPrevious = mPRPreset;
                 reverbSpinnerInit((Spinner)findViewById(R.id.prSpinner));
             }
-
-            ActionBar ab = getActionBar();
-            final int padding = getResources().getDimensionPixelSize(
-                    R.dimen.action_bar_switch_padding);
-            mToggleSwitch.setPadding(0,0, padding, 0);
-            ab.setCustomView(mToggleSwitch, new ActionBar.LayoutParams(
-                    ActionBar.LayoutParams.WRAP_CONTENT,
-                    ActionBar.LayoutParams.WRAP_CONTENT,
-                    Gravity.CENTER_VERTICAL | Gravity.RIGHT));
-            ab.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
-
+            
+//            ActionBar ab = getActionBar();
+//            final int padding =
+//                    getResources().getDimensionPixelSize(R.dimen.action_bar_switch_padding);
+///            mToggleSwitch.setPadding(0, 0, padding, 0);
+//            if (ab != null) {
+//                ab.setCustomView(
+ //                       mToggleSwitch,
+//                        new ActionBar.LayoutParams(
+//                                ActionBar.LayoutParams.WRAP_CONTENT,
+//                                ActionBar.LayoutParams.WRAP_CONTENT,
+//                                Gravity.CENTER_VERTICAL | Gravity.RIGHT));
+//                ab.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
+//            }
         } else {
             viewGroup.setVisibility(View.GONE);
             ((TextView) findViewById(R.id.noEffectsTextView)).setVisibility(View.VISIBLE);
         }
-
     }
 
     /*
