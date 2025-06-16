@@ -77,3 +77,37 @@
 -keep class com.google.gson.reflect.TypeToken
 -keep class * extends com.google.gson.reflect.TypeToken
 -keep public class * implements java.lang.reflect.Type
+
+-keep class com.zmusicfx.** { *; }
+
+# 保留 Material 组件相关资源
+-keep class com.google.android.material.** { *; }
+-dontwarn com.google.android.material.**
+
+-keep class com.google.android.gms.cast.** { *; }
+-dontwarn com.google.android.gms.cast.**
+
+-keep class com.google.android.** { *; }
+-dontwarn com.google.android.**
+
+-keep class com.google.android.datatransport.** { *; }
+-dontwarn com.google.android.datatransport.**
+
+-keep class com.afollestad.materialdialogs.** { *; }
+-dontwarn com.afollestad.materialdialogs.**
+
+-keep class com.google.android.** { *; }
+-dontwarn com.google.android.**
+
+-keep class androidx.** { *; }
+-dontwarn androidx.**
+
+-keep class com.google.android.** { *; }
+-dontwarn com.google.android.**
+
+-keep class android.widget.** { *; }
+-dontwarn android.widget.**
+
+-keep class com.h6ah4i.** { *; }
+-dontwarn com.h6ah4i.**
+

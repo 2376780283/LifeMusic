@@ -36,11 +36,11 @@ object PreferenceUtil {
     val defaultCategories = listOf(
         CategoryInfo(CategoryInfo.Category.Home, true),
         CategoryInfo(CategoryInfo.Category.Songs, true),
-        CategoryInfo(CategoryInfo.Category.Albums, true),
+        CategoryInfo(CategoryInfo.Category.Albums, false),
         CategoryInfo(CategoryInfo.Category.Artists, true),
-        CategoryInfo(CategoryInfo.Category.Playlists, true),
+        CategoryInfo(CategoryInfo.Category.Playlists, false),
         CategoryInfo(CategoryInfo.Category.Genres, false),
-        CategoryInfo(CategoryInfo.Category.Folder, false),
+        CategoryInfo(CategoryInfo.Category.Folder, true),
         CategoryInfo(CategoryInfo.Category.Search, false)
     )
 
@@ -260,7 +260,7 @@ object PreferenceUtil {
 
     val isShowWhenLockedEnabled get() = sharedPreferences.getBoolean(SHOW_WHEN_LOCKED, false)
 
-    val isSongInfo get() = sharedPreferences.getBoolean(EXTRA_SONG_INFO, false)
+    val isSongInfo get() = sharedPreferences.getBoolean(EXTRA_SONG_INFO, true)
 
     val isPauseOnZeroVolume get() = sharedPreferences.getBoolean(PAUSE_ON_ZERO_VOLUME, false)
 

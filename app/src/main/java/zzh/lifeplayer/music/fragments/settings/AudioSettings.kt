@@ -13,7 +13,7 @@ import zzh.lifeplayer.music.EQUALIZER
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.activities.base.AbsBaseActivity.Companion.BLUETOOTH_PERMISSION_REQUEST
 import zzh.lifeplayer.music.util.NavigationUtil
-
+import com.zmusicfx.musicfx.*
 /**
  * @author Hemanth S (h4h13).
  */
@@ -53,7 +53,7 @@ class AudioSettings : AbsSettingsFragment() {
     }
 
     private fun hasEqualizer(): Boolean {
-        val effects = Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL)
+        val effects = Intent(activity, ActivityMusic::class.java)
 
         val pm = requireActivity().packageManager
         val ri = pm.resolveActivity(effects, 0)

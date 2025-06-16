@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/eqcontainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/musicfx_bgcard"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_margin="16dp"
+    android:layout_margin="20dp"
+    android:background="@drawable/musicfx_bgcard"
     android:gravity="center_horizontal">
 
     <RelativeLayout
@@ -41,17 +40,13 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical">
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
+            <SeekBar
                 android:id="@+id/EQBand0SeekBar"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -69,12 +64,9 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand1SeekBar"
+                android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </com.zmusicfx.musicfx.SeekBarRotator>
@@ -91,11 +83,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand2SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -114,11 +102,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand3SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -137,11 +121,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand4SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -160,11 +140,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand5SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -183,11 +159,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand6SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -206,11 +178,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand7SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -229,11 +197,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand8SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -252,11 +216,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand9SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -275,11 +235,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand10SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -298,11 +254,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand11SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -321,11 +273,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand12SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -344,11 +292,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand13SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -367,11 +311,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand14SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -390,11 +330,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand15SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -413,11 +349,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand16SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -436,11 +368,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand17SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -459,11 +387,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand18SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -482,11 +406,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand19SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -505,11 +425,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand20SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -528,11 +444,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand21SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -551,11 +463,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand22SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -574,11 +482,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand23SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -597,11 +501,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand24SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -620,11 +520,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand25SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -643,11 +539,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand26SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -666,11 +558,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand27SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -689,11 +577,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand28SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -712,11 +596,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand29SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -735,11 +615,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand30SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"
@@ -758,11 +634,7 @@
         <com.zmusicfx.musicfx.SeekBarRotator
             android:layout_width="wrap_content"
             android:layout_height="@dimen/eq_slider_height">
-            <com.google.android.material.slider.Slider
-                android:background="@android:color/transparent"
-                style="@style/Widget.Retro.MD3.Custom.Slider"
-                android:progressDrawable="@drawable/color_progress_seek"
-                android:splitTrack="false"
+            <SeekBar
                 android:id="@+id/EQBand31SeekBar"
                 android:layout_margin="@dimen/eq_slider_margin"
                 android:layout_width="match_parent"

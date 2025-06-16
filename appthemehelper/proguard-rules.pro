@@ -21,3 +21,15 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class zzh.lifeplayer.appthemehelper.** { *; }
+# 保留 Material 组件相关资源
+-keep class com.google.android.material.** { *; }
+-dontwarn com.google.android.material.**
+
+-keep class com.google.android.** { *; }
+-dontwarn com.google.android.**
+
+-keep class com.google.android.datatransport.** { *; }
+-dontwarn com.google.android.datatransport.**
+
+-keep class com.afollestad.materialdialogs.input.InputUtilExtKt { *; }
+-dontwarn com.afollestad.materialdialogs.input.**

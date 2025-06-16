@@ -374,18 +374,12 @@
         <!-- 继承 SplashScreen 的关键属性 -->
         <item name="android:windowBackground">@drawable/splash</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-
-        
         <item name="colorPrimary">#ffffff</item>
-        <item name="colorPrimaryContainer">#2D2D2D</item>
+        <item name="colorPrimaryContainer">#37596D</item>
         <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSecondary">#03DAC6</item>
+        <item name="colorSecondary">@color/app_shortcut_default_background</item>
         <item name="colorSecondaryContainer">#37596D</item>
-        
-        <!-- 使用已有的 Slider 样式 -->
-        <item name="sliderStyle">@style/Widget.Retro.MD3.Custom.Slider</item>
-
-        <!-- 确保字体一致 -->
+   
         <item name="fontFamily">@font/manrope</item>
         <item name="android:fontFamily">@font/manrope</item>
     </style>

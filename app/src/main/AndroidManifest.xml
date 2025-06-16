@@ -265,7 +265,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_big_info" />
         </receiver>
-
+<!--
         <receiver
             android:name=".appwidgets.AppWidgetClassic"
             android:exported="true"
@@ -277,7 +277,8 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_classic_info" />
-        </receiver>
+        </receiver> -->
+        <!--
         <receiver
             android:name=".appwidgets.AppWidgetSmall"
             android:exported="true"
@@ -289,7 +290,8 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_small_info" />
-        </receiver>
+        </receiver> -->
+        <!--
         <receiver
             android:name=".appwidgets.AppWidgetText"
             android:exported="true"
@@ -301,7 +303,7 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_text" />
-        </receiver>
+        </receiver> -->
         <receiver
             android:name=".appwidgets.AppWidgetCard"
             android:exported="true"

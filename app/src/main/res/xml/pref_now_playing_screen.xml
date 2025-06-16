@@ -9,7 +9,7 @@
         app:icon="@drawable/ic_play_circle_filled" />
 
     <zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATESwitchPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="extra_song_info"
         android:layout="@layout/list_item_view_switch"
         android:summary="@string/pref_summary_extra_song_info"
@@ -89,7 +89,7 @@
 
         <zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATESwitchPreference
             android:layout="@layout/list_item_view_switch"
-            app:defaultValue="false"
+            app:defaultValue="true"
             app:icon="@drawable/ic_play_arrow"
             app:key="toggle_add_controls"
             app:summary="@string/pref_summary_extra_controls"
