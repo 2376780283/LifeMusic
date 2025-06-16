@@ -1,0 +1,36 @@
+[✓] Updated: ./app/build.gradle
+[✓] Updated: ./app/src/main/AndroidManifest.xml
+[✓] Updated: ./app/src/main/java/zzh/lifeplayer/music/helper/MusicPlayerRemote.kt
+[✓] Updated: ./app/src/main/java/zzh/lifeplayer/music/service/MusicService.kt
+[✓] Updated: ./app/src/main/java/zzh/lifeplayer/music/util/color/NotificationColorUtil.java
+[✓] Updated: ./app/src/normal/AndroidManifest.xml
+[✓] Updated: ./app/build/intermediates/incremental/normalDebug/mergeNormalDebugResources/merger.xml
+[✓] Updated: ./app/build/intermediates/manifest_merge_blame_file/normalDebug/manifest-merger-blame-normal-debug-report.txt
+[✓] Updated: ./app/build/intermediates/merged_manifest/normalDebug/AndroidManifest.xml
+[✓] Updated: ./app/build/intermediates/merged_manifests/normalDebug/AndroidManifest.xml
+[✓] Updated: ./app/build/intermediates/packaged_manifests/normalDebug/AndroidManifest.xml
+[✓] Updated: ./app/build/outputs/logs/manifest-merger-normal-debug-report.txt
+[✓] Updated: ./appthemehelper/build.gradle
+[✓] Updated: ./azmusicfx/build.gradle
+[✓] Updated: ./azmusicfx/src/main/AndroidManifest.xml
+[✓] Updated: ./azmusicfx/src/main/java/com/android/audiofx/OpenSLESConstants.java
+[✓] Updated: ./azmusicfx/src/main/java/com/android/musicfx/ActivityMusic.java
+[✓] Updated: ./azmusicfx/src/main/java/com/android/musicfx/Compatibility.java
+[✓] Updated: ./azmusicfx/src/main/java/com/android/musicfx/ControlPanelEffect.java
+[✓] Updated: ./azmusicfx/src/main/java/com/android/musicfx/ControlPanelPicker.java
+[✓] Updated: ./azmusicfx/src/main/java/com/android/musicfx/ControlPanelReceiver.java
+[✓] Updated: ./azmusicfx/src/main/java/com/android/musicfx/SeekBarRotator.java
+[✓] Updated: ./azmusicfx/src/main/res/layout/music_eq.xml
+
+<com.google.android.material.slider.Slider
+    android:id="@+id/materialSlider"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:valueFrom="0"    <!-- 最小值 -->
+    android:valueTo="100"    <!-- 最大值 -->
+    android:stepSize="1"     <!-- 步长（整数型） -->
+    app:thumbColor="@color/primary"          <!-- 滑块颜色 -->
+    app:trackColor="@color/surface_variant"   <!-- 轨道背景 -->
+    app:activeTrackColor="@color/primary"     <!-- 进度条颜色 -->
+    app:haloColor="@color/primary_light"       <!-- 触摸光晕效果 -->
+/>
