@@ -353,6 +353,7 @@
     <string name="pref_summary_colored_app_shortcuts">Colors the app shortcuts in the accent color. Every time you change the color please toggle this to take effect</string>
     <string name="pref_summary_colored_notification">"Colors the notification in the album cover\u2019s vibrant color"</string>
     <string name="pref_summary_cross_fade">Duration to crossfade between songs</string>
+    <string name="perf_summary_lyrics_text_size">lyrics text size</string>
     <string name="pref_summary_desaturated_color">As per Material Design guide lines in dark mode colors should be desaturated</string>
     <string name="pref_summary_expand_now_playing_panel">Clicking on the notification will show now playing screen instead of the home screen</string>
     <string name="pref_summary_extra_controls">Add extra controls for mini player</string>
@@ -385,6 +386,7 @@
     <string name="pref_title_appbar_mode">Header style</string>
     <string name="pref_title_audio_ducking">Reduce volume on focus loss</string>
     <string name="pref_title_audio_fade">Fade audio</string>
+    <string name="pref_lyrics_text_size">lyrics font</string>
     <string name="pref_title_auto_download_artist_images">Auto-download artist images</string>
     <string name="pref_title_blacklist">Blacklist</string>
     <string name="pref_title_bluetooth_playback">Bluetooth playback</string>

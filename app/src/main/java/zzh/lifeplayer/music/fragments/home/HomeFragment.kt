@@ -5,7 +5,7 @@ import android.view.*
 import android.view.MenuItem.SHOW_AS_ACTION_IF_ROOM
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.os.bundleOf
-import androidx.core.text.parseAsHtml
+// import androidx.core.text.parseAsHtml
 import androidx.core.view.doOnLayout
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
@@ -24,7 +24,6 @@ import zzh.lifeplayer.music.dialogs.ImportPlaylistDialog
 import zzh.lifeplayer.music.extensions.accentColor
 import zzh.lifeplayer.music.extensions.dip
 import zzh.lifeplayer.music.extensions.elevatedAccentColor
-import zzh.lifeplayer.music.extensions.setUpMediaRouteButton
 import zzh.lifeplayer.music.fragments.ReloadType
 import zzh.lifeplayer.music.fragments.base.AbsMainActivityFragment
 import zzh.lifeplayer.music.glide.RetroGlideExtension
@@ -221,8 +220,7 @@ class HomeFragment :
             menu,
             ATHToolbarActivity.getToolbarBackgroundColor(binding.toolbar)
         )
-        //Setting up cast button
-        requireContext().setUpMediaRouteButton(menu) 
+      
     }
 
     override fun scrollToTop() {

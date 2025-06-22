@@ -5,16 +5,16 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.devtools.ksp'
 
 android {
-    compileSdk 34
+    compileSdk 35
     namespace "zzh.lifeplayer.music"
-  //buildToolsVersion="35.0.0"
+    buildToolsVersion="35.0.0"
     defaultConfig {
         minSdk 30
-        targetSdk 34
+        targetSdk 35
         vectorDrawables.useSupportLibrary = true
         applicationId namespace
         versionCode 20250519
-        versionName '10.0'
+        versionName '11.0.4'
 
     }
     
@@ -117,7 +117,6 @@ static def getProperty(Properties properties, String name) {
 
 dependencies {
     implementation project(':appthemehelper')
-  //  implementation project(':azmusicfx')
     implementation libs.gridLayout
 
     implementation libs.androidx.appcompat
@@ -130,7 +129,7 @@ dependencies {
     
     implementation libs.androidx.mediarouter
     //Cast Dependencies
-    normalImplementation libs.google.play.services.cast.framework
+    // normalImplementation libs.google.play.services.cast.framework
     //WebServer by NanoHttpd
     normalImplementation libs.nanohttpd
 
@@ -188,6 +187,8 @@ dependencies {
     implementation libs.fastscroll.library
     implementation libs.customactivityoncrash
     implementation libs.tankery.circularSeekBar
+    implementation libs.androidx.exoplayer
+    
     /*
     // needed
     implementation(platform(libs.androidx.compose.bom))
@@ -200,4 +201,5 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     
     debugImplementation(libs.androidx.compose.ui.tooling)*/
+    
 }

@@ -1,19 +1,4 @@
-/*
- * Copyright (c) 2020 Hemanth Savarla.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 package zzh.lifeplayer.music.fragments.playlists
-
 import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
@@ -24,7 +9,6 @@ import zzh.lifeplayer.music.EXTRA_PLAYLIST_ID
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.playlist.PlaylistAdapter
 import zzh.lifeplayer.music.db.PlaylistWithSongs
-import zzh.lifeplayer.music.extensions.setUpMediaRouteButton
 import zzh.lifeplayer.music.fragments.ReloadType
 import zzh.lifeplayer.music.fragments.base.AbsRecyclerViewCustomGridSizeFragment
 import zzh.lifeplayer.music.helper.SortOrder.PlaylistSortOrder
@@ -83,8 +67,6 @@ class PlaylistsFragment :
         menu.findItem(R.id.action_settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         setUpSortOrderMenu(menu.findItem(R.id.action_sort_order).subMenu!!)
         MenuCompat.setGroupDividerEnabled(menu, true)
-        //Setting up cast button
-        requireContext().setUpMediaRouteButton(menu)
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {

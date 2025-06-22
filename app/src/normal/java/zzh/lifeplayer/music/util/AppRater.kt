@@ -14,7 +14,8 @@ object AppRater {
     private const val DAYS_UNTIL_PROMPT = 3//Min number of days
     private const val LAUNCHES_UNTIL_PROMPT = 5//Min number of launches
 
-    fun appLaunched(context: Activity) {
+    fun appLaunched(context: Activity) {/*
+    
         val prefs = context.getSharedPreferences(APP_RATING, 0)
         if (prefs.getBoolean(DO_NOT_SHOW_AGAIN, false)) {
             return
@@ -37,12 +38,12 @@ object AppRater {
             if (launchCount >= LAUNCHES_UNTIL_PROMPT) {
                 if (System.currentTimeMillis() >= dateFirstLaunch + DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000) {
                     //showRateDialog(context, editor)
-  //                  showPlayStoreReviewDialog(context, this)
+                    showPlayStoreReviewDialog(context, this)
                 }
             }
         }
     }
-/*
+    
     private fun showPlayStoreReviewDialog(context: Activity, editor: SharedPreferences.Editor) {
         val manager = ReviewManagerFactory.create(context)
         val flow = manager.requestReviewFlow()
@@ -57,6 +58,6 @@ object AppRater {
                     }
                 }
             }
-        }
-    }*/
+        }*/
+    }
 }

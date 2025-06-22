@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2020 Hemanth Savarla.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 package zzh.lifeplayer.music.fragments.player
 
 import android.animation.ObjectAnimator
@@ -30,6 +16,7 @@ import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
 import zzh.lifeplayer.music.LYRICS_TYPE
 import zzh.lifeplayer.music.R
+import zzh.lifeplayer.music.LYRICS_FONT_SIZE
 import zzh.lifeplayer.music.SHOW_LYRICS
 import zzh.lifeplayer.music.adapter.album.AlbumCoverPagerAdapter
 import zzh.lifeplayer.music.adapter.album.AlbumCoverPagerAdapter.AlbumCoverFragment
@@ -47,12 +34,14 @@ import zzh.lifeplayer.music.transform.CarousalPagerTransformer
 import zzh.lifeplayer.music.transform.ParallaxPagerTransformer
 import zzh.lifeplayer.music.util.CoverLyricsType
 import zzh.lifeplayer.music.util.LyricUtil
+import zzh.lifeplayer.music.model.Song
+import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
+import zzh.lifeplayer.music.util.PreferenceUtil.lyricsfontsize
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
 class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_player_album_cover),
     ViewPager.OnPageChangeListener, MusicProgressViewUpdateHelper.Callback,
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -62,7 +51,7 @@ class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_playe
     private var callbacks: Callbacks? = null
     private var currentPosition: Int = 0
     val viewPager get() = binding.viewPager
-
+    
     private val colorReceiver = object : AlbumCoverFragment.ColorReceiver {
         override fun onColorReady(color: MediaNotificationProcessor, request: Int) {
             if (currentPosition == request) {
@@ -122,12 +111,16 @@ class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_playe
                 MusicPlayerRemote.resumePlaying()
                 true
             }
+             /*
             setOnClickListener {
                 goToLyrics(requireActivity())
-            }
+            }*/
+            applyfontsize()
+             
+            
         }
     }
-
+    
     private fun setupViewPager() {
         binding.viewPager.addOnPageChangeListener(this)
         val nps = PreferenceUtil.nowPlayingScreen
@@ -200,8 +193,17 @@ class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_playe
             }
             LYRICS_TYPE -> {
                 maybeInitLyrics()
+                
+              //  lrcView.setLyricFontSize(18f)  // 设置为 18sp 大小
             }
+            LYRICS_FONT_SIZE -> {
+               applyfontsize()
+           }
         }
+        
+    }
+    private fun applyfontsize(){
+        binding.lyricsView?.setLyricFontSize(lyricsfontsize)
     }
 
     private fun setLRCViewColors(@ColorInt primaryColor: Int, @ColorInt secondaryColor: Int) {

@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2020 Hemanth Savarla.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 package zzh.lifeplayer.music.fragments.albums
 
 import android.os.Bundle
@@ -23,7 +9,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import zzh.lifeplayer.music.EXTRA_ALBUM_ID
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.album.AlbumAdapter
-import zzh.lifeplayer.music.extensions.setUpMediaRouteButton
 import zzh.lifeplayer.music.fragments.GridStyle
 import zzh.lifeplayer.music.fragments.ReloadType
 import zzh.lifeplayer.music.fragments.base.AbsRecyclerViewCustomGridSizeFragment
@@ -153,7 +138,7 @@ class AlbumsFragment : AbsRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridL
         setupLayoutMenu(layoutItem.subMenu!!)
         setUpSortOrderMenu(menu.findItem(R.id.action_sort_order).subMenu!!)
         //Setting up cast button
-        requireContext().setUpMediaRouteButton(menu)
+      
     }
 
     private fun setUpSortOrderMenu(

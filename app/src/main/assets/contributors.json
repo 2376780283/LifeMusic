@@ -18,27 +18,15 @@
     "image": "tomaThomas.png"
   },
   {
-    "name": "Daksh P. Jain",
-    "summary": "Website & GitHub Maintainer",
-    "link": "https://daksh.eu.org",
-    "image": "daksh.png"
-  },
-  {
     "name": "Milind Goel",
     "summary": "Support Representative & Moderator",
     "link": "https://milindgoel.vercel.app",
     "image": "milind.png"
   },
   {
-    "name": "Lennart Glamann",
-    "summary": "Play Store Banner & Images",
-    "link": "https://telegram.me/FlixbusLennart",
-    "image": "lenny.jpg"
-  },
-  {
-    "name": "Haythem Gataa",
+    "name": "Alis",
     "summary": "App Logo & Banners",
-    "link": "https://dribbble.com/haythemgataa",
-    "image": "haythem.jpg"
+    "link": "",
+    "image": "alis.png"
   }
 ]

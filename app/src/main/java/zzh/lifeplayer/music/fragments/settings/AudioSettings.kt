@@ -14,9 +14,6 @@ import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.activities.base.AbsBaseActivity.Companion.BLUETOOTH_PERMISSION_REQUEST
 import zzh.lifeplayer.music.util.NavigationUtil
 import com.zmusicfx.musicfx.*
-/**
- * @author Hemanth S (h4h13).
- */
 
 class AudioSettings : AbsSettingsFragment() {
     override fun invalidateSettings() {

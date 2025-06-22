@@ -159,15 +159,15 @@
                 <data android:mimeType="*/*" />
                 <!-- Work around Android's ugly primitive PatternMatcher implementation that can't cope with finding a . early in the path unless it's explicitly matched. -->
                 <data android:host="*" />
-                <data android:pathPattern=".*\\.rmbak" />
-                <data android:pathPattern=".*\\..*\\.rmbak" />
-                <data android:pathPattern=".*\\..*\\..*\\.rmbak" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.rmbak" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.rmbak" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.rmbak" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.rmbak" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.rmbak" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.rmbak" />
+                <data android:pathPattern=".*\\.zzh" />
+                <data android:pathPattern=".*\\..*\\.zzh" />
+                <data android:pathPattern=".*\\..*\\..*\\.zzh" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.zzh" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.zzh" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.zzh" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.zzh" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.zzh" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.zzh" />
             </intent-filter>
         </activity>
 

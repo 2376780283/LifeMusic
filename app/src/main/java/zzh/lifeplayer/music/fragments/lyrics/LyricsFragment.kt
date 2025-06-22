@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2020 Hemanth Savarla.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 package zzh.lifeplayer.music.fragments.lyrics
 
 import android.annotation.SuppressLint
@@ -37,18 +23,24 @@ import zzh.lifeplayer.music.extensions.accentColor
 import zzh.lifeplayer.music.extensions.materialDialog
 import zzh.lifeplayer.music.extensions.openUrl
 import zzh.lifeplayer.music.extensions.uri
+import zzh.lifeplayer.music.fragments.base.goToLyrics // goto function
 import zzh.lifeplayer.music.fragments.base.AbsMainActivityFragment
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.MusicProgressViewUpdateHelper
 import zzh.lifeplayer.music.lyrics.LrcView
 import zzh.lifeplayer.music.model.AudioTagInfo
 import zzh.lifeplayer.music.model.Song
+// import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.FileUtils
 import zzh.lifeplayer.music.util.LyricUtil
 import zzh.lifeplayer.music.util.UriUtil
 import com.afollestad.materialdialogs.input.input
+
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+// import kotlinx.coroutines.withContext
+
 import org.jaudiotagger.audio.AudioFileIO
 import org.jaudiotagger.tag.FieldKey
 import java.io.File
@@ -56,6 +48,7 @@ import java.io.FileOutputStream
 import java.util.*
 import kotlin.collections.set
 
+// import androidx.lifecycle.lifecycleScope
 class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
     MusicProgressViewUpdateHelper.Callback {
 
@@ -103,7 +96,7 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
                 }
             }
     }
-
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         enterTransition = Fade()
@@ -117,7 +110,10 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
         setupWakelock()
         setupViews()
         setupToolbar()
+
     }
+    
+   
 
     private fun setupLyricsView() {
         binding.lyricsView.apply {
@@ -130,6 +126,7 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
                 return@OnPlayClickListener true
             })
         }
+      
     }
 
     override fun onUpdateProgressViews(progress: Int, total: Int) {

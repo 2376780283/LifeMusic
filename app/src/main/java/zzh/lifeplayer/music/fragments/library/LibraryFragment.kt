@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2020 Hemanth Savarla.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 package zzh.lifeplayer.music.fragments.library
 
 import android.os.Bundle
@@ -30,7 +16,6 @@ import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.FragmentLibraryBinding
 import zzh.lifeplayer.music.dialogs.CreatePlaylistDialog
 import zzh.lifeplayer.music.dialogs.ImportPlaylistDialog
-import zzh.lifeplayer.music.extensions.setUpMediaRouteButton
 import zzh.lifeplayer.music.extensions.whichFragment
 import zzh.lifeplayer.music.fragments.base.AbsMainActivityFragment
 import zzh.lifeplayer.music.model.CategoryInfo
@@ -64,8 +49,7 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library) {
 
     private fun setupTitle() {
         val color = ThemeStore.accentColor(requireContext())
-        val hexColor = String.format("#%06X", 0xFFFFFF and color)
-        val appName = "Retro <span  style='color:$hexColor';>Music</span>".parseAsHtml()
+        val appName = "Life S"
         binding.appNameText.text = appName
     }
 
@@ -98,8 +82,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library) {
             menu,
             getToolbarBackgroundColor(binding.toolbar)
         )
-        //Setting up cast button
-        requireContext().setUpMediaRouteButton(menu)
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {

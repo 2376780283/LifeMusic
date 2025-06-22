@@ -1,21 +1,17 @@
 package zzh.lifeplayer.music.cast
 
 import androidx.core.net.toUri
-import zzh.lifeplayer.music.cast.RetroWebServer.Companion.MIME_TYPE_AUDIO
+/*import zzh.lifeplayer.music.cast.RetroWebServer.Companion.MIME_TYPE_AUDIO
 import zzh.lifeplayer.music.cast.RetroWebServer.Companion.PART_COVER_ART
-import zzh.lifeplayer.music.cast.RetroWebServer.Companion.PART_SONG
+import zzh.lifeplayer.music.cast.RetroWebServer.Companion.PART_SONG*/
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.RetroUtil
-import com.google.android.gms.cast.MediaInfo
-import com.google.android.gms.cast.MediaInfo.STREAM_TYPE_BUFFERED
-import com.google.android.gms.cast.MediaMetadata
-import com.google.android.gms.cast.MediaMetadata.*
-import com.google.android.gms.common.images.WebImage
+
 import java.net.MalformedURLException
 import java.net.URL
 
 object CastHelper {
-
+/*
     private const val CAST_MUSIC_METADATA_ID = "metadata_id"
     private const val CAST_MUSIC_METADATA_ALBUM_ID = "metadata_album_id"
     private const val CAST_URL_PROTOCOL = "http"
@@ -46,5 +42,5 @@ object CastHelper {
             setMetadata(musicMetadata)
             setStreamDuration(song.duration)
         }.build()
-    }
+    }*/
 }

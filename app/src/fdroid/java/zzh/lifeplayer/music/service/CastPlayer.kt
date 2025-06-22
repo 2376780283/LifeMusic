@@ -1,5 +1,6 @@
 package zzh.lifeplayer.music.service
 
+import android.net.Uri
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.service.playback.Playback
 
@@ -19,7 +20,7 @@ class CastPlayer : Playback {
     ) {
     }
 
-    override fun setNextDataSource(path: String?) {}
+    override fun setNextDataSource(path: Uri?) {}
 
     override var callbacks: Playback.PlaybackCallbacks? = null
 

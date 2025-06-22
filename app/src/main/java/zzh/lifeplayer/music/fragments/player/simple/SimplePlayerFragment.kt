@@ -29,9 +29,6 @@ import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 
-/**
- * @author Hemanth S (h4h13).
- */
 
 class SimplePlayerFragment : AbsPlayerFragment(R.layout.fragment_simple_player) {
 

@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2020 Hemanth Savarla.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 package zzh.lifeplayer.music.adapter.album
 
 import android.os.Bundle
@@ -28,7 +14,7 @@ import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.activities.MainActivity
 import zzh.lifeplayer.music.fragments.AlbumCoverStyle
 import zzh.lifeplayer.music.fragments.NowPlayingScreen.*
-import zzh.lifeplayer.music.fragments.base.goToLyrics
+// import zzh.lifeplayer.music.fragments.base.goToLyrics
 import zzh.lifeplayer.music.glide.RetroGlideExtension
 import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
 import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
@@ -39,11 +25,11 @@ import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+// import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+// import com.google.android.material.dialog.MaterialAlertDialogBuilder
+// import kotlinx.coroutines.Dispatchers
+// import kotlinx.coroutines.launch
+// import kotlinx.coroutines.withContext
 
 class AlbumCoverPagerAdapter(
     fragmentManager: FragmentManager,
@@ -68,7 +54,6 @@ class AlbumCoverPagerAdapter(
         }
         return o
     }
-
     /**
      * Only the latest passed [AlbumCoverFragment.ColorReceiver] is guaranteed to receive a
      * response
@@ -108,14 +93,15 @@ class AlbumCoverPagerAdapter(
             savedInstanceState: Bundle?
         ): View? {
             val view = inflater.inflate(getLayoutWithPlayerTheme(), container, false)
+            /*
             view.setOnClickListener {
                 if (mainActivity.getBottomSheetBehavior().state == STATE_EXPANDED) {
                     showLyricsDialog()
                 }
-            }
+            }*/ // 手势冲突解决
             return view
         }
-
+/*
         private fun showLyricsDialog() {
             lifecycleScope.launch(Dispatchers.IO) {
                 val data: String? = MusicUtil.getLyrics(song)
@@ -134,7 +120,7 @@ class AlbumCoverPagerAdapter(
                 }
             }
         }
-
+*/
         private fun getLayoutWithPlayerTheme(): Int {
             return when (PreferenceUtil.nowPlayingScreen) {
                 Card, Fit, Tiny, Classic, Gradient, Full -> R.layout.fragment_album_full_cover

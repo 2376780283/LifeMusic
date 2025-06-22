@@ -8,7 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.contains
 import androidx.navigation.ui.setupWithNavController
 import zzh.lifeplayer.music.R
-import zzh.lifeplayer.music.activities.base.AbsCastActivity
 import zzh.lifeplayer.music.extensions.*
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.SearchQueryHelper.getSongs
@@ -23,8 +22,8 @@ import zzh.lifeplayer.music.util.logE
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
-
-class MainActivity : AbsCastActivity() {
+import zzh.lifeplayer.music.activities.base.AbsSlidingMusicPanelActivity
+class MainActivity : AbsSlidingMusicPanelActivity() {
     companion object {
         const val TAG = "MainActivity"
         const val EXPAND_PANEL = "expand_panel"
@@ -112,12 +111,6 @@ class MainActivity : AbsCastActivity() {
             expandPanel()
             intent?.removeExtra(EXPAND_PANEL)
         }
-    }
-
-    override fun onServiceConnected() {
-        super.onServiceConnected()
-        intent ?: return
-        handlePlaybackIntent(intent)
     }
 
     private fun handlePlaybackIntent(intent: Intent) {

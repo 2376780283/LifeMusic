@@ -1,5 +1,6 @@
 package zzh.lifeplayer.music.fragments.player
 
+import android.util.TypedValue
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -22,6 +23,7 @@ import zzh.lifeplayer.music.model.lyrics.AbsSynchronizedLyrics
 import zzh.lifeplayer.music.model.lyrics.Lyrics
 import zzh.lifeplayer.music.util.LyricUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
+// import zzh.lifeplayer.music.util.PreferenceUtil.lyricsfontsize
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,9 +40,9 @@ class CoverLyricsFragment : AbsMusicServiceFragment(R.layout.fragment_cover_lyri
     private val lyricsLayout: FrameLayout get() = binding.playerLyrics
     private val lyricsLine1: TextView get() = binding.playerLyricsLine1
     private val lyricsLine2: TextView get() = binding.playerLyricsLine2
-
+    
     private var lyrics: Lyrics? = null
-
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentCoverLyricsBinding.bind(view)
@@ -53,9 +55,11 @@ class CoverLyricsFragment : AbsMusicServiceFragment(R.layout.fragment_cover_lyri
         if (nps == NowPlayingScreen.Fit || nps == NowPlayingScreen.Full) {
             binding.root.background = null
         }
+      
         binding.playerLyricsLine2.setOnClickListener {
             goToLyrics(requireActivity())
         }
+  
     }
 
     fun setColors(color: MediaNotificationProcessor) {
@@ -79,6 +83,7 @@ class CoverLyricsFragment : AbsMusicServiceFragment(R.layout.fragment_cover_lyri
                 progressViewUpdateHelper?.stop()
                 binding.root.isVisible = false
             }
+         
         }
     }
 

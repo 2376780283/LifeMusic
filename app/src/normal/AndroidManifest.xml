@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application tools:ignore="MissingApplicationIcon">
         <activity android:name=".activities.PurchaseActivity" />
@@ -11,9 +10,5 @@
             android:name="com.android.vending.splits.required"
             android:value="true" />
 
-        <!-- ChromeCast -->
-        <meta-data
-            android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-            android:value="zzh.lifeplayer.music.cast.CastOptionsProvider" />
     </application>
 </manifest>

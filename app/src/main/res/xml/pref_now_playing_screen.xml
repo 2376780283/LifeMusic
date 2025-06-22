@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <zzh.lifeplayer.music.preferences.NowPlayingScreenPreference
@@ -21,6 +22,7 @@
         android:layout="@layout/list_item_view_switch_no_title"
         android:title="@string/pref_snow_fall_title" />
 
+
     <zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATEListPreference
         android:defaultValue="0"
         android:entries="@array/pref_lyrics_type_entries"
@@ -28,6 +30,16 @@
         android:key="lyrics_type"
         android:layout="@layout/list_item_view"
         android:title="@string/pref_title_lyrics_type" />
+
+    <zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATESeekBarPreference
+        android:defaultValue="26"
+        android:key="lyrics_text_size"
+        android:layout="@layout/list_item_view_seekbar"
+        app:ateKey_pref_unit="dp"
+        android:max="64"
+        android:summary="@string/perf_summary_lyrics_text_size"
+        android:title="@string/pref_lyrics_text_size"
+        app:showSeekBarValue="true" />
 
     <zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATESwitchPreference
         android:defaultValue="false"

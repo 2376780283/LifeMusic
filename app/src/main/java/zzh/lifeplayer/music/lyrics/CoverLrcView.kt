@@ -1,18 +1,6 @@
-/*
- * Copyright (C) 2017 wangchenyan
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the
- * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
 package zzh.lifeplayer.music.lyrics
 
+import android.util.TypedValue
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
@@ -39,6 +27,7 @@ import java.io.File
 import java.lang.Runnable
 import kotlin.math.abs
 
+import zzh.lifeplayer.music.util.PreferenceUtil.lyricsfontsize
 /**
  * 歌词 Created by wcy on 2015/11/9.
  */
@@ -174,13 +163,16 @@ class CoverLrcView @JvmOverloads constructor(
 
     private fun init(attrs: AttributeSet?) {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.LrcView)
+         
         mCurrentTextSize = ta.getDimension(
             R.styleable.LrcView_lrcTextSize, resources.getDimension(R.dimen.lrc_current_text_size)
         )
+        
         mNormalTextSize = ta.getDimension(
             R.styleable.LrcView_lrcNormalTextSize,
             resources.getDimension(R.dimen.lrc_text_size)
         )
+       
         if (mNormalTextSize == 0f) {
             mNormalTextSize = mCurrentTextSize
         }
@@ -300,6 +292,16 @@ class CoverLrcView @JvmOverloads constructor(
                 }
             }
         }
+    }
+    
+    fun setLyricFontSize(spSize: Float) {
+      mNormalTextSize = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP,
+        spSize,
+        resources.displayMetrics
+       )
+       mCurrentTextSize = mNormalTextSize * 1.2f
+       invalidate()
     }
 
     fun loadLrc(lrcText: String?) {
@@ -579,4 +581,6 @@ class CoverLrcView @JvmOverloads constructor(
     init {
         init(attrs)
     }
+   
+   
 }
