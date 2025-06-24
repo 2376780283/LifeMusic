@@ -166,13 +166,11 @@ class CoverLrcView @JvmOverloads constructor(
          
         mCurrentTextSize = ta.getDimension(
             R.styleable.LrcView_lrcTextSize, resources.getDimension(R.dimen.lrc_current_text_size)
-        )
-        
+        )       
         mNormalTextSize = ta.getDimension(
             R.styleable.LrcView_lrcNormalTextSize,
             resources.getDimension(R.dimen.lrc_text_size)
-        )
-       
+        )     
         if (mNormalTextSize == 0f) {
             mNormalTextSize = mCurrentTextSize
         }
@@ -300,7 +298,7 @@ class CoverLrcView @JvmOverloads constructor(
         spSize,
         resources.displayMetrics
        )
-       mCurrentTextSize = mNormalTextSize * 1.2f
+       mCurrentTextSize = mNormalTextSize * 1.2
        invalidate()
     }
 

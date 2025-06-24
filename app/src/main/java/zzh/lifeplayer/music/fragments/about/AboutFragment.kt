@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2020 Hemanth Savarla.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 package zzh.lifeplayer.music.fragments.about
 
 import android.content.pm.PackageManager
@@ -66,7 +52,7 @@ class AboutFragment : Fragment(R.layout.fragment_about), View.OnClickListener {
     //    binding.aboutContent.cardSocial.websiteLink.setOnClickListener(this)
 
    //     binding.aboutContent.cardOther.changelog.setOnClickListener(this)
-     //   binding.aboutContent.cardOther.openSource.setOnClickListener(this)
+   //    binding.aboutContent.cardOther.openSource.setOnClickListener(this)
     }
 
     override fun onClick(view: View) {
@@ -81,7 +67,7 @@ class AboutFragment : Fragment(R.layout.fragment_about), View.OnClickListener {
     //        R.id.donateLink -> NavigationUtil.goToSupportDevelopment(requireActivity())
     //        R.id.twitterLink -> openUrl(Constants.APP_TWITTER_LINK)
      //       R.id.changelog -> NavigationUtil.gotoWhatNews(requireActivity())
-   //         R.id.openSource -> NavigationUtil.goToOpenSource(requireActivity())
+       //     R.id.openSource -> NavigationUtil.goToOpenSource(requireActivity())
             R.id.bugReportLink -> NavigationUtil.bugReport(requireActivity())
    //         R.id.websiteLink -> openUrl(Constants.WEBSITE)
         }

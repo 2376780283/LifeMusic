@@ -1,8 +1,9 @@
 # 🎵 LifeMusic - Android 音乐播放器
 # fork from RetroMusic
-一款简洁美观的 Android 音乐播放应用，让你的生活充满旋律。
+ url - https://github.com/RetroMusicPlayer/RetroMusicPlayer/
+一款简洁美观的 Android 音乐播放应用，让你のlife充满旋律。
 
-![screenshot](screenShot/aronaep.jpg) <!-- 可替换为你的应用截图 -->
+![screenshot](screenShot/aronaep.jpg)
 
 ---
 
@@ -21,6 +22,7 @@
 - 🌙 深色 / 浅色主题切换
 - 🔊 支持后台播放与通知栏控制
 - 拥有 musicfx / equalizer（第三方）
+- support lyrics font size
 
 
 #未来工作
@@ -29,6 +31,7 @@
 - 完全移除 google cast 和 google 内购服务
 - 修复 material 主题错误
 - 优化 歌词字体大小设置
+- 優化theme 切換 或 其他卡の頓問題
 
 ---
 
@@ -39,4 +42,4 @@
 | ![](screenShot/home.png) | ![](screenShot/player.png) | ![](screenShot/list.png) |
 
 ---
-
+# 软件の界面嚴格遵循 material you

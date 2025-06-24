@@ -14,7 +14,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         applicationId namespace
         versionCode 20250519
-        versionName '11.0.4'
+        versionName '11.0.4.1'
 
     }
     
