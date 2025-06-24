@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/bannerImage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_widget_circle_min_height"
+        android:scaleType="centerCrop"
+        android:alpha="0.7"
+        android:padding="10dp"
+        android:transitionName="banner_image" />
 
 
     <Switch
@@ -40,12 +48,11 @@
             android:orientation="vertical">
 
             <Spinner
-                    android:id="@+id/eqSpinner"
+                android:id="@+id/eqSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="?android:attr/listPreferredItemHeight"
-                android:drawSelectorOnTop="true"
-            />
+                android:drawSelectorOnTop="true" />
 
             <include layout="@layout/music_eq" />
 
@@ -119,13 +126,12 @@
             </LinearLayout>
 
             <Spinner
-                    android:id="@+id/prSpinner"
+                android:id="@+id/prSpinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="?android:attr/listPreferredItemHeight"
                 android:drawSelectorOnTop="true"
-                android:visibility="gone"
-            />
+                android:visibility="gone" />
 
         </LinearLayout>
     </ScrollView>
