@@ -102,6 +102,7 @@ public class ActivityMusic extends Activity implements OnSeekBarChangeListener {
 
     private StringBuilder mFormatBuilder = new StringBuilder();
     private Formatter mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
+    
 
     /**
      * Mapping for the EQ widget ids per band
@@ -274,8 +275,9 @@ public class ActivityMusic extends Activity implements OnSeekBarChangeListener {
                 || (mPresetReverbSupported)) {
             // Set the listener for the main enhancements toggle button.
             // Depending on the state enable the supported effects if they were
-            // checked in the setup tab.
+            // checked in the setup tab.        
             mToggleSwitch = findViewById(R.id.effToggle);
+           if (mToggleSwitch != null){
             mToggleSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(final CompoundButton buttonView,
@@ -291,6 +293,7 @@ public class ActivityMusic extends Activity implements OnSeekBarChangeListener {
                     updateUIHeadset();
                 }
             });
+           }
 
             // Initialize the Virtualizer elements.
             // Set the SeekBar listener.
@@ -431,9 +434,8 @@ public class ActivityMusic extends Activity implements OnSeekBarChangeListener {
             viewGroup.setVisibility(View.GONE);
             ((TextView) findViewById(R.id.noEffectsTextView)).setVisibility(View.VISIBLE);
         }
-
     }
-
+    
     /*
      * (non-Javadoc)
      *
