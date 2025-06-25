@@ -60,9 +60,6 @@ android {
         normal {
             dimension "version"
         }
-        fdroid {
-            dimension "version"
-        }
     }
 
     buildFeatures {

@@ -24,7 +24,7 @@ public final class OpenSLESConstants {
     /**
      * The maximum bass boost strength in o/oo.
      */
-    public static final short BASSBOOST_MAX_STRENGTH = 1000;
+    public static final short BASSBOOST_MAX_STRENGTH = 2000;
 
     /**
      * The minimum reverb room level in mb.

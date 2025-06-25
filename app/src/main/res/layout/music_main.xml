@@ -1,138 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <ImageView
-        android:id="@+id/bannerImage"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_widget_circle_min_height"
-        android:scaleType="centerCrop"
-        android:alpha="0.7"
-        android:padding="10dp"
-        android:transitionName="banner_image" />
-
-
-    <Switch
-        android:id="@+id/effToggle"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="2dip"
-        android:paddingLeft="20dip"
-        android:paddingRight="20dip" />
+        android:fitsSystemWindows="true"
+        app:liftOnScroll="true">
 
-    <TextView
-        android:id="@+id/noEffectsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:ellipsize="marquee"
-        android:fadingEdge="horizontal"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="@string/no_effects"
-        android:layout_weight="1"
-        android:visibility="gone" />
-
-    <ScrollView
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:id="@+id/contentSoundEffects"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            style="@style/Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            app:layout_collapseMode="none"
+            app:title="Equalizer Tool"
+            app:titleTextAppearance="@style/ToolbarTextAppearanceNormal" />
 
-            <Spinner
-                android:id="@+id/eqSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="?android:attr/listPreferredItemHeight"
-                android:drawSelectorOnTop="true" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-            <include layout="@layout/music_eq" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/bannerImage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/app_widget_circle_min_height"
+            android:scaleType="centerCrop"
+            android:alpha="0.7"
+            android:padding="10dp"
+            android:transitionName="banner_image" />
+
+
+        <Switch
+            android:id="@+id/effToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="2dip"
+            android:paddingLeft="20dip"
+            android:paddingRight="20dip" />
+
+        <TextView
+            android:id="@+id/noEffectsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/no_effects"
+            android:layout_weight="1"
+            android:visibility="gone" />
+
+        <ScrollView
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/bBLayout"
+                android:id="@+id/contentSoundEffects"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="?android:attr/listPreferredItemHeight"
                 android:gravity="center_vertical"
-                android:paddingRight="?android:attr/scrollbarSize"
-                android:layout_marginLeft="15dip"
-                android:layout_marginRight="6dip"
-                android:layout_marginTop="6dip"
-                android:layout_marginBottom="6dip"
-                android:orientation="horizontal"
-                android:background="@android:drawable/list_selector_background">
-                <TextView
-                    android:id="@+id/bBStrengthText"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/eqSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:ellipsize="marquee"
-                    android:fadingEdge="horizontal"
-                    android:text="@string/bass_boost_strength" />
-                <SeekBar
-                    android:id="@+id/bBStrengthSeekBar"
-                    android:layout_width="170dip"
+                    android:minHeight="?android:attr/listPreferredItemHeight"
+                    android:drawSelectorOnTop="true" />
+
+                <include layout="@layout/music_eq" />
+
+                <LinearLayout
+                    android:id="@+id/bBLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="2dip"
-                    android:paddingLeft="20dip"
-                    android:paddingRight="20dip" />
+                    android:minHeight="?android:attr/listPreferredItemHeight"
+                    android:gravity="center_vertical"
+                    android:paddingRight="?android:attr/scrollbarSize"
+                    android:layout_marginLeft="15dip"
+                    android:layout_marginRight="6dip"
+                    android:layout_marginTop="6dip"
+                    android:layout_marginBottom="6dip"
+                    android:orientation="horizontal"
+                    android:background="@android:drawable/list_selector_background">
+                    <TextView
+                        android:id="@+id/bBStrengthText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:ellipsize="marquee"
+                        android:fadingEdge="horizontal"
+                        android:text="@string/bass_boost_strength" />
+                    <SeekBar
+                        android:id="@+id/bBStrengthSeekBar"
+                        android:layout_width="170dip"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dip"
+                        android:paddingLeft="20dip"
+                        android:paddingRight="20dip" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/vILayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="?android:attr/listPreferredItemHeight"
+                    android:gravity="center_vertical"
+                    android:paddingRight="?android:attr/scrollbarSize"
+                    android:layout_marginLeft="15dip"
+                    android:layout_marginRight="6dip"
+                    android:layout_marginTop="6dip"
+                    android:layout_marginBottom="6dip"
+                    android:orientation="horizontal"
+                    android:background="@android:drawable/list_selector_background">
+                    <TextView
+                        android:id="@+id/vIStrengthText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:ellipsize="marquee"
+                        android:fadingEdge="horizontal"
+                        android:text="@string/virtualizer_strength" />
+                    <SeekBar
+                        android:id="@+id/vIStrengthSeekBar"
+                        android:layout_width="170dip"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dip"
+                        android:paddingLeft="20dip"
+                        android:paddingRight="20dip" />
+                    <Switch
+                        android:id="@+id/vIStrengthToggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dip"
+                        android:paddingLeft="20dip"
+                        android:paddingRight="20dip" />
+                </LinearLayout>
+
+                <Spinner
+                    android:id="@+id/prSpinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="?android:attr/listPreferredItemHeight"
+                    android:drawSelectorOnTop="true"
+                    android:visibility="gone" />
+
             </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/vILayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="?android:attr/listPreferredItemHeight"
-                android:gravity="center_vertical"
-                android:paddingRight="?android:attr/scrollbarSize"
-                android:layout_marginLeft="15dip"
-                android:layout_marginRight="6dip"
-                android:layout_marginTop="6dip"
-                android:layout_marginBottom="6dip"
-                android:orientation="horizontal"
-                android:background="@android:drawable/list_selector_background">
-                <TextView
-                    android:id="@+id/vIStrengthText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:ellipsize="marquee"
-                    android:fadingEdge="horizontal"
-                    android:text="@string/virtualizer_strength" />
-                <SeekBar
-                    android:id="@+id/vIStrengthSeekBar"
-                    android:layout_width="170dip"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="2dip"
-                    android:paddingLeft="20dip"
-                    android:paddingRight="20dip" />
-                <Switch
-                    android:id="@+id/vIStrengthToggle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="2dip"
-                    android:paddingLeft="20dip"
-                    android:paddingRight="20dip" />
-            </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-            <Spinner
-                android:id="@+id/prSpinner"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="?android:attr/listPreferredItemHeight"
-                android:drawSelectorOnTop="true"
-                android:visibility="gone" />
-
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>

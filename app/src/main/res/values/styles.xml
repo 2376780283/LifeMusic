@@ -367,21 +367,5 @@
         <item name="haloRadius">0dp</item>
     </style>
 
-    <!-- 为音乐效果页面创建专用 Material 3 主题 -->
-    <style
-            name="Theme.RetroMusic.MusicFX"
-            parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- 继承 SplashScreen 的关键属性 -->
-        <item name="android:windowBackground">@drawable/splash</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="colorPrimary">#ffffff</item>
-        <item name="colorPrimaryContainer">#37596D</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSecondary">@color/app_shortcut_default_background</item>
-        <item name="colorSecondaryContainer">#37596D</item>
-   
-        <item name="fontFamily">@font/manrope</item>
-        <item name="android:fontFamily">@font/manrope</item>
-    </style>
 
 </resources>

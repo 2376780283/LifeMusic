@@ -47,8 +47,15 @@ import java.util.Formatter;
 import java.util.Locale;
 import java.util.UUID;
 import zzh.lifeplayer.music.helper.MusicPlayerRemote; // xuyao okay
-
-public class ActivityMusic extends Activity implements OnSeekBarChangeListener {
+import androidx.appcompat.app.AppCompatActivity;
+import zzh.lifeplayer.appthemehelper.util.ATHUtil;
+import zzh.lifeplayer.appthemehelper.util.ColorUtil;
+import zzh.lifeplayer.appthemehelper.util.ToolbarContentTintHelper;
+import zzh.lifeplayer.music.activities.base.AbsThemeActivity;
+import zzh.lifeplayer.music.databinding.ActivityLicenseBinding;
+import zzh.lifeplayer.music.extensions.ExtensionsKt;
+import com.google.android.material.appbar.MaterialToolbar;
+public class ActivityMusic extends AbsThemeActivity implements OnSeekBarChangeListener {
     private final static String TAG = "MusicFXActivityMusic";
 
     /**

@@ -191,7 +191,7 @@
         <!-- this music fx -->
         <activity
             android:name="com.zmusicfx.musicfx.ActivityMusic"
-            android:theme="@style/Theme.RetroMusic.MusicFX"
+            android:theme="@style/Theme.RetroMusic.SplashScreen"
             android:configChanges="orientation|screenSize"
             android:exported="true">
             <intent-filter>

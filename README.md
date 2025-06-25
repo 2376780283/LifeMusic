@@ -24,7 +24,6 @@
 - 拥有 musicfx / equalizer（第三方）
 - support lyrics font size
 
-
 #未来工作
 - 🎚️ 可视化音频频谱（👆😈）
 - 修复 musicfx问题 和 改进 musicfx
@@ -32,7 +31,6 @@
 - 修复 material 主题错误
 - 优化 歌词字体大小设置
 - 優化theme 切換 或 其他卡の頓問題
-
 ---
 
 ## 📸 界面预览

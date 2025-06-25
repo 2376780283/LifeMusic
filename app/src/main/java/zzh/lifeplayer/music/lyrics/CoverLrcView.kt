@@ -298,7 +298,7 @@ class CoverLrcView @JvmOverloads constructor(
         spSize,
         resources.displayMetrics
        )
-       mCurrentTextSize = mNormalTextSize * 1.2
+       mCurrentTextSize = mNormalTextSize * 1.2f // float 类型
        invalidate()
     }
 
