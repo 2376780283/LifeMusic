@@ -4,40 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <!--
+    <zzh.lifeplayer.music.views.HomeImageLayout
+        android:id="@+id/imageLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        app:liftOnScroll="true">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            style="@style/Toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_collapseMode="none"
-            app:title="Equalizer Tool"
-            app:titleTextAppearance="@style/ToolbarTextAppearanceNormal" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
+        android:layout_height="match_parent" /> -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/bannerImage"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/app_widget_circle_min_height"
-            android:scaleType="centerCrop"
-            android:alpha="0.7"
-            android:padding="10dp"
-            android:transitionName="banner_image" />
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:liftOnScroll="true">
 
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                style="@style/Toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="none"
+                app:title="Equalizer Tool"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                app:titleTextAppearance="@style/ToolbarTextAppearanceNormal" />
 
+        </com.google.android.material.appbar.AppBarLayout>
         <Switch
             android:id="@+id/effToggle"
             android:layout_width="wrap_content"
@@ -58,7 +52,6 @@
             android:text="@string/no_effects"
             android:layout_weight="1"
             android:visibility="gone" />
-
         <ScrollView
             android:orientation="vertical"
             android:layout_width="match_parent"

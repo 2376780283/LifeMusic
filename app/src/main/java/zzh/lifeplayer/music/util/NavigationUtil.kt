@@ -48,10 +48,7 @@ object NavigationUtil {
 /*    fun openEqualizer(activity: Activity) {
         stockEqualizer(activity)
     }
-*/
-    
-
-/*    private fun stockEqualizer(activity: Activity) {
+      private fun stockEqualizer(activity: Activity) {
         val sessionId = audioSessionId
         if (sessionId == AudioEffect.ERROR_BAD_VALUE) {
             activity.showToast(R.string.no_audio_ID, Toast.LENGTH_LONG)
@@ -67,22 +64,23 @@ object NavigationUtil {
         }
     }*/
 
-// by zzh life
-    fun openEqualizer(activity: Activity) {
+fun openEqualizer(activity: Activity) {
     val sessionId = audioSessionId
     if (sessionId == AudioEffect.ERROR_BAD_VALUE) {
-        activity.showToast(R.string.no_audio_ID, Toast.LENGTH_LONG)
+     //   activity.showToast(R.string.no_audio_ID, Toast.LENGTH_LONG)
     } else {
-          try {
-               val effects = Intent(activity, ActivityMusic::class.java)
-               effects.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, sessionId)
-               effects.putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC)
-               activity.startActivityForResult(effects, 0)
- 
+        try {
+            Intent(activity, ActivityMusic::class.java).apply {
+                putExtra(AudioEffect.EXTRA_AUDIO_SESSION, sessionId)
+                putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC)
+            }.also { intent ->
+                activity.startActivityForResult(intent, 0)
+                // 添加动画
+                activity.overridePendingTransition(R.anim.retro_fragment_open_enter, 0)
+            }
         } catch (e: Exception) {
-             activity.showToast(R.string.no_equalizer)
+            activity.showToast(R.string.no_equalizer)
         }
-
-       }
     }
+}
 }

@@ -42,6 +42,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView;
 import zzh.lifeplayer.music.R;
 import java.util.Formatter;
 import java.util.Locale;
@@ -52,9 +53,25 @@ import zzh.lifeplayer.appthemehelper.util.ATHUtil;
 import zzh.lifeplayer.appthemehelper.util.ColorUtil;
 import zzh.lifeplayer.appthemehelper.util.ToolbarContentTintHelper;
 import zzh.lifeplayer.music.activities.base.AbsThemeActivity;
-import zzh.lifeplayer.music.databinding.ActivityLicenseBinding;
-import zzh.lifeplayer.music.extensions.ExtensionsKt;
 import com.google.android.material.appbar.MaterialToolbar;
+
+import zzh.lifeplayer.music.glide.RetroGlideExtension;
+
+import zzh.lifeplayer.music.glide.BlurTransformation;
+import zzh.lifeplayer.music.helper.MusicPlayerRemote;
+import zzh.lifeplayer.music.interfaces.IScrollHelper;
+import zzh.lifeplayer.music.model.Song;
+import zzh.lifeplayer.music.util.PreferenceUtil;
+import zzh.lifeplayer.music.views.TopAppBarLayout;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.io.File;
+import com.bumptech.glide.RequestBuilder;
+import android.graphics.drawable.Drawable;
+import zzh.lifeplayer.music.views.HomeImageLayout;
 public class ActivityMusic extends AbsThemeActivity implements OnSeekBarChangeListener {
     private final static String TAG = "MusicFXActivityMusic";
 
@@ -110,6 +127,8 @@ public class ActivityMusic extends AbsThemeActivity implements OnSeekBarChangeLi
     private StringBuilder mFormatBuilder = new StringBuilder();
     private Formatter mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
     
+    private MaterialToolbar toolbar;
+ //   private ImageView bannerImage;
 
     /**
      * Mapping for the EQ widget ids per band
@@ -263,7 +282,24 @@ public class ActivityMusic extends AbsThemeActivity implements OnSeekBarChangeLi
         // Set accessibility label for bass boost and virtualizer strength seekbars.
         findViewById(R.id.bBStrengthText).setLabelFor(R.id.bBStrengthSeekBar);
         findViewById(R.id.vIStrengthText).setLabelFor(R.id.vIStrengthSeekBar);
-
+//        bannerImage = findViewById(R.id.bannerImage);
+        toolbar = findViewById(R.id.toolbar);
+        /*
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+              @Override
+             public void onClick(View v) {
+               onBackPressed();
+               
+             }
+        });*/
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        @Override
+          public void onClick(View v) {
+            finish();         
+            overridePendingTransition(R.anim.retro_fragment_open_enter, R.anim.retro_fragment_close_exit);
+          }
+        });
+        
         // Fill array with presets from AudioEffects call.
         // allocate a space for 2 extra strings (CI Extreme & User)
         final int numPresets = ControlPanelEffect.getParameterInt(mContext, mCallingPackageName,
@@ -441,8 +477,28 @@ public class ActivityMusic extends AbsThemeActivity implements OnSeekBarChangeLi
             viewGroup.setVisibility(View.GONE);
             ((TextView) findViewById(R.id.noEffectsTextView)).setVisibility(View.VISIBLE);
         }
+ //       loadProfile();
     }
-    
+/*   
+    private void loadProfile() {   
+    if (bannerImage != null) {
+        File bannerFile = RetroGlideExtension.INSTANCE.getBannerModel();
+        
+        // 正确的调用方式：将 Glide 请求作为第一个参数传入
+        RequestBuilder<Drawable> requestBuilder = Glide.with(this)
+            .load(bannerFile);
+            
+        requestBuilder = RetroGlideExtension.INSTANCE.profileBannerOptions(
+            requestBuilder,  // 第一个参数：RequestBuilder 实例
+            bannerFile       // 第二个参数：File 实例
+            // 有很多错误需要修复
+        );
+        
+        requestBuilder.into(bannerImage);
+    }
+} */
+     
+       
     /*
      * (non-Javadoc)
      *
