@@ -364,7 +364,7 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
         hideFab()
         logD(fieldKeyValueMap)
         GlobalScope.launch {
-            if (VersionUtils.hasR()) {
+//            if (VersionUtils.hasR()) {
                 cacheFiles = TagWriter.writeTagsToFilesR(
                     this@AbsTagEditorActivity, AudioTagInfo(
                         songPaths,
@@ -378,7 +378,7 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
                         MediaStore.createWriteRequest(contentResolver, getSongUris())
                     launcher.launch(IntentSenderRequest.Builder(pendingIntent).build())
                 }
-            } else {
+/*            } else {
                 TagWriter.writeTagsToFiles(
                     this@AbsTagEditorActivity, AudioTagInfo(
                         songPaths,
@@ -386,7 +386,7 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
                         artworkInfo
                     )
                 )
-            }
+            }*/
         }
     }
 

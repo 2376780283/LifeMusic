@@ -53,9 +53,9 @@ abstract class AbsThemeActivity : ATHToolbarActivity(), Runnable {
         maybeShowWhenLocked()
         setLightNavigationBarAuto()
         setLightStatusBarAuto(surfaceColor())
-        if (VersionUtils.hasQ()) {
+/*        if (VersionUtils.hasQ()) {
             window.decorView.isForceDarkAllowed = false
-        }
+        }*/
     }
 
     private fun updateTheme() {

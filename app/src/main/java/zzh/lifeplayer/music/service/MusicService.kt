@@ -111,10 +111,7 @@ class MusicService : MediaBrowserServiceCompat(),
     @JvmField
     var position = -1
     private val appWidgetBig = AppWidgetBig.instance
-    private val appWidgetCard = AppWidgetCard.instance
-    private val appWidgetClassic = AppWidgetClassic.instance
-    private val appWidgetSmall = AppWidgetSmall.instance
-    private val appWidgetText = AppWidgetText.instance
+    private val appWidgetCard = AppWidgetCard.instance    
     private val appWidgetMd3 = AppWidgetMD3.instance
     private val appWidgetCircle = AppWidgetCircle.instance
     private val widgetIntentReceiver = object : BroadcastReceiver() {
@@ -123,14 +120,6 @@ class MusicService : MediaBrowserServiceCompat(),
             val ids = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)
             if (command != null) {
                 when (command) {
-                    AppWidgetClassic.NAME -> {
-                        appWidgetClassic.performUpdate(this@MusicService, ids)
-                    }
-
-                    AppWidgetSmall.NAME -> {
-                        appWidgetSmall.performUpdate(this@MusicService, ids)
-                    }
-
                     AppWidgetBig.NAME -> {
                         appWidgetBig.performUpdate(this@MusicService, ids)
                     }
@@ -138,11 +127,6 @@ class MusicService : MediaBrowserServiceCompat(),
                     AppWidgetCard.NAME -> {
                         appWidgetCard.performUpdate(this@MusicService, ids)
                     }
-
-                    AppWidgetText.NAME -> {
-                        appWidgetText.performUpdate(this@MusicService, ids)
-                    }
-
                     AppWidgetMD3.NAME -> {
                         appWidgetMd3.performUpdate(this@MusicService, ids)
                     }
@@ -1043,7 +1027,7 @@ class MusicService : MediaBrowserServiceCompat(),
 
         // We must send the album art in METADATA_KEY_ALBUM_ART key on A13+ or
         // else album art is blurry in notification
-        if (isAlbumArtOnLockScreen || VersionUtils.hasT()) {
+        if (isAlbumArtOnLockScreen /*|| VersionUtils.hasT()*/ ) {
             // val screenSize: Point = RetroUtil.getScreenSize(this)
             val request = Glide.with(this)
                 .asBitmap()
@@ -1160,17 +1144,17 @@ class MusicService : MediaBrowserServiceCompat(),
             }
             if (!isForeground && isPlaying) {
                 // Specify that this is a media service, if supported.
-                if (VersionUtils.hasQ()) {
+//                if (VersionUtils.hasQ()) {
                     startForeground(
                         PlayingNotification.NOTIFICATION_ID, playingNotification!!.build(),
                         ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
                     )
-                } else {
+/*                } else {
                     startForeground(
                         PlayingNotification.NOTIFICATION_ID,
                         playingNotification!!.build()
                     )
-                }
+                }*/
                 isForeground = true
             } else {
                 // If we are already in foreground just update the notification
@@ -1310,11 +1294,8 @@ class MusicService : MediaBrowserServiceCompat(),
 
     private fun sendChangeInternal(what: String) {
         LocalBroadcastManager.getInstance(this).sendBroadcast(Intent(what))
-        appWidgetBig.notifyChange(this, what)
-        appWidgetClassic.notifyChange(this, what)
-        appWidgetSmall.notifyChange(this, what)
-        appWidgetCard.notifyChange(this, what)
-        appWidgetText.notifyChange(this, what)
+        appWidgetBig.notifyChange(this, what)        
+        appWidgetCard.notifyChange(this, what)        
         appWidgetMd3.notifyChange(this, what)
         appWidgetCircle.notifyChange(this, what)
     }

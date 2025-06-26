@@ -214,7 +214,7 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
                 val fieldKeyValueMap = EnumMap<FieldKey, String>(FieldKey::class.java)
                 fieldKeyValueMap[FieldKey.LYRICS] = input.toString()
                 GlobalScope.launch {
-                    if (VersionUtils.hasR()) {
+//                    if (VersionUtils.hasR()) {
                         cacheFile = TagWriter.writeTagsToFilesR(
                             requireContext(), AudioTagInfo(
                                 listOf(song.data), fieldKeyValueMap, null
@@ -229,13 +229,13 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
                         normalLyricsLauncher.launch(
                             IntentSenderRequest.Builder(pendingIntent).build()
                         )
-                    } else {
+/*                    } else {
                         TagWriter.writeTagsToFiles(
                             requireContext(), AudioTagInfo(
                                 listOf(song.data), fieldKeyValueMap, null
                             )
                         )
-                    }
+                    }*/
                 }
             }
             positiveButton(res = R.string.save) {

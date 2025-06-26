@@ -196,11 +196,11 @@ class RealSongRepository(private val context: Context) : SongRepository {
             selectionFinal =
                 selectionFinal + " AND " + Media.DURATION + ">= " + (PreferenceUtil.filterLength * 1000)
         }
-        val uri = if (VersionUtils.hasQ()) {
+        val uri =/* if (VersionUtils.hasQ()) {
             Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
-        } else {
+        } else {*/
             Media.EXTERNAL_CONTENT_URI
-        }
+//        }
         return try {
             context.contentResolver.query(
                 uri,

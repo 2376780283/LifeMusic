@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2020 Hemanth Savarla.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 package zzh.lifeplayer.music.dialogs
 
 import android.app.Activity
@@ -27,7 +13,7 @@ import androidx.fragment.app.DialogFragment
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.EXTRA_SONG
 import zzh.lifeplayer.music.R
-import zzh.lifeplayer.music.activities.saf.SAFGuideActivity
+//import zzh.lifeplayer.music.activities.saf.SAFGuideActivity
 import zzh.lifeplayer.music.extensions.extraNotNull
 import zzh.lifeplayer.music.extensions.materialDialog
 import zzh.lifeplayer.music.fragments.LibraryViewModel
@@ -63,16 +49,16 @@ class DeleteSongsDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         libraryViewModel = activity?.getViewModel() as LibraryViewModel
         val songs = extraNotNull<List<Song>>(EXTRA_SONG).value
-        if (VersionUtils.hasR()) {
+//        if (VersionUtils.hasR()) {
             val deleteResultLauncher =
                 registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-                    if (result.resultCode == Activity.RESULT_OK) {
+ //                   if (result.resultCode == Activity.RESULT_OK) {
                         if ((songs.size == 1) && MusicPlayerRemote.isPlaying(songs[0])) {
                             MusicPlayerRemote.playNextSong()
                         }
                         MusicPlayerRemote.removeFromQueue(songs)
                         reloadTabs()
-                    }
+//                    }
                     dismiss()
                 }
             val pendingIntent =
@@ -83,7 +69,8 @@ class DeleteSongsDialog : DialogFragment() {
                 IntentSenderRequest.Builder(pendingIntent.intentSender).build()
             )
             return super.onCreateDialog(savedInstanceState)
-        } else {
+//        } else {
+/*
             val pair = if (songs.size > 1) {
                 Pair(
                     R.string.delete_songs_title,
@@ -126,10 +113,10 @@ class DeleteSongsDialog : DialogFragment() {
                         }
                     }
                 }
-        }
+        }*/
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+/*    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             SAFGuideActivity.REQUEST_CODE_SAF_GUIDE -> {
@@ -145,7 +132,7 @@ class DeleteSongsDialog : DialogFragment() {
             }
         }
     }
-
+*/
     fun deleteSongs(songs: List<Song>) {
         CoroutineScope(Dispatchers.IO).launch {
             dismiss()

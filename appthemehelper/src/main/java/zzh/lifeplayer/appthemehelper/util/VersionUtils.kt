@@ -68,6 +68,8 @@ object VersionUtils {
     /**
      * @return true if device is running API >= 30
      */
+     // this app  support at least for android 11
+     
     @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
     @JvmStatic
     fun hasR(): Boolean {

@@ -47,7 +47,7 @@ class SavePlaylistDialog : DialogFragment() {
         super.onCreate(savedInstanceState)
         val playlistWithSongs = extraNotNull<PlaylistWithSongs>(EXTRA_PLAYLIST).value
 
-        if (VersionUtils.hasR()) {
+//        if (VersionUtils.hasR()) {
             createNewFile(
                 "audio/mpegurl",
                 playlistWithSongs.playlistEntity.playlistName
@@ -75,7 +75,7 @@ class SavePlaylistDialog : DialogFragment() {
                     )
                 }
             }
-        } else {
+/*        } else {
             lifecycleScope.launch(Dispatchers.IO) {
                 val file = PlaylistsUtil.savePlaylistWithSongs(playlistWithSongs)
                 MediaScannerConnection.scanFile(
@@ -92,7 +92,7 @@ class SavePlaylistDialog : DialogFragment() {
                     dismiss()
                 }
             }
-        }
+        }*/
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

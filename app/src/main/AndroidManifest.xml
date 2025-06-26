@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <uses-permission
         android:name="android.permission.BLUETOOTH"
         android:maxSdkVersion="30" />
@@ -175,11 +173,11 @@
             android:name=".appshortcuts.AppShortcutLauncherActivity"
             android:launchMode="singleInstance"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
+<!--
         <activity
             android:name=".activities.saf.SAFGuideActivity"
             android:theme="@style/Theme.Intro" />
-
+-->
         <activity
             android:name=".activities.ErrorActivity"
             android:exported="true">
@@ -234,7 +232,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <!-- audio fx ∆ -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}"
@@ -265,45 +262,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_big_info" />
         </receiver>
-<!--
-        <receiver
-            android:name=".appwidgets.AppWidgetClassic"
-            android:exported="true"
-            android:label="@string/app_widget_classic_name">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
 
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/app_widget_classic_info" />
-        </receiver> -->
-        <!--
-        <receiver
-            android:name=".appwidgets.AppWidgetSmall"
-            android:exported="true"
-            android:label="@string/app_widget_small_name">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/app_widget_small_info" />
-        </receiver> -->
-        <!--
-        <receiver
-            android:name=".appwidgets.AppWidgetText"
-            android:exported="true"
-            android:label="@string/app_widget_text_name">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/app_widget_text" />
-        </receiver> -->
         <receiver
             android:name=".appwidgets.AppWidgetCard"
             android:exported="true"
@@ -340,7 +299,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_circle_info" />
         </receiver>
-
         <service
             android:name=".service.MusicService"
             android:exported="true"
@@ -350,15 +308,12 @@
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
         </service>
-
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" />
-
         <meta-data
             android:name="com.lge.support.SPLIT_WINDOW"
             android:value="true" />
-
         <!-- Android Auto -->
         <meta-data
             android:name="com.google.android.gms.car.application"
@@ -369,7 +324,6 @@
         <meta-data
             android:name="com.google.android.gms.car.notification.SmallIcon"
             android:resource="@drawable/ic_notification" />
-
         <!-- For auto-storage of locale on Android 12 and lower -->
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
@@ -380,7 +334,6 @@
                 android:value="true" />
         </service>
     </application>
-
     <!-- This is not that important, it's just here so that we can query equalizer package and check if it's present on A11+ because of Package visibility restrictions. -->
     <queries>
         <package android:name="com.android.musicfx" />
