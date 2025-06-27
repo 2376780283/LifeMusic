@@ -141,7 +141,7 @@ dependencies {
 
     implementation libs.androidx.core.splashscreen
 
-    normalImplementation libs.google.feature.delivery
+//    normalImplementation libs.google.feature.delivery
     
     implementation libs.android.material
 
@@ -174,7 +174,7 @@ dependencies {
 
     implementation libs.org.eclipse.egit.github.core
     implementation libs.jaudiotagger
-    normalImplementation libs.android.lab.library
+//    normalImplementation libs.android.lab.library
     implementation libs.slidableactivity
     implementation libs.material.intro
     implementation libs.dhaval2404.imagepicker
