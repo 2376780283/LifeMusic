@@ -8,7 +8,6 @@ afollestad_dialog_version = "3.3.0"
 coreSplashscreen = "1.0.1"
 customactivityoncrash = "2.4.0"
 fadingedgelayout = "1.0.0"
-google_featureDelivery_version = "2.1.0"
 gradle = "8.6.0" 
 dhaval2404_imagepicker_version = "2.1"
 chrisbanes_insetter_version = "0.6.1"
@@ -16,7 +15,6 @@ jaudiotagger = "2.3.15"
 yslibrary_keyboardvisibilityevent_version = "3.0.0-RC3"
 koinAndroid = "3.5.6"
 kotlinGradlePlugin = "1.9.22"
-
 kotlinxCoroutinesAndroid = "1.8.1"
 android_tab_library_version = "2.2.0"
 fast_scroll_libraryVersion = "1.2.0"
@@ -33,9 +31,7 @@ orgEclipseEgitGithubCore = "2.1.5"
 playServicesCastFramework = "21.5.0"
 preference_version = "1.2.1"
 appcompat_version = "1.7.0"
-google_play_review_version = "2.0.2"
 room_version = "2.6.1"
-#core_version = "1.14.0-alpha01"
 core_version = "1.15.0"
 
 #COMPOSE
@@ -65,21 +61,14 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room_ver
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room_version" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room_version" }
 
-#google_play
-google-feature-delivery = { module = "com.google.android.play:feature-delivery", version.ref = "google_featureDelivery_version" }
-google-play-services-cast-framework = { module = "com.google.android.gms:play-services-cast-framework", version.ref = "playServicesCastFramework" }
-google-play-review = { module = "com.google.android.play:review", version.ref = "google_play_review_version" }
-
 #glide
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide_version" }
 glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide_version" }
 glide-okhttp3-integration = { module = "com.github.bumptech.glide:okhttp3-integration", version.ref = "glide_version" }
 
-
 #koin
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinAndroid" }
-
 
 #material dialog
 afollestad-material-dialogs-color = { module = "com.afollestad.material-dialogs:color", version.ref = "afollestad_dialog_version" }
@@ -103,7 +92,6 @@ jetradarmobile-android-snowfall = { module = "com.github.jetradarmobile:android-
 chrisbanes-insetter = { module = "dev.chrisbanes.insetter:insetter", version.ref = "chrisbanes_insetter_version" }
 org-eclipse-egit-github-core = { module = "org.eclipse.mylyn.github:org.eclipse.egit.github.core", version.ref = "orgEclipseEgitGithubCore" }
 jaudiotagger = { module = "com.github.Adonai:jaudiotagger", version.ref = "jaudiotagger" }
-android-lab-library = { module = "com.anjlab.android.iab.v3:library", version.ref = "android_tab_library_version" }
 slidableactivity = { module = "com.r0adkll:slidableactivity", version.ref = "slidableactivity" }
 material-intro = { module = "com.heinrichreimersoftware:material-intro", version.ref = "materialIntro" }
 dhaval2404-imagepicker = { module = "com.github.dhaval2404:imagepicker", version.ref = "dhaval2404_imagepicker_version" }
@@ -112,7 +100,6 @@ customactivityoncrash = { module = "cat.ereza:customactivityoncrash", version.re
 tankery-circularSeekBar = { module = "me.tankery.lib:circularSeekBar", version.ref = "tankery_circularSeekBar_version" }
 androidx-mediarouter = { group = "androidx.mediarouter", name = "mediarouter", version.ref = "mediarouter" }
 nanohttpd = { group = "org.nanohttpd", name = "nanohttpd", version.ref = "nanohttpd" }
-
 
 #androidx
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat_version" }

@@ -4,8 +4,6 @@
 
 
     <application tools:ignore="MissingApplicationIcon">
-        <activity android:name=".activities.PurchaseActivity" />
-
         <meta-data
             android:name="com.android.vending.splits.required"
             android:value="true" />
