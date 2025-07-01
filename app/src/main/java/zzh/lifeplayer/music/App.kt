@@ -25,7 +25,6 @@ class App : Application() {
             androidContext(this@App)
             modules(appModules)
         }
-        // default theme
         if (!ThemeStore.isConfigured(this, 3)) {
             ThemeStore.editTheme(this)
                 .accentColorRes(zzh.lifeplayer.appthemehelper.R.color.md_deep_purple_A200)
@@ -33,11 +32,8 @@ class App : Application() {
                 .commit()
         }
         wallpaperAccentManager.init()
-
         if (VersionUtils.hasNougatMR())
             DynamicShortcutManager(this).initDynamicShortcuts()
-
-        // setting Error activity
         CaocConfig.Builder.create().errorActivity(ErrorActivity::class.java)
             .restartActivity(MainActivity::class.java).apply()
 

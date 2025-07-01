@@ -1,32 +1,38 @@
 [
-  {
-    "name": "zzhlife • zzh",
-    "summary": "Lead Developer & Designer",
-    "link": "https://github.com/2376780283",
-    "image": "zzhlife.webp"
-  },
-  {
-    "name": "Prathamesh More",
-    "summary": "Developer",
-    "link": "https://prathameshmm02.github.io",
-    "image": "pratham.jpg"
-  },
-  {
-    "name": "Thomas Möller",
-    "summary": "Developer",
-    "link": "https://github.com/tomaThomas",
-    "image": "tomaThomas.png"
-  },
-  {
-    "name": "Milind Goel",
-    "summary": "Support Representative & Moderator",
-    "link": "https://milindgoel.vercel.app",
-    "image": "milind.png"
-  },
-  {
-    "name": "Alis",
-    "summary": "App Logo & Banners",
-    "link": "",
-    "image": "alis.png"
-  }
+    {
+        "name": "zzhlife • zzh",
+        "summary": "Lead Developer & Designer",
+        "link": "https://github.com/2376780283",
+        "image": "zzhlife.webp"
+    },
+    {
+        "name": "Omagari Hare",
+        "summary": "DeveloperANDBugFix",
+        "link": "empty",
+        "image": "gouqin.jpg"
+    },
+    {
+        "name": "Prathamesh More",
+        "summary": "Developer",
+        "link": "https://prathameshmm02.github.io",
+        "image": "pratham.jpg"
+    },
+    {
+        "name": "Thomas Möller",
+        "summary": "Developer",
+        "link": "https://github.com/tomaThomas",
+        "image": "tomaThomas.webp"
+    },
+    {
+        "name": "Milind Goel",
+        "summary": "Support Representative & Moderator",
+        "link": "https://milindgoel.vercel.app",
+        "image": "milind.webp"
+    },
+    {
+        "name": "Alis",
+        "summary": "App Logo & Banners",
+        "link": "",
+        "image": "alis.webp"
+    }
 ]

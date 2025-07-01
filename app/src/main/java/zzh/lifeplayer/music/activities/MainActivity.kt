@@ -34,7 +34,7 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
         setTaskDescriptionColorAuto()
         hideStatusBar()
         updateTabs()
-        AppRater.appLaunched(this)
+//        AppRater.appLaunched(this)
 
         setupNavigationController()
 

@@ -49,16 +49,16 @@ class DeleteSongsDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         libraryViewModel = activity?.getViewModel() as LibraryViewModel
         val songs = extraNotNull<List<Song>>(EXTRA_SONG).value
-//        if (VersionUtils.hasR()) {
+ //       if (VersionUtils.hasR()) {
             val deleteResultLauncher =
                 registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
- //                   if (result.resultCode == Activity.RESULT_OK) {
+  //                  if (result.resultCode == Activity.RESULT_OK) {
                         if ((songs.size == 1) && MusicPlayerRemote.isPlaying(songs[0])) {
                             MusicPlayerRemote.playNextSong()
                         }
                         MusicPlayerRemote.removeFromQueue(songs)
                         reloadTabs()
-//                    }
+      //              }
                     dismiss()
                 }
             val pendingIntent =
@@ -69,8 +69,8 @@ class DeleteSongsDialog : DialogFragment() {
                 IntentSenderRequest.Builder(pendingIntent.intentSender).build()
             )
             return super.onCreateDialog(savedInstanceState)
-//        } else {
-/*
+/*        } else {
+
             val pair = if (songs.size > 1) {
                 Pair(
                     R.string.delete_songs_title,
@@ -115,8 +115,8 @@ class DeleteSongsDialog : DialogFragment() {
                 }
         }*/
     }
-
-/*    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+/*
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             SAFGuideActivity.REQUEST_CODE_SAF_GUIDE -> {
