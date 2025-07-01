@@ -1144,17 +1144,17 @@ class MusicService : MediaBrowserServiceCompat(),
             }
             if (!isForeground && isPlaying) {
                 // Specify that this is a media service, if supported.
-//                if (VersionUtils.hasQ()) {
+                if (VersionUtils.hasQ()) {
                     startForeground(
                         PlayingNotification.NOTIFICATION_ID, playingNotification!!.build(),
                         ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
                     )
-/*                } else {
+                } else {
                     startForeground(
                         PlayingNotification.NOTIFICATION_ID,
                         playingNotification!!.build()
                     )
-                }*/
+                }
                 isForeground = true
             } else {
                 // If we are already in foreground just update the notification
