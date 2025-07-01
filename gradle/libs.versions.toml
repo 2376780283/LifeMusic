@@ -34,10 +34,6 @@ appcompat_version = "1.7.0"
 room_version = "2.6.1"
 core_version = "1.15.0"
 
-#COMPOSE
-#compose_bom = "2024.05.00"
-#compose_compiler = "1.5.13"
-
 #plugins
 devTools_ksp_version = "1.9.22-1.0.17"
 ben_manes_versoin = "0.46.0"
@@ -111,16 +107,6 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-palette-ktx = { group = "androidx.palette", name = "palette-ktx", version = "1.0.0" }
 androidx-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version = "1.6.1" }
-
-#cOMPOSE
-#androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
-#androidx-compose-ui = { module = "androidx.compose.ui:ui" }
-#androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-#androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-#androidx-compose-material = { module = "androidx.compose.material:material" }
-#androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.9.0" }
-#androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle_version" }
-#androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation_version" }
 
 #buildscripts dependencies
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }

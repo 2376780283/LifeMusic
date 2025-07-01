@@ -28,19 +28,15 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
         const val TAG = "MainActivity"
         const val EXPAND_PANEL = "expand_panel"
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTaskDescriptionColorAuto()
         hideStatusBar()
         updateTabs()
 //        AppRater.appLaunched(this)
-
         setupNavigationController()
-
 //        WhatsNewFragment.showChangeLog(this)
     }
-
     private fun setupNavigationController() {
         val navController = findNavController(R.id.fragment_container)
         val navInflater = navController.navInflater
@@ -95,13 +91,11 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
             }
         }
     }
-
     private fun saveTab(id: Int) {
         if (PreferenceUtil.libraryCategory.firstOrNull { it.category.id == id }?.visible == true) {
             PreferenceUtil.lastTab = id
         }
     }
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         val expand = intent?.extra<Boolean>(EXPAND_PANEL)?.value ?: false
@@ -112,7 +106,6 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
             intent?.removeExtra(EXPAND_PANEL)
         }
     }
-
     private fun handlePlaybackIntent(intent: Intent) {
         lifecycleScope.launch(IO) {
             val uri: Uri? = intent.data
@@ -129,48 +122,52 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
                 }
                 handled = true
             }
-            if (uri != null && uri.toString().isNotEmpty()) {
-                MusicPlayerRemote.playFromUri(this@MainActivity, uri)
+        if (uri != null && uri.toString().isNotEmpty()) {
+            MusicPlayerRemote.playFromUri(this@MainActivity, uri)
+            handled = true
+        } 
+        // 替换已弃用的常量为字符串字面量
+        else if ("vnd.android.cursor.dir/playlist" == mimeType) {
+            val id = parseLongFromIntent(intent, "playlistId", "playlist")
+            if (id >= 0L) {
+                val position: Int = intent.getIntExtra("position", 0)
+                val songs: List<Song> = PlaylistSongsLoader.getPlaylistSongList(get(), id)
+                MusicPlayerRemote.openQueue(songs, position, true)
                 handled = true
-            } else if (MediaStore.Audio.Playlists.CONTENT_TYPE == mimeType) {
-                val id = parseLongFromIntent(intent, "playlistId", "playlist")
-                if (id >= 0L) {
-                    val position: Int = intent.getIntExtra("position", 0)
-                    val songs: List<Song> = PlaylistSongsLoader.getPlaylistSongList(get(), id)
-                    MusicPlayerRemote.openQueue(songs, position, true)
-                    handled = true
-                }
-            } else if (MediaStore.Audio.Albums.CONTENT_TYPE == mimeType) {
-                val id = parseLongFromIntent(intent, "albumId", "album")
-                if (id >= 0L) {
-                    val position: Int = intent.getIntExtra("position", 0)
-                    val songs = libraryViewModel.albumById(id).songs
-                    MusicPlayerRemote.openQueue(
-                        songs,
-                        position,
-                        true
-                    )
-                    handled = true
-                }
-            } else if (MediaStore.Audio.Artists.CONTENT_TYPE == mimeType) {
-                val id = parseLongFromIntent(intent, "artistId", "artist")
-                if (id >= 0L) {
-                    val position: Int = intent.getIntExtra("position", 0)
-                    val songs: List<Song> = libraryViewModel.artistById(id).songs
-                    MusicPlayerRemote.openQueue(
-                        songs,
-                        position,
-                        true
-                    )
-                    handled = true
-                }
             }
+        } 
+        else if ("vnd.android.cursor.dir/album" == mimeType) {
+            val id = parseLongFromIntent(intent, "albumId", "album")
+            if (id >= 0L) {
+                val position: Int = intent.getIntExtra("position", 0)
+                val songs = libraryViewModel.albumById(id).songs
+                MusicPlayerRemote.openQueue(
+                    songs,
+                    position,
+                    true
+                )
+                handled = true
+            }
+        } 
+        else if ("vnd.android.cursor.dir/artist" == mimeType) {
+            val id = parseLongFromIntent(intent, "artistId", "artist")
+            if (id >= 0L) {
+                val position: Int = intent.getIntExtra("position", 0)
+                val songs: List<Song> = libraryViewModel.artistById(id).songs
+                MusicPlayerRemote.openQueue(
+                    songs,
+                    position,
+                    true
+                )
+                handled = true
+            }
+        }
+            
             if (handled) {
                 setIntent(Intent())
             }
         }
     }
-
     private fun parseLongFromIntent(
         intent: Intent,
         longKey: String,

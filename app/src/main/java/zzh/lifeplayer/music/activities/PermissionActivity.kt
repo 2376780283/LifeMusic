@@ -84,9 +84,7 @@ class PermissionActivity : AbsMusicServiceActivity() {
         })
     }
 
-    private fun setupTitle() {
-        val color = accentColor()
-    
+    private fun setupTitle() {           
         val appName =
             getString(
                 R.string.message_welcome,
