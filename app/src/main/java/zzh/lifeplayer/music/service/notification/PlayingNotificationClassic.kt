@@ -22,9 +22,9 @@ import zzh.lifeplayer.music.extensions.getTintedDrawable
 import zzh.lifeplayer.music.extensions.isColorLight
 import zzh.lifeplayer.music.extensions.isSystemDarkModeEnabled
 import zzh.lifeplayer.music.extensions.toBitmap
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
-import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
 import zzh.lifeplayer.music.glide.palette.BitmapPaletteWrapper
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.service.MusicService
@@ -96,7 +96,7 @@ class PlayingNotificationClassic(
         Glide.with(context)
             .asBitmapPalette()
             .songCoverOptions(song)
-            .load(RetroGlideExtension.getSongModel(song))
+            .load(LifeGlideExtension.getSongModel(song))
             .centerCrop()
             .into(object : CustomTarget<BitmapPaletteWrapper>(
                 bigNotificationImageSize,

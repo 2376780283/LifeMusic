@@ -19,8 +19,8 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import zzh.lifeplayer.music.R
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.MusicPlayerRemote.isPlaying
 import zzh.lifeplayer.music.helper.MusicPlayerRemote.playNextSong
@@ -78,7 +78,7 @@ class PlayingQueueAdapter(
             return
         }
         Glide.with(activity)
-            .load(RetroGlideExtension.getSongModel(song))
+            .load(LifeGlideExtension.getSongModel(song))
             .songCoverOptions(song)
             .into(holder.image!!)
     }

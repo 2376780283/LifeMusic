@@ -4,7 +4,7 @@ import androidx.room.Room
 import zzh.lifeplayer.music.auto.AutoMusicProvider
 import zzh.lifeplayer.music.cast.RetroWebServer
 import zzh.lifeplayer.music.db.MIGRATION_23_24
-import zzh.lifeplayer.music.db.RetroDatabase
+import zzh.lifeplayer.music.db.LifeDatabase
 import zzh.lifeplayer.music.fragments.LibraryViewModel
 import zzh.lifeplayer.music.fragments.albums.AlbumDetailsViewModel
 import zzh.lifeplayer.music.fragments.artists.ArtistDetailsViewModel
@@ -40,21 +40,21 @@ val networkModule = module {
 private val roomModule = module {
 
     single {
-        Room.databaseBuilder(androidContext(), RetroDatabase::class.java, "playlist.db")
+        Room.databaseBuilder(androidContext(), LifeDatabase::class.java, "playlist.db")
             .addMigrations(MIGRATION_23_24)
             .build()
     }
 
     factory {
-        get<RetroDatabase>().playlistDao()
+        get< LifeDatabase>().playlistDao()
     }
 
     factory {
-        get<RetroDatabase>().playCountDao()
+        get<LifeDatabase>().playCountDao()
     }
 
     factory {
-        get<RetroDatabase>().historyDao()
+        get<LifeDatabase>().historyDao()
     }
 
     single {
@@ -78,9 +78,9 @@ private val mainModule = module {
     single {
         androidContext().contentResolver
     }
-    single {
+  /*  single {
         RetroWebServer(get())
-    }
+    }*/
 }
 private val dataModule = module {
     single {

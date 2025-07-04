@@ -33,7 +33,7 @@ import zzh.lifeplayer.music.db.PlaylistEntity
 import zzh.lifeplayer.music.db.PlaylistWithSongs
 import zzh.lifeplayer.music.db.toSongs
 import zzh.lifeplayer.music.extensions.dipToPix
-import zzh.lifeplayer.music.glide.RetroGlideExtension.playlistOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension.playlistOptions
 import zzh.lifeplayer.music.glide.playlistPreview.PlaylistPreview
 import zzh.lifeplayer.music.helper.SortOrder.PlaylistSortOrder
 import zzh.lifeplayer.music.helper.menu.PlaylistMenuHelper

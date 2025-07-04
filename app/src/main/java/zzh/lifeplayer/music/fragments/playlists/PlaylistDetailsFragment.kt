@@ -24,7 +24,7 @@ import zzh.lifeplayer.music.extensions.elevatedAccentColor
 import zzh.lifeplayer.music.extensions.surfaceColor
 import zzh.lifeplayer.music.fragments.base.AbsMainActivityFragment
 import zzh.lifeplayer.music.fragments.search.clearText
-import zzh.lifeplayer.music.glide.RetroGlideExtension.playlistOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension.playlistOptions
 import zzh.lifeplayer.music.glide.playlistPreview.PlaylistPreview
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.menu.PlaylistMenuHelper

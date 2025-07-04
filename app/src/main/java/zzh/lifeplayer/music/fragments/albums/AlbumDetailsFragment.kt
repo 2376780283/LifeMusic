@@ -45,10 +45,10 @@ import zzh.lifeplayer.music.dialogs.AddToPlaylistDialog
 import zzh.lifeplayer.music.dialogs.DeleteSongsDialog
 import zzh.lifeplayer.music.extensions.*
 import zzh.lifeplayer.music.fragments.base.AbsMainActivityFragment
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.albumCoverOptions
-import zzh.lifeplayer.music.glide.RetroGlideExtension.artistImageOptions
-import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.albumCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension.artistImageOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
 import zzh.lifeplayer.music.glide.SingleColorTarget
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.SortOrder.AlbumSongSortOrder.Companion.SONG_A_Z
@@ -279,9 +279,9 @@ class AlbumDetailsFragment : AbsMainActivityFragment(R.layout.fragment_album_det
                 binding.fragmentAlbumContent.scrobblesLabel.show()
 
                 binding.fragmentAlbumContent.listeners.text =
-                    RetroUtil.formatValue(lastFmAlbum.album.listeners.toFloat())
+                    LifeUtil.formatValue(lastFmAlbum.album.listeners.toFloat())
                 binding.fragmentAlbumContent.scrobbles.text =
-                    RetroUtil.formatValue(lastFmAlbum.album.playcount.toFloat())
+                    LifeUtil.formatValue(lastFmAlbum.album.playcount.toFloat())
             }
         }
     }
@@ -293,7 +293,7 @@ class AlbumDetailsFragment : AbsMainActivityFragment(R.layout.fragment_album_det
         Glide.with(requireContext())
             //.forceDownload(PreferenceUtil.isAllowedToDownloadMetadata())
             .load(
-                RetroGlideExtension.getArtistModel(
+                LifeGlideExtension.getArtistModel(
                     artist,
                     PreferenceUtil.isAllowedToDownloadMetadata(requireContext())
                 )
@@ -309,7 +309,7 @@ class AlbumDetailsFragment : AbsMainActivityFragment(R.layout.fragment_album_det
             .asBitmapPalette()
             .albumCoverOptions(album.safeGetFirstSong())
             //.checkIgnoreMediaStore()
-            .load(RetroGlideExtension.getSongModel(album.safeGetFirstSong()))
+            .load(LifeGlideExtension.getSongModel(album.safeGetFirstSong()))
             .into(object : SingleColorTarget(binding.image) {
                 override fun onColorReady(color: Int) {
                     setColors(color)

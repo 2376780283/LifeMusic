@@ -37,9 +37,9 @@ import zzh.lifeplayer.music.extensions.accentColor
 import zzh.lifeplayer.music.extensions.applyToolbar
 import zzh.lifeplayer.music.extensions.showToast
 import zzh.lifeplayer.music.fragments.LibraryViewModel
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.profileBannerOptions
-import zzh.lifeplayer.music.glide.RetroGlideExtension.userProfileOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.profileBannerOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension.userProfileOptions
 import zzh.lifeplayer.music.util.ImageUtil
 import zzh.lifeplayer.music.util.PreferenceUtil.userName
 import com.bumptech.glide.Glide
@@ -160,13 +160,13 @@ class UserInfoFragment : Fragment() {
     private fun loadProfile() {
         binding.bannerImage.let {
             Glide.with(this)
-                .load(RetroGlideExtension.getBannerModel())
-                .profileBannerOptions(RetroGlideExtension.getBannerModel())
+                .load(LifeGlideExtension.getBannerModel())
+                .profileBannerOptions(LifeGlideExtension.getBannerModel())
                 .into(it)
         }
         Glide.with(this)
-            .load(RetroGlideExtension.getUserModel())
-            .userProfileOptions(RetroGlideExtension.getUserModel(), requireContext())
+            .load(LifeGlideExtension.getUserModel())
+            .userProfileOptions(LifeGlideExtension.getUserModel(), requireContext())
             .into(binding.userImage)
     }
 

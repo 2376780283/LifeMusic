@@ -64,23 +64,23 @@ object NavigationUtil {
         }
     }*/
 
-fun openEqualizer(activity: Activity) {
-    val sessionId = audioSessionId
-    if (sessionId == AudioEffect.ERROR_BAD_VALUE) {
-     //   activity.showToast(R.string.no_audio_ID, Toast.LENGTH_LONG)
-    } else {
-        try {
-            Intent(activity, ActivityMusic::class.java).apply {
-                putExtra(AudioEffect.EXTRA_AUDIO_SESSION, sessionId)
-                putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC)
-            }.also { intent ->
-                activity.startActivityForResult(intent, 0)
-                // 添加动画
-                activity.overridePendingTransition(R.anim.retro_fragment_open_enter, 0)
+    fun openEqualizer(activity: Activity) {
+        val sessionId = audioSessionId
+        if (sessionId == AudioEffect.ERROR_BAD_VALUE) {
+            //   activity.showToast(R.string.no_audio_ID, Toast.LENGTH_LONG)
+        } else {
+            try {
+                Intent(activity, ActivityMusic::class.java).apply {
+                    putExtra(AudioEffect.EXTRA_AUDIO_SESSION, sessionId)
+                    putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC)
+                }.also { intent ->
+                    activity.startActivityForResult(intent, 0)
+                    // 添加动画
+                    activity.overridePendingTransition(R.anim.retro_fragment_open_enter, 0)
+                }
+            } catch (e: Exception) {
+                activity.showToast(R.string.no_equalizer)
             }
-        } catch (e: Exception) {
-            activity.showToast(R.string.no_equalizer)
         }
     }
-}
 }

@@ -15,10 +15,10 @@ import zzh.lifeplayer.music.activities.MainActivity
 import zzh.lifeplayer.music.fragments.AlbumCoverStyle
 import zzh.lifeplayer.music.fragments.NowPlayingScreen.*
 // import zzh.lifeplayer.music.fragments.base.goToLyrics
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
-import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
-import zzh.lifeplayer.music.glide.RetroMusicColoredTarget
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.glide.LifeMusicColoredTarget
 import zzh.lifeplayer.music.misc.CustomFragmentStatePagerAdapter
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.MusicUtil
@@ -157,9 +157,9 @@ class AlbumCoverPagerAdapter(
                 .asBitmapPalette()
                 .songCoverOptions(song)
                 //.checkIgnoreMediaStore()
-                .load(RetroGlideExtension.getSongModel(song))
+                .load(LifeGlideExtension.getSongModel(song))
                 .dontAnimate()
-                .into(object : RetroMusicColoredTarget(albumCover) {
+                .into(object : LifeMusicColoredTarget(albumCover) {
                     override fun onColorReady(colors: MediaNotificationProcessor) {
                         setColor(colors)
                     }

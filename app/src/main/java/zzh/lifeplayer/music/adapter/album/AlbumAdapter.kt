@@ -10,10 +10,10 @@ import androidx.fragment.app.FragmentActivity
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.base.AbsMultiSelectAdapter
 import zzh.lifeplayer.music.adapter.base.MediaEntryViewHolder
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.albumCoverOptions
-import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
-import zzh.lifeplayer.music.glide.RetroMusicColoredTarget
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.albumCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
+import zzh.lifeplayer.music.glide.LifeMusicColoredTarget
 import zzh.lifeplayer.music.helper.SortOrder
 import zzh.lifeplayer.music.helper.menu.SongsMenuHelper
 import zzh.lifeplayer.music.interfaces.IAlbumClickListener
@@ -102,8 +102,8 @@ open class AlbumAdapter(
             .asBitmapPalette()
             .albumCoverOptions(song)
             //.checkIgnoreMediaStore()
-            .load(RetroGlideExtension.getSongModel(song))
-            .into(object : RetroMusicColoredTarget(holder.image!!) {
+            .load(LifeGlideExtension.getSongModel(song))
+            .into(object : LifeMusicColoredTarget(holder.image!!) {
                 override fun onColorReady(colors: MediaNotificationProcessor) {
                     setColors(colors, holder)
                 }

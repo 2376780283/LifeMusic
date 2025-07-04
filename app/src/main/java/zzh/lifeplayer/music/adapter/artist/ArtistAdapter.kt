@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2020 Hemanth Savarla.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 package zzh.lifeplayer.music.adapter.artist
 
 import android.annotation.SuppressLint
@@ -27,10 +13,10 @@ import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.base.AbsMultiSelectAdapter
 import zzh.lifeplayer.music.adapter.base.MediaEntryViewHolder
 import zzh.lifeplayer.music.extensions.hide
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.artistImageOptions
-import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
-import zzh.lifeplayer.music.glide.RetroMusicColoredTarget
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.artistImageOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
+import zzh.lifeplayer.music.glide.LifeMusicColoredTarget
 import zzh.lifeplayer.music.helper.menu.SongsMenuHelper
 import zzh.lifeplayer.music.interfaces.IAlbumArtistClickListener
 import zzh.lifeplayer.music.interfaces.IArtistClickListener
@@ -114,9 +100,9 @@ class ArtistAdapter(
         Glide.with(activity)
             .asBitmapPalette()
             .artistImageOptions(artist)
-            .load(RetroGlideExtension.getArtistModel(artist))
-            .transition(RetroGlideExtension.getDefaultTransition())
-            .into(object : RetroMusicColoredTarget(holder.image!!) {
+            .load(LifeGlideExtension.getArtistModel(artist))
+            .transition(LifeGlideExtension.getDefaultTransition())
+            .into(object : LifeMusicColoredTarget(holder.image!!) {
                 override fun onColorReady(colors: MediaNotificationProcessor) {
                     setColors(colors, holder)
                 }

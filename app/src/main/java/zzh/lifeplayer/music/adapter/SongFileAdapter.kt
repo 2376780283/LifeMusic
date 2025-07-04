@@ -26,7 +26,7 @@ import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.base.AbsMultiSelectAdapter
 import zzh.lifeplayer.music.adapter.base.MediaEntryViewHolder
 import zzh.lifeplayer.music.extensions.getTintedDrawable
-import zzh.lifeplayer.music.glide.RetroGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension
 import zzh.lifeplayer.music.glide.audiocover.AudioFileCover
 import zzh.lifeplayer.music.interfaces.ICallbacks
 import zzh.lifeplayer.music.util.MusicUtil
@@ -114,7 +114,7 @@ class SongFileAdapter(
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .error(error)
                 .placeholder(error)
-                .transition(RetroGlideExtension.getDefaultTransition())
+                .transition(LifeGlideExtension.getDefaultTransition())
                 .signature(MediaStoreSignature("", file.lastModified(), 0))
                 .into(holder.image!!)
         }

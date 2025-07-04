@@ -26,13 +26,13 @@ import zzh.lifeplayer.music.extensions.dip
 import zzh.lifeplayer.music.extensions.elevatedAccentColor
 import zzh.lifeplayer.music.fragments.ReloadType
 import zzh.lifeplayer.music.fragments.base.AbsMainActivityFragment
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.profileBannerOptions
-import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
-import zzh.lifeplayer.music.glide.RetroGlideExtension.userProfileOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.profileBannerOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension.userProfileOptions
 
 import zzh.lifeplayer.music.glide.BlurTransformation
-import zzh.lifeplayer.music.glide.RetroGlideExtension.simpleSongCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension.simpleSongCoverOptions
 import zzh.lifeplayer.music.glide.crossfadeListener
 
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
@@ -169,8 +169,8 @@ class HomeFragment :
    /*
     binding.bannerImage?.let {
         Glide.with(this)
-            .load(RetroGlideExtension.getBannerModel())
-            .profileBannerOptions(RetroGlideExtension.getBannerModel())
+            .load(LifeGlideExtension.getBannerModel())
+            .profileBannerOptions(LifeGlideExtension.getBannerModel())
               .transform(
                 BlurTransformation.Builder(requireContext()).blurRadius(blurAmount.toFloat())
                     .build()
@@ -180,15 +180,15 @@ class HomeFragment :
    */
     binding.bannerImagelarge?.let {
         Glide.with(this)
-            .load(RetroGlideExtension.getBannerModel())
-            .profileBannerOptions(RetroGlideExtension.getBannerModel())
+            .load(LifeGlideExtension.getBannerModel())
+            .profileBannerOptions(LifeGlideExtension.getBannerModel())
             .into(it)
     }
     
 
     Glide.with(requireActivity())
-        .load(RetroGlideExtension.getUserModel())
-        .userProfileOptions(RetroGlideExtension.getUserModel(), requireContext())
+        .load(LifeGlideExtension.getUserModel())
+        .userProfileOptions(LifeGlideExtension.getUserModel(), requireContext())
         .into(binding.userImage)
     }
 
@@ -279,7 +279,7 @@ class HomeFragment :
                 }
             }
             Glide.with(this)
-                .load(RetroGlideExtension.getSongModel(songs[index])) //出错代码部分
+                .load(LifeGlideExtension.getSongModel(songs[index])) //出错代码部分
                 .songCoverOptions(songs[index])
                 .into(imageView)
         }
@@ -336,7 +336,7 @@ class HomeFragment :
         }
 
         Glide.with(this)
-            .load(RetroGlideExtension.getSongModel(song))
+            .load(LifeGlideExtension.getSongModel(song))
             .songCoverOptions(song)
             .into(imageView)
     }

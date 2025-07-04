@@ -14,7 +14,7 @@ import zzh.lifeplayer.music.fragments.base.AbsRecyclerViewCustomGridSizeFragment
 import zzh.lifeplayer.music.helper.SortOrder.PlaylistSortOrder
 import zzh.lifeplayer.music.interfaces.IPlaylistClickListener
 import zzh.lifeplayer.music.util.PreferenceUtil
-import zzh.lifeplayer.music.util.RetroUtil
+import zzh.lifeplayer.music.util.LifeUtil
 import com.google.android.material.transition.MaterialSharedAxis
 
 class PlaylistsFragment :
@@ -57,7 +57,7 @@ class PlaylistsFragment :
     override fun onCreateMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateMenu(menu, inflater)
         val gridSizeItem: MenuItem = menu.findItem(R.id.action_grid_size)
-        if (RetroUtil.isLandscape) {
+        if (LifeUtil.isLandscape) {
             gridSizeItem.setTitle(R.string.action_grid_size_land)
         }
         setupGridSizeMenu(gridSizeItem.subMenu!!)
@@ -90,7 +90,7 @@ class PlaylistsFragment :
             7 -> gridSizeMenu.findItem(R.id.action_grid_size_7).isChecked = true
             8 -> gridSizeMenu.findItem(R.id.action_grid_size_8).isChecked = true
         }
-        val gridSize = if (RetroUtil.isLandscape) 4 else 3
+        val gridSize = if (LifeUtil.isLandscape) 4 else 3
         if (gridSize < 8) {
             gridSizeMenu.findItem(R.id.action_grid_size_8).isVisible = false
         }

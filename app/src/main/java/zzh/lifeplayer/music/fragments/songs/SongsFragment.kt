@@ -11,7 +11,7 @@ import zzh.lifeplayer.music.fragments.ReloadType
 import zzh.lifeplayer.music.fragments.base.AbsRecyclerViewCustomGridSizeFragment
 import zzh.lifeplayer.music.helper.SortOrder.SongSortOrder
 import zzh.lifeplayer.music.util.PreferenceUtil
-import zzh.lifeplayer.music.util.RetroUtil
+import zzh.lifeplayer.music.util.LifeUtil
 
 class SongsFragment : AbsRecyclerViewCustomGridSizeFragment<SongAdapter, GridLayoutManager>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,7 +96,7 @@ class SongsFragment : AbsRecyclerViewCustomGridSizeFragment<SongAdapter, GridLay
     override fun onCreateMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateMenu(menu, inflater)
         val gridSizeItem: MenuItem = menu.findItem(R.id.action_grid_size)
-        if (RetroUtil.isLandscape) {
+        if (LifeUtil.isLandscape) {
             gridSizeItem.setTitle(R.string.action_grid_size_land)
         }
         setUpGridSizeMenu(gridSizeItem.subMenu!!)

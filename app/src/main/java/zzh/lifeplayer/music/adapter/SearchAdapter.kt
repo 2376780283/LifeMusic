@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2020 Hemanth Savarla.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 package zzh.lifeplayer.music.adapter
 
 import android.annotation.SuppressLint
@@ -29,10 +15,10 @@ import zzh.lifeplayer.appthemehelper.ThemeStore
 import zzh.lifeplayer.music.*
 import zzh.lifeplayer.music.adapter.base.MediaEntryViewHolder
 import zzh.lifeplayer.music.db.PlaylistWithSongs
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.albumCoverOptions
-import zzh.lifeplayer.music.glide.RetroGlideExtension.artistImageOptions
-import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.albumCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension.artistImageOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.menu.SongMenuHelper
 import zzh.lifeplayer.music.model.Album
@@ -95,7 +81,7 @@ class SearchAdapter(
                 holder.title?.text = album.title
                 holder.text?.text = album.artistName
                 Glide.with(activity).asDrawable().albumCoverOptions(album.safeGetFirstSong())
-                    .load(RetroGlideExtension.getSongModel(album.safeGetFirstSong()))
+                    .load(LifeGlideExtension.getSongModel(album.safeGetFirstSong()))
                     .into(holder.image!!)
             }
 
@@ -105,7 +91,7 @@ class SearchAdapter(
                 holder.title?.text = artist.name
                 holder.text?.text = MusicUtil.getArtistInfoString(activity, artist)
                 Glide.with(activity).asDrawable().artistImageOptions(artist).load(
-                    RetroGlideExtension.getArtistModel(artist)
+                    LifeGlideExtension.getArtistModel(artist)
                 ).into(holder.image!!)
             }
 
@@ -115,7 +101,7 @@ class SearchAdapter(
                 holder.title?.text = song.title
                 holder.text?.text = song.albumName
                 Glide.with(activity).asDrawable().songCoverOptions(song)
-                    .load(RetroGlideExtension.getSongModel(song)).into(holder.image!!)
+                    .load(LifeGlideExtension.getSongModel(song)).into(holder.image!!)
             }
 
             GENRE -> {
@@ -143,7 +129,7 @@ class SearchAdapter(
                 holder.title?.text = artist.name
                 holder.text?.text = MusicUtil.getArtistInfoString(activity, artist)
                 Glide.with(activity).asDrawable().artistImageOptions(artist).load(
-                    RetroGlideExtension.getArtistModel(artist)
+                    LifeGlideExtension.getArtistModel(artist)
                 ).into(holder.image!!)
             }
 

@@ -31,14 +31,14 @@ import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.ActivityAlbumTagEditorBinding
 import zzh.lifeplayer.music.extensions.*
-import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
+import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
 import zzh.lifeplayer.music.glide.palette.BitmapPaletteWrapper
 import zzh.lifeplayer.music.model.ArtworkInfo
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.ImageUtil
 import zzh.lifeplayer.music.util.MusicUtil
-import zzh.lifeplayer.music.util.RetroColorUtil.generatePalette
-import zzh.lifeplayer.music.util.RetroColorUtil.getColor
+import zzh.lifeplayer.music.util.LifeColorUtil.generatePalette
+import zzh.lifeplayer.music.util.LifeColorUtil.getColor
 import zzh.lifeplayer.music.util.logD
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy

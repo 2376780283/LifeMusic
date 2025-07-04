@@ -20,7 +20,7 @@ import zzh.lifeplayer.music.interfaces.IAlbumArtistClickListener
 import zzh.lifeplayer.music.interfaces.IArtistClickListener
 import zzh.lifeplayer.music.service.MusicService
 import zzh.lifeplayer.music.util.PreferenceUtil
-import zzh.lifeplayer.music.util.RetroUtil
+import zzh.lifeplayer.music.util.LifeUtil
 
 class ArtistsFragment : AbsRecyclerViewCustomGridSizeFragment<ArtistAdapter, GridLayoutManager>(),
     IArtistClickListener, IAlbumArtistClickListener {
@@ -142,7 +142,7 @@ class ArtistsFragment : AbsRecyclerViewCustomGridSizeFragment<ArtistAdapter, Gri
     override fun onCreateMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateMenu(menu, inflater)
         val gridSizeItem: MenuItem = menu.findItem(R.id.action_grid_size)
-        if (RetroUtil.isLandscape) {
+        if (LifeUtil.isLandscape) {
             gridSizeItem.setTitle(R.string.action_grid_size_land)
         }
         setUpGridSizeMenu(gridSizeItem.subMenu!!)

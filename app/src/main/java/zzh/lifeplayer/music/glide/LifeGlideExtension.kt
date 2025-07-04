@@ -37,7 +37,7 @@ import com.bumptech.glide.signature.MediaStoreSignature
 import java.io.File
 
 
-object RetroGlideExtension {
+object LifeGlideExtension {
 
     private val DEFAULT_ARTIST_IMAGE
         get() = R.drawable.default_artist_art

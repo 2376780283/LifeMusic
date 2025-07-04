@@ -23,7 +23,7 @@ import zzh.lifeplayer.music.glide.palette.BitmapPaletteWrapper
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 import com.bumptech.glide.request.transition.Transition
 
-abstract class RetroMusicColoredTarget(view: ImageView) : BitmapPaletteTarget(view) {
+abstract class LifeMusicColoredTarget(view: ImageView) : BitmapPaletteTarget(view) {
 
     protected val defaultFooterColor: Int
         get() = getView().context.colorControlNormal()

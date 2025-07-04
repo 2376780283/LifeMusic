@@ -28,9 +28,9 @@ import zzh.lifeplayer.music.databinding.FragmentArtistDetailsBinding
 import zzh.lifeplayer.music.dialogs.AddToPlaylistDialog
 import zzh.lifeplayer.music.extensions.*
 import zzh.lifeplayer.music.fragments.base.AbsMainActivityFragment
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.artistImageOptions
-import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.artistImageOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
 import zzh.lifeplayer.music.glide.SingleColorTarget
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.SortOrder
@@ -187,9 +187,9 @@ abstract class AbsArtistDetailsFragment : AbsMainActivityFragment(R.layout.fragm
                         scrobbles.show()
                         scrobblesLabel.show()
                         listeners.text =
-                            RetroUtil.formatValue(lastFmArtist.artist.stats.listeners.toFloat())
+                            LifeUtil.formatValue(lastFmArtist.artist.stats.listeners.toFloat())
                         scrobbles.text =
-                            RetroUtil.formatValue(lastFmArtist.artist.stats.playcount.toFloat())
+                            LifeUtil.formatValue(lastFmArtist.artist.stats.playcount.toFloat())
                     }
                 }
             }
@@ -203,7 +203,7 @@ abstract class AbsArtistDetailsFragment : AbsMainActivityFragment(R.layout.fragm
 
     private fun loadArtistImage(artist: Artist) {
         Glide.with(requireContext()).asBitmapPalette().artistImageOptions(artist)
-            .load(RetroGlideExtension.getArtistModel(artist)).dontAnimate()
+            .load(LifeGlideExtension.getArtistModel(artist)).dontAnimate()
             .into(object : SingleColorTarget(binding.image) {
                 override fun onColorReady(color: Int) {
                     setColors(color)

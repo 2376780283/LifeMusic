@@ -17,7 +17,7 @@ import zzh.lifeplayer.music.fragments.ReloadType
 import zzh.lifeplayer.music.fragments.base.AbsRecyclerViewFragment
 import zzh.lifeplayer.music.interfaces.IGenreClickListener
 import zzh.lifeplayer.music.model.Genre
-import zzh.lifeplayer.music.util.RetroUtil
+import zzh.lifeplayer.music.util.LifeUtil
 import com.google.android.material.transition.MaterialSharedAxis
 
 class
@@ -34,7 +34,7 @@ GenresFragment : AbsRecyclerViewFragment<GenreAdapter, LinearLayoutManager>(),
     }
 
     override fun createLayoutManager(): LinearLayoutManager {
-        return if (RetroUtil.isLandscape) {
+        return if (LifeUtil.isLandscape) {
             GridLayoutManager(activity, 4)
         } else {
             GridLayoutManager(activity, 2)

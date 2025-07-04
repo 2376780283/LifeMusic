@@ -36,7 +36,7 @@ import zzh.lifeplayer.appthemehelper.ThemeStore;
 import zzh.lifeplayer.appthemehelper.util.ColorUtil;
 import zzh.lifeplayer.appthemehelper.util.VersionUtils;
 
-public class RetroColorUtil {
+public class LifeColorUtil {
   public static int desaturateColor(int color, float ratio) {
     float[] hsv = new float[3];
     Color.colorToHSV(color, hsv);

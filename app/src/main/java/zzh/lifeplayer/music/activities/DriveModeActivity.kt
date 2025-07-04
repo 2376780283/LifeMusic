@@ -27,8 +27,8 @@ import zzh.lifeplayer.music.db.toSongEntity
 import zzh.lifeplayer.music.extensions.accentColor
 import zzh.lifeplayer.music.extensions.drawAboveSystemBars
 import zzh.lifeplayer.music.glide.BlurTransformation
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.MusicProgressViewUpdateHelper
 import zzh.lifeplayer.music.helper.MusicProgressViewUpdateHelper.Callback
@@ -242,7 +242,7 @@ class DriveModeActivity : AbsMusicServiceActivity(), Callback {
         binding.songText.text = song.artistName
 
         Glide.with(this)
-            .load(RetroGlideExtension.getSongModel(song))
+            .load(LifeGlideExtension.getSongModel(song))
             .songCoverOptions(song)
             .transform(BlurTransformation.Builder(this).build())
             .into(binding.image)

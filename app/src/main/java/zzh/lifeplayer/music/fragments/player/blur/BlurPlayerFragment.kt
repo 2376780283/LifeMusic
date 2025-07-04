@@ -17,8 +17,8 @@ import zzh.lifeplayer.music.extensions.whichFragment
 import zzh.lifeplayer.music.fragments.base.AbsPlayerFragment
 import zzh.lifeplayer.music.fragments.player.PlayerAlbumCoverFragment
 import zzh.lifeplayer.music.glide.BlurTransformation
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.simpleSongCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.simpleSongCoverOptions
 import zzh.lifeplayer.music.glide.crossfadeListener
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.model.Song
@@ -102,7 +102,7 @@ class BlurPlayerFragment : AbsPlayerFragment(R.layout.fragment_blur),
     private fun updateBlur() {
         // https://github.com/bumptech/glide/issues/527#issuecomment-148840717
         Glide.with(this)
-            .load(RetroGlideExtension.getSongModel(MusicPlayerRemote.currentSong))
+            .load(LifeGlideExtension.getSongModel(MusicPlayerRemote.currentSong))
             .simpleSongCoverOptions(MusicPlayerRemote.currentSong)
             .transform(
                 BlurTransformation.Builder(requireContext()).blurRadius(blurAmount.toFloat())

@@ -55,7 +55,7 @@ import zzh.lifeplayer.appthemehelper.util.ToolbarContentTintHelper;
 import zzh.lifeplayer.music.activities.base.AbsThemeActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 
-import zzh.lifeplayer.music.glide.RetroGlideExtension;
+import zzh.lifeplayer.music.glide.LifeGlideExtension;
 
 import zzh.lifeplayer.music.glide.BlurTransformation;
 import zzh.lifeplayer.music.helper.MusicPlayerRemote;
@@ -482,13 +482,13 @@ public class ActivityMusic extends AbsThemeActivity implements OnSeekBarChangeLi
 /*   
     private void loadProfile() {   
     if (bannerImage != null) {
-        File bannerFile = RetroGlideExtension.INSTANCE.getBannerModel();
+        File bannerFile = LifeGlideExtension.INSTANCE.getBannerModel();
         
         // 正确的调用方式：将 Glide 请求作为第一个参数传入
         RequestBuilder<Drawable> requestBuilder = Glide.with(this)
             .load(bannerFile);
             
-        requestBuilder = RetroGlideExtension.INSTANCE.profileBannerOptions(
+        requestBuilder = LifeGlideExtension.INSTANCE.profileBannerOptions(
             requestBuilder,  // 第一个参数：RequestBuilder 实例
             bannerFile       // 第二个参数：File 实例
             // 有很多错误需要修复

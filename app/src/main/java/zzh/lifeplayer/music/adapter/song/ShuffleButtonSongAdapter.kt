@@ -23,7 +23,7 @@ import zzh.lifeplayer.music.extensions.accentOutlineColor
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.PreferenceUtil
-import zzh.lifeplayer.music.util.RetroUtil
+import zzh.lifeplayer.music.util.LifeUtil
 import com.google.android.material.button.MaterialButton
 
 class ShuffleButtonSongAdapter(
@@ -58,7 +58,7 @@ class ShuffleButtonSongAdapter(
             }
         } else {
             super.onBindViewHolder(holder, position - 1)
-            val landscape = RetroUtil.isLandscape
+            val landscape = LifeUtil.isLandscape
             if ((PreferenceUtil.songGridSize > 2 && !landscape) || (PreferenceUtil.songGridSizeLand > 5 && landscape)) {
                 holder.menu?.isVisible = false
             }

@@ -15,8 +15,8 @@ import androidx.media.app.NotificationCompat.MediaStyle
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.activities.MainActivity
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.service.MusicService
 import zzh.lifeplayer.music.service.MusicService.Companion.ACTION_QUIT
@@ -117,7 +117,7 @@ class PlayingNotificationImpl24(
         currentTarget = Glide.with(context)
             .asBitmap()
             .songCoverOptions(song)
-            .load(RetroGlideExtension.getSongModel(song))
+            .load(LifeGlideExtension.getSongModel(song))
             //.checkIgnoreMediaStore()
             .centerCrop()
             .into(object : CustomTarget<Bitmap>(

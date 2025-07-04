@@ -31,13 +31,13 @@ import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.ActivitySongTagEditorBinding
 import zzh.lifeplayer.music.extensions.*
-import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
+import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
 import zzh.lifeplayer.music.glide.palette.BitmapPaletteWrapper
 import zzh.lifeplayer.music.model.ArtworkInfo
 import zzh.lifeplayer.music.repository.SongRepository
 import zzh.lifeplayer.music.util.ImageUtil
 import zzh.lifeplayer.music.util.MusicUtil
-import zzh.lifeplayer.music.util.RetroColorUtil
+import zzh.lifeplayer.music.util.LifeColorUtil
 import zzh.lifeplayer.music.util.logD
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -111,8 +111,8 @@ class SongTagEditorActivity : AbsTagEditorActivity<ActivitySongTagEditorBinding>
         val bitmap = albumArt
         setImageBitmap(
             bitmap,
-            RetroColorUtil.getColor(
-                RetroColorUtil.generatePalette(bitmap),
+            LifeColorUtil.getColor(
+                LifeColorUtil.generatePalette(bitmap),
                 defaultFooterColor()
             )
         )
@@ -181,11 +181,11 @@ class SongTagEditorActivity : AbsTagEditorActivity<ActivitySongTagEditorBinding>
                     resource: BitmapPaletteWrapper,
                     transition: Transition<in BitmapPaletteWrapper>?
                 ) {
-                    RetroColorUtil.getColor(resource.palette, Color.TRANSPARENT)
+                    LifeColorUtil.getColor(resource.palette, Color.TRANSPARENT)
                     albumArtBitmap = resource.bitmap?.let { ImageUtil.resizeBitmap(it, 2048) }
                     setImageBitmap(
                         albumArtBitmap,
-                        RetroColorUtil.getColor(
+                        LifeColorUtil.getColor(
                             resource.palette,
                             defaultFooterColor()
                         )

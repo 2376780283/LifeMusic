@@ -40,7 +40,7 @@ import zzh.lifeplayer.music.interfaces.IAlbumClickListener
 import zzh.lifeplayer.music.interfaces.IArtistClickListener
 import zzh.lifeplayer.music.model.Album
 import zzh.lifeplayer.music.model.Artist
-import zzh.lifeplayer.music.util.RetroUtil
+import zzh.lifeplayer.music.util.LifeUtil
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
@@ -213,10 +213,10 @@ class DetailListFragment : AbsMainActivityFragment(R.layout.fragment_playlist_de
         GridLayoutManager(requireContext(), gridCount(), GridLayoutManager.VERTICAL, false)
 
     private fun gridCount(): Int {
-        if (RetroUtil.isTablet) {
-            return if (RetroUtil.isLandscape) 6 else 4
+        if (LifeUtil.isTablet) {
+            return if (LifeUtil.isLandscape) 6 else 4
         }
-        return if (RetroUtil.isLandscape) 4 else 2
+        return if (LifeUtil.isLandscape) 4 else 2
     }
 
 

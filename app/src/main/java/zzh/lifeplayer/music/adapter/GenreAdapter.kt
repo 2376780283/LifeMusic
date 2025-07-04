@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2020 Hemanth Savarla.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 package zzh.lifeplayer.music.adapter
 
 import android.annotation.SuppressLint
@@ -23,10 +9,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.ItemGenreBinding
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
-import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
-import zzh.lifeplayer.music.glide.RetroMusicColoredTarget
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.glide.LifeMusicColoredTarget
 import zzh.lifeplayer.music.interfaces.IGenreClickListener
 import zzh.lifeplayer.music.model.Genre
 import zzh.lifeplayer.music.util.MusicUtil
@@ -73,8 +59,8 @@ class GenreAdapter(
         Glide.with(activity)
             .asBitmapPalette()
             .songCoverOptions(genreSong)
-            .load(RetroGlideExtension.getSongModel(genreSong))
-            .into(object : RetroMusicColoredTarget(holder.binding.image) {
+            .load(LifeGlideExtension.getSongModel(genreSong))
+            .into(object : LifeMusicColoredTarget(holder.binding.image) {
                 override fun onColorReady(colors: MediaNotificationProcessor) {
                     setColors(holder, colors)
                 }

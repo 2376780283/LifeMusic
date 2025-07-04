@@ -16,10 +16,10 @@ import zzh.lifeplayer.music.activities.base.AbsThemeActivity
 import zzh.lifeplayer.music.databinding.ActivityShareInstagramBinding
 import zzh.lifeplayer.music.extensions.accentColor
 import zzh.lifeplayer.music.extensions.setStatusBarColor
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
-import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
-import zzh.lifeplayer.music.glide.RetroMusicColoredTarget
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.glide.LifeMusicColoredTarget
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.Share
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
@@ -59,8 +59,8 @@ class ShareInstagramStory : AbsThemeActivity() {
             Glide.with(this)
                 .asBitmapPalette()
                 .songCoverOptions(songFinal)
-                .load(RetroGlideExtension.getSongModel(songFinal))
-                .into(object : RetroMusicColoredTarget(binding.image) {
+                .load(LifeGlideExtension.getSongModel(songFinal))
+                .into(object : LifeMusicColoredTarget(binding.image) {
                     override fun onColorReady(colors: MediaNotificationProcessor) {
                         setColors(colors.backgroundColor)
                     }

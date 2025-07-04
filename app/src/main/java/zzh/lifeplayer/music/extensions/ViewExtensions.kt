@@ -36,7 +36,7 @@ import androidx.core.view.*
 import zzh.lifeplayer.appthemehelper.ThemeStore
 import zzh.lifeplayer.appthemehelper.util.TintHelper
 import zzh.lifeplayer.music.util.PreferenceUtil
-import zzh.lifeplayer.music.util.RetroUtil
+import zzh.lifeplayer.music.util.LifeUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
@@ -227,7 +227,7 @@ fun View.focusAndShowKeyboard() {
  */
 fun View.drawAboveSystemBars(onlyPortrait: Boolean = true) {
     if (PreferenceUtil.isFullScreenMode) return
-    if (onlyPortrait && RetroUtil.isLandscape) return
+    if (onlyPortrait && LifeUtil.isLandscape) return
     applyInsetter {
         type(navigationBars = true) {
             margin()

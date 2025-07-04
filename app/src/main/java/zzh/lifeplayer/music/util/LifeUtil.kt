@@ -22,7 +22,7 @@ import java.net.NetworkInterface
 import java.text.DecimalFormat
 import java.util.*
 
-object RetroUtil {
+object LifeUtil {
     fun formatValue(numValue: Float): String {
         var value = numValue
         val arr = arrayOf("", "K", "M", "B", "T", "P", "E")

@@ -29,13 +29,13 @@ import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.activities.MainActivity
 import zzh.lifeplayer.music.appwidgets.base.BaseAppWidget
 import zzh.lifeplayer.music.extensions.getTintedDrawable
-import zzh.lifeplayer.music.glide.RetroGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension
 import zzh.lifeplayer.music.service.MusicService
 import zzh.lifeplayer.music.service.MusicService.Companion.ACTION_REWIND
 import zzh.lifeplayer.music.service.MusicService.Companion.ACTION_SKIP
 import zzh.lifeplayer.music.service.MusicService.Companion.ACTION_TOGGLE_PAUSE
 import zzh.lifeplayer.music.util.PreferenceUtil
-import zzh.lifeplayer.music.util.RetroUtil
+import zzh.lifeplayer.music.util.LifeUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
@@ -144,7 +144,7 @@ class AppWidgetBig : BaseAppWidget() {
         linkButtons(service, appWidgetView)
 
         // Load the album cover async and push the update on completion
-        val p = RetroUtil.getScreenSize(service)
+        val p = LifeUtil.getScreenSize(service)
         val widgetImageSize = p.x.coerceAtMost(p.y)
         val appContext = service.applicationContext
         service.runOnUiThread {
@@ -154,7 +154,7 @@ class AppWidgetBig : BaseAppWidget() {
             target = Glide.with(appContext)
                 .asBitmap()
                 //.checkIgnoreMediaStore()
-                .load(RetroGlideExtension.getSongModel(song))
+                .load(LifeGlideExtension.getSongModel(song))
                 .into(object : CustomTarget<Bitmap>(widgetImageSize, widgetImageSize) {
                     override fun onResourceReady(
                         resource: Bitmap,

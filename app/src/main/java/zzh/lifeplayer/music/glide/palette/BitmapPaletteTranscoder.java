@@ -22,7 +22,7 @@ import com.bumptech.glide.load.Options;
 import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.resource.transcode.ResourceTranscoder;
 
-import zzh.lifeplayer.music.util.RetroColorUtil;
+import zzh.lifeplayer.music.util.LifeColorUtil;
 
 public class BitmapPaletteTranscoder implements ResourceTranscoder<Bitmap,  BitmapPaletteWrapper> {
 
@@ -30,7 +30,7 @@ public class BitmapPaletteTranscoder implements ResourceTranscoder<Bitmap,  Bitm
   public Resource<BitmapPaletteWrapper> transcode(@NonNull Resource<Bitmap> toTranscode, @NonNull Options options) {
     Bitmap bitmap = toTranscode.get();
     BitmapPaletteWrapper bitmapPaletteWrapper =
-            new BitmapPaletteWrapper(bitmap, RetroColorUtil.generatePalette(bitmap));
+            new BitmapPaletteWrapper(bitmap, LifeColorUtil.generatePalette(bitmap));
     return new BitmapPaletteResource(bitmapPaletteWrapper);
   }
 }

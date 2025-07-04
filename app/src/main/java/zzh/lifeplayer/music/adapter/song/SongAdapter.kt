@@ -29,10 +29,10 @@ import zzh.lifeplayer.music.EXTRA_ALBUM_ID
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.base.AbsMultiSelectAdapter
 import zzh.lifeplayer.music.adapter.base.MediaEntryViewHolder
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
-import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
-import zzh.lifeplayer.music.glide.RetroMusicColoredTarget
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.glide.LifeMusicColoredTarget
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.SortOrder
 import zzh.lifeplayer.music.helper.menu.SongMenuHelper
@@ -40,7 +40,7 @@ import zzh.lifeplayer.music.helper.menu.SongsMenuHelper
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
-import zzh.lifeplayer.music.util.RetroUtil
+import zzh.lifeplayer.music.util.LifeUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 import com.bumptech.glide.Glide
 import me.zhanghai.android.fastscroll.PopupTextProvider
@@ -98,7 +98,7 @@ open class SongAdapter(
         holder.text?.text = getSongText(song)
         holder.text2?.text = getSongText(song)
         loadAlbumCover(song, holder)
-        val landscape = RetroUtil.isLandscape
+        val landscape = LifeUtil.isLandscape
         if ((PreferenceUtil.songGridSize > 2 && !landscape) || (PreferenceUtil.songGridSizeLand > 5 && landscape)) {
             holder.menu?.isVisible = false
         }
@@ -121,8 +121,8 @@ open class SongAdapter(
         Glide.with(activity)
             .asBitmapPalette()
             .songCoverOptions(song)
-            .load(RetroGlideExtension.getSongModel(song))
-            .into(object : RetroMusicColoredTarget(holder.image!!) {
+            .load(LifeGlideExtension.getSongModel(song))
+            .into(object : LifeMusicColoredTarget(holder.image!!) {
                 override fun onColorReady(colors: MediaNotificationProcessor) {
                     setColors(colors, holder)
                 }

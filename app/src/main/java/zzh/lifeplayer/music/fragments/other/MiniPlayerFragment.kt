@@ -31,13 +31,13 @@ import zzh.lifeplayer.music.extensions.show
 import zzh.lifeplayer.music.extensions.textColorPrimary
 import zzh.lifeplayer.music.extensions.textColorSecondary
 import zzh.lifeplayer.music.fragments.base.AbsMusicServiceFragment
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.MusicProgressViewUpdateHelper
 import zzh.lifeplayer.music.helper.PlayPauseButtonOnClickHandler
 import zzh.lifeplayer.music.util.PreferenceUtil
-import zzh.lifeplayer.music.util.RetroUtil
+import zzh.lifeplayer.music.util.LifeUtil
 import com.bumptech.glide.Glide
 import kotlin.math.abs
 
@@ -69,7 +69,7 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
     }
 
     fun setUpButtons() {
-        if (RetroUtil.isTablet) {
+        if (LifeUtil.isTablet) {
             binding.actionNext.show()
             binding.actionPrevious.show()
         } else {
@@ -115,8 +115,8 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
     private fun updateSongCover() {
         val song = MusicPlayerRemote.currentSong
         Glide.with(requireContext())
-            .load(RetroGlideExtension.getSongModel(song))
-            .transition(RetroGlideExtension.getDefaultTransition())
+            .load(LifeGlideExtension.getSongModel(song))
+            .transition(LifeGlideExtension.getDefaultTransition())
             .songCoverOptions(song)
             .into(binding.image)
     }

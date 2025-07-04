@@ -12,10 +12,10 @@ import zzh.lifeplayer.music.extensions.hideStatusBar
 import zzh.lifeplayer.music.extensions.setTaskDescriptionColorAuto
 import zzh.lifeplayer.music.extensions.whichFragment
 import zzh.lifeplayer.music.fragments.player.lockscreen.LockScreenControlsFragment
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
-import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
-import zzh.lifeplayer.music.glide.RetroMusicColoredTarget
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.glide.LifeMusicColoredTarget
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 import com.bumptech.glide.Glide
@@ -96,9 +96,9 @@ class LockScreenActivity : AbsMusicServiceActivity() {
         Glide.with(this)
             .asBitmapPalette()
             .songCoverOptions(song)
-            .load(RetroGlideExtension.getSongModel(song))
+            .load(LifeGlideExtension.getSongModel(song))
             .dontAnimate()
-            .into(object : RetroMusicColoredTarget(binding.image) {
+            .into(object : LifeMusicColoredTarget(binding.image) {
                 override fun onColorReady(colors: MediaNotificationProcessor) {
                     fragment?.setColor(colors)
                 }

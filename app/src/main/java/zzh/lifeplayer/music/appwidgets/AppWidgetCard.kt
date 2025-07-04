@@ -15,9 +15,9 @@ import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.activities.MainActivity
 import zzh.lifeplayer.music.appwidgets.base.BaseAppWidget
 import zzh.lifeplayer.music.extensions.getTintedDrawable
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.asBitmapPalette
-import zzh.lifeplayer.music.glide.RetroGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
 import zzh.lifeplayer.music.glide.palette.BitmapPaletteWrapper
 import zzh.lifeplayer.music.service.MusicService
 import zzh.lifeplayer.music.service.MusicService.Companion.ACTION_REWIND
@@ -133,7 +133,7 @@ class AppWidgetCard : BaseAppWidget() {
             target = Glide.with(service)
                 .asBitmapPalette()
                 .songCoverOptions(song)
-                .load(RetroGlideExtension.getSongModel(song))
+                .load(LifeGlideExtension.getSongModel(song))
                 .centerCrop()
                 .into(object : CustomTarget<BitmapPaletteWrapper>(imageSize, imageSize) {
                     override fun onResourceReady(

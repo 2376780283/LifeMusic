@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -22,7 +21,7 @@ import zzh.lifeplayer.music.util.PreferenceUtil.playbackPitch
 import zzh.lifeplayer.music.util.PreferenceUtil.playbackSpeed
 import zzh.lifeplayer.music.util.logE
 
-class RetroExoPlayer(context: Context) : AudioManagerPlayback(context), Player.Listener {
+class LifeExoPlayer(context: Context) : AudioManagerPlayback(context), Player.Listener {
     private var player: ExoPlayer = ExoPlayer.Builder(context).build()
     override var callbacks: PlaybackCallbacks? = null
 
@@ -243,6 +242,6 @@ class RetroExoPlayer(context: Context) : AudioManagerPlayback(context), Player.L
     }
 
     companion object {
-        val TAG: String = RetroExoPlayer::class.java.simpleName
+        val TAG: String = LifeExoPlayer::class.java.simpleName
     }
 }

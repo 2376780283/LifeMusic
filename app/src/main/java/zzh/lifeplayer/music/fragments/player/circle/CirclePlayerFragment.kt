@@ -38,8 +38,8 @@ import zzh.lifeplayer.music.fragments.MusicSeekSkipTouchListener
 import zzh.lifeplayer.music.fragments.base.AbsPlayerFragment
 import zzh.lifeplayer.music.fragments.base.goToAlbum
 import zzh.lifeplayer.music.fragments.base.goToArtist
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.simpleSongCoverOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.simpleSongCoverOptions
 import zzh.lifeplayer.music.glide.crossfadeListener
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.MusicProgressViewUpdateHelper
@@ -240,7 +240,7 @@ class CirclePlayerFragment : AbsPlayerFragment(R.layout.fragment_circle_player),
             binding.songInfo.hide()
         }
         Glide.with(this)
-            .load(RetroGlideExtension.getSongModel(MusicPlayerRemote.currentSong))
+            .load(LifeGlideExtension.getSongModel(MusicPlayerRemote.currentSong))
             .simpleSongCoverOptions(MusicPlayerRemote.currentSong)
             .thumbnail(lastRequest)
             .error(Glide.with(this).load(R.drawable.default_audio_art).fitCenter())

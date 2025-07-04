@@ -30,8 +30,8 @@ import zzh.lifeplayer.music.fragments.base.AbsPlayerFragment
 import zzh.lifeplayer.music.fragments.base.goToArtist
 import zzh.lifeplayer.music.fragments.player.CoverLyricsFragment
 import zzh.lifeplayer.music.fragments.player.PlayerAlbumCoverFragment
-import zzh.lifeplayer.music.glide.RetroGlideExtension
-import zzh.lifeplayer.music.glide.RetroGlideExtension.artistImageOptions
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.artistImageOptions
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
@@ -133,7 +133,7 @@ class FullPlayerFragment : AbsPlayerFragment(R.layout.fragment_full) {
             .observe(viewLifecycleOwner) { artist ->
                 if (artist.id != -1L) {
                     Glide.with(requireActivity())
-                        .load(RetroGlideExtension.getArtistModel(artist))
+                        .load(LifeGlideExtension.getArtistModel(artist))
                         .artistImageOptions(artist)
                         .into(binding.artistImage)
                 }
