@@ -12,7 +12,10 @@ import zzh.lifeplayer.music.model.Song
 
 abstract class PlayingNotification(context: Context) :
     NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID) {
-
+    init {
+        // 这里直接设置小图标
+        setSmallIcon(R.drawable.ic_notification)
+    }
     abstract fun updateMetadata(song: Song, onUpdate: () -> Unit)
 
     abstract fun setPlaying(isPlaying: Boolean)
