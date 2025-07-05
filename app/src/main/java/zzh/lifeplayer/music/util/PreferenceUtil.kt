@@ -253,7 +253,7 @@ object PreferenceUtil {
             TOGGLE_HOME_BANNER, true
         )
     var isClassicNotification
-        get() = sharedPreferences.getBoolean(CLASSIC_NOTIFICATION, false)
+        get() = sharedPreferences.getBoolean(CLASSIC_NOTIFICATION, true)
         set(value) = sharedPreferences.edit { putBoolean(CLASSIC_NOTIFICATION, value) }
 
     val isScreenOnEnabled get() = sharedPreferences.getBoolean(KEEP_SCREEN_ON, false)
