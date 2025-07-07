@@ -738,6 +738,7 @@ object PreferenceUtil {
         } else {
             TopAppBarLayout.AppBarMode.SIMPLE
         }
+            
 
     val wallpaperAccent
         get() = sharedPreferences.getBoolean(

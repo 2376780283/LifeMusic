@@ -160,6 +160,7 @@
     <string name="depth">Depth</string>
     <string name="description">Description</string>
     <string name="device_info">Device info</string>
+    <string name="device">Device</string>
     <string name="dialog_message_set_ringtone">Allow ZZH Music to modify audio settings</string>
     <string name="dialog_title_set_ringtone">Set ringtone</string>
     <string name="disc_hint">Disc Number</string>
@@ -263,6 +264,7 @@
     <string name="new_playlist_title">New playlist</string>
     <string name="new_start_directory">%s is the new start directory.</string>
     <string name="next_song">Next Song</string>
+    <string name="navigate">Navigate</string>
     <string name="no_albums">You have no albums</string>
     <string name="no_artists">You have no artists</string>
     <string name="no_audio_ID">"Play a song first, then try again."</string>
@@ -312,6 +314,7 @@
     <string name="playback_pitch">Pitch</string>
     <string name="playback_settings">Playback Settings</string>
     <string name="playback_speed">Playback Speed</string>
+    <string name="playing_queue_group">Playing queue</string>
     <string name="playing_notification_description">The playing notification provides actions for play/pause etc.</string>
     <string name="playing_notification_name">Playing notification</string>
     <string name="playlist_created_sucessfully">%s created successfully</string>
@@ -429,6 +432,7 @@
     <string name="pref_title_toggle_volume">Volume controls</string>
     <string name="pref_title_wallpaper_accent">Wallpaper accent color</string>
     <string name="pref_title_whitelist">Whitelist music</string>
+
     <string name="pro">Pro</string>
     <string name="pro_summary">Black theme, Now playing themes, Carousel effect and more..</string>
     <string name="profile">Profile</string>
@@ -576,6 +580,7 @@
     
     <string name="no_effects">Effects not available.</string>
     <string name="eq_dialog_title">Equalizer</string>
+    <string name="effects">Effects</string>
     <string name="headset_plug">Plug in headphones for these effects.</string>
     <string name="bass_boost_strength">Bass boost</string>
     <string name="virtualizer_strength">Surround sound</string>
@@ -586,5 +591,6 @@
     <string name="fx_ok">OK</string>
     <string name="fx_cancel">Cancel</string>
     <string name="fx_picker_title">选择音效面板</string>
+    <string name="menu_group_info">Info</string>
     <!-- test -->
 </resources>

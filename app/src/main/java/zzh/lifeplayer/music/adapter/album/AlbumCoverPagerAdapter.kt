@@ -93,34 +93,10 @@ class AlbumCoverPagerAdapter(
             savedInstanceState: Bundle?
         ): View? {
             val view = inflater.inflate(getLayoutWithPlayerTheme(), container, false)
-            /*
-            view.setOnClickListener {
-                if (mainActivity.getBottomSheetBehavior().state == STATE_EXPANDED) {
-                    showLyricsDialog()
-                }
-            }*/ // 手势冲突解决
+
             return view
         }
-/*
-        private fun showLyricsDialog() {
-            lifecycleScope.launch(Dispatchers.IO) {
-                val data: String? = MusicUtil.getLyrics(song)
-                withContext(Dispatchers.Main) {
-                    MaterialAlertDialogBuilder(
-                        requireContext(),
-                        com.google.android.material.R.style.ThemeOverlay_MaterialComponents_Dialog_Alert
-                    ).apply {
-                        setTitle(song.title)
-                        setMessage(if (data.isNullOrEmpty()) "No lyrics found" else data)
-                        setNegativeButton(R.string.synced_lyrics) { _, _ ->
-                            goToLyrics(requireActivity())
-                        }
-                        show()
-                    }
-                }
-            }
-        }
-*/
+
         private fun getLayoutWithPlayerTheme(): Int {
             return when (PreferenceUtil.nowPlayingScreen) {
                 Card, Fit, Tiny, Classic, Gradient, Full -> R.layout.fragment_album_full_cover

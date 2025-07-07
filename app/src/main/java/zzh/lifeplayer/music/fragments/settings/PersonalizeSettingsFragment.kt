@@ -2,12 +2,18 @@ package zzh.lifeplayer.music.fragments.settings
 
 import android.os.Bundle
 import android.view.View
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+
 import zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATEListPreference
 import zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATESwitchPreference
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.*
 
 class PersonalizeSettingsFragment : AbsSettingsFragment() {
+
+    private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_ui)
@@ -43,6 +49,6 @@ class PersonalizeSettingsFragment : AbsSettingsFragment() {
         appBarMode?.setOnPreferenceChangeListener { _, _ ->
             restartActivity()
             true
-        }
+        }     
     }
 }
