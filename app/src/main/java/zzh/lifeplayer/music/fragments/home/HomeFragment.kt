@@ -158,26 +158,11 @@ class HomeFragment :
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigate(R.id.action_search, null, navOptions)
         }
- //        不再使用hex color 
- //        val hexColor = String.format("#%06X", 0xFFFFFF and accentColor())
- //        val hexColor = "#ff33b5e5" // use yin bian ma
         val appName = "Life Music"
         binding.appBarLayout.title = appName
     }
     
    private fun loadProfile() {
-   /*
-    binding.bannerImage?.let {
-        Glide.with(this)
-            .load(LifeGlideExtension.getBannerModel())
-            .profileBannerOptions(LifeGlideExtension.getBannerModel())
-              .transform(
-                BlurTransformation.Builder(requireContext()).blurRadius(blurAmount.toFloat())
-                    .build()
-            )
-            .into(it)
-    }
-   */
     binding.bannerImagelarge?.let {
         Glide.with(this)
             .load(LifeGlideExtension.getBannerModel())
@@ -239,7 +224,7 @@ class HomeFragment :
             MaterialSharedAxis(MaterialSharedAxis.Y, true).addTarget(CoordinatorLayout::class.java)
         reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, false)
     }
-
+/*
     private fun loadSuggestions(songs: List<Song>) { // 建议song 部分
         if (!PreferenceUtil.homeSuggestions || songs.isEmpty()) {
      //  if (!PreferenceUtil.homeSuggestions) {
@@ -283,8 +268,8 @@ class HomeFragment :
                 .songCoverOptions(songs[index])
                 .into(imageView)
         }
-    }
-    /*
+    }*/
+    
     private fun loadSuggestions(songs: List<Song>) {
     if (!PreferenceUtil.homeSuggestions || songs.isEmpty()) {
         binding.suggestions.root.isVisible = false
@@ -345,7 +330,7 @@ class HomeFragment :
     for (i in maxItems until images.size) {
         images[i].isVisible = false
     }
-}*/
+}
 
     companion object {
 

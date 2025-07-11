@@ -5,13 +5,13 @@
 
     <dimen name="progress_container_height">20dp</dimen>
 
-    <dimen name="tab_height">48dp</dimen>
+    <dimen name="tab_height">49dp</dimen>
 
     <dimen name="notification_big_image_size">112dp</dimen>
 
     <dimen name="list_item_image_icon_padding">8dp</dimen>
 
-    <dimen name="mini_player_height">56dp</dimen>
+    <dimen name="mini_player_height">59dp</dimen> 
     <dimen name="bottom_nav_height">80dp</dimen>
     <dimen name="bottom_nav_mini_player_height">136dp</dimen>
 

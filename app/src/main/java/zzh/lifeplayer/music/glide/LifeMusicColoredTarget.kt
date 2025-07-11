@@ -1,17 +1,53 @@
+package zzh.lifeplayer.music.glide
+
+import android.graphics.drawable.Drawable
+import android.widget.ImageView
+import zzh.lifeplayer.music.App
+import zzh.lifeplayer.music.extensions.colorControlNormal
+import zzh.lifeplayer.music.glide.palette.BitmapPaletteTarget
+import zzh.lifeplayer.music.glide.palette.BitmapPaletteWrapper
+import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
+import com.bumptech.glide.request.transition.Transition
+import zzh.lifeplayer.music.R       // ← 记得导入你的 tag 资源
+
+abstract class LifeMusicColoredTarget(view: ImageView) : BitmapPaletteTarget(view) {
+
+    protected val defaultFooterColor: Int
+        get() = getView().context.colorControlNormal()
+
+    abstract fun onColorReady(colors: MediaNotificationProcessor)
+
+    override fun onLoadFailed(errorDrawable: Drawable?) {
+        super.onLoadFailed(errorDrawable)
+        onColorReady(MediaNotificationProcessor.errorColor(App.getContext()))
+    }
+
+    override fun onResourceReady(
+        resource: BitmapPaletteWrapper,
+        transition: Transition<in BitmapPaletteWrapper>?
+    ) {
+        super.onResourceReady(resource, transition)
+
+        // ① 提取颜色回调
+        MediaNotificationProcessor(App.getContext()).getPaletteAsync({ palette ->
+            onColorReady(palette)
+        }, resource.bitmap)
+
+        // ② 做淡入动画
+        val imageView = getView() ?: return
+        val alreadyFaded = imageView.getTag(R.id.tag_has_faded_in) == true
+        if (!alreadyFaded) {
+            imageView.alpha = 0f
+            imageView.animate()
+                .alpha(1f)
+                .setDuration(600)        // 动画时长 300ms，可调
+                .setStartDelay(0)
+                .start()
+            imageView.setTag(R.id.tag_has_faded_in, true)
+        }
+    }
+}
 /*
- * Copyright (c) 2020 Hemanth Savarla.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 package zzh.lifeplayer.music.glide
 
 import android.graphics.drawable.Drawable
@@ -45,3 +81,5 @@ abstract class LifeMusicColoredTarget(view: ImageView) : BitmapPaletteTarget(vie
         }, resource.bitmap)
     }
 }
+
+*/

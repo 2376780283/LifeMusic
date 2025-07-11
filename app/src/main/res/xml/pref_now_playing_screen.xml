@@ -32,11 +32,11 @@
         android:title="@string/pref_title_lyrics_type" />
 
     <zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATESeekBarPreference
-        android:defaultValue="26"
+        android:defaultValue="25"
         android:key="lyrics_text_size"
         android:layout="@layout/list_item_view_seekbar"
         app:ateKey_pref_unit="dp"
-        android:max="64"
+        android:max="25"
         android:summary="@string/perf_summary_lyrics_text_size"
         android:title="@string/pref_lyrics_text_size"
         app:showSeekBarValue="true" />

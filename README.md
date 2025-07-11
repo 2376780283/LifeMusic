@@ -3,9 +3,6 @@
  url - https://github.com/RetroMusicPlayer/RetroMusicPlayer/
 一款简洁美观的 Android 音乐播放应用，让你のlife充满旋律。
 
-![screenshot](screenShot/qing.jpeg)
-
----
 
 ## 📱 应用介绍
 

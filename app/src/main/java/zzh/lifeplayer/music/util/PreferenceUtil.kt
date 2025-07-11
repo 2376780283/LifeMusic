@@ -222,7 +222,7 @@ object PreferenceUtil {
     val isIgnoreMediaStoreArtwork
         get() = sharedPreferences.getBoolean(
             IGNORE_MEDIA_STORE_ARTWORK,
-            false
+            true // android 11+ 
         )
 
     val isVolumeVisibilityMode
@@ -699,10 +699,9 @@ object PreferenceUtil {
     val crossFadeDuration
         get() = sharedPreferences
             .getInt(CROSS_FADE_DURATION, 0)
-     // 歌词大小        
     val lyricsfontsize
         get() = sharedPreferences
-            .getInt(LYRICS_FONT_SIZE, 26).toFloat()
+            .getInt(LYRICS_FONT_SIZE, 25).toFloat()
 
     val isCrossfadeEnabled get() = crossFadeDuration > 0
 

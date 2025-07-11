@@ -100,7 +100,7 @@ class ArtistAdapter(
         Glide.with(activity)
             .asBitmapPalette()
             .artistImageOptions(artist)
-            .load(LifeGlideExtension.getArtistModel(artist))
+            .load(LifeGlideExtension.getArtistModel(artist))            
             .transition(LifeGlideExtension.getDefaultTransition())
             .into(object : LifeMusicColoredTarget(holder.image!!) {
                 override fun onColorReady(colors: MediaNotificationProcessor) {
