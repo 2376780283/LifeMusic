@@ -42,16 +42,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
+    implementation project(':ucrop')
     implementation libs.androidx.core.ktx
     implementation libs.androidx.appcompat
 
     implementation "androidx.exifinterface:exifinterface:1.3.2"
     implementation 'androidx.documentfile:documentfile:1.0.1'
-
-    //More Info: https://github.com/Yalantis/uCrop
-    implementation 'com.github.yalantis:ucrop:2.2.6'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

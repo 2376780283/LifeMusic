@@ -112,6 +112,7 @@ static def getProperty(Properties properties, String name) {
 dependencies {
     implementation project(':appthemehelper')
     implementation project(':imagepicker')
+    implementation project(':ucrop')
     implementation libs.gridLayout
 
     implementation libs.androidx.appcompat
