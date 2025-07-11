@@ -29,7 +29,7 @@ import android.util.Base64
 import android.util.Log
 import androidx.annotation.XmlRes
 import androidx.media.MediaBrowserServiceCompat
-import zzh.lifeplayer.music.BuildConfig
+import cat.ereza.customactivityoncrash.BuildConfig
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.security.MessageDigest
@@ -49,8 +49,8 @@ import java.util.*
  * For more information, see res/xml/allowed_media_browser_callers.xml.
  */
 class PackageValidator(
-        context: Context,
-        @XmlRes xmlResId: Int
+    context: Context,
+    @XmlRes xmlResId: Int
 ) {
     private val context: Context
     private val packageManager: PackageManager

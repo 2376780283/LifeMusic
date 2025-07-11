@@ -47,7 +47,9 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import org.jaudiotagger.tag.FieldKey
 import org.koin.android.ext.android.inject
 import java.util.*
-
+/*
+*  Mistakes on android 11 is crashed
+*/
 class SongTagEditorActivity : AbsTagEditorActivity<ActivitySongTagEditorBinding>() {
 
     override val bindingInflater: (LayoutInflater) -> ActivitySongTagEditorBinding =

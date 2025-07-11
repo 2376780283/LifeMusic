@@ -2,6 +2,7 @@ package com.zmusicfx.musicfx;
 
 import com.zmusicfx.audiofx.OpenSLESConstants;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -202,7 +203,7 @@ public class ActivityMusic extends AbsThemeActivity implements OnSeekBarChangeLi
                     if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
                         BluetoothDevice device =
                                 intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                        int deviceClass = device.getBluetoothClass().getDeviceClass();
+                        @SuppressLint("MissingPermission") int deviceClass = device.getBluetoothClass().getDeviceClass();
 
                         // 扩展支持的设备类型
                         if (deviceClass == BluetoothClass.Device.AUDIO_VIDEO_HEADPHONES

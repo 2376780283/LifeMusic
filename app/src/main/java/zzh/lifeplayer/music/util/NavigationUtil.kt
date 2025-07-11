@@ -75,7 +75,7 @@ object NavigationUtil {
                     putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC)
                 }.also { intent ->
                     activity.startActivityForResult(intent, 0)
-                    // 添加动画
+                    // 添加动画 ru guo activity support
                     activity.overridePendingTransition(R.anim.retro_fragment_open_enter, 0)
                 }
             } catch (e: Exception) {

@@ -122,21 +122,20 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
                 }
                 handled = true
             }
-        if (uri != null && uri.toString().isNotEmpty()) {
-            MusicPlayerRemote.playFromUri(this@MainActivity, uri)
-            handled = true
-        } 
-        // 替换已弃用的常量为字符串字面量
-        else if ("vnd.android.cursor.dir/playlist" == mimeType) {
-            val id = parseLongFromIntent(intent, "playlistId", "playlist")
-            if (id >= 0L) {
-                val position: Int = intent.getIntExtra("position", 0)
-                val songs: List<Song> = PlaylistSongsLoader.getPlaylistSongList(get(), id)
-                MusicPlayerRemote.openQueue(songs, position, true)
+            if (uri != null && uri.toString().isNotEmpty()) {
+                MusicPlayerRemote.playFromUri(this@MainActivity, uri)
                 handled = true
             }
-        } 
-        else if ("vnd.android.cursor.dir/album" == mimeType) {
+            // 替换已弃用的常量为字符串字面量
+            else if ("vnd.android.cursor.dir/playlist" == mimeType) {
+                val id = parseLongFromIntent(intent, "playlistId", "playlist")
+                if (id >= 0L) {
+                    val position: Int = intent.getIntExtra("position", 0)
+                    val songs: List<Song> = PlaylistSongsLoader.getPlaylistSongList(get(), id)
+                    MusicPlayerRemote.openQueue(songs, position, true)
+                    handled = true
+                }
+            } else if ("vnd.android.cursor.dir/album" == mimeType) {
             val id = parseLongFromIntent(intent, "albumId", "album")
             if (id >= 0L) {
                 val position: Int = intent.getIntExtra("position", 0)
