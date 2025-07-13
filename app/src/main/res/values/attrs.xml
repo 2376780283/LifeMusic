@@ -23,4 +23,17 @@
             format="string" />
     </declare-styleable>
 
+    <declare-styleable name="RetroShapeableImageView">
+        <attr
+            name="retroCornerSize"
+            format="dimension" />
+        <attr
+            name="circleShape"
+            format="boolean" />
+        <attr
+            name="retroStrokeColor"
+            format="reference|color" />
+    </declare-styleable>
 </resources>
+
+

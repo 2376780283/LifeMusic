@@ -10,15 +10,15 @@
         android:layout_height="0dp"
         android:layout_margin="16dp"
         app:cardCornerRadius="40dp"
-        app:layout_constraintDimensionRatio="21:9"
+        app:layout_constraintDimensionRatio="21:11" 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_height="match_parent"> 
+            
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/bannerImage"
                 android:layout_width="match_parent"
@@ -30,10 +30,10 @@
 
             <zzh.lifeplayer.music.views.RetroShapeableImageView
                 android:id="@+id/userImage"
-                android:layout_width="104dp"
-                android:layout_height="104dp"
-                android:layout_marginStart="26dp"
-                android:layout_marginBottom="12dp"
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp"
                 android:scaleType="centerCrop"
                 app:retroStrokeColor="@color/stroke_dynamic"
                 android:transitionName="user_image"

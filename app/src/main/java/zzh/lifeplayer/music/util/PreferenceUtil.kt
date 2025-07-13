@@ -376,7 +376,7 @@ object PreferenceUtil {
 
     var songGridStyle: GridStyle
         get() {
-            val id: Int = sharedPreferences.getInt(SONG_GRID_STYLE, 0)
+            val id: Int = sharedPreferences.getInt(SONG_GRID_STYLE, 0)  // def is 0
             // We can directly use "first" kotlin extension function here but
             // there maybe layout id stored in this so to avoid a crash we use
             // "firstOrNull"

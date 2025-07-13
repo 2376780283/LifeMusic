@@ -330,8 +330,4 @@
                 android:value="true" />
         </service>
     </application>
-    <!-- This is not that important, it's just here so that we can query equalizer package and check if it's present on A11+ because of Package visibility restrictions. -->
-    <queries>
-        <package android:name="com.android.musicfx" />
-    </queries>
 </manifest>

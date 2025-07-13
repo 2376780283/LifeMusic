@@ -5,4 +5,6 @@
 
     <color name="bottomSheetColor">#202020</color>
     <color name="widget_md3_bg_color">@color/darkerColorSurface</color>
+    <!-- res/values-night/colors.xml -->
+    <color name="stroke_dynamic">#FFFFFF</color>
 </resources>
