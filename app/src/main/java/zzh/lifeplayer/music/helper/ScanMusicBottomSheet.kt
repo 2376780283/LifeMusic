@@ -47,19 +47,15 @@ class ScanMusicBottomSheet : BottomSheetDialogFragment() {
 
     interface ScanMusicStartListener {
         fun onMusicScanStart(fileToScan: File)
-
     }
 
     var listener: ScanMusicStartListener? = null
 
-
     private lateinit var scanViewModel: ScanViewModel
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        isCancelable = false
+//        isCancelable = false
 
         arguments?.let {
 
@@ -70,8 +66,6 @@ class ScanMusicBottomSheet : BottomSheetDialogFragment() {
                 targetFile = it.getSerializable(ARG_TARGET_FILE) as? File
             }
         }
-
-
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,11 +77,8 @@ class ScanMusicBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         scanViewModel =
             ViewModelProvider(requireActivity())[ScanViewModel::class.java]
-
         scanViewModel.scanStatus.observe(viewLifecycleOwner) { result ->
 
             when (result) {
@@ -125,13 +116,15 @@ class ScanMusicBottomSheet : BottomSheetDialogFragment() {
             val bottomSheet = bottomSheetDialog?.findViewById<FrameLayout>(
                 com.google.android.material.R.id.design_bottom_sheet
             )
-            if (bottomSheet != null) {
-                val behavior = BottomSheetBehavior.from(bottomSheet)
-                behavior.isDraggable = false
-            }
+             bottomSheet?.let { sheet ->
+             val behavior = BottomSheetBehavior.from(sheet)
+              // 默认直接展开
+              behavior.state = BottomSheetBehavior.STATE_EXPANDED
+              // （可选）不允许回到折叠态，始终保持展开或隐藏
+              behavior.skipCollapsed = true
+              // behavior.isDraggable = false
+             }
         }
-
-        //binding.tvLoading.text = getString(R.string.ready_to_scan)
         binding.tvLoading.show()
         binding.progressCircular.accentColor()
         binding.progressCircular.hide()

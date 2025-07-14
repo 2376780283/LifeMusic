@@ -36,5 +36,7 @@
 |------|----------|----------|
 | ![](screenShot/home.png) | ![](screenShot/player.png) | ![](screenShot/list.png) |
 
+ ![](screenShot/Screenshot_2025-07-14-14-11-02-660_zzh.lifeplayer.music.debug.jpg) |  ![](screenShot/Screenshot_2025-07-14-14-11-07-910_zzh.lifeplayer.music.debug.jpg) 
+
 ---
 # 软件の界面嚴格遵循 material you
