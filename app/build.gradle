@@ -5,12 +5,12 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.devtools.ksp'
 
 android {
-    compileSdk 35
-    namespace "zzh.lifeplayer.music"
-    buildToolsVersion="35.0.0"
+    compileSdk = 35
+    namespace = "zzh.lifeplayer.music"
+    buildToolsVersion = "35.0.0"
     defaultConfig {
-        minSdk 30
-        targetSdk 35
+        minSdk = 30
+        targetSdk = 35
         vectorDrawables.useSupportLibrary = true
         applicationId namespace
         versionCode 20250712
@@ -24,10 +24,10 @@ android {
             storePassword "114514.b"             // 密钥库的密码
             keyAlias "zzhlife"                  // 密钥别名
             keyPassword "114514.b"             // 密钥的密码
-            v1SigningEnabled true
-            v2SigningEnabled true
-            enableV3Signing true
-            enableV4Signing true
+            v1SigningEnabled = true
+            v2SigningEnabled = true
+            enableV3Signing = true
+            enableV4Signing = true
         }
         debug {
         
@@ -35,9 +35,9 @@ android {
             storePassword "114514.b"             // 密钥库的密码
             keyAlias "zzhlife"                  // 密钥别名
             keyPassword "114514.b"             // 密钥的密码
-            v1SigningEnabled true
-            v2SigningEnabled true
-            enableV3Signing true
+            v1SigningEnabled = true
+            v2SigningEnabled = true
+            enableV3Signing = true
 
         }
     }
@@ -45,8 +45,8 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            shrinkResources true
-            minifyEnabled true
+            shrinkResources = true
+            minifyEnabled = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -63,9 +63,9 @@ android {
     }
 
     buildFeatures {
-        viewBinding true
-        buildConfig true
-//        compose true
+        viewBinding = true
+        buildConfig = true
+//        compose = true
     }
     
     composeOptions {
