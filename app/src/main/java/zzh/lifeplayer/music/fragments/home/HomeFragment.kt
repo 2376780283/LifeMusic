@@ -101,7 +101,7 @@ class HomeFragment :
     }
 
     private fun setupListeners() {
-    /*
+    /*  //考慮重新加入
         binding.bannerImage?.setOnClickListener {
             findNavController().navigate(
                 R.id.user_info_fragment, null, null, FragmentNavigatorExtras(
@@ -224,7 +224,7 @@ class HomeFragment :
             MaterialSharedAxis(MaterialSharedAxis.Y, true).addTarget(CoordinatorLayout::class.java)
         reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, false)
     }
-/*
+
     private fun loadSuggestions(songs: List<Song>) { // 建议song 部分
         if (!PreferenceUtil.homeSuggestions || songs.isEmpty()) {
      //  if (!PreferenceUtil.homeSuggestions) {
@@ -268,9 +268,9 @@ class HomeFragment :
                 .songCoverOptions(songs[index])
                 .into(imageView)
         }
-    }*/
+    }
     
-    private fun loadSuggestions(songs: List<Song>) {
+ /*   private fun loadSuggestions(songs: List<Song>) {
     if (!PreferenceUtil.homeSuggestions || songs.isEmpty()) {
         binding.suggestions.root.isVisible = false
         return
@@ -330,7 +330,7 @@ class HomeFragment :
     for (i in maxItems until images.size) {
         images[i].isVisible = false
     }
-}
+}*/
 
     companion object {
 

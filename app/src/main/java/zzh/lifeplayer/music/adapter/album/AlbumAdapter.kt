@@ -98,7 +98,7 @@ open class AlbumAdapter(
             return
         }
         val song = album.safeGetFirstSong()
-        Glide.with(activity)
+         Glide.with(activity)
             .asBitmapPalette()
             .albumCoverOptions(song)
             //.checkIgnoreMediaStore()

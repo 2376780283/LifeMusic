@@ -88,6 +88,6 @@ class Factory(
 
     companion object {
         // we need these very low values to make sure our artist image loading calls doesn't block the image loading queue
-        private const val TIMEOUT: Long = 500
+        private const val TIMEOUT: Long = 1500
     }
 }
