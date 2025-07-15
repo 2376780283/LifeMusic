@@ -48,7 +48,7 @@ import zzh.lifeplayer.music.R;
 import java.util.Formatter;
 import java.util.Locale;
 import java.util.UUID;
-import zzh.lifeplayer.music.helper.MusicPlayerRemote; // xuyao okay
+import zzh.lifeplayer.music.helper.MusicPlayerRemote; 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import zzh.lifeplayer.appthemehelper.util.ATHUtil;
@@ -200,12 +200,11 @@ public class ActivityMusic extends AbsThemeActivity implements OnSeekBarChangeLi
                     final boolean isHeadsetOnPrev = mIsHeadsetOn;
                     final AudioManager audioManager =
                             (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                    // 修改广播接收器
+                    // Fixme
                     if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
                         BluetoothDevice device =
                                 intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                         @SuppressLint("MissingPermission") int deviceClass = device.getBluetoothClass().getDeviceClass();
-
                         // 扩展支持的设备类型
                         if (deviceClass == BluetoothClass.Device.AUDIO_VIDEO_HEADPHONES
                                 || deviceClass == BluetoothClass.Device.AUDIO_VIDEO_WEARABLE_HEADSET
@@ -286,14 +285,6 @@ public class ActivityMusic extends AbsThemeActivity implements OnSeekBarChangeLi
         findViewById(R.id.vIStrengthText).setLabelFor(R.id.vIStrengthSeekBar);
 //        bannerImage = findViewById(R.id.bannerImage);
         toolbar = findViewById(R.id.toolbar);
-        /*
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-              @Override
-             public void onClick(View v) {
-               onBackPressed();
-               
-             }
-        });*/
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
         @Override
           public void onClick(View v) {
@@ -481,19 +472,17 @@ public class ActivityMusic extends AbsThemeActivity implements OnSeekBarChangeLi
         }
  //       loadProfile();
     }
-/*   
+/*  
     private void loadProfile() {   
     if (bannerImage != null) {
-        File bannerFile = LifeGlideExtension.INSTANCE.getBannerModel();
-        
-        // 正确的调用方式：将 Glide 请求作为第一个参数传入
+        File bannerFile = LifeGlideExtension.INSTANCE.getBannerModel();       
         RequestBuilder<Drawable> requestBuilder = Glide.with(this)
             .load(bannerFile);
             
         requestBuilder = LifeGlideExtension.INSTANCE.profileBannerOptions(
-            requestBuilder,  // 第一个参数：RequestBuilder 实例
-            bannerFile       // 第二个参数：File 实例
-            // 有很多错误需要修复
+            requestBuilder,
+            bannerFile     
+            // 有很多错误需要修复 FixMe();
         );
         
         requestBuilder.into(bannerImage);
