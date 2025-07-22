@@ -486,19 +486,25 @@ abstract class AbsSlidingMusicPanelActivity : AbsMusicServiceActivity(),
             )
             return
         }
+        //Fixme：support nvg hide anim when nvg is hidden
+        // fix hidden func of nvg rail view
+        val isBottomNavView = (navigationView is BottomNavigationView)
         if (visible xor navigationView.isVisible) {
-            val mAnimate = animate && bottomSheetBehavior.state == STATE_COLLAPSED
+            val mAnimate = animate && isBottomNavView && bottomSheetBehavior.state == STATE_COLLAPSED
             if (mAnimate) {
                 if (visible) {
                     binding.navigationView.bringToFront()
                     binding.navigationView.show()
-                } else {
-                    binding.navigationView.hide()
+                } else {                  
+                    binding.navigationView.bringToFront()
+                    binding.navigationView.show() //stupid ass hide func
                 }
             } else {
-                binding.navigationView.isVisible = visible
-                if (visible && bottomSheetBehavior.state != STATE_EXPANDED) {
+               // Fixme : fix func of hide nvg rail               
+               // binding.navigationView.isVisible = visible
+                if (visible && isBottomNavView && bottomSheetBehavior.state != STATE_EXPANDED) {
                     binding.navigationView.bringToFront()
+                    binding.navigationView.show() 
                 }
             }
         }

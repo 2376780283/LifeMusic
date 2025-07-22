@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -14,22 +15,28 @@
             android:id="@+id/navigationView"
             style="@style/Widget.Material3.NavigationRailView"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             app:itemHorizontalTranslationEnabled="false"
             app:menuGravity="center"
-            app:menu="@menu/bottom_navigation_main"            
-            tools:viewBindingType="com.google.android.material.navigation.NavigationBarView" />
+            app:menu="@menu/bottom_navigation_main"
+            tools:viewBindingType="com.google.android.material.navigation.NavigationBarView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_container"
             android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="?attr/colorSurface"
-            app:defaultNavHost="true"            
+            app:defaultNavHost="true"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/navigationView"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:layout="@layout/fragment_home" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
         android:id="@+id/slidingPanel"
@@ -55,6 +62,5 @@
             android:layout_height="@dimen/mini_player_height"
             tools:layout="@layout/fragment_mini_player" />
     </FrameLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-

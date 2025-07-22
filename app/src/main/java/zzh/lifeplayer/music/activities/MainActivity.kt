@@ -35,15 +35,7 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
         hideStatusBar()
         updateTabs()
        // AppRater.appLaunched(this)
-       // Restore navigation state if present
-        savedInstanceState?.getBundle("nav_state")?.let {
-            findNavController(R.id.fragment_container).restoreState(it)
-        }
         setupNavigationController()
-    }
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBundle("nav_state", findNavController(R.id.fragment_container).saveState())
     }
     private fun setupNavigationController() {
         val navController = findNavController(R.id.fragment_container)
@@ -77,11 +69,10 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
                 }
             }
         }
-/*        navController.addOnDestinationChangedListener { _, destination, _ ->
+       navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == startDestinationId) {
                 currentFragment(R.id.fragment_container)?.enterTransition = null
             }
-
             when (destination.id) {
                 R.id.action_home,
                 R.id.action_song,
@@ -94,15 +85,14 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
                     if (PreferenceUtil.rememberLastTab) saveTab(destination.id)
                     setBottomNavVisibility(visible = true, animate = true)
                 }
-
-               R.id.playing_queue_fragment -> {
-                    setBottomNavVisibility(visible = false, hideBottomSheet = true)
+               R.id.playing_queue_fragment , R.id.action_go_to_lyrics -> {
+                    setBottomNavVisibility(visible = true)
                 }
-
                 else -> setBottomNavVisibility(visible = false, animate = true)
             }
-        }*/
-    }
+        }
+    }       
+    
     private fun saveTab(id: Int) {
         if (PreferenceUtil.libraryCategory.firstOrNull { it.category.id == id }?.visible == true) {
             PreferenceUtil.lastTab = id
@@ -196,4 +186,8 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
         }
         return id
     }
+     override fun onResume() {
+        super.onResume()
+        setupNavigationController()
+     }
 }
