@@ -124,7 +124,6 @@
     <string-array name="pref_language_names">
         <item>System default</item>
         <item>English</item>
-        <item>Simplified Chinese</item>
         <item>Traditional Chinese(Hong Kong)</item>
         <item>Traditional Chinese(Taiwan)</item>
         <item>Japanese</item>
@@ -132,7 +131,6 @@
     <string-array name="pref_language_codes">
         <item>auto</item>
         <item>en</item>
-        <item>zh-CN</item>
         <item>zh-HK</item>
         <item>zh-TW</item>
         <item>ja</item>

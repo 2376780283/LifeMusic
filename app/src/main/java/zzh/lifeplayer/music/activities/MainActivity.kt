@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.contains
 import androidx.navigation.ui.setupWithNavController
+// import com.google.android.material.navigationrail
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.extensions.*
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
@@ -33,9 +34,16 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
         setTaskDescriptionColorAuto()
         hideStatusBar()
         updateTabs()
-//        AppRater.appLaunched(this)
+       // AppRater.appLaunched(this)
+       // Restore navigation state if present
+        savedInstanceState?.getBundle("nav_state")?.let {
+            findNavController(R.id.fragment_container).restoreState(it)
+        }
         setupNavigationController()
-//        WhatsNewFragment.showChangeLog(this)
+    }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBundle("nav_state", findNavController(R.id.fragment_container).saveState())
     }
     private fun setupNavigationController() {
         val navController = findNavController(R.id.fragment_container)
@@ -60,6 +68,7 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
         }
         navController.graph = navGraph
         navigationView.setupWithNavController(navController)
+        val startDestinationId = navGraph.startDestinationId
         // Scroll Fragment to top
         navigationView.setOnItemReselectedListener {
             currentFragment(R.id.fragment_container).apply {
@@ -68,28 +77,31 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
                 }
             }
         }
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == navGraph.startDestinationId) {
+/*        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == startDestinationId) {
                 currentFragment(R.id.fragment_container)?.enterTransition = null
             }
+
             when (destination.id) {
-                R.id.action_home, R.id.action_song, R.id.action_album, R.id.action_artist, R.id.action_folder, R.id.action_playlist, R.id.action_genre, R.id.action_search -> {
-                    // Save the last tab
-                    if (PreferenceUtil.rememberLastTab) {
-                        saveTab(destination.id)
-                    }
-                    // Show Bottom Navigation Bar
+                R.id.action_home,
+                R.id.action_song,
+                R.id.action_album,
+                R.id.action_artist,
+                R.id.action_folder,
+                R.id.action_playlist,
+                R.id.action_genre,
+                R.id.action_search -> {
+                    if (PreferenceUtil.rememberLastTab) saveTab(destination.id)
                     setBottomNavVisibility(visible = true, animate = true)
                 }
-                R.id.playing_queue_fragment -> {
+
+               R.id.playing_queue_fragment -> {
                     setBottomNavVisibility(visible = false, hideBottomSheet = true)
                 }
-                else -> setBottomNavVisibility(
-                    visible = false,
-                    animate = true
-                ) // Hide Bottom Navigation Bar
+
+                else -> setBottomNavVisibility(visible = false, animate = true)
             }
-        }
+        }*/
     }
     private fun saveTab(id: Int) {
         if (PreferenceUtil.libraryCategory.firstOrNull { it.category.id == id }?.visible == true) {
@@ -126,7 +138,6 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
                 MusicPlayerRemote.playFromUri(this@MainActivity, uri)
                 handled = true
             }
-            // 替换已弃用的常量为字符串字面量
             else if ("vnd.android.cursor.dir/playlist" == mimeType) {
                 val id = parseLongFromIntent(intent, "playlistId", "playlist")
                 if (id >= 0L) {
