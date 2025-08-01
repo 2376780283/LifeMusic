@@ -422,8 +422,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder),
     }
 
     private fun checkIsEmpty() {
-        if (_binding != null) {
-            binding.emptyEmoji.text = getEmojiByUnicode(0x1F631)
+        if (_binding != null) {            
             binding.empty.isVisible = adapter?.itemCount == 0
         }
     }

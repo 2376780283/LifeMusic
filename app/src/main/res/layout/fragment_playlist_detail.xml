@@ -45,13 +45,14 @@
         android:visibility="gone"
         tools:visibility="visible">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/emptyEmoji"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/empty_text_emoji"
-            android:textAppearance="@style/TextViewHeadline3" />
+        <zzh.lifeplayer.music.views.RetroShapeableImageView
+            android:id="@+id/emptyEmojiView"
+            android:layout_width="108dp"
+            android:layout_height="108dp"
+            android:layout_gravity="center"           
+            android:scaleType="centerCrop"            
+            app:retroCornerSize="32dp"
+            app:srcCompat="@drawable/ic_isemptt" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/emptyText"

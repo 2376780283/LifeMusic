@@ -101,16 +101,6 @@ class HomeFragment :
     }
 
     private fun setupListeners() {
-    /*  //考慮重新加入
-        binding.bannerImage?.setOnClickListener {
-            findNavController().navigate(
-                R.id.user_info_fragment, null, null, FragmentNavigatorExtras(
-                    binding.userImage to "user_image"
-                )
-            )
-            reenterTransition = null
-        }
-    */
         binding.lastAdded.setOnClickListener {
             findNavController().navigate(
                 R.id.detailListFragment,
