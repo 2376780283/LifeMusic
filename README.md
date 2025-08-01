@@ -1,7 +1,9 @@
 # 🎵 LifeMusic - Android 音乐播放器
 # fork from RetroMusic
- url - https://github.com/RetroMusicPlayer/RetroMusicPlayer/
-一款简洁美观的 Android 音乐播放应用，让你のlife充满旋律。
+
+ - url - https://github.com/RetroMusicPlayer/RetroMusicPlayer/
+ 
+#### 一款简洁美观的 Android 音乐播放应用，让你のlife充满旋律。
 
 
 ## 📱 应用介绍
@@ -24,10 +26,8 @@
 #未来工作
 - 🎚️ 可视化音频频谱（👆😈）
 - 修复 musicfx问题 和 改进 musicfx
-- 完全移除 google cast 和 google 内购服务
-- 修复 material 主题错误
-- 优化 歌词字体大小设置
 - 優化theme 切換 或 其他卡の頓問題
+- remake UI
 ---
 
 ## 📸 界面预览
@@ -36,7 +36,10 @@
 |------|----------|----------|
 | ![](screenShot/home.png) | ![](screenShot/player.png) | ![](screenShot/list.png) |
 
- ![](screenShot/Screenshot_2025-07-14-14-11-02-660_zzh.lifeplayer.music.debug.jpg) |  ![](screenShot/Screenshot_2025-07-14-14-11-07-910_zzh.lifeplayer.music.debug.jpg) 
-
 ---
+| 首页 | OtherPage |
+|------|----------|
+| ![](screenShot/Screenshot_2025-07-14-14-11-02-660_zzh.lifeplayer.music.debug.jpg) | ![](screenShot/Screenshot_2025-08-01-16-44-47-927_zzh.lifeplayer.music.debug.jpg) |
+---
+
 # 软件の界面嚴格遵循 material you
