@@ -9,6 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:id="@+id/mainConstraintLayout"
         android:layout_height="match_parent">
 
         <zzh.lifeplayer.music.views.TintedNavigationRailView

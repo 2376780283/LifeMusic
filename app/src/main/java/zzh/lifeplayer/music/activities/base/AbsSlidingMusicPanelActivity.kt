@@ -23,6 +23,12 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.commit
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 // Android 是个人物
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+
+import androidx.transition.TransitionManager
+import androidx.transition.AutoTransition
+
 import androidx.navigation.fragment.NavHostFragment
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.ADAPTIVE_COLOR_APP
@@ -93,8 +99,7 @@ import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.ViewUtil
 import zzh.lifeplayer.music.util.logD
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigationrail.NavigationRailView
-// 艹
+import androidx.core.view.ViewPropertyAnimatorListenerAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
@@ -105,6 +110,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_SETTLIN
 import com.google.android.material.bottomsheet.BottomSheetBehavior.from
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+
+import androidx.core.animation.addListener
+import androidx.core.view.updateLayoutParams
 
 abstract class AbsSlidingMusicPanelActivity : AbsMusicServiceActivity(),
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -482,12 +490,16 @@ abstract class AbsSlidingMusicPanelActivity : AbsMusicServiceActivity(),
     }
 /*
  ZZH： this func be like shit 😡😡😡 sutpid ass and i will fucking Railnvgigation
+ md：tmd 用上了 约束布局
+ mainContent
 */
+
+
 fun setBottomNavVisibility(
     visible: Boolean,
     animate: Boolean = false,
     hideBottomSheet: Boolean = MusicPlayerRemote.playingQueue.isEmpty(),
-) {
+) {    
     if (isInOneTabMode) {
         hideBottomSheet(
             hide = hideBottomSheet,
@@ -497,58 +509,88 @@ fun setBottomNavVisibility(
         return
     }
 
-    val isRailView = navigationView is NavigationRailView
-    val isNvgHideFunc = true
-    if (visible xor navigationView.isVisible) {
-        val mAnimate = animate && isRailView && bottomSheetBehavior.state == STATE_COLLAPSED
+    val navView = binding.navigationView
 
-   if (mAnimate) {
-      ViewCompat.animate(binding.navigationView).cancel()
-     if (visible) {
-        binding.navigationView.apply {
-            bringToFront()
-            translationX = -width.toFloat()
-            alpha = 0f
-            isVisible = true
+   if (visible xor navView.isVisible) {
+ //           ViewCompat.animate(navView).cancel() // 取消旧动画
+//            ViewCompat.animate(navView).setListener(null) // ✨ 清除旧监听器
+  
+            if (visible) {
+               
+                navView.apply {
+                    bringToFront()
+                    translationX = -width.toFloat()
+                    alpha = 0f
+                    isVisible = true
+                }
 
-        ViewCompat.animate(this)
-            .translationX(0f)
-            .alpha(1f)
-            .setDuration(250)
-            .setInterpolator(FastOutSlowInInterpolator())
-            .withEndAction {
-                 binding.navigationView.isVisible = true            
+                ViewCompat.animate(navView)
+                    .translationX(0f)
+                    .alpha(1f)
+                    .setDuration(350)
+                    .setInterpolator(FastOutSlowInInterpolator())
+                    .setListener(object : ViewPropertyAnimatorListenerAdapter() {
+                        override fun onAnimationEnd(view: View) {
+                            view.alpha = 1f
+                            view.translationX = 0f
+                            view.isVisible = true                           
+                        }
+
+                        override fun onAnimationCancel(view: View) {
+                            view.alpha = 1f
+                            view.translationX = 0f
+                            view.isVisible = true                           
+                        }
+                    })
+                    .start()
+            updateNavigationConstraints(visible)
+        } else {
+            
+            navView.apply {
+                isVisible = visible
+                alpha = if (visible) 1f else 0f
+                translationX = if (visible) 0f else -width.toFloat()
+               
             }
-            // 我实在想不到别的招了
-            .start()
+            updateNavigationConstraints(visible)
         }
-     } else {
-         ViewCompat.animate(binding.navigationView)
-           .translationX(-binding.navigationView.width.toFloat())
-           .alpha(0f)
-           .setDuration(250)
-           .setInterpolator(FastOutSlowInInterpolator())
-           .withEndAction {
-             binding.navigationView.isVisible = false            
-           }
-          .start()
-     }
-    
-   } else {
-        binding.navigationView.apply {
-           isVisible = visible
-           alpha = if (visible) 1f else 0f
-           translationX = if (visible) 0f else -width.toFloat()
-       }
-   }
-}
+    }
+/*  if (visible xor navView.isVisible) {
+        if (animate) {
+            // 使用流畅的宽度动画
+            animateNavigationWidth(visible)
+        } else {
+            // 无动画直接设置状态
+            if (visible) {
+                navView.isVisible = true
+                // 设置默认宽度或上次测量宽度
+                val width = if (navView.measuredWidth > 0) navView.measuredWidth 
+                          else resources.getDimensionPixelSize(R.dimen.navigation_default_width)
+                navView.updateLayoutParams { this.width = width }
+                
+                // 更新内容区域边距
+                val fragmentContainer = binding.root.findViewById<View>(R.id.fragment_container)
+                fragmentContainer?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    leftMargin = width
+                }
+            } else {
+                navView.isVisible = false
+                // 更新内容区域边距
+                val fragmentContainer = binding.root.findViewById<View>(R.id.fragment_container)
+                fragmentContainer?.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    leftMargin = 0
+                }
+            }
+        }
+    }*/
 
     hideBottomSheet(
         hide = hideBottomSheet,
         animate = animate,
         isBottomNavVisible = visible && navigationView is BottomNavigationView
-    )
+    )    
 }
+
     fun hideBottomSheet(
         hide: Boolean,
         animate: Boolean = false,
@@ -631,4 +673,97 @@ fun setBottomNavVisibility(
         miniPlayerFragment = whichFragment<MiniPlayerFragment>(R.id.miniPlayerFragment)
         miniPlayerFragment?.view?.setOnClickListener { expandPanel() }
     }
+
+  private fun updateNavigationConstraints(visible: Boolean) {
+    // 获取正确的ConstraintLayout（不再是根布局）
+    val constraintLayout = binding.mainConstraintLayout
+    val constraintSet = ConstraintSet()
+    constraintSet.clone(constraintLayout) // 克隆当前约束
+
+    if (visible) {
+        // 显示导航栏：连接内容区域到导航栏右侧
+        constraintSet.connect(
+            R.id.fragment_container, ConstraintSet.START,
+            R.id.navigationView, ConstraintSet.END
+        )
+    } else {
+        // 隐藏导航栏：连接内容区域到父布局左侧
+        constraintSet.connect(
+            R.id.fragment_container, ConstraintSet.START,
+            ConstraintSet.PARENT_ID, ConstraintSet.START
+        )
+    }
+
+    // 应用平滑动画过渡
+    TransitionManager.beginDelayedTransition(constraintLayout, AutoTransition().apply {
+        duration = 350L
+    })
+    constraintSet.applyTo(constraintLayout)
+  }
+
+/*private fun animateNavigationWidth(visible: Boolean) {
+    // 确保使用正确的视图引用
+    val navView = binding.navigationView    
+    // 使用正确的ID获取内容区域的视图
+    val fragmentContainer = binding.root.findViewById<View>(R.id.fragment_container)    
+    // 获取导航栏的目标宽度
+    val targetWidth = if (visible) {
+        // 使用上次测量的宽度或默认宽度
+        if (navView.measuredWidth > 0) navView.measuredWidth
+        else resources.getDimensionPixelSize(R.dimen.navigation_default_width)
+    } else {
+        0
+    }
+    
+    // 获取当前宽度
+    val currentWidth = navView.width
+    
+    // 如果已经是目标状态，跳过动画
+    if (currentWidth == targetWidth) return
+    
+    // 创建宽度动画
+    ValueAnimator.ofInt(currentWidth, targetWidth).apply {
+        duration = 350
+        interpolator = FastOutSlowInInterpolator()
+        
+        // 在动画开始前启用硬件加速
+        navView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        fragmentContainer.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        
+        addUpdateListener { animator ->
+            val animatedValue = animator.animatedValue as Int
+            
+            // 更新导航栏宽度
+            navView.updateLayoutParams {
+                width = animatedValue
+            }
+            
+            // 同步更新内容区域边距 - 使用兼容的方式
+            fragmentContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                // 使用通用的leftMargin代替marginStart
+                leftMargin = animatedValue
+            }
+        }
+        
+        addListener(onEnd = {
+            // 禁用硬件加速层
+            navView.setLayerType(View.LAYER_TYPE_NONE, null)
+            fragmentContainer.setLayerType(View.LAYER_TYPE_NONE, null)
+            
+            // 动画结束后确保正确状态
+            if (visible) {
+                navView.isVisible = true
+                // 确保内容区域占满剩余空间
+                fragmentContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    leftMargin = navView.width
+                }
+            } else {
+                navView.isVisible = false
+            }
+        })
+        
+        start()
+    }
+}*/
+
 }

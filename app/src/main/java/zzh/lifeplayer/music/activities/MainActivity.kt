@@ -81,12 +81,22 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
                 R.id.action_folder,
                 R.id.action_playlist,
                 R.id.action_genre,
-                R.id.action_search -> {
-                    if (PreferenceUtil.rememberLastTab) saveTab(destination.id)
+//                R.id.user_info_fragment,
+                R.id.playing_queue_fragment,
+                R.id.action_search -> 
+                {
+                if (PreferenceUtil.rememberLastTab) saveTab(destination.id)
                     setBottomNavVisibility(visible = true, animate = true)
-                }
-               R.id.playing_queue_fragment , R.id.action_go_to_lyrics -> {
+                }                
+                R.id.playing_queue_fragment, 
+                R.id.action_go_to_lyrics -> 
+                {
                     setBottomNavVisibility(visible = true)
+                }
+                R.id.user_info_fragment,
+                R.id.albumDetailsFragment -> 
+                {
+                    setBottomNavVisibility(visible = false , animate = true)
                 }
                 else -> setBottomNavVisibility(visible = false, animate = true)
             }

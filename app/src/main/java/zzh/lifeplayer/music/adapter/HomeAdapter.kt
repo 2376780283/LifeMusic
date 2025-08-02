@@ -120,7 +120,9 @@ class HomeAdapter(private val activity: AppCompatActivity) :
                     )
                 }
             }
-        }
+        }else{
+       //补全 没有音乐则加入 empty 反馈  防止过于生硬 或空虚 
+        
     }
 
     override fun getItemCount(): Int {

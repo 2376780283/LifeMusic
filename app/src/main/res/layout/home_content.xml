@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ~ Copyright (c) 2019 Hemanth Savarala. ~ ~ Licensed under the GNU General Public License v3 ~ ~ This is free software: you can redistribute it and/or modify it under ~ the terms of the GNU General Public License as published by ~ the Free Software Foundation either version 3 of the License, or (at your option) any later version. ~ ~ This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; ~ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. ~ See the GNU General Public License for more details. -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,8 +14,39 @@
     <include
         android:id="@+id/abs_playlists"
         layout="@layout/abs_playlists" />
-    
-  
+        
+    <LinearLayout
+        android:id="@android:id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <zzh.lifeplayer.music.views.RetroShapeableImageView
+            android:id="@+id/emptyEmojiView"
+            android:layout_width="178dp"
+            android:layout_height="178dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            app:retroCornerSize="32dp"
+            android:padding="10dp"
+            app:srcCompat="@drawable/ic_isemptt" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/emptyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/nothing_to_see"
+            android:textAppearance="@style/TextViewHeadline5"
+            android:textColor="?android:attr/textColorSecondary"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
