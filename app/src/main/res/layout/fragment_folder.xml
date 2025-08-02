@@ -45,11 +45,12 @@
 
         <zzh.lifeplayer.music.views.RetroShapeableImageView
             android:id="@+id/emptyEmojiView"
-            android:layout_width="108dp"
-            android:layout_height="108dp"
+            android:layout_width="178dp"
+            android:layout_height="178dp"
             android:layout_gravity="center"           
             android:scaleType="centerCrop"            
             app:retroCornerSize="32dp"
+            android:padding="10dp"
             app:srcCompat="@drawable/ic_isemptt" />
 
         <com.google.android.material.textview.MaterialTextView

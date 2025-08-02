@@ -18,7 +18,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.ViewPropertyAnimatorCompat
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.commit
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+// Android 是个人物
 import androidx.navigation.fragment.NavHostFragment
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.ADAPTIVE_COLOR_APP
@@ -89,6 +93,8 @@ import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.ViewUtil
 import zzh.lifeplayer.music.util.logD
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigationrail.NavigationRailView
+// 艹
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
@@ -353,12 +359,14 @@ abstract class AbsSlidingMusicPanelActivity : AbsMusicServiceActivity(),
         setLightNavigationBarAuto()
         setTaskDescriptionColor(taskColor)
         //playerFragment?.onHide()
+        // old thing 不要加
     }
 
     open fun onPanelExpanded() {
         setMiniPlayerAlphaProgress(1F)
         onPaletteColorChanged()
         //playerFragment?.onShow()
+        // old thing 不要加
     }
 
     private fun setupSlidingUpPanel() {
@@ -375,7 +383,7 @@ abstract class AbsSlidingMusicPanelActivity : AbsMusicServiceActivity(),
                     STATE_EXPANDED -> onPanelExpanded()
                     STATE_COLLAPSED -> onPanelCollapsed()
                     else -> {
-                        // playerFragment!!.onHide()
+                        playerFragment!!.onHide()
                     }
                 }
             }
@@ -472,49 +480,75 @@ abstract class AbsSlidingMusicPanelActivity : AbsMusicServiceActivity(),
             onPaletteColorChanged()
         }
     }
-
-    fun setBottomNavVisibility(
-        visible: Boolean,
-        animate: Boolean = false,
-        hideBottomSheet: Boolean = MusicPlayerRemote.playingQueue.isEmpty(),
-    ) {
-        if (isInOneTabMode) {
-            hideBottomSheet(
-                hide = hideBottomSheet,
-                animate = animate,
-                isBottomNavVisible = false
-            )
-            return
-        }
-        //Fixme：support nvg hide anim when nvg is hidden
-        // fix hidden func of nvg rail view
-        val isBottomNavView = (navigationView is BottomNavigationView)
-        if (visible xor navigationView.isVisible) {
-            val mAnimate = animate && isBottomNavView && bottomSheetBehavior.state == STATE_COLLAPSED
-            if (mAnimate) {
-                if (visible) {
-                    binding.navigationView.bringToFront()
-                    binding.navigationView.show()
-                } else {                  
-                    binding.navigationView.bringToFront()
-                    binding.navigationView.show() //stupid ass hide func
-                }
-            } else {
-               // Fixme : fix func of hide nvg rail               
-               // binding.navigationView.isVisible = visible
-                if (visible && isBottomNavView && bottomSheetBehavior.state != STATE_EXPANDED) {
-                    binding.navigationView.bringToFront()
-                    binding.navigationView.show() 
-                }
-            }
-        }
+/*
+ ZZH： this func be like shit 😡😡😡 sutpid ass and i will fucking Railnvgigation
+*/
+fun setBottomNavVisibility(
+    visible: Boolean,
+    animate: Boolean = false,
+    hideBottomSheet: Boolean = MusicPlayerRemote.playingQueue.isEmpty(),
+) {
+    if (isInOneTabMode) {
         hideBottomSheet(
             hide = hideBottomSheet,
             animate = animate,
-            isBottomNavVisible = visible && navigationView is BottomNavigationView
+            isBottomNavVisible = false
         )
+        return
     }
 
+    val isRailView = navigationView is NavigationRailView
+    val isNvgHideFunc = true
+    if (visible xor navigationView.isVisible) {
+        val mAnimate = animate && isRailView && bottomSheetBehavior.state == STATE_COLLAPSED
+
+   if (mAnimate) {
+      ViewCompat.animate(binding.navigationView).cancel()
+     if (visible) {
+        binding.navigationView.apply {
+            bringToFront()
+            translationX = -width.toFloat()
+            alpha = 0f
+            isVisible = true
+
+        ViewCompat.animate(this)
+            .translationX(0f)
+            .alpha(1f)
+            .setDuration(250)
+            .setInterpolator(FastOutSlowInInterpolator())
+            .withEndAction {
+                 binding.navigationView.isVisible = true            
+            }
+            // 我实在想不到别的招了
+            .start()
+        }
+     } else {
+         ViewCompat.animate(binding.navigationView)
+           .translationX(-binding.navigationView.width.toFloat())
+           .alpha(0f)
+           .setDuration(250)
+           .setInterpolator(FastOutSlowInInterpolator())
+           .withEndAction {
+             binding.navigationView.isVisible = false            
+           }
+          .start()
+     }
+    
+   } else {
+        binding.navigationView.apply {
+           isVisible = visible
+           alpha = if (visible) 1f else 0f
+           translationX = if (visible) 0f else -width.toFloat()
+       }
+   }
+}
+
+    hideBottomSheet(
+        hide = hideBottomSheet,
+        animate = animate,
+        isBottomNavVisible = visible && navigationView is BottomNavigationView
+    )
+}
     fun hideBottomSheet(
         hide: Boolean,
         animate: Boolean = false,
