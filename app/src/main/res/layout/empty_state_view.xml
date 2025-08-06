@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="48dp">
+
+    <zzh.lifeplayer.music.views.RetroShapeableImageView
+        android:id="@+id/emptyEmojiView"
+        android:layout_width="178dp"
+        android:layout_height="178dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        app:retroCornerSize="32dp"
+        android:padding="2dp"
+        app:srcCompat="@drawable/ic_isemptt" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="empty emmmm"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_marginTop="24dp"
+        android:fontFamily="sans-serif-medium" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="none emm"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:lineSpacingExtra="4dp" />
+</LinearLayout>

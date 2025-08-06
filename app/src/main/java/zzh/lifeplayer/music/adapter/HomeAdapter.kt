@@ -43,96 +43,104 @@ import zzh.lifeplayer.music.util.PreferenceUtil
 class HomeAdapter(private val activity: AppCompatActivity) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), IArtistClickListener, IAlbumClickListener {
 
+    private val EMPTY_VIEW = 999
     private var list = listOf<Home>()
 
     override fun getItemViewType(position: Int): Int {
-        return list[position].homeSection
+        return if (list.isEmpty()) {
+            EMPTY_VIEW
+        } else {
+            list[position].homeSection
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val layout =
-            LayoutInflater.from(activity).inflate(R.layout.section_recycler_view, parent, false)
         return when (viewType) {
-            RECENT_ARTISTS, TOP_ARTISTS -> ArtistViewHolder(layout)
-            FAVOURITES -> PlaylistViewHolder(layout)
-            TOP_ALBUMS, RECENT_ALBUMS -> AlbumViewHolder(layout)
+            RECENT_ARTISTS, TOP_ARTISTS -> {
+                val layout = LayoutInflater.from(activity).inflate(R.layout.section_recycler_view, parent, false)
+                ArtistViewHolder(layout)
+            }
+            FAVOURITES -> {
+                val layout = LayoutInflater.from(activity).inflate(R.layout.section_recycler_view, parent, false)
+                PlaylistViewHolder(layout)
+            }
+            TOP_ALBUMS, RECENT_ALBUMS -> {
+                val layout = LayoutInflater.from(activity).inflate(R.layout.section_recycler_view, parent, false)
+                AlbumViewHolder(layout)
+            }
+            EMPTY_VIEW -> {
+                val layout = LayoutInflater.from(activity).inflate(R.layout.empty_state_view, parent, false)
+                EmptyViewHolder(layout)
+            }
             else -> {
+                val layout = LayoutInflater.from(activity).inflate(R.layout.section_recycler_view, parent, false)
                 ArtistViewHolder(layout)
             }
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val home = list[position]
-        when (getItemViewType(position)) {
-            RECENT_ALBUMS -> {
-                val viewHolder = holder as AlbumViewHolder
-                viewHolder.bindView(home)
-                viewHolder.clickableArea.setOnClickListener {
+        when (holder) {
+            is AlbumViewHolder -> {
+                val home = list[position]
+                holder.bindView(home)
+                holder.clickableArea.setOnClickListener {
                     it.findFragment<HomeFragment>().setSharedAxisXTransitions()
                     activity.findNavController(R.id.fragment_container).navigate(
                         R.id.detailListFragment,
-                        bundleOf("type" to RECENT_ALBUMS)
+                        bundleOf("type" to home.homeSection)
                     )
                 }
             }
-            TOP_ALBUMS -> {
-                val viewHolder = holder as AlbumViewHolder
-                viewHolder.bindView(home)
-                viewHolder.clickableArea.setOnClickListener {
+            is ArtistViewHolder -> {
+                val home = list[position]
+                holder.bindView(home)
+                holder.clickableArea.setOnClickListener {
                     it.findFragment<HomeFragment>().setSharedAxisXTransitions()
                     activity.findNavController(R.id.fragment_container).navigate(
                         R.id.detailListFragment,
-                        bundleOf("type" to TOP_ALBUMS)
+                        bundleOf("type" to home.homeSection)
                     )
                 }
             }
-            RECENT_ARTISTS -> {
-                val viewHolder = holder as ArtistViewHolder
-                viewHolder.bindView(home)
-                viewHolder.clickableArea.setOnClickListener {
+            is PlaylistViewHolder -> {
+                val home = list[position]
+                holder.bindView(home)
+                holder.clickableArea.setOnClickListener {
                     it.findFragment<HomeFragment>().setSharedAxisXTransitions()
                     activity.findNavController(R.id.fragment_container).navigate(
                         R.id.detailListFragment,
-                        bundleOf("type" to RECENT_ARTISTS)
+                        bundleOf("type" to home.homeSection)
                     )
                 }
             }
-            TOP_ARTISTS -> {
-                val viewHolder = holder as ArtistViewHolder
-                viewHolder.bindView(home)
-                viewHolder.clickableArea.setOnClickListener {
-                    it.findFragment<HomeFragment>().setSharedAxisXTransitions()
-                    activity.findNavController(R.id.fragment_container).navigate(
-                        R.id.detailListFragment,
-                        bundleOf("type" to TOP_ARTISTS)
-                    )
+/*            is EmptyViewHolder -> {
+                holder.bindView()
+                holder.browseButton.setOnClickListener {
+                    //empty
                 }
-            }
-            FAVOURITES -> {
-                val viewHolder = holder as PlaylistViewHolder
-                viewHolder.bindView(home)
-                viewHolder.clickableArea.setOnClickListener {
-                    it.findFragment<HomeFragment>().setSharedAxisXTransitions()
-                    activity.findNavController(R.id.fragment_container).navigate(
-                        R.id.detailListFragment,
-                        bundleOf("type" to FAVOURITES)
-                    )
-                }
-            }
-        }else{
-       //补全 没有音乐则加入 empty 反馈  防止过于生硬 或空虚 
-        
+            }*/
+            // 懒得写了
+        }
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return if (list.isEmpty()) 1 else list.size // 空状态时显示一个项目
     }
 
     @SuppressLint("NotifyDataSetChanged")
     fun swapData(sections: List<Home>) {
         list = sections
         notifyDataSetChanged()
+    }
+
+    // 空状态视图持有者
+    inner class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+/*        val browseButton: View = view.findViewById(R.id.browseButton)
+        
+        fun bindView() {
+            // 可以在这里添加动态文本或图标
+        }*/
     }
 
     @Suppress("UNCHECKED_CAST")
