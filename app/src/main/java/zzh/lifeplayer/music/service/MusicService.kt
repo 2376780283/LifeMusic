@@ -675,15 +675,16 @@ class MusicService : MediaBrowserServiceCompat(),
 
     override fun onTrackEnded() {
         acquireWakeLock()
-        // if there is a timer finished, don't continue
         if (pendingQuit
-            || repeatMode == REPEAT_MODE_NONE && isLastTrack
-        ) {
-            notifyChange(PLAY_STATE_CHANGED)
+            || (repeatMode == REPEAT_MODE_NONE && isLastTrack)
+        ) {            
             seek(0, false)
+            quit()
             if (pendingQuit) {
-                pendingQuit = false
-                quit()
+                pendingQuit = false                
+            } else if (repeatMode == REPEAT_MODE_NONE && isLastTrack) {
+                position = 0
+                notifyChange(QUEUE_CHANGED)
             }
         } else {
             playNextSong(false)
