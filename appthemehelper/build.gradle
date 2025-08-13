@@ -3,10 +3,9 @@ apply plugin: 'kotlin-android'
 android {
     compileSdk 35
     namespace "zzh.lifeplayer.appthemehelper"
-    buildToolsVersion="35.0.0"
     defaultConfig {
         minSdk 30
-        targetSdk 35
+        targetSdk 36
     }
     buildTypes {
         release {
