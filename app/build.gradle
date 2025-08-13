@@ -7,10 +7,9 @@ apply plugin: 'com.google.devtools.ksp'
 android {
     compileSdk = 35
     namespace = "zzh.lifeplayer.music"
-    buildToolsVersion = "35.0.0"
     defaultConfig {
         minSdk = 30
-        targetSdk = 35
+        targetSdk = 36
         vectorDrawables.useSupportLibrary = true
         applicationId namespace
         versionCode 20250712
@@ -20,21 +19,20 @@ android {
     
     signingConfigs {
         release {
-            storeFile file("zzh-source-apps.jks") // 密钥库的路径
-            storePassword "114514.b"             // 密钥库的密码
-            keyAlias "zzhlife"                  // 密钥别名
-            keyPassword "114514.b"             // 密钥的密码
+            storeFile file("zzh-source-apps.jks") 
+            storePassword "114514.b"             
+            keyAlias "zzhlife"                  
+            keyPassword "114514.b"             
             v1SigningEnabled = true
             v2SigningEnabled = true
             enableV3Signing = true
             enableV4Signing = true
         }
-        debug {
-        
-            storeFile file("zzh-source-apps.jks") // 密钥库的路径
-            storePassword "114514.b"             // 密钥库的密码
-            keyAlias "zzhlife"                  // 密钥别名
-            keyPassword "114514.b"             // 密钥的密码
+        debug {  
+            storeFile file("zzh-source-apps.jks") 
+            storePassword "114514.b"             
+            keyAlias "zzhlife"                 
+            keyPassword "114514.b"             
             v1SigningEnabled = true
             v2SigningEnabled = true
             enableV3Signing = true
