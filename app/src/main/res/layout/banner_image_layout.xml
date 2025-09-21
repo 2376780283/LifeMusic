@@ -73,6 +73,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/userImage"
                 app:layout_constraintStart_toEndOf="@+id/userImage"
                 app:layout_constraintTop_toBottomOf="@+id/text"
+                app:layout_constraintTop_toTopOf="@+id/text"
                 tools:text="@string/app_name" />
 
 
