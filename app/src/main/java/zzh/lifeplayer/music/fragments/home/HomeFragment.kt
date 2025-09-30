@@ -215,91 +215,74 @@ class HomeFragment :
         reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, false)
     }
 
-    private fun loadSuggestions(songs: List<Song>) { // 建议song 部分
-        if (!PreferenceUtil.homeSuggestions || songs.isEmpty()) {
-     //  if (!PreferenceUtil.homeSuggestions) {
-            binding.suggestions.root.isVisible = false
-            return
-        }
-        val images = listOf(
-            binding.suggestions.image1,
-            binding.suggestions.image2,
-            binding.suggestions.image3,
-            binding.suggestions.image4,
-            binding.suggestions.image5,
-            binding.suggestions.image6,
-            binding.suggestions.image7,
-            binding.suggestions.image8
-        )
-        val color = accentColor()
-        binding.suggestions.message.apply {
-            setTextColor(color)
-            setOnClickListener {
-                it.isClickable = false
-                it.postDelayed({ it.isClickable = true }, 500)
-                MusicPlayerRemote.playNext(songs.subList(0, 8))
-                if (!MusicPlayerRemote.isPlaying) {
-                    MusicPlayerRemote.playNextSong()
-                }
-            }
-        }
-        binding.suggestions.card6.setCardBackgroundColor(ColorUtil.withAlpha(color, 0.12f))
-        images.forEachIndexed { index, imageView ->
-            imageView.setOnClickListener {
-                it.isClickable = false
-                it.postDelayed({ it.isClickable = true }, 500)
-                MusicPlayerRemote.playNext(songs[index])
-                if (!MusicPlayerRemote.isPlaying) {
-                    MusicPlayerRemote.playNextSong()
-                }
-            }
-            Glide.with(this)
-                .load(LifeGlideExtension.getSongModel(songs[index])) //出错代码部分
-                .songCoverOptions(songs[index])
-                .into(imageView)
-        }
-    }
-    
- /*   private fun loadSuggestions(songs: List<Song>) {
-    if (!PreferenceUtil.homeSuggestions || songs.isEmpty()) {
+private fun loadSuggestions(songs: List<Song>) {
+    if (!PreferenceUtil.homeSuggestions) {
         binding.suggestions.root.isVisible = false
         return
     }
+    
+    if (songs.isEmpty()) {
+        showEmptySuggestionsState()
+        return
+    }    
+    // 正常加载有歌曲的情况
+    loadSuggestionsWithSongs(songs)
+}
 
-    binding.suggestions.root.isVisible = true
-
+private fun showEmptySuggestionsState() {
     val images = listOf(
-        binding.suggestions.image1,
-        binding.suggestions.image2,
-        binding.suggestions.image3,
-        binding.suggestions.image4,
-        binding.suggestions.image5,
-        binding.suggestions.image6,
-        binding.suggestions.image7,
-        binding.suggestions.image8
+        binding.suggestions.image1, binding.suggestions.image2,
+        binding.suggestions.image3, binding.suggestions.image4,
+        binding.suggestions.image5, binding.suggestions.image6,
+        binding.suggestions.image7, binding.suggestions.image8
     )
-
     val color = accentColor()
-    val maxItems = minOf(songs.size, images.size)
+    // 隐藏所有图片或显示占位符
+    images.forEach { imageView ->
+         Glide.with(this).load(R.drawable.default_audio_art).into(imageView)
+    }   
+    binding.suggestions.message.apply {
+        setTextColor(color)    
+        setOnClickListener(null)  
+        text = "Nothing"   
+    } 
+//    binding.suggestions.message.text = "Nothing"
+//    binding.suggestions.message.setOnClickListener(null) 
+}
 
+private fun loadSuggestionsWithSongs(songs: List<Song>) {
+    val images = listOf(
+        binding.suggestions.image1, binding.suggestions.image2,
+        binding.suggestions.image3, binding.suggestions.image4,
+        binding.suggestions.image5, binding.suggestions.image6,
+        binding.suggestions.image7, binding.suggestions.image8
+    )
+    
+    val color = accentColor()
+    
+    // 设置消息区域
     binding.suggestions.message.apply {
         setTextColor(color)
         setOnClickListener {
             it.isClickable = false
             it.postDelayed({ it.isClickable = true }, 500)
-            MusicPlayerRemote.playNext(songs.take(maxItems))
+            val maxItems = minOf(songs.size, 8)
+            MusicPlayerRemote.playNext(songs.subList(0, maxItems))
             if (!MusicPlayerRemote.isPlaying) {
                 MusicPlayerRemote.playNextSong()
             }
         }
     }
-
+    
     binding.suggestions.card6.setCardBackgroundColor(ColorUtil.withAlpha(color, 0.12f))
-
+    
+    // 安全地加载歌曲（带边界检查）
+    val maxItems = minOf(songs.size, images.size)
+    
     for (index in 0 until maxItems) {
         val song = songs[index]
         val imageView = images[index]
-
+        
         imageView.isVisible = true
         imageView.setOnClickListener {
             it.isClickable = false
@@ -309,19 +292,20 @@ class HomeFragment :
                 MusicPlayerRemote.playNextSong()
             }
         }
-
+        
         Glide.with(this)
             .load(LifeGlideExtension.getSongModel(song))
             .songCoverOptions(song)
             .into(imageView)
     }
-
-    // 隐藏未使用的 imageView
+    
+    // 隐藏未使用的imageView
     for (i in maxItems until images.size) {
         images[i].isVisible = false
     }
-}*/
+}
 
+    
     companion object {
 
         const val TAG: String = "BannerHomeFragment"

@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) 2019 Hemanth Savarala.
+ *
+ * Licensed under the GNU General Public License v3
+ *
+ * This is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by
+ *  the Free Software Foundation either version 3 of the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ */
 package zzh.lifeplayer.music.service
 
 import android.annotation.SuppressLint
@@ -5,7 +18,12 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.bluetooth.BluetoothDevice
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.pm.ServiceInfo
 import android.database.ContentObserver
@@ -13,9 +31,13 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.media.AudioManager
-import android.os.*
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
+import android.os.Binder
+import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.IBinder
+import android.os.Looper
+import android.os.PowerManager
 import android.os.PowerManager.WakeLock
 import android.provider.MediaStore
 import android.support.v4.media.MediaBrowserCompat
@@ -33,9 +55,19 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.media.MediaBrowserServiceCompat
 import androidx.preference.PreferenceManager
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
-import zzh.lifeplayer.music.*
+import zzh.lifeplayer.music.ALBUM_ART_ON_LOCK_SCREEN
+import zzh.lifeplayer.music.BLURRED_ALBUM_ART
+import zzh.lifeplayer.music.BuildConfig
+import zzh.lifeplayer.music.CROSS_FADE_DURATION
+import zzh.lifeplayer.music.PLAYBACK_PITCH
+import zzh.lifeplayer.music.PLAYBACK_SPEED
+import zzh.lifeplayer.music.R
+import zzh.lifeplayer.music.TOGGLE_HEADSET
 import zzh.lifeplayer.music.activities.LockScreenActivity
-import zzh.lifeplayer.music.appwidgets.*
+import zzh.lifeplayer.music.appwidgets.AppWidgetBig
+import zzh.lifeplayer.music.appwidgets.AppWidgetCard
+import zzh.lifeplayer.music.appwidgets.AppWidgetCircle
+import zzh.lifeplayer.music.appwidgets.AppWidgetMD3
 import zzh.lifeplayer.music.auto.AutoMediaIDHelper
 import zzh.lifeplayer.music.auto.AutoMusicProvider
 import zzh.lifeplayer.music.extensions.showToast
@@ -52,8 +84,6 @@ import zzh.lifeplayer.music.providers.HistoryStore
 import zzh.lifeplayer.music.providers.MusicPlaybackQueueStore
 import zzh.lifeplayer.music.providers.SongPlayCountStore
 import zzh.lifeplayer.music.service.notification.PlayingNotification
-import zzh.lifeplayer.music.service.notification.PlayingNotificationClassic
-import zzh.lifeplayer.music.service.notification.PlayingNotificationImpl24
 import zzh.lifeplayer.music.service.playback.Playback
 import zzh.lifeplayer.music.service.playback.Playback.PlaybackCallbacks
 import zzh.lifeplayer.music.util.MusicUtil
@@ -63,7 +93,6 @@ import zzh.lifeplayer.music.util.PreferenceUtil.crossFadeDuration
 import zzh.lifeplayer.music.util.PreferenceUtil.isAlbumArtOnLockScreen
 import zzh.lifeplayer.music.util.PreferenceUtil.isBluetoothSpeaker
 import zzh.lifeplayer.music.util.PreferenceUtil.isBlurredAlbumArt
-import zzh.lifeplayer.music.util.PreferenceUtil.isClassicNotification
 import zzh.lifeplayer.music.util.PreferenceUtil.isHeadsetPlugged
 import zzh.lifeplayer.music.util.PreferenceUtil.isLockScreen
 import zzh.lifeplayer.music.util.PreferenceUtil.isPauseOnZeroVolume
@@ -77,12 +106,18 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.get
-import java.util.*
+import java.util.Objects
+import java.util.Random
 
 
 /**
@@ -111,7 +146,7 @@ class MusicService : MediaBrowserServiceCompat(),
     @JvmField
     var position = -1
     private val appWidgetBig = AppWidgetBig.instance
-    private val appWidgetCard = AppWidgetCard.instance    
+    private val appWidgetCard = AppWidgetCard.instance      
     private val appWidgetMd3 = AppWidgetMD3.instance
     private val appWidgetCircle = AppWidgetCircle.instance
     private val widgetIntentReceiver = object : BroadcastReceiver() {
@@ -127,6 +162,7 @@ class MusicService : MediaBrowserServiceCompat(),
                     AppWidgetCard.NAME -> {
                         appWidgetCard.performUpdate(this@MusicService, ids)
                     }
+
                     AppWidgetMD3.NAME -> {
                         appWidgetMd3.performUpdate(this@MusicService, ids)
                     }
@@ -516,13 +552,7 @@ class MusicService : MediaBrowserServiceCompat(),
     }
 
     private fun initNotification() {
-        playingNotification = if (VERSION.SDK_INT >= VERSION_CODES.N
-            && !isClassicNotification
-        ) {
-            PlayingNotificationImpl24.from(this, notificationManager!!, mediaSession!!)
-        } else {
-            PlayingNotificationClassic.from(this, notificationManager!!)
-        }
+        playingNotification = PlayingNotification.from(this, notificationManager!!, mediaSession!!)
     }
 
     private val isLastTrack: Boolean
@@ -625,20 +655,6 @@ class MusicService : MediaBrowserServiceCompat(),
             }
 
             ALBUM_ART_ON_LOCK_SCREEN, BLURRED_ALBUM_ART -> updateMediaSessionMetaData(::updateMediaSessionPlaybackState)
-            COLORED_NOTIFICATION -> {
-                playingNotification?.updateMetadata(currentSong) {
-                    playingNotification?.setPlaying(isPlaying)
-                    startForegroundOrNotify()
-                }
-            }
-
-            CLASSIC_NOTIFICATION -> {
-                updateNotification()
-                playingNotification?.updateMetadata(currentSong) {
-                    playingNotification?.setPlaying(isPlaying)
-                    startForegroundOrNotify()
-                }
-            }
 
             TOGGLE_HEADSET -> registerHeadsetEvents()
         }
@@ -675,13 +691,14 @@ class MusicService : MediaBrowserServiceCompat(),
 
     override fun onTrackEnded() {
         acquireWakeLock()
+        // if there is a timer finished, don't continue
         if (pendingQuit
             || (repeatMode == REPEAT_MODE_NONE && isLastTrack)
-        ) {            
-            seek(0, false)
+        ) {
             quit()
+            seek(0, false)
             if (pendingQuit) {
-                pendingQuit = false                
+                pendingQuit = false
             } else if (repeatMode == REPEAT_MODE_NONE && isLastTrack) {
                 position = 0
                 notifyChange(QUEUE_CHANGED)
@@ -1028,7 +1045,7 @@ class MusicService : MediaBrowserServiceCompat(),
 
         // We must send the album art in METADATA_KEY_ALBUM_ART key on A13+ or
         // else album art is blurry in notification
-        if (isAlbumArtOnLockScreen /*|| VersionUtils.hasT()*/ ) {
+        if (isAlbumArtOnLockScreen || VersionUtils.hasT()) {
             // val screenSize: Point = LifeUtil.getScreenSize(this)
             val request = Glide.with(this)
                 .asBitmap()
@@ -1253,7 +1270,12 @@ class MusicService : MediaBrowserServiceCompat(),
 
     private fun registerHeadsetEvents() {
         if (!headsetReceiverRegistered && isHeadsetPlugged) {
-            ContextCompat.registerReceiver(this, headsetReceiver, headsetReceiverIntentFilter, ContextCompat.RECEIVER_EXPORTED)
+            ContextCompat.registerReceiver(
+                this,
+                headsetReceiver,
+                headsetReceiverIntentFilter,
+                ContextCompat.RECEIVER_EXPORTED
+            )
             headsetReceiverRegistered = true
         }
     }
@@ -1295,8 +1317,8 @@ class MusicService : MediaBrowserServiceCompat(),
 
     private fun sendChangeInternal(what: String) {
         LocalBroadcastManager.getInstance(this).sendBroadcast(Intent(what))
-        appWidgetBig.notifyChange(this, what)        
-        appWidgetCard.notifyChange(this, what)        
+        appWidgetBig.notifyChange(this, what)
+        appWidgetCard.notifyChange(this, what)
         appWidgetMd3.notifyChange(this, what)
         appWidgetCircle.notifyChange(this, what)
     }
@@ -1334,7 +1356,7 @@ class MusicService : MediaBrowserServiceCompat(),
         mediaButtonIntent.component = mediaButtonReceiverComponentName
         val mediaButtonReceiverPendingIntent = PendingIntent.getBroadcast(
             applicationContext, 0, mediaButtonIntent,
-            if (VersionUtils.hasMarshmallow()) PendingIntent.FLAG_IMMUTABLE else 0
+            PendingIntent.FLAG_IMMUTABLE
         )
         mediaSession = MediaSessionCompat(
             this,
@@ -1355,7 +1377,7 @@ class MusicService : MediaBrowserServiceCompat(),
 
     companion object {
         val TAG: String = MusicService::class.java.simpleName
-        const val Life_MUSIC_PACKAGE_NAME = "zzh.lifeplayer.music"
+        const val Life_MUSIC_PACKAGE_NAME = "zzh.lifeplayer.music.LifeMusic"
         const val MUSIC_PACKAGE_NAME = "com.android.music"
         const val ACTION_TOGGLE_PAUSE = "$Life_MUSIC_PACKAGE_NAME.togglepause"
         const val ACTION_PLAY = "$Life_MUSIC_PACKAGE_NAME.play"

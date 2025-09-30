@@ -11,7 +11,6 @@ class HomeBinding(
     val appBarLayout = homeBinding.appBarLayout
     val toolbar = homeBinding.appBarLayout.toolbar
     val bannerImagelarge = homeBinding.imageLayout.bannerImage
-  //  val bannerImage = homeBinding.bannerImage // bg image
     val userImage = homeBinding.imageLayout.userImage
     val lastAdded = homeBinding.homeContent.absPlaylists.lastAdded
     val topPlayed = homeBinding.homeContent.absPlaylists.topPlayed

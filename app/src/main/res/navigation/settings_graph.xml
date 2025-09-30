@@ -58,13 +58,6 @@
             app:popEnterAnim="@anim/retro_fragment_close_enter"
             app:popExitAnim="@anim/retro_fragment_close_exit" />
 
-        <action
-            android:id="@+id/action_mainSettingsFragment_to_notificationSettingsFragment"
-            app:destination="@id/notificationSettingsFragment"
-            app:enterAnim="@anim/retro_fragment_open_enter"
-            app:exitAnim="@anim/retro_fragment_open_exit"
-            app:popEnterAnim="@anim/retro_fragment_close_enter"
-            app:popExitAnim="@anim/retro_fragment_close_exit" />
 
         <action
             android:id="@+id/action_mainSettingsFragment_to_aboutActivity"
@@ -94,11 +87,6 @@
         android:id="@+id/imageSettingFragment"
         android:name="zzh.lifeplayer.music.fragments.settings.ImageSettingFragment"
         android:label="Image" />
-
-    <fragment
-        android:id="@+id/notificationSettingsFragment"
-        android:name="zzh.lifeplayer.music.fragments.settings.NotificationSettingsFragment"
-        android:label="Notification" />
 
     <fragment
         android:id="@+id/nowPlayingSettingsFragment"

@@ -43,10 +43,7 @@ abstract class AbsMultiSelectAdapter<V : RecyclerView.ViewHolder?, I>(
 
     override fun onDestroyActionMode(mode: ActionMode?) {
         clearChecked()
-        activity.window.statusBarColor = when {
-            VersionUtils.hasMarshmallow() -> Color.TRANSPARENT
-            else -> Color.BLACK
-        }
+        activity.window.statusBarColor = Color.TRANSPARENT
         actionMode = null
         onBackPressedCallback.remove()
     }

@@ -23,12 +23,6 @@
 - 拥有 musicfx / equalizer（第三方）
 - support lyrics font size
 
-#未来工作
-- 🎚️ 可视化音频频谱（👆😈）
-- 修复 musicfx问题 和 改进 musicfx
-- 優化theme 切換 或 其他卡の頓問題
-- remake UI
----
 
 ## 📸 界面预览
 
@@ -40,6 +34,8 @@
 | 首页 | OtherPage |
 |------|----------|
 | ![](screenShot/Screenshot_2025-07-14-14-11-02-660_zzh.lifeplayer.music.debug.jpg) | ![](screenShot/Screenshot_2025-08-01-16-44-47-927_zzh.lifeplayer.music.debug.jpg) |
+
 ---
 
-# 软件の界面嚴格遵循 material you
+ ![](screenShot/Screenshot_2025-09-30-13-35-08-815_zzh.lifeplayer.music.jpg) 
+
