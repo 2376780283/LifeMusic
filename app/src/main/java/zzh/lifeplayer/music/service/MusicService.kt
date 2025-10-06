@@ -119,7 +119,6 @@ import org.koin.java.KoinJavaComponent.get
 import java.util.Objects
 import java.util.Random
 
-
 /**
  * @author Karim Abou Zeid (kabouzeid), Andrew Neal. Modified by Prathamesh More
  */
@@ -726,6 +725,7 @@ class MusicService : MediaBrowserServiceCompat(),
         } else {
             position = nextPosition
             prepareNextImpl()
+            playbackManager.reopenAudioEffectSession()
             notifyChange(META_CHANGED)
         }
     }
