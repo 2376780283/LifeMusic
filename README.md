@@ -1,4 +1,4 @@
-# 🎵 LifeMusic - Android 音乐播放器
+# 🎵 PixelMusic - Android 音乐播放器
 # fork from RetroMusic
 
  - url - https://github.com/RetroMusicPlayer/RetroMusicPlayer/
@@ -8,7 +8,7 @@
 
 ## 📱 应用介绍
 
-**LifeMusic** 是为 Android 平台开发的本地音乐播放器，主打简洁 UI 与流畅体验。无广告、无打扰，只为让你专注于音乐本身。
+**PixelMusic** 是为 Android 平台开发的本地音乐播放器，主打简洁 UI 与流畅体验。无广告、无打扰，只为让你专注于音乐本身。
 
 ---
 

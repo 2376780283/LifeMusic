@@ -78,7 +78,7 @@ class PermissionActivity : AbsMusicServiceActivity() {
         val appName =
             getString(
                 R.string.message_welcome,
-                "Life Music"
+                "PixelMusic"
             )
         binding.appNameText.text = appName
     }

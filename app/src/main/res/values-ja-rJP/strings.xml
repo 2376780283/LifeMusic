@@ -453,7 +453,7 @@
     <string name="restored_previous_purchases">購入を復元しました</string>
     <string name="restoring_purchase">購入を復元しています...</string>
     <string name="retro_music_player">zzh Music Player</string>
-    <string name="retro_music_pro">Life Music Pro</string>
+    <string name="retro_music_pro">PixelMusic Pro</string>
     <string name="ringtone_summary">音楽を着信音に設定するには、端末の設定にアクセスする権限が必要です</string>
     <string name="ringtone_title">着信音（オプション）</string>
     <string name="permission_alarm_summary">スリープタイマーを設定するには、アプリに正確なアラームをスケジュールする許可が必要です</string>
@@ -537,7 +537,7 @@
     <string name="track_list">トラック番号</string>
     <string name="translate">翻訳</string>
     <string name="translate_community">翻訳を手伝ってください！</string>
-    <string name="try_retro_music_premium">Life Music Premium を試す</string>
+    <string name="try_retro_music_premium">PixelMusic Premium を試す</string>
     <string name="twitter_page">ツイッター</string>
     <string name="twitter_page_summary">あなたのデザインを皆に共有しましょう</string>
     <string name="unlabeled">ラベルを表示しない</string>
@@ -567,5 +567,5 @@
     <string name="you_will_be_forwarded_to_the_issue_tracker_website">不具合報告用のウェブサイトに移動します。</string>
     <string name="your_account_data_is_only_used_for_authentication">あなたのアカウントは認証にのみ使用されます</string>
     <string name="could_not_write_tags_to_file">音楽ファイルにタグを書き込めませんでした</string>
-    <string name="sleep_timer_no_permission">アラームをスケジュールする権限がありません。設定からlife Musicを許可してください。</string>
+    <string name="sleep_timer_no_permission">アラームをスケジュールする権限がありません。設定からPixelMusicを許可してください。</string>
 </resources>

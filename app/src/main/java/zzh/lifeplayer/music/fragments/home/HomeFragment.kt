@@ -148,7 +148,7 @@ class HomeFragment :
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigate(R.id.action_search, null, navOptions)
         }
-        val appName = "Life Music"
+        val appName = "PixelMusic"
         binding.appBarLayout.title = appName
     }
     
