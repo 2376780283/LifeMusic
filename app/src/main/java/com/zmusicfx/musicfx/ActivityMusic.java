@@ -472,21 +472,6 @@ public class ActivityMusic extends AbsThemeActivity implements OnSeekBarChangeLi
         }
  //       loadProfile();
     }
-    // 在 ActivityMusic 的 onCreate 中注册
-    private BroadcastReceiver effectSessionReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        if ("com.zmusicfx.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION".equals(intent.getAction())) {
-            int sessionId = intent.getIntExtra(AudioEffect.EXTRA_AUDIO_SESSION, -1);
-            String packageName = intent.getStringExtra(AudioEffect.EXTRA_PACKAGE_NAME);
-            // 重新初始化效果器（如果需要）
-            ControlPanelEffect.initEffectsPreferences(mContext, packageName, sessionId);
-        } else if ("com.zmusicfx.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION".equals(intent.getAction())) {
-            // 清理效果器资源
-        }
-    }
-    };
-
 /*  
     private void loadProfile() {   
     if (bannerImage != null) {

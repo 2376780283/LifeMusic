@@ -16,13 +16,26 @@ package zzh.lifeplayer.music.glide.audiocover
 /** @author Karim Abou Zeid (kabouzeid)
  */
 class AudioFileCover(val filePath: String) {
+
+    init {
+        require(filePath.isNotBlank()) { "File path cannot be blank. Received: '$filePath'" }
+    }
+
     override fun hashCode(): Int {
         return filePath.hashCode()
     }
 
     override fun equals(other: Any?): Boolean {
-        return if (other is AudioFileCover) {
+/*        return if (other is AudioFileCover) {
             other.filePath == filePath
-        } else false
+        } else false  */
+        if (this === other) return true
+        if (other !is AudioFileCover) return false
+        return filePath == other.filePath
+    }
+
+    override fun toString(): String {
+        return "AudioFileCover(filePath='$filePath')"
+        
     }
 }

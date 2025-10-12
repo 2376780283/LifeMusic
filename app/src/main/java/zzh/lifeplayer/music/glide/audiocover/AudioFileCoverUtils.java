@@ -14,51 +14,109 @@
 
 package zzh.lifeplayer.music.glide.audiocover;
 
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.mp3.MP3File;
-import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.images.Artwork;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
+
 
 public class AudioFileCoverUtils {
 
   public static final String[] FALLBACKS = {
     "cover.jpg", "album.jpg", "folder.jpg",
-    "cover.png", "album.png", "folder.png",
+    "cover.png", "album.png", "folder.png", 
     "cover.webp", "album.webp", "folder.webp"
   };
+  
+  private static final long MIN_COVER_SIZE_BYTES = 1024;
+  private static final long MAX_COVER_SIZE_BYTES = 50 * 1024 * 1024;
+
 
   public static InputStream fallback(String path) throws FileNotFoundException {
-    // Method 1: use embedded high resolution album art if there is any
-    try {
-      MP3File mp3File = new MP3File(path);
-      if (mp3File.hasID3v2Tag()) {
-        Artwork art = mp3File.getTag().getFirstArtwork();
-        if (art != null) {
-          byte[] imageData = art.getBinaryData();
-          return new ByteArrayInputStream(imageData);
-        }
-      }
-      // If there are any exceptions, we ignore them and continue to the other fallback method
-    } catch (ReadOnlyFileException | InvalidAudioFrameException | TagException | IOException | CannotReadException ignored) {
+    if (path == null || path.trim().isEmpty()) {
+      return null;
     }
 
-    // Method 2: look for album art in external files
-    final File parent = new File(path).getParentFile();
-    for (String fallback : FALLBACKS) {
-      File cover = new File(parent, fallback);
-      if (cover.exists()) {
-        return new FileInputStream(cover);
+    InputStream taggedArtwork = extractArtworkFromTags(path);
+    if (taggedArtwork != null) {
+      return taggedArtwork;
+    }
+
+    return findExternalCoverArt(path);
+  }
+
+  private static InputStream extractArtworkFromTags(String path) {
+    try {
+      MP3File mp3File = new MP3File(path);
+      
+      if (mp3File.hasID3v2Tag()) {
+        Artwork artwork = mp3File.getTag().getFirstArtwork();
+        if (isValidArtwork(artwork)) {
+          return new ByteArrayInputStream(artwork.getBinaryData());
+        }
       }
+      
+      if (mp3File.hasID3v1Tag()) {
+        Artwork artwork = mp3File.getID3v1Tag().getFirstArtwork();
+        if (isValidArtwork(artwork)) {
+          return new ByteArrayInputStream(artwork.getBinaryData());
+        }
+      }
+      
+    } catch (Exception e) {
     }
     return null;
+  }
+
+  private static InputStream findExternalCoverArt(String path) throws FileNotFoundException {
+    final File audioFile = new File(path);
+    final File parentDirectory = audioFile.getParentFile();
+    
+    if (!isValidDirectory(parentDirectory)) {
+      return null;
+    }
+    
+    for (String coverFileName : FALLBACKS) {
+      File coverFile = new File(parentDirectory, coverFileName);
+      
+      if (isValidCoverFile(coverFile)) {
+        try {
+          return new FileInputStream(coverFile);
+        } catch (FileNotFoundException | SecurityException e) {
+          continue;
+        }
+      }
+    }
+    
+    return null;
+  }
+
+  private static boolean isValidArtwork(Artwork artwork) {
+    if (artwork == null) {
+      return false;
+    }
+    
+    byte[] imageData = artwork.getBinaryData();
+    return imageData != null && imageData.length > 0;
+  }
+
+  private static boolean isValidDirectory(File directory) {
+    return directory != null && 
+           directory.exists() && 
+           directory.isDirectory() && 
+           directory.canRead();
+  }
+
+  private static boolean isValidCoverFile(File coverFile) {
+    if (!coverFile.exists() || !coverFile.isFile() || !coverFile.canRead()) {
+      return false;
+    }
+    
+    long fileSize = coverFile.length();
+    return fileSize >= MIN_COVER_SIZE_BYTES && fileSize <= MAX_COVER_SIZE_BYTES;
   }
 }

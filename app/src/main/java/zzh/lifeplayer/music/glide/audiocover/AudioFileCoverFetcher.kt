@@ -18,43 +18,77 @@ import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.data.DataFetcher
 import java.io.ByteArrayInputStream
-import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 
 class AudioFileCoverFetcher(private val model: AudioFileCover) : DataFetcher<InputStream> {
+    
     private var stream: InputStream? = null
+    
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in InputStream>) {
-        val retriever = MediaMetadataRetriever()
+        var retriever: MediaMetadataRetriever? = null
+        
         try {
+            retriever = MediaMetadataRetriever()
             retriever.setDataSource(model.filePath)
-            val picture = retriever.embeddedPicture
-            stream = if (picture != null) {
-                ByteArrayInputStream(picture)
-            } else {
-                AudioFileCoverUtils.fallback(model.filePath)
+            
+            val embeddedPicture = retriever.embeddedPicture
+            if (embeddedPicture != null && embeddedPicture.isNotEmpty()) {
+                stream = ByteArrayInputStream(embeddedPicture)
+                callback.onDataReady(stream!!)
+                return
             }
-            callback.onDataReady(stream)
-        } catch (e: FileNotFoundException) {
-            callback.onLoadFailed(e)
+            
+            stream = AudioFileCoverUtils.fallback(model.filePath)
+            if (stream != null) {
+                callback.onDataReady(stream!!)
+                return
+            }
+            
+            callback.onLoadFailed(
+                NoSuchElementException("No cover art found for file: ${model.filePath}")
+            )
+            
+        } catch (e: Exception) {
+            handleFallbackOrFail(callback, e)
         } finally {
+            retriever?.let { safeReleaseRetriever(it) }
+        }
+    }
+    
+    private fun handleFallbackOrFail(
+        callback: DataFetcher.DataCallback<in InputStream>,
+        originalException: Exception
+    ) {
+        try {
+            stream = AudioFileCoverUtils.fallback(model.filePath)
+            if (stream != null) {
+                callback.onDataReady(stream!!)
+            } else {
+                callback.onLoadFailed(originalException)
+            }
+        } catch (fallbackException: Exception) {
+            callback.onLoadFailed(originalException)
+        }
+    }
+    
+    private fun safeReleaseRetriever(retriever: MediaMetadataRetriever) {
+        try {
             retriever.release()
+        } catch (e: Exception) {
         }
     }
 
     override fun cleanup() {
-        // already cleaned up in loadData and ByteArrayInputStream will be GC'd
         if (stream != null) {
             try {
                 stream?.close()
             } catch (ignore: IOException) {
-                // can't do much about it
             }
         }
     }
 
     override fun cancel() {
-        // cannot cancel
     }
 
     override fun getDataClass(): Class<InputStream> {

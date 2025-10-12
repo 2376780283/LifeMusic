@@ -37,10 +37,16 @@ class SimpleSongAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
-        val fixedTrackNumber = MusicUtil.getFixedTrackNumber(dataSet[position].trackNumber)
+ /*       val fixedTrackNumber = MusicUtil.getFixedTrackNumber(dataSet[position].trackNumber)
 
         holder.imageText?.text = if (fixedTrackNumber > 0) fixedTrackNumber.toString() else "-"
-        holder.time?.text = MusicUtil.getReadableDurationString(dataSet[position].duration)
+        holder.time?.text = MusicUtil.getReadableDurationString(dataSet[position].duration)*/
+        val song = dataSet[position]
+
+        holder.imageText?.text = MusicUtil.getDisplayTrackNumber(song, position)
+
+        // Format and display song duration
+        holder.time?.text = MusicUtil.getReadableDurationString(song.duration)
     }
 
     override fun getItemCount(): Int {

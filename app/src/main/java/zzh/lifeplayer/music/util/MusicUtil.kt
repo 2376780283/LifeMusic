@@ -141,6 +141,16 @@ object MusicUtil : KoinComponent {
     fun getFixedTrackNumber(trackNumberToFix: Int): Int {
         return trackNumberToFix % 1000
     }
+    
+    @JvmStatic
+    fun getDisplayTrackNumber(song: Song, position: Int): String {
+        val fixedTrackNumber = getFixedTrackNumber(song.trackNumber)
+        return if (fixedTrackNumber > 0) {
+            fixedTrackNumber.toString()
+        } else {
+            (position + 1).toString()
+        }
+    }
 
     fun getLyrics(song: Song): String? {
         var lyrics: String? = "No lyrics found"

@@ -58,7 +58,8 @@ object LifeGlideExtension {
     }
 
     private fun getSongModel(song: Song, ignoreMediaStore: Boolean): Any {
-        return if (ignoreMediaStore) {
+ //       return if (ignoreMediaStore) {
+          return if (ignoreMediaStore && song.data.isNotBlank()) {
             AudioFileCover(song.data)
         } else {
             getMediaStoreAlbumCoverUri(song.albumId)
