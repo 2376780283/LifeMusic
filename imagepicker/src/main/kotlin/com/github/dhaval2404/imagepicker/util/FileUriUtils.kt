@@ -24,8 +24,10 @@ import java.io.OutputStream
  */
 
 object FileUriUtils {
-
-    fun getRealPath(context: Context, uri: Uri): String? {
+    fun getRealPath(
+        context: Context,
+        uri: Uri,
+    ): String? {
         var path = getPathFromLocalUri(context, uri)
         if (path == null) {
             path = getPathFromRemoteUri(context, uri)
@@ -33,7 +35,10 @@ object FileUriUtils {
         return path
     }
 
-    private fun getPathFromLocalUri(context: Context, uri: Uri): String? {
+    private fun getPathFromLocalUri(
+        context: Context,
+        uri: Uri,
+    ): String? {
         val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
         // DocumentProvider
@@ -67,12 +72,16 @@ object FileUriUtils {
             }
         } else if ("content".equals(uri.scheme!!, ignoreCase = true)) {
             // Return the remote address
-            return if (isGooglePhotosUri(uri)) uri.lastPathSegment else getDataColumn(
-                context,
-                uri,
-                null,
-                null
-            )
+            return if (isGooglePhotosUri(uri)) {
+                uri.lastPathSegment
+            } else {
+                getDataColumn(
+                    context,
+                    uri,
+                    null,
+                    null,
+                )
+            }
         } else if ("file".equals(uri.scheme!!, ignoreCase = true)) {
             return uri.path
         }
@@ -83,9 +92,8 @@ object FileUriUtils {
         context: Context,
         uri: Uri?,
         selection: String?,
-        selectionArgs: Array<String>?
+        selectionArgs: Array<String>?,
     ): String? {
-
         var cursor: Cursor? = null
         val column = "_data"
         val projection = arrayOf(column)
@@ -105,7 +113,10 @@ object FileUriUtils {
         return null
     }
 
-    private fun getDownloadDocument(context: Context, uri: Uri): String? {
+    private fun getDownloadDocument(
+        context: Context,
+        uri: Uri,
+    ): String? {
         val fileName = getFilePath(context, uri)
         if (fileName != null) {
             val path =
@@ -119,13 +130,18 @@ object FileUriUtils {
         if (id.contains(":")) {
             id = id.split(":")[1]
         }
-        val contentUri = ContentUris.withAppendedId(
-            Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id)
-        )
+        val contentUri =
+            ContentUris.withAppendedId(
+                Uri.parse("content://downloads/public_downloads"),
+                java.lang.Long.valueOf(id),
+            )
         return getDataColumn(context, contentUri, null, null)
     }
 
-    private fun getMediaDocument(context: Context, uri: Uri): String? {
+    private fun getMediaDocument(
+        context: Context,
+        uri: Uri,
+    ): String? {
         val docId = DocumentsContract.getDocumentId(uri)
         val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val type = split[0]
@@ -145,8 +161,10 @@ object FileUriUtils {
         return getDataColumn(context, contentUri, selection, selectionArgs)
     }
 
-    private fun getFilePath(context: Context, uri: Uri): String? {
-
+    private fun getFilePath(
+        context: Context,
+        uri: Uri,
+    ): String? {
         var cursor: Cursor? = null
         val projection = arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
 
@@ -162,7 +180,10 @@ object FileUriUtils {
         return null
     }
 
-    private fun getPathFromRemoteUri(context: Context, uri: Uri): String? {
+    private fun getPathFromRemoteUri(
+        context: Context,
+        uri: Uri,
+    ): String? {
         // The code below is why Java now has try-with-resources and the Files utility.
         var file: File? = null
         var inputStream: InputStream? = null
@@ -201,31 +222,23 @@ object FileUriUtils {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.
      */
-    private fun isExternalStorageDocument(uri: Uri): Boolean {
-        return "com.android.externalstorage.documents" == uri.authority
-    }
+    private fun isExternalStorageDocument(uri: Uri): Boolean = "com.android.externalstorage.documents" == uri.authority
 
     /**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is DownloadsProvider.
      */
-    private fun isDownloadsDocument(uri: Uri): Boolean {
-        return "com.android.providers.downloads.documents" == uri.authority
-    }
+    private fun isDownloadsDocument(uri: Uri): Boolean = "com.android.providers.downloads.documents" == uri.authority
 
     /**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is MediaProvider.
      */
-    private fun isMediaDocument(uri: Uri): Boolean {
-        return "com.android.providers.media.documents" == uri.authority
-    }
+    private fun isMediaDocument(uri: Uri): Boolean = "com.android.providers.media.documents" == uri.authority
 
     /**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is Google Photos.
      */
-    private fun isGooglePhotosUri(uri: Uri): Boolean {
-        return "com.google.android.apps.photos.content" == uri.authority
-    }
+    private fun isGooglePhotosUri(uri: Uri): Boolean = "com.google.android.apps.photos.content" == uri.authority
 }

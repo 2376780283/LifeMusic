@@ -18,19 +18,26 @@ import zzh.lifeplayer.appthemehelper.util.VersionUtils
  * @author Karim Abou Zeid (kabouzeid)
  */
 object ATH {
-
-    fun didThemeValuesChange(context: Context, since: Long): Boolean {
-        return ThemeStore.isConfigured(context) && ThemeStore.prefs(context).getLong(
+    fun didThemeValuesChange(
+        context: Context,
+        since: Long,
+    ): Boolean =
+        ThemeStore.isConfigured(context) && ThemeStore.prefs(context).getLong(
             ThemeStorePrefKeys.VALUES_CHANGED,
-            -1
+            -1,
         ) > since
-    }
 
-    fun setTint(view: View, @ColorInt color: Int) {
+    fun setTint(
+        view: View,
+        @ColorInt color: Int,
+    ) {
         TintHelper.setTintAuto(view, color, false)
     }
 
-    fun setBackgroundTint(view: View, @ColorInt color: Int) {
+    fun setBackgroundTint(
+        view: View,
+        @ColorInt color: Int,
+    ) {
         TintHelper.setTintAuto(view, color, true)
     }
 }

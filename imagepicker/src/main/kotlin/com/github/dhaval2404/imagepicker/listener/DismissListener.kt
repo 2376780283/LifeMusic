@@ -9,7 +9,6 @@ package com.github.dhaval2404.imagepicker.listener
  * @since 19 December 2020
  */
 interface DismissListener {
-
     /**
      * This method will be invoked when the dialog is dismissed.
      */

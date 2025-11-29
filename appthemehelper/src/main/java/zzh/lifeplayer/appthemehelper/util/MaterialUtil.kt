@@ -2,19 +2,18 @@ package zzh.lifeplayer.appthemehelper.util
 
 import android.content.res.ColorStateList
 import android.graphics.Color
-import zzh.lifeplayer.appthemehelper.ThemeStore
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
+import zzh.lifeplayer.appthemehelper.ThemeStore
 
 object MaterialUtil {
-
     @JvmOverloads
     @JvmStatic
     fun setTint(
-        button: MaterialButton, background: Boolean = true,
-        color: Int = ThemeStore.accentColor(button.context)
+        button: MaterialButton,
+        background: Boolean = true,
+        color: Int = ThemeStore.accentColor(button.context),
     ) {
-
         button.isAllCaps = false
         val context = button.context
         val colorState = ColorStateList.valueOf(color)
@@ -22,10 +21,9 @@ object MaterialUtil {
             ColorStateList.valueOf(
                 MaterialValueHelper.getPrimaryTextColor(
                     context,
-                    ColorUtil.isColorLight(color)
-                )
+                    ColorUtil.isColorLight(color),
+                ),
             )
-
 
         if (background) {
             button.backgroundTintList = colorState
@@ -42,7 +40,7 @@ object MaterialUtil {
     fun tintColor(
         button: MaterialButton,
         textColor: Int = Color.WHITE,
-        backgroundColor: Int = Color.BLACK
+        backgroundColor: Int = Color.BLACK,
     ) {
         val backgroundColorStateList = ColorStateList.valueOf(backgroundColor)
         val textColorColorStateList = ColorStateList.valueOf(textColor)
@@ -53,7 +51,10 @@ object MaterialUtil {
 
     @JvmOverloads
     @JvmStatic
-    fun setTint(textInputLayout: TextInputLayout, background: Boolean = true) {
+    fun setTint(
+        textInputLayout: TextInputLayout,
+        background: Boolean = true,
+    ) {
         val context = textInputLayout.context
         val accentColor = ThemeStore.accentColor(context)
         val colorState = ColorStateList.valueOf(accentColor)

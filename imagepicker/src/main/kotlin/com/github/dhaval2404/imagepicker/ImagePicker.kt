@@ -18,7 +18,6 @@ import java.io.File
  * @since 04 January 2019
  */
 open class ImagePicker {
-
     companion object {
         // Default Request Code to Pick Image
         const val REQUEST_CODE = 2404
@@ -45,9 +44,7 @@ open class ImagePicker {
          * @param activity Activity Instance
          */
         @JvmStatic
-        fun with(activity: Activity): Builder {
-            return Builder(activity)
-        }
+        fun with(activity: Activity): Builder = Builder(activity)
 
         /**
          * Use this to use ImagePicker in Fragment Class
@@ -55,9 +52,7 @@ open class ImagePicker {
          * @param fragment Fragment Instance
          */
         @JvmStatic
-        fun with(fragment: Fragment): Builder {
-            return Builder(fragment)
-        }
+        fun with(fragment: Fragment): Builder = Builder(fragment)
 
         /**
          * Get error message from intent
@@ -73,8 +68,9 @@ open class ImagePicker {
         }
     }
 
-    class Builder(private val activity: Activity) {
-
+    class Builder(
+        private val activity: Activity,
+    ) {
         private var fragment: Fragment? = null
 
         // Image Provider
@@ -168,7 +164,10 @@ open class ImagePicker {
          * @param x aspect ratio X
          * @param y aspect ratio Y
          */
-        fun crop(x: Float, y: Float): Builder {
+        fun crop(
+            x: Float,
+            y: Float,
+        ): Builder {
             cropX = x
             cropY = y
             return crop()
@@ -186,14 +185,15 @@ open class ImagePicker {
          * Crop Square Image, Useful for Profile Image.
          *
          */
-        fun cropSquare(): Builder {
-            return crop(1f, 1f)
-        }
+        fun cropSquare(): Builder = crop(1f, 1f)
 
         /**
          * Max Width and Height of final image
          */
-        fun maxResultSize(width: Int, height: Int): Builder {
+        fun maxResultSize(
+            width: Int,
+            height: Int,
+        ): Builder {
             this.maxWidth = width
             this.maxHeight = height
             return this
@@ -251,11 +251,12 @@ open class ImagePicker {
          * Sets the callback that will be called when the dialog is dismissed for any reason.
          */
         fun setDismissListener(listener: (() -> Unit)): Builder {
-            this.dismissListener = object : DismissListener {
-                override fun onDismiss() {
-                    listener.invoke()
+            this.dismissListener =
+                object : DismissListener {
+                    override fun onDismiss() {
+                        listener.invoke()
+                    }
                 }
-            }
             return this
         }
 
@@ -305,7 +306,7 @@ open class ImagePicker {
                             }
                         }
                     },
-                    dismissListener
+                    dismissListener,
                 )
             } else {
                 onResult(createIntent())
@@ -327,15 +328,15 @@ open class ImagePicker {
                         }
                     }
                 },
-                dismissListener
+                dismissListener,
             )
         }
 
         /**
          * Get Bundle for ImagePickerActivity
          */
-        private fun getBundle(): Bundle {
-            return Bundle().apply {
+        private fun getBundle(): Bundle =
+            Bundle().apply {
                 putSerializable(EXTRA_IMAGE_PROVIDER, imageProvider)
                 putStringArray(EXTRA_MIME_TYPES, mimeTypes)
 
@@ -350,7 +351,6 @@ open class ImagePicker {
 
                 putString(EXTRA_SAVE_DIRECTORY, saveDir)
             }
-        }
 
         /**
          * Start ImagePickerActivity with given Argument

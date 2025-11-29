@@ -21,8 +21,9 @@ import java.io.IOException
  * @version 1.0
  * @since 04 January 2019
  */
-class CropProvider(activity: ImagePickerActivity) : BaseProvider(activity) {
-
+class CropProvider(
+    activity: ImagePickerActivity,
+) : BaseProvider(activity) {
     companion object {
         private val TAG = CropProvider::class.java.simpleName
 
@@ -113,8 +114,10 @@ class CropProvider(activity: ImagePickerActivity) : BaseProvider(activity) {
         val options = UCrop.Options()
         options.setCompressionFormat(FileUtil.getCompressFormat(extension))
 
-        val uCrop = UCrop.of(uri, Uri.fromFile(mCropImageFile))
-            .withOptions(options)
+        val uCrop =
+            UCrop
+                .of(uri, Uri.fromFile(mCropImageFile))
+                .withOptions(options)
 
         if (mCropAspectX > 0 && mCropAspectY > 0) {
             uCrop.withAspectRatio(mCropAspectX, mCropAspectY)
@@ -133,7 +136,7 @@ class CropProvider(activity: ImagePickerActivity) : BaseProvider(activity) {
                     "<activity\n" +
                     "    android:name=\"com.yalantis.ucrop.UCropActivity\"\n" +
                     "    android:screenOrientation=\"portrait\"\n" +
-                    "    android:theme=\"@style/Theme.AppCompat.Light.NoActionBar\"/>"
+                    "    android:theme=\"@style/Theme.AppCompat.Light.NoActionBar\"/>",
             )
             ex.printStackTrace()
         }
@@ -147,7 +150,11 @@ class CropProvider(activity: ImagePickerActivity) : BaseProvider(activity) {
      * @param data Result Intent
      */
     @Suppress("UNUSED_PARAMETER")
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+    ) {
         if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == Activity.RESULT_OK) {
                 handleResult(mCropImageFile)

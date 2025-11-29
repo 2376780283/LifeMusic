@@ -21,18 +21,19 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceViewHolder
 import zzh.lifeplayer.appthemehelper.ThemeStore
 
-class ATEPreferenceCategory @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet?,
-    defStyleAttr: Int = -1,
-    defStyleRes: Int = -1
-) : PreferenceCategory(context, attrs, defStyleAttr, defStyleRes) {
-
-    override fun onBindViewHolder(holder: PreferenceViewHolder) {
-        super.onBindViewHolder(holder)
-        val title = holder.itemView.findViewById<TextView>(android.R.id.title)
-        title.setTextColor(
-           ThemeStore.accentColor(context)
-        )
+class ATEPreferenceCategory
+    @JvmOverloads
+    constructor(
+        context: Context,
+        attrs: AttributeSet?,
+        defStyleAttr: Int = -1,
+        defStyleRes: Int = -1,
+    ) : PreferenceCategory(context, attrs, defStyleAttr, defStyleRes) {
+        override fun onBindViewHolder(holder: PreferenceViewHolder) {
+            super.onBindViewHolder(holder)
+            val title = holder.itemView.findViewById<TextView>(android.R.id.title)
+            title.setTextColor(
+                ThemeStore.accentColor(context),
+            )
+        }
     }
-}

@@ -10,5 +10,5 @@ package com.github.dhaval2404.imagepicker.constant
 enum class ImageProvider {
     GALLERY,
     CAMERA,
-    BOTH
+    BOTH,
 }

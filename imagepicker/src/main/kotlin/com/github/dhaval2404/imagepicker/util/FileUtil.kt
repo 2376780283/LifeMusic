@@ -23,7 +23,6 @@ import java.util.Locale
  * @since 04 January 2019
  */
 object FileUtil {
-
     /**
      * Get Image File
      *
@@ -34,7 +33,10 @@ object FileUtil {
      * @return Return Empty file to store camera image.
      * @throws IOException if permission denied of failed to create new file.
      */
-    fun getImageFile(fileDir: File, extension: String? = null): File? {
+    fun getImageFile(
+        fileDir: File,
+        extension: String? = null,
+    ): File? {
         try {
             // Create an image file name
             val ext = extension ?: ".jpg"
@@ -88,7 +90,10 @@ object FileUtil {
      * @param uri Uri to get Image Size
      * @return Int Array, Index 0 has width and Index 1 has height
      */
-    fun getImageResolution(context: Context, uri: Uri): Pair<Int, Int> {
+    fun getImageResolution(
+        context: Context,
+        uri: Uri,
+    ): Pair<Int, Int> {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
         val stream = context.contentResolver.openInputStream(uri)
@@ -115,9 +120,10 @@ object FileUtil {
      * @param uri Uri to get Image Size
      * @return Int Image File Size
      */
-    fun getImageSize(context: Context, uri: Uri): Long {
-        return getDocumentFile(context, uri)?.length() ?: 0
-    }
+    fun getImageSize(
+        context: Context,
+        uri: Uri,
+    ): Long = getDocumentFile(context, uri)?.length() ?: 0
 
     /**
      * Create copy of Uri into application specific local path
@@ -126,7 +132,10 @@ object FileUtil {
      * @param uri Source Uri
      * @return File return copy of Uri object
      */
-    fun getTempFile(context: Context, uri: Uri): File? {
+    fun getTempFile(
+        context: Context,
+        uri: Uri,
+    ): File? {
         try {
             val destination = File(context.cacheDir, "image_picker.png")
 
@@ -153,7 +162,10 @@ object FileUtil {
      * @param uri Source Uri
      * @return DocumentFile return DocumentFile from Uri
      */
-    fun getDocumentFile(context: Context, uri: Uri): DocumentFile? {
+    fun getDocumentFile(
+        context: Context,
+        uri: Uri,
+    ): DocumentFile? {
         var file: DocumentFile? = null
         if (isFileUri(uri)) {
             val path = FileUriUtils.getRealPath(context, uri)
@@ -173,8 +185,8 @@ object FileUtil {
      * @return Bitmap CompressFormat
      */
     @Suppress("DEPRECATION")
-    fun getCompressFormat(extension: String): Bitmap.CompressFormat {
-        return when {
+    fun getCompressFormat(extension: String): Bitmap.CompressFormat =
+        when {
             extension.contains("png", ignoreCase = true) -> Bitmap.CompressFormat.PNG
             extension.contains("webp", ignoreCase = true) -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -185,16 +197,13 @@ object FileUtil {
             }
             else -> Bitmap.CompressFormat.JPEG
         }
-    }
 
     /**
      * Get Image Extension i.e. .png, .jpg
      *
      * @return extension of image with dot, or default .jpg if it none.
      */
-    fun getImageExtension(file: File): String {
-        return getImageExtension(Uri.fromFile(file))
-    }
+    fun getImageExtension(file: File): String = getImageExtension(Uri.fromFile(file))
 
     /**
      * Get Image Extension i.e. .png, .jpg
@@ -226,7 +235,5 @@ object FileUtil {
      *
      * @return Boolean, True if Uri is local file object else return false
      */
-    private fun isFileUri(uri: Uri): Boolean {
-        return "file".equals(uri.scheme, ignoreCase = true)
-    }
+    private fun isFileUri(uri: Uri): Boolean = "file".equals(uri.scheme, ignoreCase = true)
 }

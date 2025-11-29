@@ -16,9 +16,9 @@ import com.github.dhaval2404.imagepicker.util.IntentUtils
  * @version 1.0
  * @since 04 January 2019
  */
-class GalleryProvider(activity: ImagePickerActivity) :
-    BaseProvider(activity) {
-
+class GalleryProvider(
+    activity: ImagePickerActivity,
+) : BaseProvider(activity) {
     companion object {
         private const val GALLERY_INTENT_REQ_CODE = 4261
     }
@@ -55,7 +55,11 @@ class GalleryProvider(activity: ImagePickerActivity) :
      * @param resultCode For success it should be {@link Activity#RESULT_OK}
      * @param data Result Intent
      */
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+    ) {
         if (requestCode == GALLERY_INTENT_REQ_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 handleResult(data)

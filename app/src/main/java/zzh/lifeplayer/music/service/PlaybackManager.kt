@@ -9,6 +9,8 @@ import zzh.lifeplayer.music.service.playback.Playback
 import zzh.lifeplayer.music.util.PreferenceUtil
 import com.zmusicfx.musicfx.ControlPanelEffect
 
+import android.os.Handler
+import android.os.Looper
 
 class PlaybackManager(val context: Context) {
 
@@ -48,7 +50,6 @@ class PlaybackManager(val context: Context) {
             if (!playback!!.isInitialized) {
                 onNotInitialized()
             } else {
-               // openAudioEffectSession()
                 if (playbackLocation == PlaybackLocation.LOCAL) {
                     if (playback is CrossFadePlayer) {
                         if (!(playback as CrossFadePlayer).isCrossFading) {
@@ -131,30 +132,19 @@ class PlaybackManager(val context: Context) {
     }
     
     private fun openAudioEffectSession() {
-     /*   val intent = Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION)
-        intent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, audioSessionId)
-        intent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, context.packageName)
-        intent.putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC)
-        context.sendBroadcast(intent) */
         val audioSessionId = playback!!.audioSessionId
         if (audioSessionId != 0) {
-            // 直接使用 ControlPanelEffect 初始化效果会话
-            ControlPanelEffect.openSession(context, context.packageName, audioSessionId)
-            ControlPanelEffect.setEnabledAll(context, context.packageName, audioSessionId, true)
+            Handler(Looper.getMainLooper()).postDelayed({
+                 // 直接使用 ControlPanelEffect 初始化效果会话
+                ControlPanelEffect.openSession(context, context.packageName, audioSessionId)
+                ControlPanelEffect.setEnabledAll(context, context.packageName, audioSessionId, true)
+            }, 500)
         }
     }
 
     private fun closeAudioEffectSession() {
-     /*   val audioEffectsIntent = Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION)
-        if (playback != null) {
-            audioEffectsIntent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION,
-                playback!!.audioSessionId)
-        }
-        audioEffectsIntent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, context.packageName)
-        context.sendBroadcast(audioEffectsIntent)*/
         val audioSessionId = playback!!.audioSessionId
         if (audioSessionId != 0) {
-            // 禁用所有效果并关闭会话
             ControlPanelEffect.setEnabledAll(context, context.packageName, audioSessionId, false)
             ControlPanelEffect.closeSession(context, context.packageName, audioSessionId)
         }

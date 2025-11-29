@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
-//import com.github.dhaval2404.imagepicker.provider.CameraProvider
+// import com.github.dhaval2404.imagepicker.provider.CameraProvider
 import com.github.dhaval2404.imagepicker.provider.CompressionProvider
 import com.github.dhaval2404.imagepicker.provider.CropProvider
 import com.github.dhaval2404.imagepicker.provider.GalleryProvider
@@ -22,7 +22,6 @@ import com.github.dhaval2404.imagepicker.util.FileUriUtils
  * @since 04 January 2019
  */
 class ImagePickerActivity : AppCompatActivity() {
-
     companion object {
         private const val TAG = "image_picker"
 
@@ -35,6 +34,7 @@ class ImagePickerActivity : AppCompatActivity() {
     }
 
     private var mGalleryProvider: GalleryProvider? = null
+
 //    private var mCameraProvider: CameraProvider? = null
     private lateinit var mCropProvider: CropProvider
     private lateinit var mCompressionProvider: CompressionProvider
@@ -48,7 +48,7 @@ class ImagePickerActivity : AppCompatActivity() {
      * Save all appropriate activity state.
      */
     public override fun onSaveInstanceState(outState: Bundle) {
-  //      mCameraProvider?.onSaveInstanceState(outState)
+        //      mCameraProvider?.onSaveInstanceState(outState)
         mCropProvider.onSaveInstanceState(outState)
         super.onSaveInstanceState(outState)
     }
@@ -95,7 +95,7 @@ class ImagePickerActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 //        mCameraProvider?.onRequestPermissionsResult(requestCode)
@@ -104,7 +104,11 @@ class ImagePickerActivity : AppCompatActivity() {
     /**
      * Dispatch incoming result to the correct provider.
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+    ) {
         super.onActivityResult(requestCode, resultCode, data)
 //        mCameraProvider?.onActivityResult(requestCode, resultCode, data)
         mGalleryProvider?.onActivityResult(requestCode, resultCode, data)
@@ -129,7 +133,6 @@ class ImagePickerActivity : AppCompatActivity() {
             mCompressionProvider.isCompressionRequired(uri) -> mCompressionProvider.compress(uri)
             else -> setResult(uri)
         }
-       
     }
 
     /**
@@ -142,7 +145,7 @@ class ImagePickerActivity : AppCompatActivity() {
     fun setCropImage(uri: Uri) {
         // Delete Camera file after crop. Else there will be two image for the same action.
         // In case of Gallery Provider, we will get original image path, so we will not delete that.
-  //      mCameraProvider?.delete()
+        //      mCameraProvider?.delete()
 
         if (mCompressionProvider.isCompressionRequired(uri)) {
             mCompressionProvider.compress(uri)
@@ -161,7 +164,7 @@ class ImagePickerActivity : AppCompatActivity() {
 
         // Delete Camera file after crop. Else there will be two image for the same action.
         // In case of Gallery Provider, we will get original image path, so we will not delete that.
-  //      mCameraProvider?.delete()
+        //      mCameraProvider?.delete()
 
         // If crop file is not null, Delete it after crop
         mCropProvider.delete()

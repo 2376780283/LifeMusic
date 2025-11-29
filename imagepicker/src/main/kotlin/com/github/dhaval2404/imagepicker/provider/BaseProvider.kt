@@ -13,13 +13,15 @@ import java.io.File
  * @version 1.0
  * @since 04 January 2019
  */
-abstract class BaseProvider(protected val activity: ImagePickerActivity) :
-    ContextWrapper(activity) {
-
-    fun getFileDir(path: String?): File {
-        return if (path != null) File(path)
-        else getExternalFilesDir(Environment.DIRECTORY_DCIM) ?: activity.filesDir
-    }
+abstract class BaseProvider(
+    protected val activity: ImagePickerActivity,
+) : ContextWrapper(activity) {
+    fun getFileDir(path: String?): File =
+        if (path != null) {
+            File(path)
+        } else {
+            getExternalFilesDir(Environment.DIRECTORY_DCIM) ?: activity.filesDir
+        }
 
     /**
      * Cancel operation and Set Error Message

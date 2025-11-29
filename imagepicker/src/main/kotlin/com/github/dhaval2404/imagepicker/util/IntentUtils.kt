@@ -18,12 +18,14 @@ import java.io.File
  * @since 04 January 2018
  */
 object IntentUtils {
-
     /**
      * @return Intent Gallery Intent
      */
     @JvmStatic
-    fun getGalleryIntent(context: Context, mimeTypes: Array<String>): Intent {
+    fun getGalleryIntent(
+        context: Context,
+        mimeTypes: Array<String>,
+    ): Intent {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             val intent = getGalleryDocumentIntent(mimeTypes)
             if (intent.resolveActivity(context.packageManager) != null) {
@@ -69,7 +71,10 @@ object IntentUtils {
      * @return Intent Camera Intent
      */
     @JvmStatic
-    fun getCameraIntent(context: Context, file: File): Intent? {
+    fun getCameraIntent(
+        context: Context,
+        file: File,
+    ): Intent? {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -104,18 +109,22 @@ object IntentUtils {
      * @return Intent
      */
     @JvmStatic
-    fun getUriViewIntent(context: Context, uri: Uri): Intent {
+    fun getUriViewIntent(
+        context: Context,
+        uri: Uri,
+    ): Intent {
         val intent = Intent(Intent.ACTION_VIEW)
         val authority =
             context.packageName + context.getString(R.string.image_picker_provider_authority_suffix)
 
         val file = DocumentFile.fromSingleUri(context, uri)
-        val dataUri = if (file?.canRead() == true) {
-            uri
-        } else {
-            val filePath = FileUriUtils.getRealPath(context, uri)!!
-            FileProvider.getUriForFile(context, authority, File(filePath))
-        }
+        val dataUri =
+            if (file?.canRead() == true) {
+                uri
+            } else {
+                val filePath = FileUriUtils.getRealPath(context, uri)!!
+                FileProvider.getUriForFile(context, authority, File(filePath))
+            }
 
         intent.setDataAndType(dataUri, "image/*")
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

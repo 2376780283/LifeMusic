@@ -34,14 +34,13 @@ import java.io.IOException
  * For More Info Visit: https://github.com/zetbaitsu/Compressor
  */
 object ImageUtil {
-
     @Throws(IOException::class)
     fun compressImage(
         imageFile: File,
         reqWidth: Float,
         reqHeight: Float,
         compressFormat: Bitmap.CompressFormat,
-        destinationPath: String
+        destinationPath: String,
     ): File {
         var fileOutputStream: FileOutputStream? = null
         val file = File(destinationPath).parentFile
@@ -54,7 +53,7 @@ object ImageUtil {
             decodeSampledBitmapFromFile(imageFile, reqWidth, reqHeight)?.compress(
                 compressFormat,
                 100,
-                fileOutputStream
+                fileOutputStream,
             )
         } finally {
             if (fileOutputStream != null) {
@@ -70,7 +69,7 @@ object ImageUtil {
     private fun decodeSampledBitmapFromFile(
         imageFile: File,
         reqWidth: Float,
-        reqHeight: Float
+        reqHeight: Float,
     ): Bitmap? {
         // First decode with inJustDecodeBounds=true to check dimensions
 
@@ -137,16 +136,24 @@ object ImageUtil {
         val canvas = Canvas(scaledBitmap!!)
         canvas.setMatrix(scaleMatrix)
         canvas.drawBitmap(
-            bmp!!, middleX - bmp.width / 2,
-            middleY - bmp.height / 2, Paint(Paint.FILTER_BITMAP_FLAG)
+            bmp!!,
+            middleX - bmp.width / 2,
+            middleY - bmp.height / 2,
+            Paint(Paint.FILTER_BITMAP_FLAG),
         )
         bmp.recycle()
 
         val matrix = Matrix()
-        scaledBitmap = Bitmap.createBitmap(
-            scaledBitmap, 0, 0, scaledBitmap.width,
-            scaledBitmap.height, matrix, true
-        )
+        scaledBitmap =
+            Bitmap.createBitmap(
+                scaledBitmap,
+                0,
+                0,
+                scaledBitmap.width,
+                scaledBitmap.height,
+                matrix,
+                true,
+            )
 
         return scaledBitmap
     }
@@ -154,7 +161,7 @@ object ImageUtil {
     private fun calculateInSampleSize(
         options: BitmapFactory.Options,
         reqWidth: Int,
-        reqHeight: Int
+        reqHeight: Int,
     ): Int {
         // Raw height and width of image
         val height = options.outHeight
@@ -179,35 +186,33 @@ object ImageUtil {
      * Ref: https://developer.android.com/topic/performance/graphics/manage-memory#kotlin
      */
     private fun canUseForInBitmap(
-    candidate: Bitmap,
-    targetOptions: BitmapFactory.Options
-): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        val width: Int = targetOptions.outWidth / targetOptions.inSampleSize
-        val height: Int = targetOptions.outHeight / targetOptions.inSampleSize
+        candidate: Bitmap,
+        targetOptions: BitmapFactory.Options,
+    ): Boolean =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            val width: Int = targetOptions.outWidth / targetOptions.inSampleSize
+            val height: Int = targetOptions.outHeight / targetOptions.inSampleSize
 
-        //  安全地处理 config 可能为 null 的情况
-        val config = candidate.config ?: Bitmap.Config.ARGB_8888
-        val byteCount: Int = width * height * getBytesPerPixel(config)
+            //  安全地处理 config 可能为 null 的情况
+            val config = candidate.config ?: Bitmap.Config.ARGB_8888
+            val byteCount: Int = width * height * getBytesPerPixel(config)
 
-        byteCount <= candidate.allocationByteCount
-    } else {
-        candidate.width == targetOptions.outWidth &&
-            candidate.height == targetOptions.outHeight &&
-            targetOptions.inSampleSize == 1
-    }
-}
+            byteCount <= candidate.allocationByteCount
+        } else {
+            candidate.width == targetOptions.outWidth &&
+                candidate.height == targetOptions.outHeight &&
+                targetOptions.inSampleSize == 1
+        }
 
     /**
      * A helper function to return the byte usage per pixel of a bitmap based on its configuration.
      */
     @Suppress("DEPRECATION")
-    private fun getBytesPerPixel(config: Bitmap.Config): Int {
-        return when (config) {
+    private fun getBytesPerPixel(config: Bitmap.Config): Int =
+        when (config) {
             Bitmap.Config.ARGB_8888 -> 4
             Bitmap.Config.RGB_565, Bitmap.Config.ARGB_4444 -> 2
             Bitmap.Config.ALPHA_8 -> 1
             else -> 1
         }
-    }
 }

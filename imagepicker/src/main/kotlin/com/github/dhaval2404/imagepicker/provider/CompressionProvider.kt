@@ -19,8 +19,9 @@ import java.io.File
  * @version 1.0
  * @since 04 January 2019
  */
-class CompressionProvider(activity: ImagePickerActivity) : BaseProvider(activity) {
-
+class CompressionProvider(
+    activity: ImagePickerActivity,
+) : BaseProvider(activity) {
     companion object {
         private val TAG = CompressionProvider::class.java.simpleName
     }
@@ -51,9 +52,7 @@ class CompressionProvider(activity: ImagePickerActivity) : BaseProvider(activity
      *
      * @return Boolean. True if Compression should be enabled else false.
      */
-    private fun isCompressEnabled(): Boolean {
-        return mMaxFileSize > 0L
-    }
+    private fun isCompressEnabled(): Boolean = mMaxFileSize > 0L
 
     /**
      * Check if compression is required
@@ -83,9 +82,7 @@ class CompressionProvider(activity: ImagePickerActivity) : BaseProvider(activity
         return status
     }
 
-    private fun getSizeDiff(file: File): Long {
-        return file.length() - mMaxFileSize
-    }
+    private fun getSizeDiff(file: File): Long = file.length() - mMaxFileSize
 
     private fun getSizeDiff(uri: Uri): Long {
         val length = FileUtil.getImageSize(this, uri)
@@ -150,11 +147,12 @@ class CompressionProvider(activity: ImagePickerActivity) : BaseProvider(activity
             if (mMaxFileSize > 0) {
                 val diff = getSizeDiff(newFile)
                 // Log.i(TAG, "Size Diff:$diff")
-                attempt += when {
-                    diff > 1024 * 1024 -> 3
-                    diff > 500 * 1024 -> 2
-                    else -> 1
-                }
+                attempt +=
+                    when {
+                        diff > 1024 * 1024 -> 3
+                        diff > 500 * 1024 -> 2
+                        else -> 1
+                    }
             } else {
                 attempt++
             }
@@ -169,7 +167,10 @@ class CompressionProvider(activity: ImagePickerActivity) : BaseProvider(activity
     /**
      * Compress the file
      */
-    private fun applyCompression(file: File, attempt: Int): File? {
+    private fun applyCompression(
+        file: File,
+        attempt: Int,
+    ): File? {
         val resList = resolutionList()
         if (attempt >= resList.size) {
             return null
@@ -198,8 +199,11 @@ class CompressionProvider(activity: ImagePickerActivity) : BaseProvider(activity
         val compressFile: File? = FileUtil.getImageFile(fileDir = mFileDir, extension = extension)
         return if (compressFile != null) {
             ImageUtil.compressImage(
-                file, maxWidth.toFloat(), maxHeight.toFloat(),
-                format, compressFile.absolutePath
+                file,
+                maxWidth.toFloat(),
+                maxHeight.toFloat(),
+                format,
+                compressFile.absolutePath,
             )
         } else {
             null
@@ -210,8 +214,8 @@ class CompressionProvider(activity: ImagePickerActivity) : BaseProvider(activity
      * Image Resolution will be reduce with below parameters.
      *
      */
-    private fun resolutionList(): List<IntArray> {
-        return listOf(
+    private fun resolutionList(): List<IntArray> =
+        listOf(
             intArrayOf(2448, 3264), // 8.0 Megapixel
             intArrayOf(2008, 3032), // 6.0 Megapixel
             intArrayOf(1944, 2580), // 5.0 Megapixel
@@ -226,9 +230,8 @@ class CompressionProvider(activity: ImagePickerActivity) : BaseProvider(activity
             intArrayOf(240, 320), // 0.15 Megapixel
             intArrayOf(120, 160), // 0.08 Megapixel
             intArrayOf(60, 80), // 0.04 Megapixel
-            intArrayOf(30, 40) // 0.02 Megapixel
+            intArrayOf(30, 40), // 0.02 Megapixel
         )
-    }
 
     /**
      * This method will be called when final result fot this provider is enabled.
