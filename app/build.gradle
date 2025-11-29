@@ -12,7 +12,7 @@ android {
         targetSdk = 36
         vectorDrawables.useSupportLibrary = true
         applicationId namespace
-        versionCode 20251025
+        versionCode 20251129
         versionName '12.4.0'
 
     }
