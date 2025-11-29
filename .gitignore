@@ -39,3 +39,4 @@ captures
 app/normal/release/
 /models/
 /app/release/
+app/src/main/java/zzh/lifeplayer/music/util/PermissionUtils.kt

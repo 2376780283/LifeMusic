@@ -11,6 +11,9 @@ import android.provider.Settings
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
+import android.os.Build
+
+import android.os.Environment
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.app.ActivityCompat
@@ -21,6 +24,8 @@ import zzh.lifeplayer.music.extensions.accentColor
 import zzh.lifeplayer.music.extensions.rootView
 import zzh.lifeplayer.music.util.logD
 import com.google.android.material.snackbar.Snackbar
+import zzh.lifeplayer.music.util.requestAllFilesPermission
+import androidx.activity.result.contract.ActivityResultContracts
 
 abstract class AbsBaseActivity : AbsThemeActivity() {
     private var hadPermissions: Boolean = false
@@ -80,15 +85,21 @@ abstract class AbsBaseActivity : AbsThemeActivity() {
 
     protected fun hasPermissions(): Boolean {
         for (permission in permissions) {
-            if (ActivityCompat.checkSelfPermission(this,
-                    permission) != PackageManager.PERMISSION_GRANTED
+            if (
+                permission == Manifest.permission.MANAGE_EXTERNAL_STORAGE &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+            ) {
+                if (!Environment.isExternalStorageManager()) return false
+            } else if (
+                ActivityCompat.checkSelfPermission(this, permission) !=
+                PackageManager.PERMISSION_GRANTED
             ) {
                 return false
             }
         }
         return true
     }
-
+    
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -102,6 +113,8 @@ abstract class AbsBaseActivity : AbsThemeActivity() {
                             this@AbsBaseActivity, Manifest.permission.READ_EXTERNAL_STORAGE,
                         ) || ActivityCompat.shouldShowRequestPermissionRationale(
                             this@AbsBaseActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        ) || ActivityCompat.shouldShowRequestPermissionRationale(
+                            this@AbsBaseActivity, Manifest.permission.MANAGE_EXTERNAL_STORAGE,
                         )
                     ) {
                         // User has deny from permission dialog
@@ -114,22 +127,7 @@ abstract class AbsBaseActivity : AbsThemeActivity() {
                             .setActionTextColor(accentColor()).show()
                     } else {
                         // User has deny permission and checked never show permission dialog so you can redirect to Application settings page
-                        Snackbar.make(
-                            snackBarContainer,
-                            permissionDeniedMessage!!,
-                            Snackbar.LENGTH_INDEFINITE
-                        )
-                            .setAction(R.string.action_settings) {
-                                val intent = Intent()
-                                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                                val uri = Uri.fromParts(
-                                    "package",
-                                    this@AbsBaseActivity.packageName,
-                                    null
-                                )
-                                intent.data = uri
-                                startActivity(intent)
-                            }.setActionTextColor(accentColor()).show()
+                        requestPermission()
                     }
                     return
                 }
@@ -160,6 +158,20 @@ abstract class AbsBaseActivity : AbsThemeActivity() {
             }
         }
     }
+    fun requestPermission(onGrant: () -> Unit = {}) {
+        requestAllFilesPermission(this, requestAllFilePermissionLauncher, onGrant)
+    }
+
+    /** 1. Android 11+ 储存权限回调 (Hyper OS2 有点猫饼，刚打开授权窗口就会进回调) */
+    private val requestAllFilePermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {            
+            Snackbar
+                .make(snackBarContainer, permissionDeniedMessage!!, Snackbar.LENGTH_SHORT)
+                .setAction(R.string.action_grant) { requestPermissions() }
+                .setActionTextColor(accentColor())
+                .show()
+            //    requestPermission()
+        }
 
     companion object {
         const val PERMISSION_REQUEST = 100

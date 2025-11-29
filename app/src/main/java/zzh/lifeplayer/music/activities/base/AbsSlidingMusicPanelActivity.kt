@@ -114,7 +114,7 @@ abstract class AbsSlidingMusicPanelActivity : AbsMusicServiceActivity(),
     private var miniPlayerFragment: MiniPlayerFragment? = null
     private var nowPlayingScreen: NowPlayingScreen? = null
     private var taskColor: Int = 0
-    private var paletteColor: Int = Color.WHITE
+    private var paletteColor: Int = 0xFFFFFFFF.toInt()
     private var navigationBarColor = 0
 
     private val panelState: Int
@@ -419,8 +419,8 @@ abstract class AbsSlidingMusicPanelActivity : AbsMusicServiceActivity(),
                 setLightNavigationBar(true)
                 setLightStatusBar(isColorLight)
             } else if (nowPlayingScreen == Card || nowPlayingScreen == Blur || nowPlayingScreen == BlurCard) {
-                animateNavigationBarColor(Color.BLACK)
-                navigationBarColor = Color.BLACK
+                animateNavigationBarColor(android.graphics.Color.BLACK)
+                navigationBarColor = android.graphics.Color.BLACK
                 setLightStatusBar(false)
                 setLightNavigationBar(true)
             } else if (nowPlayingScreen == Color || nowPlayingScreen == Tiny || nowPlayingScreen == Gradient) {
@@ -497,7 +497,7 @@ abstract class AbsSlidingMusicPanelActivity : AbsMusicServiceActivity(),
                     binding.navigationView.show()
                 } else {                  
                     binding.navigationView.bringToFront()
-                    binding.navigationView.show() //stupid ass hide func
+                    binding.navigationView.hide() //stupid ass hide func
                 }
             } else {
                // Fixme : fix func of hide nvg rail               
@@ -587,8 +587,8 @@ abstract class AbsSlidingMusicPanelActivity : AbsMusicServiceActivity(),
             Circle -> CirclePlayerFragment()
             Classic -> ClassicPlayerFragment()
             MD3 -> MD3PlayerFragment()
-            else -> PlayerFragment()
-        } // must extend AbsPlayerFragment
+            else -> BlurPlayerFragment()
+        }
         supportFragmentManager.commit {
             replace(R.id.playerFragmentContainer, fragment)
         }

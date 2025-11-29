@@ -42,6 +42,7 @@ import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_player_album_cover),
     ViewPager.OnPageChangeListener, MusicProgressViewUpdateHelper.Callback,
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -111,10 +112,6 @@ class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_playe
                 MusicPlayerRemote.resumePlaying()
                 true
             }
-             /*
-            setOnClickListener {
-                goToLyrics(requireActivity())
-            }*/
             applyfontsize()
              
             
@@ -191,11 +188,11 @@ class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_playe
                     progressViewUpdateHelper?.stop()
                 }
             }
+            
             LYRICS_TYPE -> {
-                maybeInitLyrics()
-                
-              //  lrcView.setLyricFontSize(18f)  // 设置为 18sp 大小
+                maybeInitLyrics()               
             }
+            
             LYRICS_FONT_SIZE -> {
                applyfontsize()
            }
@@ -293,8 +290,8 @@ class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_playe
             } else {
                 setLRCViewColors(primaryColor, secondaryColor)
             }
-            Color, Classic -> setLRCViewColors(color.primaryTextColor, color.secondaryTextColor)
-            Blur -> setLRCViewColors(Color.WHITE, ColorUtil.withAlpha(Color.WHITE, 0.5f))
+            Color, Classic -> setLRCViewColors(color.primaryTextColor, color.secondaryTextColor)           
+            Blur -> setLRCViewColors(android.graphics.Color.WHITE, ColorUtil.withAlpha(android.graphics.Color.WHITE, 0.5f))
             else -> setLRCViewColors(primaryColor, secondaryColor)
         }
     }
