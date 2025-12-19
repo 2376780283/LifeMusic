@@ -81,7 +81,6 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
                 R.id.action_folder,
                 R.id.action_playlist,
                 R.id.action_genre,
-//                R.id.user_info_fragment,
                 R.id.playing_queue_fragment,
                 R.id.action_search -> 
                 {
@@ -91,14 +90,14 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
                 R.id.playing_queue_fragment, 
                 R.id.action_go_to_lyrics -> 
                 {
-                    setBottomNavVisibility(visible = true)
+                    setBottomNavVisibility(visible = false , animate = true)
                 }
                 R.id.user_info_fragment,
                 R.id.albumDetailsFragment -> 
                 {
                     setBottomNavVisibility(visible = false , animate = true)
                 }
-                else -> setBottomNavVisibility(visible = false, animate = true)
+                else -> setBottomNavVisibility(visible = true, animate = true)
             }
         }
     }       

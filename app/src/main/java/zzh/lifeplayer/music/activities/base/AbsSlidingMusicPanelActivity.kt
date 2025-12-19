@@ -89,6 +89,7 @@ import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.ViewUtil
 import zzh.lifeplayer.music.util.logD
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigationrail.NavigationRailView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
@@ -486,22 +487,36 @@ abstract class AbsSlidingMusicPanelActivity : AbsMusicServiceActivity(),
             )
             return
         }
-        //Fixme：support nvg hide anim when nvg is hidden
-        // fix hidden func of nvg rail view
         val isBottomNavView = (navigationView is BottomNavigationView)
         if (visible xor navigationView.isVisible) {
-            val mAnimate = animate && isBottomNavView && bottomSheetBehavior.state == STATE_COLLAPSED
+            val mAnimate = animate && bottomSheetBehavior.state == STATE_COLLAPSED
             if (mAnimate) {
                 if (visible) {
-                    binding.navigationView.bringToFront()
-                    binding.navigationView.show()
+                binding.navigationView.isEnabled = true // 允许触摸
+                binding.navigationView.isClickable = true
+                setNavigationItemsEnabled(binding.navigationView, true)
+                binding.navigationView
+                    .animate()
+                    .alpha(1f) // 恢复不透明度
+                    .setDuration(300)
+                    .withStartAction { binding.navigationView.alpha = 0.4f }
+                    .withEndAction {}
+                    .start()
                 } else {                  
-                    binding.navigationView.bringToFront()
-                    binding.navigationView.hide() //stupid ass hide func
+                // 隐藏导航栏
+                binding.navigationView.isEnabled = false
+                binding.navigationView.isClickable = false                
+                setNavigationItemsEnabled(binding.navigationView, false)               
+                binding.navigationView
+                    .animate()
+                    .alpha(0.5f) // 变暗效果 (50%透明度)
+                    .setDuration(300)
+                    .withEndAction {
+                        binding.navigationView.animate().alpha(0.4f).setDuration(100).withEndAction {}.start()
+                    }
+                    .start()
                 }
             } else {
-               // Fixme : fix func of hide nvg rail               
-               // binding.navigationView.isVisible = visible
                 if (visible && isBottomNavView && bottomSheetBehavior.state != STATE_EXPANDED) {
                     binding.navigationView.bringToFront()
                     binding.navigationView.show() 
@@ -513,6 +528,22 @@ abstract class AbsSlidingMusicPanelActivity : AbsMusicServiceActivity(),
             animate = animate,
             isBottomNavVisible = visible && navigationView is BottomNavigationView
         )
+    }
+  
+    fun setNavigationItemsEnabled(nvgview: View, enabled: Boolean) {
+    if (binding.navigationView !is NavigationRailView) {
+            val menu = binding.navigationView.menu
+            for (i in 0 until menu.size()) {
+                menu.getItem(i).isEnabled = enabled
+            }
+            return
+    }
+    val menu = binding.navigationView.menu
+        for (i in 0 until menu.size()) {
+            val menuItem = menu.getItem(i)       
+            menuItem.isEnabled = enabled       
+           // menuItem.isCheckable = enabled
+        }
     }
 
     fun hideBottomSheet(
