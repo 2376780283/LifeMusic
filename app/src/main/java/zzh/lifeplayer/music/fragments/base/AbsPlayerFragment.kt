@@ -147,7 +147,7 @@ abstract class AbsPlayerFragment(@LayoutRes layout: Int) :
 
             R.id.action_go_to_album -> {
                 // Hide Bottom Bar First, else Bottom Sheet doesn't collapse fully
-                mainActivity.setBottomNavVisibility(false)
+                
                 mainActivity.collapsePanel()
                 requireActivity()
                     .findNavController(R.id.fragment_container)
@@ -392,7 +392,7 @@ fun goToArtist(activity: Activity) {
         currentFragment(R.id.fragment_container)?.exitTransition = null
 
         // Hide Bottom Bar First, else Bottom Sheet doesn't collapse fully
-        setBottomNavVisibility(false)
+        
         if (getBottomSheetBehavior().state == BottomSheetBehavior.STATE_EXPANDED) {
             collapsePanel()
         }
@@ -409,7 +409,7 @@ fun goToAlbum(activity: Activity) {
         currentFragment(R.id.fragment_container)?.exitTransition = null
 
         // Hide Bottom Bar First, else Bottom Sheet doesn't collapse fully
-        setBottomNavVisibility(false)
+        
         if (getBottomSheetBehavior().state == BottomSheetBehavior.STATE_EXPANDED) {
             collapsePanel()
         }
@@ -423,7 +423,7 @@ fun goToLyrics(activity: Activity) {
     if (activity !is MainActivity) return
     activity.apply {
         // Hide Bottom Bar First, else Bottom Sheet doesn't collapse fully
-        setBottomNavVisibility(false)
+        
         if (getBottomSheetBehavior().state == BottomSheetBehavior.STATE_EXPANDED) {
             collapsePanel()
         }

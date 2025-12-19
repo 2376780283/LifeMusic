@@ -180,7 +180,7 @@ abstract class AbsSlidingMusicPanelActivity :
                     STATE_SETTLING,
                     STATE_DRAGGING -> {
                         if (fromNotification) {
-                            binding.navigationView.bringToFront()
+                            
                             fromNotification = false
                         }
                     }
@@ -333,10 +333,7 @@ abstract class AbsSlidingMusicPanelActivity :
         val alpha = 1 - progress
         miniPlayerFragment?.view?.alpha = 1 - (progress / 0.2F)
         miniPlayerFragment?.view?.isGone = alpha == 0f
-        if (!isLandscape) {
-            binding.navigationView.translationY = progress * 500
-            binding.navigationView.alpha = alpha
-        }
+
         binding.playerFragmentContainer.alpha = (progress - 0.2F) / 0.2F
     }
 
@@ -485,8 +482,7 @@ abstract class AbsSlidingMusicPanelActivity :
             }
         }
         if (binding.navigationView.menu.size() == 1) {
-            isInOneTabMode = true
-            binding.navigationView.isVisible = false
+            isInOneTabMode = true            
         } else {
             isInOneTabMode = false
         }
@@ -504,13 +500,9 @@ abstract class AbsSlidingMusicPanelActivity :
         animate: Boolean = false,
         hideBottomSheet: Boolean = MusicPlayerRemote.playingQueue.isEmpty(),
     ) {
-        if (isInOneTabMode) {
-            hideBottomSheet(hide = hideBottomSheet, animate = animate, isBottomNavVisible = false)
-            return
-        }
-        val isBottomNavView = (navigationView is BottomNavigationView)
+     
         if (visible xor navigationView.isVisible) {
-            val mAnimate = animate && bottomSheetBehavior.state == STATE_COLLAPSED
+            val mAnimate = animate //  && bottomSheetBehavior.state == STATE_COLLAPSED
             if (mAnimate) {
                 if (visible) {
                     binding.navigationView.isEnabled = true // 允许触摸
@@ -543,9 +535,19 @@ abstract class AbsSlidingMusicPanelActivity :
                         .start()
                 }
             } else {
-                if (visible && isBottomNavView && bottomSheetBehavior.state != STATE_EXPANDED) {
+                if (visible && bottomSheetBehavior.state != STATE_EXPANDED) {
                     binding.navigationView.bringToFront()
                     binding.navigationView.show()
+                    binding.navigationView.isEnabled = true // 允许触摸
+                    binding.navigationView.isClickable = true
+                    setNavigationItemsEnabled(binding.navigationView, true)
+                    binding.navigationView
+                        .animate()
+                        .alpha(1f) // 恢复不透明度
+                        .setDuration(300)
+                        .withStartAction { binding.navigationView.alpha = 0.4f }
+                        .withEndAction {}
+                        .start()
                 }
             }
         }
@@ -590,7 +592,7 @@ abstract class AbsSlidingMusicPanelActivity :
         } else {
             if (MusicPlayerRemote.playingQueue.isNotEmpty()) {
                 binding.slidingPanel.elevation = 0F
-                binding.navigationView.elevation = 5F
+                
                 if (isBottomNavVisible) {
                     logD("List")
                     if (animate) {

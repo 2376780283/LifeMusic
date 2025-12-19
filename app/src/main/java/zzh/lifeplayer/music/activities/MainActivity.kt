@@ -82,16 +82,18 @@ class MainActivity : AbsSlidingMusicPanelActivity() {
                 R.id.action_artist,
                 R.id.action_folder,
                 R.id.action_playlist,
-                R.id.action_genre,
+                R.id.action_genre,                
+                R.id.action_search -> {
+                    setBottomNavVisibility(visible = true, animate = true)
+                }
+                
                 R.id.playing_queue_fragment,
                 R.id.action_go_to_lyrics,
                 R.id.user_info_fragment,
-                R.id.albumDetailsFragment,
-                R.id.action_search -> {
-                    if (PreferenceUtil.rememberLastTab) saveTab(destination.id)
+                R.id.albumDetailsFragment -> {            
                     setBottomNavVisibility(visible = false, animate = true)
-                }
-                else -> setBottomNavVisibility(visible = true, animate = true)
+                } 
+                else -> setBottomNavVisibility(visible = false, animate = true)
             }
         }
     }
