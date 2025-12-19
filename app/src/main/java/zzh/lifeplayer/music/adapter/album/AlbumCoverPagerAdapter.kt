@@ -33,7 +33,7 @@ import com.bumptech.glide.Glide
 
 class AlbumCoverPagerAdapter(
     fragmentManager: FragmentManager,
-    private val dataSet: List<Song>
+    private var dataSet: List<Song>
 ) : CustomFragmentStatePagerAdapter(fragmentManager) {
 
     private var currentColorReceiver: AlbumCoverFragment.ColorReceiver? = null
@@ -46,7 +46,7 @@ class AlbumCoverPagerAdapter(
     override fun getCount(): Int {
         return dataSet.size
     }
-
+       
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val o = super.instantiateItem(container, position)
         if (currentColorReceiver != null && currentColorReceiverPosition == position) {
@@ -54,6 +54,16 @@ class AlbumCoverPagerAdapter(
         }
         return o
     }
+    
+    fun updateData(newDataSet: List<Song>) {
+        this.dataSet = newDataSet
+        notifyDataSetChanged()
+    }
+
+    override fun getItemPosition(`object`: Any): Int {
+        return POSITION_NONE
+    }
+    
     /**
      * Only the latest passed [AlbumCoverFragment.ColorReceiver] is guaranteed to receive a
      * response
