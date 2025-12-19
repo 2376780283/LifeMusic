@@ -14,15 +14,15 @@
 package zzh.lifeplayer.music.util
 
 import android.view.ViewGroup
+import me.zhanghai.android.fastscroll.FastScroller
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
+import me.zhanghai.android.fastscroll.PopupStyles
+import me.zhanghai.android.fastscroll.R
 import zzh.lifeplayer.appthemehelper.ThemeStore.Companion.accentColor
 import zzh.lifeplayer.appthemehelper.util.ColorUtil.isColorLight
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
 import zzh.lifeplayer.appthemehelper.util.TintHelper
 import zzh.lifeplayer.music.views.PopupBackground
-import me.zhanghai.android.fastscroll.FastScroller
-import me.zhanghai.android.fastscroll.FastScrollerBuilder
-import me.zhanghai.android.fastscroll.PopupStyles
-import me.zhanghai.android.fastscroll.R
 
 object ThemedFastScroller {
     fun create(view: ViewGroup): FastScroller {
@@ -38,11 +38,7 @@ object ThemedFastScroller {
         }
 
         fastScrollerBuilder.setThumbDrawable(
-            TintHelper.createTintedDrawable(
-                context,
-                R.drawable.afs_md2_thumb,
-                color
-            )
+            TintHelper.createTintedDrawable(context, R.drawable.afs_md2_thumb, color)
         )
         return fastScrollerBuilder.build()
     }

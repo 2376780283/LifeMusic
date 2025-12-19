@@ -18,18 +18,14 @@ import java.io.IOException
  * Crop Selected/Captured Image
  *
  * @author Dhaval Patel
- * @version 1.0
  * @since 04 January 2019
+ * @version 1.0
  */
-class CropProvider(
-    activity: ImagePickerActivity,
-) : BaseProvider(activity) {
+class CropProvider(activity: ImagePickerActivity) : BaseProvider(activity) {
     companion object {
         private val TAG = CropProvider::class.java.simpleName
 
-        /**
-         * Key to Save/Retrieve Crop File state
-         */
+        /** Key to Save/Retrieve Crop File state */
         private const val STATE_CROP_FILE = "state.crop_file"
     }
 
@@ -62,8 +58,8 @@ class CropProvider(
     /**
      * Save CameraProvider state
      *
-     * mCropImageFile will lose its state when activity is recreated on
-     * Orientation change or for Low memory device.
+     * mCropImageFile will lose its state when activity is recreated on Orientation change or for
+     * Low memory device.
      *
      * Here, We Will save its state for later use
      *
@@ -74,9 +70,7 @@ class CropProvider(
         outState.putSerializable(STATE_CROP_FILE, mCropImageFile)
     }
 
-    /**
-     * Retrieve CropProvider state
-     */
+    /** Retrieve CropProvider state */
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         // Restore crop file
         mCropImageFile = savedInstanceState?.getSerializable(STATE_CROP_FILE) as File?
@@ -89,9 +83,7 @@ class CropProvider(
      */
     fun isCropEnabled() = mCrop
 
-    /**
-     * Start Crop Activity
-     */
+    /** Start Crop Activity */
     fun startIntent(uri: Uri) {
         cropImage(uri)
     }
@@ -114,10 +106,7 @@ class CropProvider(
         val options = UCrop.Options()
         options.setCompressionFormat(FileUtil.getCompressFormat(extension))
 
-        val uCrop =
-            UCrop
-                .of(uri, Uri.fromFile(mCropImageFile))
-                .withOptions(options)
+        val uCrop = UCrop.of(uri, Uri.fromFile(mCropImageFile)).withOptions(options)
 
         if (mCropAspectX > 0 && mCropAspectY > 0) {
             uCrop.withAspectRatio(mCropAspectX, mCropAspectY)
@@ -136,7 +125,7 @@ class CropProvider(
                     "<activity\n" +
                     "    android:name=\"com.yalantis.ucrop.UCropActivity\"\n" +
                     "    android:screenOrientation=\"portrait\"\n" +
-                    "    android:theme=\"@style/Theme.AppCompat.Light.NoActionBar\"/>",
+                    "    android:theme=\"@style/Theme.AppCompat.Light.NoActionBar\"/>"
             )
             ex.printStackTrace()
         }
@@ -150,11 +139,7 @@ class CropProvider(
      * @param data Result Intent
      */
     @Suppress("UNUSED_PARAMETER")
-    fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-    ) {
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == Activity.RESULT_OK) {
                 handleResult(mCropImageFile)
@@ -177,9 +162,7 @@ class CropProvider(
         }
     }
 
-    /**
-     * Handle Crop Failed
-     */
+    /** Handle Crop Failed */
     override fun onFailure() {
         delete()
     }

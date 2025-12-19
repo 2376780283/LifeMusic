@@ -21,9 +21,7 @@ import zzh.lifeplayer.music.model.Artist
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.PreferenceUtil
 
-/**
- * Created by hemanths on 16/08/17.
- */
+/** Created by hemanths on 16/08/17. */
 interface LastAddedRepository {
     fun recentSongs(): List<Song>
 
@@ -35,7 +33,7 @@ interface LastAddedRepository {
 class RealLastAddedRepository(
     private val songRepository: RealSongRepository,
     private val albumRepository: RealAlbumRepository,
-    private val artistRepository: RealArtistRepository
+    private val artistRepository: RealArtistRepository,
 ) : LastAddedRepository {
     override fun recentSongs(): List<Song> {
         return songRepository.songs(makeLastAddedCursor())
@@ -54,7 +52,7 @@ class RealLastAddedRepository(
         return songRepository.makeSongCursor(
             MediaStore.Audio.Media.DATE_ADDED + ">?",
             arrayOf(cutoff.toString()),
-            MediaStore.Audio.Media.DATE_ADDED + " DESC"
+            MediaStore.Audio.Media.DATE_ADDED + " DESC",
         )
     }
 }

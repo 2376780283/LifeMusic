@@ -9,18 +9,15 @@ import androidx.core.view.updatePadding
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
+import dev.chrisbanes.insetter.applyInsetter
 import zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATEPreferenceFragmentCompat
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.extensions.dip
 import zzh.lifeplayer.music.extensions.goToProVersion
 import zzh.lifeplayer.music.extensions.showToast
 import zzh.lifeplayer.music.preferences.*
-import dev.chrisbanes.insetter.applyInsetter
 
-/**
- * @author Hemanth S (h4h13).
- */
-
+/** @author Hemanth S (h4h13). */
 abstract class AbsSettingsFragment : ATEPreferenceFragmentCompat() {
 
     internal fun showProToastAndNavigate(message: String) {
@@ -43,9 +40,8 @@ abstract class AbsSettingsFragment : ATEPreferenceFragmentCompat() {
     protected fun setSummary(preference: Preference?) {
         preference?.let {
             setSummary(
-                it, PreferenceManager
-                    .getDefaultSharedPreferences(it.context)
-                    .getString(it.key, "")
+                it,
+                PreferenceManager.getDefaultSharedPreferences(it.context).getString(it.key, ""),
             )
         }
     }
@@ -58,11 +54,7 @@ abstract class AbsSettingsFragment : ATEPreferenceFragmentCompat() {
         }
 
         listView.updatePadding(bottom = dip(R.dimen.mini_player_height))
-        listView.applyInsetter {
-            type(navigationBars = true) {
-                padding(vertical = true)
-            }
-        }
+        listView.applyInsetter { type(navigationBars = true) { padding(vertical = true) } }
         invalidateSettings()
     }
 

@@ -25,12 +25,9 @@ import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.activities.base.AbsMusicServiceActivity
 import zzh.lifeplayer.music.interfaces.IMusicServiceEventListener
 
-/**
- * Created by hemanths on 18/08/17.
- */
-
-open class AbsMusicServiceFragment(@LayoutRes layout: Int) : Fragment(layout),
-    IMusicServiceEventListener {
+/** Created by hemanths on 18/08/17. */
+open class AbsMusicServiceFragment(@LayoutRes layout: Int) :
+    Fragment(layout), IMusicServiceEventListener {
 
     val navOptions by lazy {
         navOptions {
@@ -52,7 +49,11 @@ open class AbsMusicServiceFragment(@LayoutRes layout: Int) : Fragment(layout),
         try {
             serviceActivity = context as AbsMusicServiceActivity?
         } catch (e: ClassCastException) {
-            throw RuntimeException(context.javaClass.simpleName + " must be an instance of " + AbsMusicServiceActivity::class.java.simpleName)
+            throw RuntimeException(
+                context.javaClass.simpleName +
+                    " must be an instance of " +
+                    AbsMusicServiceActivity::class.java.simpleName
+            )
         }
     }
 
@@ -73,30 +74,21 @@ open class AbsMusicServiceFragment(@LayoutRes layout: Int) : Fragment(layout),
         serviceActivity?.removeMusicServiceEventListener(this)
     }
 
-    override fun onFavoriteStateChanged() {
-    }
+    override fun onFavoriteStateChanged() {}
 
-    override fun onPlayingMetaChanged() {
-    }
+    override fun onPlayingMetaChanged() {}
 
-    override fun onServiceConnected() {
-    }
+    override fun onServiceConnected() {}
 
-    override fun onServiceDisconnected() {
-    }
+    override fun onServiceDisconnected() {}
 
-    override fun onQueueChanged() {
-    }
+    override fun onQueueChanged() {}
 
-    override fun onPlayStateChanged() {
-    }
+    override fun onPlayStateChanged() {}
 
-    override fun onRepeatModeChanged() {
-    }
+    override fun onRepeatModeChanged() {}
 
-    override fun onShuffleModeChanged() {
-    }
+    override fun onShuffleModeChanged() {}
 
-    override fun onMediaStoreChanged() {
-    }
+    override fun onMediaStoreChanged() {}
 }

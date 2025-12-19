@@ -26,7 +26,8 @@ import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 class TinyPlaybackControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_tiny_controls_fragment) {
     private var _binding: FragmentTinyControlsFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val shuffleButton: ImageButton
         get() = binding.shuffleButton
@@ -46,8 +47,7 @@ class TinyPlaybackControlsFragment :
         updateShuffleState()
     }
 
-    override fun onUpdateProgressViews(progress: Int, total: Int) {
-    }
+    override fun onUpdateProgressViews(progress: Int, total: Int) {}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

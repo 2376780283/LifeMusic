@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
+import com.bumptech.glide.Glide
+import me.zhanghai.android.fastscroll.PopupTextProvider
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.base.AbsMultiSelectAdapter
 import zzh.lifeplayer.music.adapter.base.MediaEntryViewHolder
@@ -22,18 +24,15 @@ import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.bumptech.glide.Glide
-import me.zhanghai.android.fastscroll.PopupTextProvider
 
 open class AlbumAdapter(
     override val activity: FragmentActivity,
     var dataSet: List<Album>,
     var itemLayoutRes: Int,
-    val listener: IAlbumClickListener?
-) : AbsMultiSelectAdapter<AlbumAdapter.ViewHolder, Album>(
-    activity,
-    R.menu.menu_media_selection
-), PopupTextProvider {
+    val listener: IAlbumClickListener?,
+) :
+    AbsMultiSelectAdapter<AlbumAdapter.ViewHolder, Album>(activity, R.menu.menu_media_selection),
+    PopupTextProvider {
 
     init {
         this.setHasStableIds(true)
@@ -74,7 +73,8 @@ open class AlbumAdapter(
         holder.title?.text = getAlbumTitle(album)
         holder.text?.text = getAlbumText(album)
         // Check if imageContainer exists so we can have a smooth transition without
-        // CardView clipping, if it doesn't exist in current layout set transition name to image instead.
+        // CardView clipping, if it doesn't exist in current layout set transition name to image
+        // instead.
         if (holder.imageContainer != null) {
             holder.imageContainer?.transitionName = album.id.toString()
         } else {
@@ -98,16 +98,18 @@ open class AlbumAdapter(
             return
         }
         val song = album.safeGetFirstSong()
-         Glide.with(activity)
+        Glide.with(activity)
             .asBitmapPalette()
             .albumCoverOptions(song)
-            //.checkIgnoreMediaStore()
+            // .checkIgnoreMediaStore()
             .load(LifeGlideExtension.getSongModel(song))
-            .into(object : LifeMusicColoredTarget(holder.image!!) {
-                override fun onColorReady(colors: MediaNotificationProcessor) {
-                    setColors(colors, holder)
+            .into(
+                object : LifeMusicColoredTarget(holder.image!!) {
+                    override fun onColorReady(colors: MediaNotificationProcessor) {
+                        setColors(colors, holder)
+                    }
                 }
-            })
+            )
     }
 
     override fun getItemCount(): Int {
@@ -126,10 +128,7 @@ open class AlbumAdapter(
         return model.title
     }
 
-    override fun onMultipleItemAction(
-        menuItem: MenuItem,
-        selection: List<Album>
-    ) {
+    override fun onMultipleItemAction(menuItem: MenuItem, selection: List<Album>) {
         SongsMenuHelper.handleMenuClick(activity, getSongList(selection), menuItem.itemId)
     }
 
@@ -148,13 +147,12 @@ open class AlbumAdapter(
     private fun getSectionName(position: Int): String {
         var sectionName: String? = null
         when (PreferenceUtil.albumSortOrder) {
-            SortOrder.AlbumSortOrder.ALBUM_A_Z, SortOrder.AlbumSortOrder.ALBUM_Z_A -> sectionName =
-                dataSet[position].title
+            SortOrder.AlbumSortOrder.ALBUM_A_Z,
+            SortOrder.AlbumSortOrder.ALBUM_Z_A -> sectionName = dataSet[position].title
 
             SortOrder.AlbumSortOrder.ALBUM_ARTIST -> sectionName = dataSet[position].albumArtist
-            SortOrder.AlbumSortOrder.ALBUM_YEAR -> return MusicUtil.getYearString(
-                dataSet[position].year
-            )
+            SortOrder.AlbumSortOrder.ALBUM_YEAR ->
+                return MusicUtil.getYearString(dataSet[position].year)
         }
         return MusicUtil.getSectionName(sectionName)
     }

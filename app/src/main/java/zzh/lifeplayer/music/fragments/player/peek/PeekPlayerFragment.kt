@@ -29,17 +29,14 @@ import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 
-/**
- * Created by hemanths on 2019-10-03.
- */
-
+/** Created by hemanths on 2019-10-03. */
 class PeekPlayerFragment : AbsPlayerFragment(R.layout.fragment_peek_player) {
 
     private lateinit var controlsFragment: PeekPlayerControlFragment
     private var lastColor: Int = 0
     private var _binding: FragmentPeekPlayerBinding? = null
-    private val binding get() = _binding!!
-
+    private val binding
+        get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,34 +44,26 @@ class PeekPlayerFragment : AbsPlayerFragment(R.layout.fragment_peek_player) {
         setUpPlayerToolbar()
         setUpSubFragments()
         binding.title.isSelected = true
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
         binding.root.drawAboveSystemBarsWithPadding()
     }
 
     private fun setUpSubFragments() {
-        controlsFragment =
-            whichFragment(R.id.playbackControlsFragment) as PeekPlayerControlFragment
+        controlsFragment = whichFragment(R.id.playbackControlsFragment) as PeekPlayerControlFragment
 
-        val coverFragment =
-            whichFragment(R.id.playerAlbumCoverFragment) as PlayerAlbumCoverFragment
+        val coverFragment = whichFragment(R.id.playerAlbumCoverFragment) as PlayerAlbumCoverFragment
         coverFragment.setCallbacks(this)
     }
 
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.apply {
             inflateMenu(R.menu.menu_player)
-            setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
             setOnMenuItemClickListener(this@PeekPlayerFragment)
-            ToolbarContentTintHelper.colorizeToolbar(
-                this,
-                colorControlNormal(),
-                requireActivity()
-            )
+            ToolbarContentTintHelper.colorizeToolbar(this, colorControlNormal(), requireActivity())
         }
     }
 
@@ -82,11 +71,9 @@ class PeekPlayerFragment : AbsPlayerFragment(R.layout.fragment_peek_player) {
         return binding.playerToolbar
     }
 
-    override fun onShow() {
-    }
+    override fun onShow() {}
 
-    override fun onHide() {
-    }
+    override fun onHide() {}
 
     override fun toolbarIconColor() = colorControlNormal()
 
@@ -99,8 +86,7 @@ class PeekPlayerFragment : AbsPlayerFragment(R.layout.fragment_peek_player) {
         controlsFragment.setColor(color)
     }
 
-    override fun onFavoriteToggled() {
-    }
+    override fun onFavoriteToggled() {}
 
     private fun updateSong() {
         val song = MusicPlayerRemote.currentSong

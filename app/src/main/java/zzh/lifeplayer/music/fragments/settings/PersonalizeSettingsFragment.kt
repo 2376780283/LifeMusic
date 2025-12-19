@@ -1,11 +1,9 @@
 package zzh.lifeplayer.music.fragments.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-
 import zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATEListPreference
 import zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATESwitchPreference
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
@@ -17,8 +15,10 @@ class PersonalizeSettingsFragment : AbsSettingsFragment() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_ui)
-        // Hide Blur album art preference on Android 11+ devices as the lockscreen album art feature was removed by Google
-        // And if the feature is present in some Custom ROM's there is also an option to set blur so this preference is unnecessary on Android 11 and above
+        // Hide Blur album art preference on Android 11+ devices as the lockscreen album art feature
+        // was removed by Google
+        // And if the feature is present in some Custom ROM's there is also an option to set blur so
+        // this preference is unnecessary on Android 11 and above
         val blurredAlbumArt: ATESwitchPreference? = findPreference(BLURRED_ALBUM_ART)
         blurredAlbumArt?.isVisible = !VersionUtils.hasR()
     }
@@ -49,6 +49,6 @@ class PersonalizeSettingsFragment : AbsSettingsFragment() {
         appBarMode?.setOnPreferenceChangeListener { _, _ ->
             restartActivity()
             true
-        }     
+        }
     }
 }

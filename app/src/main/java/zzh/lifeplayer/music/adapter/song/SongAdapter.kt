@@ -25,6 +25,8 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
+import me.zhanghai.android.fastscroll.PopupTextProvider
 import zzh.lifeplayer.music.EXTRA_ALBUM_ID
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.base.AbsMultiSelectAdapter
@@ -38,26 +40,20 @@ import zzh.lifeplayer.music.helper.SortOrder
 import zzh.lifeplayer.music.helper.menu.SongMenuHelper
 import zzh.lifeplayer.music.helper.menu.SongsMenuHelper
 import zzh.lifeplayer.music.model.Song
+import zzh.lifeplayer.music.util.LifeUtil
 import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
-import zzh.lifeplayer.music.util.LifeUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.bumptech.glide.Glide
-import me.zhanghai.android.fastscroll.PopupTextProvider
 
-/**
- * Created by hemanths on 13/08/17.
- */
-
+/** Created by hemanths on 13/08/17. */
 open class SongAdapter(
     override val activity: FragmentActivity,
     var dataSet: MutableList<Song>,
     protected var itemLayoutRes: Int,
-    showSectionName: Boolean = true
-) : AbsMultiSelectAdapter<SongAdapter.ViewHolder, Song>(
-    activity,
-    R.menu.menu_media_selection
-), PopupTextProvider {
+    showSectionName: Boolean = true,
+) :
+    AbsMultiSelectAdapter<SongAdapter.ViewHolder, Song>(activity, R.menu.menu_media_selection),
+    PopupTextProvider {
 
     private var showSectionName = true
 
@@ -99,7 +95,10 @@ open class SongAdapter(
         holder.text2?.text = getSongText(song)
         loadAlbumCover(song, holder)
         val landscape = LifeUtil.isLandscape
-        if ((PreferenceUtil.songGridSize > 2 && !landscape) || (PreferenceUtil.songGridSizeLand > 5 && landscape)) {
+        if (
+            (PreferenceUtil.songGridSize > 2 && !landscape) ||
+                (PreferenceUtil.songGridSizeLand > 5 && landscape)
+        ) {
             holder.menu?.isVisible = false
         }
     }
@@ -122,11 +121,13 @@ open class SongAdapter(
             .asBitmapPalette()
             .songCoverOptions(song)
             .load(LifeGlideExtension.getSongModel(song))
-            .into(object : LifeMusicColoredTarget(holder.image!!) {
-                override fun onColorReady(colors: MediaNotificationProcessor) {
-                    setColors(colors, holder)
+            .into(
+                object : LifeMusicColoredTarget(holder.image!!) {
+                    override fun onColorReady(colors: MediaNotificationProcessor) {
+                        setColors(colors, holder)
+                    }
                 }
-            })
+            )
     }
 
     private fun getSongTitle(song: Song): String {
@@ -158,22 +159,23 @@ open class SongAdapter(
     }
 
     override fun getPopupText(position: Int): String {
-        val sectionName: String? = when (PreferenceUtil.songSortOrder) {
-            SortOrder.SongSortOrder.SONG_DEFAULT -> return MusicUtil.getSectionName(
-                dataSet[position].title,
-                true
-            )
+        val sectionName: String? =
+            when (PreferenceUtil.songSortOrder) {
+                SortOrder.SongSortOrder.SONG_DEFAULT ->
+                    return MusicUtil.getSectionName(dataSet[position].title, true)
 
-            SortOrder.SongSortOrder.SONG_A_Z, SortOrder.SongSortOrder.SONG_Z_A -> dataSet[position].title
-            SortOrder.SongSortOrder.SONG_ALBUM -> dataSet[position].albumName
-            SortOrder.SongSortOrder.SONG_ARTIST -> dataSet[position].artistName
-            SortOrder.SongSortOrder.SONG_YEAR -> return MusicUtil.getYearString(dataSet[position].year)
-            SortOrder.SongSortOrder.COMPOSER -> dataSet[position].composer
-            SortOrder.SongSortOrder.SONG_ALBUM_ARTIST -> dataSet[position].albumArtist
-            else -> {
-                return ""
+                SortOrder.SongSortOrder.SONG_A_Z,
+                SortOrder.SongSortOrder.SONG_Z_A -> dataSet[position].title
+                SortOrder.SongSortOrder.SONG_ALBUM -> dataSet[position].albumName
+                SortOrder.SongSortOrder.SONG_ARTIST -> dataSet[position].artistName
+                SortOrder.SongSortOrder.SONG_YEAR ->
+                    return MusicUtil.getYearString(dataSet[position].year)
+                SortOrder.SongSortOrder.COMPOSER -> dataSet[position].composer
+                SortOrder.SongSortOrder.SONG_ALBUM_ARTIST -> dataSet[position].albumArtist
+                else -> {
+                    return ""
+                }
             }
-        }
         return MusicUtil.getSectionName(sectionName)
     }
 
@@ -183,27 +185,30 @@ open class SongAdapter(
             get() = dataSet[layoutPosition]
 
         init {
-            menu?.setOnClickListener(object : SongMenuHelper.OnClickSongMenu(activity) {
-                override val song: Song
-                    get() = this@ViewHolder.song
+            menu?.setOnClickListener(
+                object : SongMenuHelper.OnClickSongMenu(activity) {
+                    override val song: Song
+                        get() = this@ViewHolder.song
 
-                override val menuRes: Int
-                    get() = songMenuRes
+                    override val menuRes: Int
+                        get() = songMenuRes
 
-                override fun onMenuItemClick(item: MenuItem): Boolean {
-                    return onSongMenuItemClick(item) || super.onMenuItemClick(item)
+                    override fun onMenuItemClick(item: MenuItem): Boolean {
+                        return onSongMenuItemClick(item) || super.onMenuItemClick(item)
+                    }
                 }
-            })
+            )
         }
 
         protected open fun onSongMenuItemClick(item: MenuItem): Boolean {
             if (image != null && image!!.isVisible) {
                 when (item.itemId) {
                     R.id.action_go_to_album -> {
-                        activity.findNavController(R.id.fragment_container)
+                        activity
+                            .findNavController(R.id.fragment_container)
                             .navigate(
                                 R.id.albumDetailsFragment,
-                                bundleOf(EXTRA_ALBUM_ID to song.albumId)
+                                bundleOf(EXTRA_ALBUM_ID to song.albumId),
                             )
                         return true
                     }

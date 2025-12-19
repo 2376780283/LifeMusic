@@ -7,14 +7,13 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
-import zzh.lifeplayer.appthemehelper.util.VersionUtils
-import zzh.lifeplayer.music.R
-import zzh.lifeplayer.music.extensions.materialDialog
-import zzh.lifeplayer.music.util.getExternalStorageDirectory
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
 import com.afollestad.materialdialogs.list.updateListItems
 import java.io.File
+import zzh.lifeplayer.music.R
+import zzh.lifeplayer.music.extensions.materialDialog
+import zzh.lifeplayer.music.util.getExternalStorageDirectory
 
 class BlacklistFolderChooserDialog : DialogFragment() {
     private var initialPath: String = getExternalStorageDirectory().absolutePath
@@ -50,20 +49,26 @@ class BlacklistFolderChooserDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         var mSavedInstanceState = savedInstanceState
- //       if (VersionUtils.hasT()) {
-            if (ActivityCompat.checkSelfPermission(
-                    requireActivity(), Manifest.permission.READ_MEDIA_AUDIO
-                )
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                return materialDialog().show {
-                    title(res = R.string.md_error_label)
-                    message(res = R.string.made_with_love)
-                    positiveButton(res = android.R.string.ok)
-                }
+        //       if (VersionUtils.hasT()) {
+        if (
+            ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.READ_MEDIA_AUDIO,
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return materialDialog().show {
+                title(res = R.string.md_error_label)
+                message(res = R.string.made_with_love)
+                positiveButton(res = android.R.string.ok)
             }
-//        } else
-         if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        }
+        //        } else
+        if (
+            ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             return materialDialog().show {
                 title(res = R.string.md_error_label)
                 message(res = R.string.md_storage_perm_error)
@@ -81,10 +86,10 @@ class BlacklistFolderChooserDialog : DialogFragment() {
         parentContents = listFiles()
         return materialDialog()
             .title(text = parentFolder?.absolutePath)
-            .listItems(
-                items = contentsArray.toCharSequence(),
-                waitForPositiveButton = false
-            ) { _: MaterialDialog, i: Int, _: CharSequence ->
+            .listItems(items = contentsArray.toCharSequence(), waitForPositiveButton = false) {
+                _: MaterialDialog,
+                i: Int,
+                _: CharSequence ->
                 onSelection(i)
             }
             .noAutoDismiss()

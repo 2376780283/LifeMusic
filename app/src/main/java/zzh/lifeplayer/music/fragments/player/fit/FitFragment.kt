@@ -17,7 +17,8 @@ import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 
 class FitFragment : AbsPlayerFragment(R.layout.fragment_fit) {
     private var _binding: FragmentFitBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override fun playerToolbar(): Toolbar {
         return binding.playerToolbar
@@ -48,7 +49,7 @@ class FitFragment : AbsPlayerFragment(R.layout.fragment_fit) {
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             colorControlNormal(),
-            requireActivity()
+            requireActivity(),
         )
     }
 
@@ -75,19 +76,17 @@ class FitFragment : AbsPlayerFragment(R.layout.fragment_fit) {
         playbackControlsFragment = whichFragment(R.id.playbackControlsFragment)
         val playerAlbumCoverFragment: PlayerAlbumCoverFragment =
             whichFragment(R.id.playerAlbumCoverFragment)
-      //  playerAlbumCoverFragment.setCallbacks(this)
+        //  playerAlbumCoverFragment.setCallbacks(this)
     }
 
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.apply {
             inflateMenu(R.menu.menu_player)
-            setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
             setOnMenuItemClickListener(this@FitFragment)
-            ToolbarContentTintHelper.colorizeToolbar(
-                this,
-                colorControlNormal(),
-                requireActivity()
-            )
+            ToolbarContentTintHelper.colorizeToolbar(this, colorControlNormal(), requireActivity())
         }
     }
 

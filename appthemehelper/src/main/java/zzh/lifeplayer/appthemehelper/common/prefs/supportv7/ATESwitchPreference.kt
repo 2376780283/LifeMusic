@@ -8,26 +8,21 @@ import androidx.preference.CheckBoxPreference
 import zzh.lifeplayer.appthemehelper.R
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 
-/**
- * @author Aidan Follestad (afollestad)
- */
+/** @author Aidan Follestad (afollestad) */
 class ATESwitchPreference
-    @JvmOverloads
-    constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = -1,
-        defStyleRes: Int = -1,
-    ) : CheckBoxPreference(context, attrs, defStyleAttr, defStyleRes) {
-        init {
-            widgetLayoutResource = R.layout.ate_preference_switch_support
-            icon?.colorFilter =
-                BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                    ATHUtil.resolveColor(
-                        context,
-                        android.R.attr.colorControlNormal,
-                    ),
-                    BlendModeCompat.SRC_IN,
-                )
-        }
+@JvmOverloads
+constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = -1,
+    defStyleRes: Int = -1,
+) : CheckBoxPreference(context, attrs, defStyleAttr, defStyleRes) {
+    init {
+        widgetLayoutResource = R.layout.ate_preference_switch_support
+        icon?.colorFilter =
+            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                ATHUtil.resolveColor(context, android.R.attr.colorControlNormal),
+                BlendModeCompat.SRC_IN,
+            )
     }
+}

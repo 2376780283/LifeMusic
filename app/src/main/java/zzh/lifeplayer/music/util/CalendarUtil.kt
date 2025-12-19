@@ -15,10 +15,9 @@ package zzh.lifeplayer.music.util
 
 import java.util.*
 
-/** @author Eugene Cheung (arkon)
- */
+/** @author Eugene Cheung (arkon) */
 class CalendarUtil {
-    private val calendar = Calendar.getInstance()// Time elapsed so far today
+    private val calendar = Calendar.getInstance() // Time elapsed so far today
 
     /**
      * Returns the time elapsed so far today in milliseconds.
@@ -26,8 +25,10 @@ class CalendarUtil {
      * @return Time elapsed today in milliseconds.
      */
     val elapsedToday: Long
-        get() =// Time elapsed so far today
-            (calendar[Calendar.HOUR_OF_DAY] * 60 + calendar[Calendar.MINUTE]) * MS_PER_MINUTE + calendar[Calendar.SECOND] * 1000 + calendar[Calendar.MILLISECOND]// Today + days passed this week
+        get() = // Time elapsed so far today
+        (calendar[Calendar.HOUR_OF_DAY] * 60 + calendar[Calendar.MINUTE]) * MS_PER_MINUTE +
+                calendar[Calendar.SECOND] * 1000 +
+                calendar[Calendar.MILLISECOND] // Today + days passed this week
 
     /**
      * Returns the time elapsed so far this week in milliseconds.
@@ -43,7 +44,7 @@ class CalendarUtil {
                 elapsed += passedWeekdays * MS_PER_DAY
             }
             return elapsed
-        }// Today + rest of this month
+        } // Today + rest of this month
 
     /**
      * Returns the time elapsed so far this month in milliseconds.
@@ -51,8 +52,8 @@ class CalendarUtil {
      * @return Time elapsed this month in milliseconds.
      */
     val elapsedMonth: Long
-        get() =// Today + rest of this month
-            elapsedToday + (calendar[Calendar.DAY_OF_MONTH] - 1) * MS_PER_DAY
+        get() = // Today + rest of this month
+        elapsedToday + (calendar[Calendar.DAY_OF_MONTH] - 1) * MS_PER_DAY
 
     /**
      * Returns the time elapsed so far this month and the last numMonths months in milliseconds.
@@ -76,7 +77,7 @@ class CalendarUtil {
             elapsed += getDaysInMonth(month) * MS_PER_DAY
         }
         return elapsed
-    }// Today + rest of this month + previous months until January
+    } // Today + rest of this month + previous months until January
 
     /**
      * Returns the time elapsed so far this year in milliseconds.
@@ -121,5 +122,4 @@ class CalendarUtil {
         private const val MS_PER_MINUTE = (60 * 1000).toLong()
         private const val MS_PER_DAY = 24 * 60 * MS_PER_MINUTE
     }
-
 }

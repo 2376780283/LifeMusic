@@ -10,6 +10,11 @@ import androidx.core.content.res.use
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
+import com.google.gson.reflect.TypeToken
+import java.io.File
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.*
 import zzh.lifeplayer.music.extensions.getIntRes
@@ -23,36 +28,32 @@ import zzh.lifeplayer.music.model.CategoryInfo
 import zzh.lifeplayer.music.transform.*
 import zzh.lifeplayer.music.util.theme.ThemeMode
 import zzh.lifeplayer.music.views.TopAppBarLayout
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
-import com.google.gson.reflect.TypeToken
-import java.io.File
-
 
 object PreferenceUtil {
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(App.getContext())
 
-    val defaultCategories = listOf(
-        CategoryInfo(CategoryInfo.Category.Home, true),
-        CategoryInfo(CategoryInfo.Category.Songs, true),
-        CategoryInfo(CategoryInfo.Category.Albums, false),
-        CategoryInfo(CategoryInfo.Category.Artists, true),
-        CategoryInfo(CategoryInfo.Category.Playlists, false),
-        CategoryInfo(CategoryInfo.Category.Genres, false),
-        CategoryInfo(CategoryInfo.Category.Folder, true),
-        CategoryInfo(CategoryInfo.Category.Search, false)
-    )
+    val defaultCategories =
+        listOf(
+            CategoryInfo(CategoryInfo.Category.Home, true),
+            CategoryInfo(CategoryInfo.Category.Songs, true),
+            CategoryInfo(CategoryInfo.Category.Albums, false),
+            CategoryInfo(CategoryInfo.Category.Artists, true),
+            CategoryInfo(CategoryInfo.Category.Playlists, false),
+            CategoryInfo(CategoryInfo.Category.Genres, false),
+            CategoryInfo(CategoryInfo.Category.Folder, true),
+            CategoryInfo(CategoryInfo.Category.Search, false),
+        )
 
     var libraryCategory: List<CategoryInfo>
         get() {
             val gson = Gson()
             val collectionType = object : TypeToken<List<CategoryInfo>>() {}.type
 
-            val data = sharedPreferences.getStringOrDefault(
-                LIBRARY_CATEGORIES,
-                gson.toJson(defaultCategories, collectionType)
-            )
+            val data =
+                sharedPreferences.getStringOrDefault(
+                    LIBRARY_CATEGORIES,
+                    gson.toJson(defaultCategories, collectionType),
+                )
             return try {
                 Gson().fromJson(data, collectionType)
             } catch (e: JsonSyntaxException) {
@@ -67,21 +68,18 @@ object PreferenceUtil {
             }
         }
 
-    fun registerOnSharedPreferenceChangedListener(
-        listener: OnSharedPreferenceChangeListener,
-    ) = sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
-
+    fun registerOnSharedPreferenceChangedListener(listener: OnSharedPreferenceChangeListener) =
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
 
     fun unregisterOnSharedPreferenceChangedListener(
-        changeListener: OnSharedPreferenceChangeListener,
+        changeListener: OnSharedPreferenceChangeListener
     ) = sharedPreferences.unregisterOnSharedPreferenceChangeListener(changeListener)
 
-
-    val baseTheme get() = sharedPreferences.getStringOrDefault(GENERAL_THEME, "auto")
+    val baseTheme
+        get() = sharedPreferences.getStringOrDefault(GENERAL_THEME, "auto")
 
     fun getGeneralThemeValue(isSystemDark: Boolean): ThemeMode {
-        val themeMode: String =
-            sharedPreferences.getStringOrDefault(GENERAL_THEME, "auto")
+        val themeMode: String = sharedPreferences.getStringOrDefault(GENERAL_THEME, "auto")
         return if (isBlackMode && isSystemDark && themeMode != "light") {
             ThemeMode.BLACK
         } else {
@@ -100,240 +98,172 @@ object PreferenceUtil {
 
     var languageCode: String
         get() = sharedPreferences.getString(LANGUAGE_NAME, "auto") ?: "auto"
-        set(value) = sharedPreferences.edit {
-            putString(LANGUAGE_NAME, value)
-        }
+        set(value) = sharedPreferences.edit { putString(LANGUAGE_NAME, value) }
 
     var isLocaleAutoStorageEnabled: Boolean
-        get() = sharedPreferences.getBoolean(
-            LOCALE_AUTO_STORE_ENABLED,
-            false
-        )
-        set(value) = sharedPreferences.edit {
-            putBoolean(LOCALE_AUTO_STORE_ENABLED, value)
-        }
+        get() = sharedPreferences.getBoolean(LOCALE_AUTO_STORE_ENABLED, false)
+        set(value) = sharedPreferences.edit { putBoolean(LOCALE_AUTO_STORE_ENABLED, value) }
 
     var Fragment.userName
-        get() = sharedPreferences.getString(
-            USER_NAME,
-            getString(R.string.user_name)
-        )
-        set(value) = sharedPreferences.edit {
-            putString(USER_NAME, value)
-        }
+        get() = sharedPreferences.getString(USER_NAME, getString(R.string.user_name))
+        set(value) = sharedPreferences.edit { putString(USER_NAME, value) }
 
     var safSdCardUri
         get() = sharedPreferences.getStringOrDefault(SAF_SDCARD_URI, "")
-        set(value) = sharedPreferences.edit {
-            putString(SAF_SDCARD_URI, value)
-        }
+        set(value) = sharedPreferences.edit { putString(SAF_SDCARD_URI, value) }
 
     private val autoDownloadImagesPolicy
-        get() = sharedPreferences.getStringOrDefault(
-            AUTO_DOWNLOAD_IMAGES_POLICY,
-            "only_wifi"
-        )
+        get() = sharedPreferences.getStringOrDefault(AUTO_DOWNLOAD_IMAGES_POLICY, "only_wifi")
 
     var albumArtistsOnly
-        get() = sharedPreferences.getBoolean(
-            ALBUM_ARTISTS_ONLY,
-            false
-        )
+        get() = sharedPreferences.getBoolean(ALBUM_ARTISTS_ONLY, false)
         set(value) = sharedPreferences.edit { putBoolean(ALBUM_ARTISTS_ONLY, value) }
 
     var albumDetailSongSortOrder
-        get() = sharedPreferences.getStringOrDefault(
-            ALBUM_DETAIL_SONG_SORT_ORDER,
-            AlbumSongSortOrder.SONG_TRACK_LIST
-        )
+        get() =
+            sharedPreferences.getStringOrDefault(
+                ALBUM_DETAIL_SONG_SORT_ORDER,
+                AlbumSongSortOrder.SONG_TRACK_LIST,
+            )
         set(value) = sharedPreferences.edit { putString(ALBUM_DETAIL_SONG_SORT_ORDER, value) }
 
     var artistDetailSongSortOrder
-        get() = sharedPreferences.getStringOrDefault(
-            ARTIST_DETAIL_SONG_SORT_ORDER,
-            ArtistSongSortOrder.SONG_A_Z
-        )
+        get() =
+            sharedPreferences.getStringOrDefault(
+                ARTIST_DETAIL_SONG_SORT_ORDER,
+                ArtistSongSortOrder.SONG_A_Z,
+            )
         set(value) = sharedPreferences.edit { putString(ARTIST_DETAIL_SONG_SORT_ORDER, value) }
 
     var songSortOrder
-        get() = sharedPreferences.getStringOrDefault(
-            SONG_SORT_ORDER,
-            SongSortOrder.SONG_A_Z
-        )
-        set(value) = sharedPreferences.edit {
-            putString(SONG_SORT_ORDER, value)
-        }
+        get() = sharedPreferences.getStringOrDefault(SONG_SORT_ORDER, SongSortOrder.SONG_A_Z)
+        set(value) = sharedPreferences.edit { putString(SONG_SORT_ORDER, value) }
 
     var albumSortOrder
-        get() = sharedPreferences.getStringOrDefault(
-            ALBUM_SORT_ORDER,
-            AlbumSortOrder.ALBUM_A_Z
-        )
-        set(value) = sharedPreferences.edit {
-            putString(ALBUM_SORT_ORDER, value)
-        }
-
+        get() = sharedPreferences.getStringOrDefault(ALBUM_SORT_ORDER, AlbumSortOrder.ALBUM_A_Z)
+        set(value) = sharedPreferences.edit { putString(ALBUM_SORT_ORDER, value) }
 
     var artistSortOrder
-        get() = sharedPreferences.getStringOrDefault(
-            ARTIST_SORT_ORDER,
-            ArtistSortOrder.ARTIST_A_Z
-        )
-        set(value) = sharedPreferences.edit {
-            putString(ARTIST_SORT_ORDER, value)
-        }
+        get() = sharedPreferences.getStringOrDefault(ARTIST_SORT_ORDER, ArtistSortOrder.ARTIST_A_Z)
+        set(value) = sharedPreferences.edit { putString(ARTIST_SORT_ORDER, value) }
 
     val albumSongSortOrder
-        get() = sharedPreferences.getStringOrDefault(
-            ALBUM_SONG_SORT_ORDER,
-            AlbumSongSortOrder.SONG_TRACK_LIST
-        )
+        get() =
+            sharedPreferences.getStringOrDefault(
+                ALBUM_SONG_SORT_ORDER,
+                AlbumSongSortOrder.SONG_TRACK_LIST,
+            )
 
     val artistSongSortOrder
-        get() = sharedPreferences.getStringOrDefault(
-            ARTIST_SONG_SORT_ORDER,
-            AlbumSongSortOrder.SONG_TRACK_LIST
-        )
+        get() =
+            sharedPreferences.getStringOrDefault(
+                ARTIST_SONG_SORT_ORDER,
+                AlbumSongSortOrder.SONG_TRACK_LIST,
+            )
 
     var artistAlbumSortOrder
-        get() = sharedPreferences.getStringOrDefault(
-            ARTIST_ALBUM_SORT_ORDER,
-            ArtistAlbumSortOrder.ALBUM_YEAR
-        )
-        set(value) = sharedPreferences.edit {
-            putString(ARTIST_ALBUM_SORT_ORDER, value)
-        }
+        get() =
+            sharedPreferences.getStringOrDefault(
+                ARTIST_ALBUM_SORT_ORDER,
+                ArtistAlbumSortOrder.ALBUM_YEAR,
+            )
+        set(value) = sharedPreferences.edit { putString(ARTIST_ALBUM_SORT_ORDER, value) }
 
     var playlistSortOrder
-        get() = sharedPreferences.getStringOrDefault(
-            PLAYLIST_SORT_ORDER,
-            PlaylistSortOrder.PLAYLIST_A_Z
-        )
-        set(value) = sharedPreferences.edit {
-            putString(PLAYLIST_SORT_ORDER, value)
-        }
+        get() =
+            sharedPreferences.getStringOrDefault(
+                PLAYLIST_SORT_ORDER,
+                PlaylistSortOrder.PLAYLIST_A_Z,
+            )
+        set(value) = sharedPreferences.edit { putString(PLAYLIST_SORT_ORDER, value) }
 
     val genreSortOrder
-        get() = sharedPreferences.getStringOrDefault(
-            GENRE_SORT_ORDER,
-            GenreSortOrder.GENRE_A_Z
-        )
+        get() = sharedPreferences.getStringOrDefault(GENRE_SORT_ORDER, GenreSortOrder.GENRE_A_Z)
 
     val isIgnoreMediaStoreArtwork
-        get() = sharedPreferences.getBoolean(
-            IGNORE_MEDIA_STORE_ARTWORK,
-            true // android 11+ 
-        )
+        get() =
+            sharedPreferences.getBoolean(
+                IGNORE_MEDIA_STORE_ARTWORK,
+                true, // android 11+
+            )
 
     val isVolumeVisibilityMode
-        get() = sharedPreferences.getBoolean(
-            TOGGLE_VOLUME, false
-        )
+        get() = sharedPreferences.getBoolean(TOGGLE_VOLUME, false)
 
     var isInitializedBlacklist
-        get() = sharedPreferences.getBoolean(
-            INITIALIZED_BLACKLIST, false
-        )
-        set(value) = sharedPreferences.edit {
-            putBoolean(INITIALIZED_BLACKLIST, value)
-        }
+        get() = sharedPreferences.getBoolean(INITIALIZED_BLACKLIST, false)
+        set(value) = sharedPreferences.edit { putBoolean(INITIALIZED_BLACKLIST, value) }
 
     private val isBlackMode
-        get() = sharedPreferences.getBoolean(
-            BLACK_THEME, false
-        )
+        get() = sharedPreferences.getBoolean(BLACK_THEME, false)
 
     val isExtraControls
-        get() = sharedPreferences.getBoolean(
-            TOGGLE_ADD_CONTROLS, true
-        )
+        get() = sharedPreferences.getBoolean(TOGGLE_ADD_CONTROLS, true)
 
     val isHomeBanner
-        get() = sharedPreferences.getBoolean(
-            TOGGLE_HOME_BANNER, true
-        )
-    val isScreenOnEnabled get() = sharedPreferences.getBoolean(KEEP_SCREEN_ON, false)
+        get() = sharedPreferences.getBoolean(TOGGLE_HOME_BANNER, true)
 
-    val isShowWhenLockedEnabled get() = sharedPreferences.getBoolean(SHOW_WHEN_LOCKED, false)
+    val isScreenOnEnabled
+        get() = sharedPreferences.getBoolean(KEEP_SCREEN_ON, false)
 
-    val isSongInfo get() = sharedPreferences.getBoolean(EXTRA_SONG_INFO, true)
+    val isShowWhenLockedEnabled
+        get() = sharedPreferences.getBoolean(SHOW_WHEN_LOCKED, false)
 
-    val isPauseOnZeroVolume get() = sharedPreferences.getBoolean(PAUSE_ON_ZERO_VOLUME, false)
+    val isSongInfo
+        get() = sharedPreferences.getBoolean(EXTRA_SONG_INFO, true)
+
+    val isPauseOnZeroVolume
+        get() = sharedPreferences.getBoolean(PAUSE_ON_ZERO_VOLUME, false)
 
     var isSleepTimerFinishMusic
-        get() = sharedPreferences.getBoolean(
-            SLEEP_TIMER_FINISH_SONG, false
-        )
-        set(value) = sharedPreferences.edit {
-            putBoolean(SLEEP_TIMER_FINISH_SONG, value)
-        }
+        get() = sharedPreferences.getBoolean(SLEEP_TIMER_FINISH_SONG, false)
+        set(value) = sharedPreferences.edit { putBoolean(SLEEP_TIMER_FINISH_SONG, value) }
 
-    val isExpandPanel get() = sharedPreferences.getBoolean(EXPAND_NOW_PLAYING_PANEL, false)
+    val isExpandPanel
+        get() = sharedPreferences.getBoolean(EXPAND_NOW_PLAYING_PANEL, false)
 
     val isHeadsetPlugged
-        get() = sharedPreferences.getBoolean(
-            TOGGLE_HEADSET, false
-        )
+        get() = sharedPreferences.getBoolean(TOGGLE_HEADSET, false)
 
     val isAlbumArtOnLockScreen
-        get() = sharedPreferences.getBoolean(
-            ALBUM_ART_ON_LOCK_SCREEN, true
-        )
+        get() = sharedPreferences.getBoolean(ALBUM_ART_ON_LOCK_SCREEN, true)
 
     val isBluetoothSpeaker
-        get() = sharedPreferences.getBoolean(
-            BLUETOOTH_PLAYBACK, false
-        )
+        get() = sharedPreferences.getBoolean(BLUETOOTH_PLAYBACK, false)
 
     val isBlurredAlbumArt
-        get() = sharedPreferences.getBoolean(
-            BLURRED_ALBUM_ART, false
-        ) && !VersionUtils.hasR()
+        get() = sharedPreferences.getBoolean(BLURRED_ALBUM_ART, false) && !VersionUtils.hasR()
 
-    val blurAmount get() = sharedPreferences.getInt(NEW_BLUR_AMOUNT, 25)
+    val blurAmount
+        get() = sharedPreferences.getInt(NEW_BLUR_AMOUNT, 25)
 
     val isCarouselEffect
-        get() = sharedPreferences.getBoolean(
-            CAROUSEL_EFFECT, false
-        )
+        get() = sharedPreferences.getBoolean(CAROUSEL_EFFECT, false)
 
     var isColoredAppShortcuts
-        get() = sharedPreferences.getBoolean(
-            COLORED_APP_SHORTCUTS, true
-        )
-        set(value) = sharedPreferences.edit {
-            putBoolean(COLORED_APP_SHORTCUTS, value)
-        }
+        get() = sharedPreferences.getBoolean(COLORED_APP_SHORTCUTS, true)
+        set(value) = sharedPreferences.edit { putBoolean(COLORED_APP_SHORTCUTS, value) }
 
     var isDesaturatedColor
-        get() = sharedPreferences.getBoolean(
-            DESATURATED_COLOR, false
-        )
-        set(value) = sharedPreferences.edit {
-            putBoolean(DESATURATED_COLOR, value)
-        }
+        get() = sharedPreferences.getBoolean(DESATURATED_COLOR, false)
+        set(value) = sharedPreferences.edit { putBoolean(DESATURATED_COLOR, value) }
 
-/*    val isGapLessPlayback
-        get() = sharedPreferences.getBoolean(
-            GAP_LESS_PLAYBACK, false
-        )
-*/
+    /*    val isGapLessPlayback
+            get() = sharedPreferences.getBoolean(
+                GAP_LESS_PLAYBACK, false
+            )
+    */
     val isAdaptiveColor
-        get() = sharedPreferences.getBoolean(
-            ADAPTIVE_COLOR_APP, false
-        )
+        get() = sharedPreferences.getBoolean(ADAPTIVE_COLOR_APP, false)
 
     val isFullScreenMode
-        get() = sharedPreferences.getBoolean(
-            TOGGLE_FULL_SCREEN, true
-        )
+        get() = sharedPreferences.getBoolean(TOGGLE_FULL_SCREEN, true)
 
     val isAudioFocusEnabled
-        get() = sharedPreferences.getBoolean(
-            MANAGE_AUDIO_FOCUS, false
-        )
+        get() = sharedPreferences.getBoolean(MANAGE_AUDIO_FOCUS, false)
 
-    val isLockScreen get() = sharedPreferences.getBoolean(LOCK_SCREEN, false)
+    val isLockScreen
+        get() = sharedPreferences.getBoolean(LOCK_SCREEN, false)
 
     @Suppress("deprecation")
     fun isAllowedToDownloadMetadata(context: Context): Boolean {
@@ -343,89 +273,67 @@ object PreferenceUtil {
                 val connectivityManager = context.getSystemService<ConnectivityManager>()
                 val network = connectivityManager?.activeNetwork
                 val capabilities = connectivityManager?.getNetworkCapabilities(network)
-                capabilities != null && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                capabilities != null &&
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
             }
-            
+
             "never" -> false
             else -> false
         }
     }
 
-
     var lyricsOption
         get() = sharedPreferences.getInt(LYRICS_OPTIONS, 1)
-        set(value) = sharedPreferences.edit {
-            putInt(LYRICS_OPTIONS, value)
-        }
+        set(value) = sharedPreferences.edit { putInt(LYRICS_OPTIONS, value) }
 
     var songGridStyle: GridStyle
         get() {
-            val id: Int = sharedPreferences.getInt(SONG_GRID_STYLE, 0)  // def is 0
+            val id: Int = sharedPreferences.getInt(SONG_GRID_STYLE, 0) // def is 0
             // We can directly use "first" kotlin extension function here but
             // there maybe layout id stored in this so to avoid a crash we use
             // "firstOrNull"
-            return GridStyle.values().firstOrNull { gridStyle ->
-                gridStyle.id == id
-            } ?: GridStyle.Grid
+            return GridStyle.values().firstOrNull { gridStyle -> gridStyle.id == id }
+                ?: GridStyle.Grid
         }
-        set(value) = sharedPreferences.edit {
-            putInt(SONG_GRID_STYLE, value.id)
-        }
+        set(value) = sharedPreferences.edit { putInt(SONG_GRID_STYLE, value.id) }
 
     var albumGridStyle: GridStyle
         get() {
             val id: Int = sharedPreferences.getInt(ALBUM_GRID_STYLE, 0)
-            return GridStyle.values().firstOrNull { gridStyle ->
-                gridStyle.id == id
-            } ?: GridStyle.Grid
+            return GridStyle.values().firstOrNull { gridStyle -> gridStyle.id == id }
+                ?: GridStyle.Grid
         }
-        set(value) = sharedPreferences.edit {
-            putInt(ALBUM_GRID_STYLE, value.id)
-        }
+        set(value) = sharedPreferences.edit { putInt(ALBUM_GRID_STYLE, value.id) }
 
     var artistGridStyle: GridStyle
         get() {
             val id: Int = sharedPreferences.getInt(ARTIST_GRID_STYLE, 3)
-            return GridStyle.values().firstOrNull { gridStyle ->
-                gridStyle.id == id
-            } ?: GridStyle.Circular
+            return GridStyle.values().firstOrNull { gridStyle -> gridStyle.id == id }
+                ?: GridStyle.Circular
         }
-        set(value) = sharedPreferences.edit {
-            putInt(ARTIST_GRID_STYLE, value.id)
-        }
+        set(value) = sharedPreferences.edit { putInt(ARTIST_GRID_STYLE, value.id) }
 
-    val filterLength get() = sharedPreferences.getInt(FILTER_SONG, 20)
+    val filterLength
+        get() = sharedPreferences.getInt(FILTER_SONG, 20)
 
     var lastVersion
         // This was stored as an integer before now it's a long, so avoid a ClassCastException
-        get() = try {
-            sharedPreferences.getLong(LAST_CHANGELOG_VERSION, 0)
-        } catch (e: ClassCastException) {
-            sharedPreferences.edit { remove(LAST_CHANGELOG_VERSION) }
-            0
-        }
-        set(value) = sharedPreferences.edit {
-            putLong(LAST_CHANGELOG_VERSION, value)
-        }
+        get() =
+            try {
+                sharedPreferences.getLong(LAST_CHANGELOG_VERSION, 0)
+            } catch (e: ClassCastException) {
+                sharedPreferences.edit { remove(LAST_CHANGELOG_VERSION) }
+                0
+            }
+        set(value) = sharedPreferences.edit { putLong(LAST_CHANGELOG_VERSION, value) }
 
     var lastSleepTimerValue
-        get() = sharedPreferences.getInt(
-            LAST_SLEEP_TIMER_VALUE,
-            30
-        )
-        set(value) = sharedPreferences.edit {
-            putInt(LAST_SLEEP_TIMER_VALUE, value)
-        }
-
+        get() = sharedPreferences.getInt(LAST_SLEEP_TIMER_VALUE, 30)
+        set(value) = sharedPreferences.edit { putInt(LAST_SLEEP_TIMER_VALUE, value) }
 
     var nextSleepTimerElapsedRealTime
-        get() = sharedPreferences.getInt(
-            NEXT_SLEEP_TIMER_ELAPSED_REALTIME,
-            -1
-        )
-        set(value) = sharedPreferences.edit {
-            putInt(NEXT_SLEEP_TIMER_ELAPSED_REALTIME, value)
-        }
+        get() = sharedPreferences.getInt(NEXT_SLEEP_TIMER_ELAPSED_REALTIME, -1)
+        set(value) = sharedPreferences.edit { putInt(NEXT_SLEEP_TIMER_ELAPSED_REALTIME, value) }
 
     fun themeResFromPrefValue(themePrefValue: String): Int {
         return when (themePrefValue) {
@@ -437,14 +345,12 @@ object PreferenceUtil {
 
     val homeArtistGridStyle: Int
         get() {
-            val position = sharedPreferences.getStringOrDefault(
-                HOME_ARTIST_GRID_STYLE, "0"
-            ).toInt()
+            val position = sharedPreferences.getStringOrDefault(HOME_ARTIST_GRID_STYLE, "0").toInt()
             val layoutRes =
-                App.getContext().resources.obtainTypedArray(R.array.pref_home_grid_style_layout)
-                    .use {
-                        it.getResourceId(position, 0)
-                    }
+                App.getContext()
+                    .resources
+                    .obtainTypedArray(R.array.pref_home_grid_style_layout)
+                    .use { it.getResourceId(position, 0) }
             return if (layoutRes == 0) {
                 R.layout.item_artist
             } else layoutRes
@@ -452,13 +358,12 @@ object PreferenceUtil {
 
     val homeAlbumGridStyle: Int
         get() {
-            val position = sharedPreferences.getStringOrDefault(
-                HOME_ALBUM_GRID_STYLE, "4"
-            ).toInt()
-            val layoutRes = App.getContext()
-                .resources.obtainTypedArray(R.array.pref_home_grid_style_layout).use {
-                    it.getResourceId(position, 0)
-                }
+            val position = sharedPreferences.getStringOrDefault(HOME_ALBUM_GRID_STYLE, "4").toInt()
+            val layoutRes =
+                App.getContext()
+                    .resources
+                    .obtainTypedArray(R.array.pref_home_grid_style_layout)
+                    .use { it.getResourceId(position, 0) }
             return if (layoutRes == 0) {
                 R.layout.item_image
             } else layoutRes
@@ -466,9 +371,7 @@ object PreferenceUtil {
 
     val tabTitleMode: Int
         get() {
-            return when (sharedPreferences.getStringOrDefault(
-                TAB_TEXT_MODE, "0"
-            ).toInt()) {
+            return when (sharedPreferences.getStringOrDefault(TAB_TEXT_MODE, "0").toInt()) {
                 0 -> BottomNavigationView.LABEL_VISIBILITY_AUTO
                 1 -> BottomNavigationView.LABEL_VISIBILITY_LABELED
                 2 -> BottomNavigationView.LABEL_VISIBILITY_SELECTED
@@ -477,84 +380,69 @@ object PreferenceUtil {
             }
         }
 
-
     var songGridSize
-        get() = sharedPreferences.getInt(
-            SONG_GRID_SIZE,
-            App.getContext().getIntRes(R.integer.default_list_columns)
-        )
-        set(value) = sharedPreferences.edit {
-            putInt(SONG_GRID_SIZE, value)
-        }
+        get() =
+            sharedPreferences.getInt(
+                SONG_GRID_SIZE,
+                App.getContext().getIntRes(R.integer.default_list_columns),
+            )
+        set(value) = sharedPreferences.edit { putInt(SONG_GRID_SIZE, value) }
 
     var songGridSizeLand
-        get() = sharedPreferences.getInt(
-            SONG_GRID_SIZE_LAND,
-            App.getContext().getIntRes(R.integer.default_grid_columns_land)
-        )
-        set(value) = sharedPreferences.edit {
-            putInt(SONG_GRID_SIZE_LAND, value)
-        }
-
+        get() =
+            sharedPreferences.getInt(
+                SONG_GRID_SIZE_LAND,
+                App.getContext().getIntRes(R.integer.default_grid_columns_land),
+            )
+        set(value) = sharedPreferences.edit { putInt(SONG_GRID_SIZE_LAND, value) }
 
     var albumGridSize: Int
-        get() = sharedPreferences.getInt(
-            ALBUM_GRID_SIZE,
-            App.getContext().getIntRes(R.integer.default_grid_columns)
-        )
-        set(value) = sharedPreferences.edit {
-            putInt(ALBUM_GRID_SIZE, value)
-        }
-
+        get() =
+            sharedPreferences.getInt(
+                ALBUM_GRID_SIZE,
+                App.getContext().getIntRes(R.integer.default_grid_columns),
+            )
+        set(value) = sharedPreferences.edit { putInt(ALBUM_GRID_SIZE, value) }
 
     var albumGridSizeLand
-        get() = sharedPreferences.getInt(
-            ALBUM_GRID_SIZE_LAND,
-            App.getContext().getIntRes(R.integer.default_grid_columns_land)
-        )
-        set(value) = sharedPreferences.edit {
-            putInt(ALBUM_GRID_SIZE_LAND, value)
-        }
-
+        get() =
+            sharedPreferences.getInt(
+                ALBUM_GRID_SIZE_LAND,
+                App.getContext().getIntRes(R.integer.default_grid_columns_land),
+            )
+        set(value) = sharedPreferences.edit { putInt(ALBUM_GRID_SIZE_LAND, value) }
 
     var artistGridSize
-        get() = sharedPreferences.getInt(
-            ARTIST_GRID_SIZE,
-            App.getContext().getIntRes(R.integer.default_grid_columns)
-        )
-        set(value) = sharedPreferences.edit {
-            putInt(ARTIST_GRID_SIZE, value)
-        }
-
+        get() =
+            sharedPreferences.getInt(
+                ARTIST_GRID_SIZE,
+                App.getContext().getIntRes(R.integer.default_grid_columns),
+            )
+        set(value) = sharedPreferences.edit { putInt(ARTIST_GRID_SIZE, value) }
 
     var artistGridSizeLand
-        get() = sharedPreferences.getInt(
-            ARTIST_GRID_SIZE_LAND,
-            App.getContext().getIntRes(R.integer.default_grid_columns_land)
-        )
-        set(value) = sharedPreferences.edit {
-            putInt(ALBUM_GRID_SIZE_LAND, value)
-        }
-
+        get() =
+            sharedPreferences.getInt(
+                ARTIST_GRID_SIZE_LAND,
+                App.getContext().getIntRes(R.integer.default_grid_columns_land),
+            )
+        set(value) = sharedPreferences.edit { putInt(ALBUM_GRID_SIZE_LAND, value) }
 
     var playlistGridSize
-        get() = sharedPreferences.getInt(
-            PLAYLIST_GRID_SIZE,
-            App.getContext().getIntRes(R.integer.default_grid_columns)
-        )
-        set(value) = sharedPreferences.edit {
-            putInt(PLAYLIST_GRID_SIZE, value)
-        }
-
+        get() =
+            sharedPreferences.getInt(
+                PLAYLIST_GRID_SIZE,
+                App.getContext().getIntRes(R.integer.default_grid_columns),
+            )
+        set(value) = sharedPreferences.edit { putInt(PLAYLIST_GRID_SIZE, value) }
 
     var playlistGridSizeLand
-        get() = sharedPreferences.getInt(
-            PLAYLIST_GRID_SIZE_LAND,
-            App.getContext().getIntRes(R.integer.default_grid_columns_land)
-        )
-        set(value) = sharedPreferences.edit {
-            putInt(PLAYLIST_GRID_SIZE, value)
-        }
+        get() =
+            sharedPreferences.getInt(
+                PLAYLIST_GRID_SIZE_LAND,
+                App.getContext().getIntRes(R.integer.default_grid_columns_land),
+            )
+        set(value) = sharedPreferences.edit { putInt(PLAYLIST_GRID_SIZE, value) }
 
     var albumCoverStyle: AlbumCoverStyle
         get() {
@@ -568,7 +456,6 @@ object PreferenceUtil {
         }
         set(value) = sharedPreferences.edit { putInt(ALBUM_COVER_STYLE, value.id) }
 
-
     var nowPlayingScreen: NowPlayingScreen
         get() {
             val id: Int = sharedPreferences.getInt(NOW_PLAYING_SCREEN_ID, 0)
@@ -579,18 +466,16 @@ object PreferenceUtil {
             }
             return NowPlayingScreen.Adaptive
         }
-        set(value) = sharedPreferences.edit {
-            putInt(NOW_PLAYING_SCREEN_ID, value.id)
-            // Also set a cover theme for that now playing
-            value.defaultCoverTheme?.let { coverTheme -> albumCoverStyle = coverTheme }
-        }
+        set(value) =
+            sharedPreferences.edit {
+                putInt(NOW_PLAYING_SCREEN_ID, value.id)
+                // Also set a cover theme for that now playing
+                value.defaultCoverTheme?.let { coverTheme -> albumCoverStyle = coverTheme }
+            }
 
     val albumCoverTransform: ViewPager.PageTransformer
         get() {
-            val style = sharedPreferences.getStringOrDefault(
-                ALBUM_COVER_TRANSFORM,
-                "0"
-            ).toInt()
+            val style = sharedPreferences.getStringOrDefault(ALBUM_COVER_TRANSFORM, "0").toInt()
             return when (style) {
                 0 -> NormalPageTransformer()
                 1 -> CascadingPageTransformer()
@@ -609,24 +494,23 @@ object PreferenceUtil {
             val filePath: String = sharedPreferences.getStringOrDefault(START_DIRECTORY, folderPath)
             return File(filePath)
         }
-        set(value) = sharedPreferences.edit {
-            putString(
-                START_DIRECTORY,
-                FileUtil.safeGetCanonicalPath(value)
-            )
-        }
+        set(value) =
+            sharedPreferences.edit {
+                putString(START_DIRECTORY, FileUtil.safeGetCanonicalPath(value))
+            }
 
     fun getRecentlyPlayedCutoffTimeMillis(): Long {
         val calendarUtil = CalendarUtil()
-        val interval: Long = when (sharedPreferences.getString(RECENTLY_PLAYED_CUTOFF, "")) {
-            "today" -> calendarUtil.elapsedToday
-            "this_week" -> calendarUtil.elapsedWeek
-            "past_seven_days" -> calendarUtil.getElapsedDays(7)
-            "past_three_months" -> calendarUtil.getElapsedMonths(3)
-            "this_year" -> calendarUtil.elapsedYear
-            "this_month" -> calendarUtil.elapsedMonth
-            else -> calendarUtil.elapsedMonth
-        }
+        val interval: Long =
+            when (sharedPreferences.getString(RECENTLY_PLAYED_CUTOFF, "")) {
+                "today" -> calendarUtil.elapsedToday
+                "this_week" -> calendarUtil.elapsedWeek
+                "past_seven_days" -> calendarUtil.getElapsedDays(7)
+                "past_three_months" -> calendarUtil.getElapsedMonths(3)
+                "this_year" -> calendarUtil.elapsedYear
+                "this_month" -> calendarUtil.elapsedMonth
+                else -> calendarUtil.elapsedMonth
+            }
         return System.currentTimeMillis() - interval
     }
 
@@ -646,20 +530,13 @@ object PreferenceUtil {
         }
 
     val homeSuggestions: Boolean
-        get() = sharedPreferences.getBoolean(
-            TOGGLE_SUGGESTIONS,
-            true
-        )
+        get() = sharedPreferences.getBoolean(TOGGLE_SUGGESTIONS, true)
 
     val pauseHistory: Boolean
-        get() = sharedPreferences.getBoolean(
-            PAUSE_HISTORY,
-            false
-        )
+        get() = sharedPreferences.getBoolean(PAUSE_HISTORY, false)
 
     var audioFadeDuration
-        get() = sharedPreferences
-            .getInt(AUDIO_FADE_DURATION, 0)
+        get() = sharedPreferences.getInt(AUDIO_FADE_DURATION, 0)
         set(value) = sharedPreferences.edit { putInt(AUDIO_FADE_DURATION, value) }
 
     var showLyrics: Boolean
@@ -673,21 +550,20 @@ object PreferenceUtil {
         get() = sharedPreferences.getBoolean(ENABLE_SEARCH_PLAYLIST, true)
 
     var lastTab: Int
-        get() = sharedPreferences
-            .getInt(LAST_USED_TAB, 0)
+        get() = sharedPreferences.getInt(LAST_USED_TAB, 0)
         set(value) = sharedPreferences.edit { putInt(LAST_USED_TAB, value) }
 
     val isWhiteList: Boolean
         get() = sharedPreferences.getBoolean(WHITELIST_MUSIC, false)
 
     val crossFadeDuration
-        get() = sharedPreferences
-            .getInt(CROSS_FADE_DURATION, 0)
-    val lyricsfontsize
-        get() = sharedPreferences
-            .getInt(LYRICS_FONT_SIZE, 25).toFloat()
+        get() = sharedPreferences.getInt(CROSS_FADE_DURATION, 0)
 
-    val isCrossfadeEnabled get() = crossFadeDuration > 0
+    val lyricsfontsize
+        get() = sharedPreferences.getInt(LYRICS_FONT_SIZE, 25).toFloat()
+
+    val isCrossfadeEnabled
+        get() = crossFadeDuration > 0
 
     val materialYou
         get() = sharedPreferences.getBoolean(MATERIAL_YOU, VersionUtils.hasS())
@@ -699,35 +575,35 @@ object PreferenceUtil {
         get() = sharedPreferences.getBoolean(SNOWFALL, false)
 
     val lyricsType: CoverLyricsType
-        get() = if (sharedPreferences.getString(LYRICS_TYPE, "0") == "0") {
-            CoverLyricsType.REPLACE_COVER
-        } else {
-            CoverLyricsType.OVER_COVER
-        }
+        get() =
+            if (sharedPreferences.getString(LYRICS_TYPE, "0") == "0") {
+                CoverLyricsType.REPLACE_COVER
+            } else {
+                CoverLyricsType.OVER_COVER
+            }
 
     var playbackSpeed
-        get() = sharedPreferences
-            .getFloat(PLAYBACK_SPEED, 1F)
+        get() = sharedPreferences.getFloat(PLAYBACK_SPEED, 1F)
         set(value) = sharedPreferences.edit { putFloat(PLAYBACK_SPEED, value) }
 
     var playbackPitch
-        get() = sharedPreferences
-            .getFloat(PLAYBACK_PITCH, 1F)
+        get() = sharedPreferences.getFloat(PLAYBACK_PITCH, 1F)
         set(value) = sharedPreferences.edit { putFloat(PLAYBACK_PITCH, value) }
 
     val appBarMode: TopAppBarLayout.AppBarMode
-        get() = if (sharedPreferences.getString(APPBAR_MODE, "0") == "0") { //确保xml里调用值 是0 
-            TopAppBarLayout.AppBarMode.COLLAPSING
-        } else {
-            TopAppBarLayout.AppBarMode.SIMPLE
-        }
-            
+        get() =
+            if (sharedPreferences.getString(APPBAR_MODE, "0") == "0") { // 确保xml里调用值 是0
+                TopAppBarLayout.AppBarMode.COLLAPSING
+            } else {
+                TopAppBarLayout.AppBarMode.SIMPLE
+            }
 
     val wallpaperAccent
-        get() = sharedPreferences.getBoolean(
-            WALLPAPER_ACCENT,
-            VersionUtils.hasOreoMR1() && !VersionUtils.hasS()
-        )
+        get() =
+            sharedPreferences.getBoolean(
+                WALLPAPER_ACCENT,
+                VersionUtils.hasOreoMR1() && !VersionUtils.hasS(),
+            )
 
     val lyricsScreenOn
         get() = sharedPreferences.getBoolean(SCREEN_ON_LYRICS, false)
@@ -743,5 +619,6 @@ object PreferenceUtil {
 }
 
 enum class CoverLyricsType {
-    REPLACE_COVER, OVER_COVER
+    REPLACE_COVER,
+    OVER_COVER,
 }

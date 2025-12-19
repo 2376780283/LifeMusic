@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
+import com.bumptech.glide.Glide
+import me.zhanghai.android.fastscroll.PopupTextProvider
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.base.AbsMultiSelectAdapter
 import zzh.lifeplayer.music.adapter.base.MediaEntryViewHolder
@@ -25,16 +27,15 @@ import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.bumptech.glide.Glide
-import me.zhanghai.android.fastscroll.PopupTextProvider
 
 class ArtistAdapter(
     override val activity: FragmentActivity,
     var dataSet: List<Artist>,
     var itemLayoutRes: Int,
     val IArtistClickListener: IArtistClickListener,
-    val IAlbumArtistClickListener: IAlbumArtistClickListener? = null
-) : AbsMultiSelectAdapter<ArtistAdapter.ViewHolder, Artist>(activity, R.menu.menu_media_selection),
+    val IAlbumArtistClickListener: IAlbumArtistClickListener? = null,
+) :
+    AbsMultiSelectAdapter<ArtistAdapter.ViewHolder, Artist>(activity, R.menu.menu_media_selection),
     PopupTextProvider {
 
     var albumArtistsOnly = false
@@ -74,8 +75,7 @@ class ArtistAdapter(
         holder.itemView.isActivated = isChecked
         holder.title?.text = artist.name
         holder.text?.hide()
-        val transitionName =
-            if (albumArtistsOnly) artist.name else artist.id.toString()
+        val transitionName = if (albumArtistsOnly) artist.name else artist.id.toString()
         if (holder.imageContainer != null) {
             holder.imageContainer?.transitionName = transitionName
         } else {
@@ -100,13 +100,15 @@ class ArtistAdapter(
         Glide.with(activity)
             .asBitmapPalette()
             .artistImageOptions(artist)
-            .load(LifeGlideExtension.getArtistModel(artist))            
+            .load(LifeGlideExtension.getArtistModel(artist))
             .transition(LifeGlideExtension.getDefaultTransition())
-            .into(object : LifeMusicColoredTarget(holder.image!!) {
-                override fun onColorReady(colors: MediaNotificationProcessor) {
-                    setColors(colors, holder)
+            .into(
+                object : LifeMusicColoredTarget(holder.image!!) {
+                    override fun onColorReady(colors: MediaNotificationProcessor) {
+                        setColors(colors, holder)
+                    }
                 }
-            })
+            )
     }
 
     override fun getItemCount(): Int {
@@ -121,10 +123,7 @@ class ArtistAdapter(
         return model.name
     }
 
-    override fun onMultipleItemAction(
-        menuItem: MenuItem,
-        selection: List<Artist>
-    ) {
+    override fun onMultipleItemAction(menuItem: MenuItem, selection: List<Artist>) {
         SongsMenuHelper.handleMenuClick(activity, getSongList(selection), menuItem.itemId)
     }
 

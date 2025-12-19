@@ -16,13 +16,6 @@ package zzh.lifeplayer.music.helper.menu
 
 import android.view.MenuItem
 import androidx.fragment.app.FragmentActivity
-import zzh.lifeplayer.music.R
-import zzh.lifeplayer.music.dialogs.AddToPlaylistDialog
-import zzh.lifeplayer.music.helper.MusicPlayerRemote
-import zzh.lifeplayer.music.model.Genre
-import zzh.lifeplayer.music.model.Song
-import zzh.lifeplayer.music.repository.GenreRepository
-import zzh.lifeplayer.music.repository.RealRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,9 +23,17 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.component.inject
+import zzh.lifeplayer.music.R
+import zzh.lifeplayer.music.dialogs.AddToPlaylistDialog
+import zzh.lifeplayer.music.helper.MusicPlayerRemote
+import zzh.lifeplayer.music.model.Genre
+import zzh.lifeplayer.music.model.Song
+import zzh.lifeplayer.music.repository.GenreRepository
+import zzh.lifeplayer.music.repository.RealRepository
 
 object GenreMenuHelper : KoinComponent {
     private val genreRepository by inject<GenreRepository>()
+
     fun handleMenuClick(activity: FragmentActivity, genre: Genre, item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_play -> {

@@ -24,6 +24,9 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.transition.MaterialFadeThrough
+import me.zhanghai.android.fastscroll.FastScroller
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import zzh.lifeplayer.appthemehelper.common.ATHToolbarActivity
 import zzh.lifeplayer.appthemehelper.util.ToolbarContentTintHelper
 import zzh.lifeplayer.music.R
@@ -36,18 +39,21 @@ import zzh.lifeplayer.music.extensions.dip
 import zzh.lifeplayer.music.interfaces.IScrollHelper
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.ThemedFastScroller.create
-import com.google.android.material.transition.MaterialFadeThrough
-import me.zhanghai.android.fastscroll.FastScroller
-import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
-abstract class AbsRecyclerViewFragment<A : RecyclerView.Adapter<*>, LM : RecyclerView.LayoutManager> :
-    AbsMainActivityFragment(R.layout.fragment_main_recycler), IScrollHelper {
+abstract class AbsRecyclerViewFragment<
+    A : RecyclerView.Adapter<*>,
+    LM : RecyclerView.LayoutManager,
+> : AbsMainActivityFragment(R.layout.fragment_main_recycler), IScrollHelper {
 
     private var _binding: FragmentMainRecyclerBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
+
     protected var adapter: A? = null
     protected var layoutManager: LM? = null
-    val shuffleButton get() = binding.shuffleButton
+    val shuffleButton
+        get() = binding.shuffleButton
+
     abstract val isShuffleVisible: Boolean
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,21 +73,20 @@ abstract class AbsRecyclerViewFragment<A : RecyclerView.Adapter<*>, LM : Recycle
         binding.shuffleButton.fitsSystemWindows = PreferenceUtil.isFullScreenMode
         // Add listeners when shuffle is visible
         if (isShuffleVisible) {
-            binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (dy > 0) {
-                        binding.shuffleButton.hide()
-                    } else if (dy < 0) {
-                        binding.shuffleButton.show()
+            binding.recyclerView.addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        if (dy > 0) {
+                            binding.shuffleButton.hide()
+                        } else if (dy < 0) {
+                            binding.shuffleButton.show()
+                        }
                     }
-
                 }
-            })
+            )
             binding.shuffleButton.apply {
-                setOnClickListener {
-                    onShuffleClicked()
-                }
+                setOnClickListener { onShuffleClicked() }
                 accentColor()
             }
         } else {
@@ -94,18 +99,14 @@ abstract class AbsRecyclerViewFragment<A : RecyclerView.Adapter<*>, LM : Recycle
         }
     }
 
-    open fun onShuffleClicked() {
-    }
+    open fun onShuffleClicked() {}
 
-    val toolbar: Toolbar get() = binding.appBarLayout.toolbar
+    val toolbar: Toolbar
+        get() = binding.appBarLayout.toolbar
 
     private fun setupToolbar() {
         toolbar.setNavigationOnClickListener {
-            findNavController().navigate(
-                R.id.action_search,
-                null,
-                navOptions
-            )
+            findNavController().navigate(R.id.action_search, null, navOptions)
         }
         val appName = resources.getString(titleRes)
         binding.appBarLayout.title = appName
@@ -127,12 +128,14 @@ abstract class AbsRecyclerViewFragment<A : RecyclerView.Adapter<*>, LM : Recycle
 
     private fun initAdapter() {
         adapter = createAdapter()
-        adapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onChanged() {
-                super.onChanged()
-                checkIsEmpty()
+        adapter?.registerAdapterDataObserver(
+            object : RecyclerView.AdapterDataObserver() {
+                override fun onChanged() {
+                    super.onChanged()
+                    checkIsEmpty()
+                }
             }
-        })
+        )
     }
 
     protected open val emptyMessage: Int
@@ -161,8 +164,7 @@ abstract class AbsRecyclerViewFragment<A : RecyclerView.Adapter<*>, LM : Recycle
 
     protected abstract fun createLayoutManager(): LM
 
-    @NonNull
-    protected abstract fun createAdapter(): A
+    @NonNull protected abstract fun createAdapter(): A
 
     protected fun invalidateLayoutManager() {
         initLayoutManager()
@@ -175,9 +177,11 @@ abstract class AbsRecyclerViewFragment<A : RecyclerView.Adapter<*>, LM : Recycle
         binding.recyclerView.adapter = adapter
     }
 
-    val recyclerView get() = binding.recyclerView
+    val recyclerView
+        get() = binding.recyclerView
 
-    val container get() = binding.root
+    val container
+        get() = binding.root
 
     override fun scrollToTop() {
         recyclerView.scrollToPosition(0)
@@ -194,25 +198,19 @@ abstract class AbsRecyclerViewFragment<A : RecyclerView.Adapter<*>, LM : Recycle
             requireContext(),
             toolbar,
             menu,
-            ATHToolbarActivity.getToolbarBackgroundColor(toolbar)
+            ATHToolbarActivity.getToolbarBackgroundColor(toolbar),
         )
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_settings -> findNavController().navigate(
-                R.id.settings_fragment,
-                null,
-                navOptions
-            )
-            R.id.action_import_playlist -> ImportPlaylistDialog().show(
-                childFragmentManager,
-                "ImportPlaylist"
-            )
-            R.id.action_add_to_playlist -> CreatePlaylistDialog.create(emptyList()).show(
-                childFragmentManager,
-                "ShowCreatePlaylistDialog"
-            )
+            R.id.action_settings ->
+                findNavController().navigate(R.id.settings_fragment, null, navOptions)
+            R.id.action_import_playlist ->
+                ImportPlaylistDialog().show(childFragmentManager, "ImportPlaylist")
+            R.id.action_add_to_playlist ->
+                CreatePlaylistDialog.create(emptyList())
+                    .show(childFragmentManager, "ShowCreatePlaylistDialog")
         }
         return false
     }

@@ -1,11 +1,11 @@
 package zzh.lifeplayer.music.fragments.home
 
+// import androidx.core.text.parseAsHtml
 import android.os.Bundle
 import android.view.*
 import android.view.MenuItem.SHOW_AS_ACTION_IF_ROOM
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.os.bundleOf
-// import androidx.core.text.parseAsHtml
 import androidx.core.view.doOnLayout
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
@@ -13,6 +13,9 @@ import androidx.core.view.updateLayoutParams
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.google.android.material.transition.MaterialFadeThrough
+import com.google.android.material.transition.MaterialSharedAxis
 import zzh.lifeplayer.appthemehelper.common.ATHToolbarActivity
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.ToolbarContentTintHelper
@@ -30,30 +33,18 @@ import zzh.lifeplayer.music.glide.LifeGlideExtension
 import zzh.lifeplayer.music.glide.LifeGlideExtension.profileBannerOptions
 import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
 import zzh.lifeplayer.music.glide.LifeGlideExtension.userProfileOptions
-
-import zzh.lifeplayer.music.glide.BlurTransformation
-import zzh.lifeplayer.music.glide.LifeGlideExtension.simpleSongCoverOptions
-import zzh.lifeplayer.music.glide.crossfadeListener
-
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.interfaces.IScrollHelper
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.PreferenceUtil.userName
-import zzh.lifeplayer.music.util.PreferenceUtil.blurAmount
 
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
-import com.bumptech.glide.request.RequestOptions
-
-import com.google.android.material.transition.MaterialFadeThrough
-import com.google.android.material.transition.MaterialSharedAxis
-
-class HomeFragment :
-    AbsMainActivityFragment(R.layout.fragment_home), IScrollHelper {
+class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home), IScrollHelper {
 
     private var _binding: HomeBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val homeBinding = FragmentHomeBinding.bind(view)
@@ -72,75 +63,72 @@ class HomeFragment :
             layoutManager = LinearLayoutManager(mainActivity)
             adapter = homeAdapter
         }
-        libraryViewModel.getSuggestions().observe(viewLifecycleOwner) {
-            loadSuggestions(it)
-        }
-        libraryViewModel.getHome().observe(viewLifecycleOwner) {
-            homeAdapter.swapData(it)
-        }
+        libraryViewModel.getSuggestions().observe(viewLifecycleOwner) { loadSuggestions(it) }
+        libraryViewModel.getHome().observe(viewLifecycleOwner) { homeAdapter.swapData(it) }
 
         loadProfile()
         setupTitle()
         colorButtons()
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
-        view.doOnLayout {
-            adjustPlaylistButtons()
-        }
+        view.doOnLayout { adjustPlaylistButtons() }
     }
 
     private fun adjustPlaylistButtons() {
         val buttons =
             listOf(binding.history, binding.lastAdded, binding.topPlayed, binding.actionShuffle)
-        buttons.maxOf { it.lineCount }.let { maxLineCount ->
-            buttons.forEach { button ->
-                // Set the highest line count to every button for consistency
-                button.setLines(maxLineCount)
+        buttons
+            .maxOf { it.lineCount }
+            .let { maxLineCount ->
+                buttons.forEach { button ->
+                    // Set the highest line count to every button for consistency
+                    button.setLines(maxLineCount)
+                }
             }
-        }
     }
 
     private fun setupListeners() {
         binding.lastAdded.setOnClickListener {
-            findNavController().navigate(
-                R.id.detailListFragment,
-                bundleOf(EXTRA_PLAYLIST_TYPE to LAST_ADDED_PLAYLIST)
-            )
+            findNavController()
+                .navigate(
+                    R.id.detailListFragment,
+                    bundleOf(EXTRA_PLAYLIST_TYPE to LAST_ADDED_PLAYLIST),
+                )
             setSharedAxisYTransitions()
         }
 
         binding.topPlayed.setOnClickListener {
-            findNavController().navigate(
-                R.id.detailListFragment,
-                bundleOf(EXTRA_PLAYLIST_TYPE to TOP_PLAYED_PLAYLIST)
-            )
+            findNavController()
+                .navigate(
+                    R.id.detailListFragment,
+                    bundleOf(EXTRA_PLAYLIST_TYPE to TOP_PLAYED_PLAYLIST),
+                )
             setSharedAxisYTransitions()
         }
 
-        binding.actionShuffle.setOnClickListener {
-            libraryViewModel.shuffleSongs()
-        }
+        binding.actionShuffle.setOnClickListener { libraryViewModel.shuffleSongs() }
 
         binding.history.setOnClickListener {
-            findNavController().navigate(
-                R.id.detailListFragment,
-                bundleOf(EXTRA_PLAYLIST_TYPE to HISTORY_PLAYLIST)
-            )
+            findNavController()
+                .navigate(
+                    R.id.detailListFragment,
+                    bundleOf(EXTRA_PLAYLIST_TYPE to HISTORY_PLAYLIST),
+                )
             setSharedAxisYTransitions()
         }
 
         binding.userImage.setOnClickListener {
-            findNavController().navigate(
-                R.id.user_info_fragment, null, null, FragmentNavigatorExtras(
-                    binding.userImage to "user_image"
+            findNavController()
+                .navigate(
+                    R.id.user_info_fragment,
+                    null,
+                    null,
+                    FragmentNavigatorExtras(binding.userImage to "user_image"),
                 )
-            )
         }
         // Reload suggestions
         binding.suggestions.refreshButton.setOnClickListener {
-            libraryViewModel.forceReload(
-                ReloadType.Suggestions
-            )
+            libraryViewModel.forceReload(ReloadType.Suggestions)
         }
     }
 
@@ -151,20 +139,19 @@ class HomeFragment :
         val appName = "PixelMusic"
         binding.appBarLayout.title = appName
     }
-    
-   private fun loadProfile() {
-    binding.bannerImagelarge?.let {
-        Glide.with(this)
-            .load(LifeGlideExtension.getBannerModel())
-            .profileBannerOptions(LifeGlideExtension.getBannerModel())
-            .into(it)
-    }
-    
 
-    Glide.with(requireActivity())
-        .load(LifeGlideExtension.getUserModel())
-        .userProfileOptions(LifeGlideExtension.getUserModel(), requireContext())
-        .into(binding.userImage)
+    private fun loadProfile() {
+        binding.bannerImagelarge?.let {
+            Glide.with(this)
+                .load(LifeGlideExtension.getBannerModel())
+                .profileBannerOptions(LifeGlideExtension.getBannerModel())
+                .into(it)
+        }
+
+        Glide.with(requireActivity())
+            .load(LifeGlideExtension.getUserModel())
+            .userProfileOptions(LifeGlideExtension.getUserModel(), requireContext())
+            .into(binding.userImage)
     }
 
     fun colorButtons() {
@@ -173,7 +160,6 @@ class HomeFragment :
         binding.topPlayed.elevatedAccentColor()
         binding.actionShuffle.elevatedAccentColor()
     }
-    
 
     private fun checkForMargins() {
         if (mainActivity.isBottomNavVisible) {
@@ -193,9 +179,8 @@ class HomeFragment :
             requireContext(),
             binding.toolbar,
             menu,
-            ATHToolbarActivity.getToolbarBackgroundColor(binding.toolbar)
+            ATHToolbarActivity.getToolbarBackgroundColor(binding.toolbar),
         )
-      
     }
 
     override fun scrollToTop() {
@@ -215,97 +200,106 @@ class HomeFragment :
         reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, false)
     }
 
-private fun loadSuggestions(songs: List<Song>) {
-    if (!PreferenceUtil.homeSuggestions) {
-        binding.suggestions.root.isVisible = false
-        return
+    private fun loadSuggestions(songs: List<Song>) {
+        if (!PreferenceUtil.homeSuggestions) {
+            binding.suggestions.root.isVisible = false
+            return
+        }
+
+        if (songs.isEmpty()) {
+            showEmptySuggestionsState()
+            return
+        }
+        // 正常加载有歌曲的情况
+        loadSuggestionsWithSongs(songs)
     }
-    
-    if (songs.isEmpty()) {
-        showEmptySuggestionsState()
-        return
-    }    
-    // 正常加载有歌曲的情况
-    loadSuggestionsWithSongs(songs)
-}
 
-private fun showEmptySuggestionsState() {
-    val images = listOf(
-        binding.suggestions.image1, binding.suggestions.image2,
-        binding.suggestions.image3, binding.suggestions.image4,
-        binding.suggestions.image5, binding.suggestions.image6,
-        binding.suggestions.image7, binding.suggestions.image8
-    )
-    val color = accentColor()
-    // 隐藏所有图片或显示占位符
-    images.forEach { imageView ->
-         Glide.with(this).load(R.drawable.default_audio_art).into(imageView)
-    }   
-    binding.suggestions.message.apply {
-        setTextColor(color)    
-        setOnClickListener(null)  
-        text = "Nothing"   
-    } 
-//    binding.suggestions.message.text = "Nothing"
-//    binding.suggestions.message.setOnClickListener(null) 
-}
+    private fun showEmptySuggestionsState() {
+        val images =
+            listOf(
+                binding.suggestions.image1,
+                binding.suggestions.image2,
+                binding.suggestions.image3,
+                binding.suggestions.image4,
+                binding.suggestions.image5,
+                binding.suggestions.image6,
+                binding.suggestions.image7,
+                binding.suggestions.image8,
+            )
+        val color = accentColor()
+        // 隐藏所有图片或显示占位符
+        images.forEach { imageView ->
+            Glide.with(this).load(R.drawable.default_audio_art).into(imageView)
+        }
+        binding.suggestions.message.apply {
+            setTextColor(color)
+            setOnClickListener(null)
+            text = "Nothing"
+        }
+        //    binding.suggestions.message.text = "Nothing"
+        //    binding.suggestions.message.setOnClickListener(null)
+    }
 
-private fun loadSuggestionsWithSongs(songs: List<Song>) {
-    val images = listOf(
-        binding.suggestions.image1, binding.suggestions.image2,
-        binding.suggestions.image3, binding.suggestions.image4,
-        binding.suggestions.image5, binding.suggestions.image6,
-        binding.suggestions.image7, binding.suggestions.image8
-    )
-    
-    val color = accentColor()
-    
-    // 设置消息区域
-    binding.suggestions.message.apply {
-        setTextColor(color)
-        setOnClickListener {
-            it.isClickable = false
-            it.postDelayed({ it.isClickable = true }, 500)
-            val maxItems = minOf(songs.size, 8)
-            MusicPlayerRemote.playNext(songs.subList(0, maxItems))
-            if (!MusicPlayerRemote.isPlaying) {
-                MusicPlayerRemote.playNextSong()
+    private fun loadSuggestionsWithSongs(songs: List<Song>) {
+        val images =
+            listOf(
+                binding.suggestions.image1,
+                binding.suggestions.image2,
+                binding.suggestions.image3,
+                binding.suggestions.image4,
+                binding.suggestions.image5,
+                binding.suggestions.image6,
+                binding.suggestions.image7,
+                binding.suggestions.image8,
+            )
+
+        val color = accentColor()
+
+        // 设置消息区域
+        binding.suggestions.message.apply {
+            setTextColor(color)
+            setOnClickListener {
+                it.isClickable = false
+                it.postDelayed({ it.isClickable = true }, 500)
+                val maxItems = minOf(songs.size, 8)
+                MusicPlayerRemote.playNext(songs.subList(0, maxItems))
+                if (!MusicPlayerRemote.isPlaying) {
+                    MusicPlayerRemote.playNextSong()
+                }
             }
         }
-    }
-    
-    binding.suggestions.card6.setCardBackgroundColor(ColorUtil.withAlpha(color, 0.12f))
-    
-    // 安全地加载歌曲（带边界检查）
-    val maxItems = minOf(songs.size, images.size)
-    
-    for (index in 0 until maxItems) {
-        val song = songs[index]
-        val imageView = images[index]
-        
-        imageView.isVisible = true
-        imageView.setOnClickListener {
-            it.isClickable = false
-            it.postDelayed({ it.isClickable = true }, 500)
-            MusicPlayerRemote.playNext(song)
-            if (!MusicPlayerRemote.isPlaying) {
-                MusicPlayerRemote.playNextSong()
-            }
-        }
-        
-        Glide.with(this)
-            .load(LifeGlideExtension.getSongModel(song))
-            .songCoverOptions(song)
-            .into(imageView)
-    }
-    
-    // 隐藏未使用的imageView
-    for (i in maxItems until images.size) {
-        images[i].isVisible = false
-    }
-}
 
-    
+        binding.suggestions.card6.setCardBackgroundColor(ColorUtil.withAlpha(color, 0.12f))
+
+        // 安全地加载歌曲（带边界检查）
+        val maxItems = minOf(songs.size, images.size)
+
+        for (index in 0 until maxItems) {
+            val song = songs[index]
+            val imageView = images[index]
+
+            imageView.isVisible = true
+            imageView.setOnClickListener {
+                it.isClickable = false
+                it.postDelayed({ it.isClickable = true }, 500)
+                MusicPlayerRemote.playNext(song)
+                if (!MusicPlayerRemote.isPlaying) {
+                    MusicPlayerRemote.playNextSong()
+                }
+            }
+
+            Glide.with(this)
+                .load(LifeGlideExtension.getSongModel(song))
+                .songCoverOptions(song)
+                .into(imageView)
+        }
+
+        // 隐藏未使用的imageView
+        for (i in maxItems until images.size) {
+            images[i].isVisible = false
+        }
+    }
+
     companion object {
 
         const val TAG: String = "BannerHomeFragment"
@@ -318,21 +312,15 @@ private fun loadSuggestionsWithSongs(songs: List<Song>) {
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_settings -> findNavController().navigate(
-                R.id.settings_fragment,
-                null,
-                navOptions
-            )
+            R.id.action_settings ->
+                findNavController().navigate(R.id.settings_fragment, null, navOptions)
 
-            R.id.action_import_playlist -> ImportPlaylistDialog().show(
-                childFragmentManager,
-                "ImportPlaylist"
-            )
+            R.id.action_import_playlist ->
+                ImportPlaylistDialog().show(childFragmentManager, "ImportPlaylist")
 
-            R.id.action_add_to_playlist -> CreatePlaylistDialog.create(emptyList()).show(
-                childFragmentManager,
-                "ShowCreatePlaylistDialog"
-            )
+            R.id.action_add_to_playlist ->
+                CreatePlaylistDialog.create(emptyList())
+                    .show(childFragmentManager, "ShowCreatePlaylistDialog")
         }
         return false
     }

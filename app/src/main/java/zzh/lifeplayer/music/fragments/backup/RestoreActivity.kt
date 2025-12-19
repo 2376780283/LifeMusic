@@ -10,6 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.DynamicColorsOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import zzh.lifeplayer.music.databinding.ActivityRestoreBinding
 import zzh.lifeplayer.music.extensions.accentColor
 import zzh.lifeplayer.music.extensions.accentOutlineColor
@@ -18,11 +22,6 @@ import zzh.lifeplayer.music.helper.BackupContent
 import zzh.lifeplayer.music.helper.BackupContent.*
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.theme.getNightMode
-import com.google.android.material.color.DynamicColors
-import com.google.android.material.color.DynamicColorsOptions
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
 
 class RestoreActivity : AppCompatActivity() {
 
@@ -38,9 +37,7 @@ class RestoreActivity : AppCompatActivity() {
         val backupUri = intent?.data
         binding.backupName.setText(getFileName(backupUri))
         binding.cancelButton.accentOutlineColor()
-        binding.cancelButton.setOnClickListener {
-            finish()
-        }
+        binding.cancelButton.setOnClickListener { finish() }
         binding.restoreButton.accentColor()
         binding.checkArtistImages.addAccentColor()
         binding.checkPlaylists.addAccentColor()
@@ -70,8 +67,11 @@ class RestoreActivity : AppCompatActivity() {
             DynamicColors.applyToActivityIfAvailable(
                 this,
                 DynamicColorsOptions.Builder()
-                    .setThemeOverlay(com.google.android.material.R.style.ThemeOverlay_Material3_DynamicColors_DayNight)
-                    .build()
+                    .setThemeOverlay(
+                        com.google.android.material.R.style
+                            .ThemeOverlay_Material3_DynamicColors_DayNight
+                    )
+                    .build(),
             )
         }
     }
@@ -83,9 +83,7 @@ class RestoreActivity : AppCompatActivity() {
             }
             ContentResolver.SCHEME_CONTENT -> {
                 val proj = arrayOf(MediaStore.Files.FileColumns.DISPLAY_NAME)
-                contentResolver.query(
-                    uri, proj, null, null, null
-                )?.use { cursor ->
+                contentResolver.query(uri, proj, null, null, null)?.use { cursor ->
                     if (cursor.count != 0) {
                         val columnIndex: Int =
                             cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME)

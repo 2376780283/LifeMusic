@@ -30,19 +30,20 @@ import zzh.lifeplayer.music.util.MusicUtil
 
 class SongShareDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val song: Song? = BundleCompat.getParcelable(requireArguments(), EXTRA_SONG, Song::class.java)
+        val song: Song? =
+            BundleCompat.getParcelable(requireArguments(), EXTRA_SONG, Song::class.java)
         val listening: String =
             String.format(
                 getString(R.string.currently_listening_to_x_by_x),
                 song?.title,
-                song?.artistName
+                song?.artistName,
             )
         return materialDialog(R.string.what_do_you_want_to_share)
             .setItems(
                 arrayOf(
                     getString(R.string.the_audio_file),
                     "\u201C" + listening + "\u201D",
-                    getString(R.string.social_stories)
+                    getString(R.string.social_stories),
                 )
             ) { _, which ->
                 withAction(which, song, listening)
@@ -52,18 +53,15 @@ class SongShareDialog : DialogFragment() {
             .colorButtons()
     }
 
-    private fun withAction(
-        which: Int,
-        song: Song?,
-        currentlyListening: String
-    ) {
+    private fun withAction(which: Int, song: Song?, currentlyListening: String) {
         when (which) {
             0 -> {
-                startActivity(Intent.createChooser(song?.let {
-                    MusicUtil.createShareSongFileIntent(
-                        requireContext(), it
+                startActivity(
+                    Intent.createChooser(
+                        song?.let { MusicUtil.createShareSongFileIntent(requireContext(), it) },
+                        null,
                     )
-                }, null))
+                )
             }
             1 -> {
                 startActivity(
@@ -72,20 +70,15 @@ class SongShareDialog : DialogFragment() {
                             .setAction(Intent.ACTION_SEND)
                             .putExtra(Intent.EXTRA_TEXT, currentlyListening)
                             .setType("text/plain"),
-                        null
+                        null,
                     )
                 )
             }
             2 -> {
                 if (song != null) {
                     startActivity(
-                        Intent(
-                            requireContext(),
-                            ShareInstagramStory::class.java
-                        ).putExtra(
-                            ShareInstagramStory.EXTRA_SONG,
-                            song
-                        )
+                        Intent(requireContext(), ShareInstagramStory::class.java)
+                            .putExtra(ShareInstagramStory.EXTRA_SONG, song)
                     )
                 }
             }
@@ -95,11 +88,7 @@ class SongShareDialog : DialogFragment() {
     companion object {
 
         fun create(song: Song): SongShareDialog {
-            return SongShareDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_SONG to song
-                )
-            }
+            return SongShareDialog().apply { arguments = bundleOf(EXTRA_SONG to song) }
         }
     }
 }

@@ -33,16 +33,15 @@ import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.content.getSystemService
 import androidx.core.view.*
-import zzh.lifeplayer.appthemehelper.ThemeStore
-import zzh.lifeplayer.appthemehelper.util.TintHelper
-import zzh.lifeplayer.music.util.PreferenceUtil
-import zzh.lifeplayer.music.util.LifeUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.navigationrail.NavigationRailView
 import dev.chrisbanes.insetter.applyInsetter
+import zzh.lifeplayer.appthemehelper.ThemeStore
+import zzh.lifeplayer.appthemehelper.util.TintHelper
+import zzh.lifeplayer.music.util.LifeUtil
+import zzh.lifeplayer.music.util.PreferenceUtil
 
 const val ANIM_DURATION = 300L
 
@@ -70,10 +69,14 @@ fun EditText.appHandleColor(): EditText {
 }
 
 fun NavigationBarView.setItemColors(@ColorInt normalColor: Int, @ColorInt selectedColor: Int) {
-    val csl = ColorStateList(
-        arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)),
-        intArrayOf(normalColor, selectedColor)
-    )
+    val csl =
+        ColorStateList(
+            arrayOf(
+                intArrayOf(-android.R.attr.state_checked),
+                intArrayOf(android.R.attr.state_checked),
+            ),
+            intArrayOf(normalColor, selectedColor),
+        )
     itemIconTintList = csl
     itemTextColor = csl
 }
@@ -81,11 +84,11 @@ fun NavigationBarView.setItemColors(@ColorInt normalColor: Int, @ColorInt select
 /**
  * Potentially animate showing a [BottomNavigationView].
  *
- * Abruptly changing the visibility leads to a re-layout of main content, animating
- * `translationY` leaves a gap where the view was that content does not fill.
+ * Abruptly changing the visibility leads to a re-layout of main content, animating `translationY`
+ * leaves a gap where the view was that content does not fill.
  *
- * Instead, take a snapshot of the view, and animate this in, only changing the visibility (and
- * thus layout) when the animation completes.
+ * Instead, take a snapshot of the view, and animate this in, only changing the visibility (and thus
+ * layout) when the animation completes.
  */
 fun NavigationBarView.show() {
     if (this is NavigationRailView) return
@@ -97,7 +100,7 @@ fun NavigationBarView.show() {
     if (!isLaidOut) {
         measure(
             View.MeasureSpec.makeMeasureSpec(parent.width, View.MeasureSpec.EXACTLY),
-            View.MeasureSpec.makeMeasureSpec(parent.height, View.MeasureSpec.AT_MOST)
+            View.MeasureSpec.makeMeasureSpec(parent.height, View.MeasureSpec.AT_MOST),
         )
         layout(parent.left, parent.height - measuredHeight, parent.right, parent.height)
     }
@@ -107,10 +110,8 @@ fun NavigationBarView.show() {
     parent.overlay.add(drawable)
     ValueAnimator.ofInt(parent.height, top).apply {
         duration = ANIM_DURATION
-        interpolator = AnimationUtils.loadInterpolator(
-            context,
-            android.R.interpolator.accelerate_decelerate
-        )
+        interpolator =
+            AnimationUtils.loadInterpolator(context, android.R.interpolator.accelerate_decelerate)
         addUpdateListener {
             val newTop = it.animatedValue as Int
             drawable.setBounds(left, newTop, right, newTop + height)
@@ -126,11 +127,11 @@ fun NavigationBarView.show() {
 /**
  * Potentially animate hiding a [BottomNavigationView].
  *
- * Abruptly changing the visibility leads to a re-layout of main content, animating
- * `translationY` leaves a gap where the view was that content does not fill.
+ * Abruptly changing the visibility leads to a re-layout of main content, animating `translationY`
+ * leaves a gap where the view was that content does not fill.
  *
- * Instead, take a snapshot, instantly hide the view (so content lays out to fill), then animate
- * out the snapshot.
+ * Instead, take a snapshot, instantly hide the view (so content lays out to fill), then animate out
+ * the snapshot.
  */
 fun NavigationBarView.hide() {
     if (this is NavigationRailView) return
@@ -148,55 +149,44 @@ fun NavigationBarView.hide() {
     isGone = true
     ValueAnimator.ofInt(top, parent.height).apply {
         duration = ANIM_DURATION
-        interpolator = AnimationUtils.loadInterpolator(
-            context,
-            android.R.interpolator.accelerate_decelerate
-        )
+        interpolator =
+            AnimationUtils.loadInterpolator(context, android.R.interpolator.accelerate_decelerate)
         addUpdateListener {
             val newTop = it.animatedValue as Int
             drawable.setBounds(left, newTop, right, newTop + height)
         }
-        doOnEnd {
-            parent.overlay.remove(drawable)
-        }
+        doOnEnd { parent.overlay.remove(drawable) }
         start()
     }
 }
 
 fun View.translateYAnimate(value: Float): Animator {
-    return ObjectAnimator.ofFloat(this, "translationY", value)
-        .apply {
-            duration = 300
-            doOnStart {
-                show()
-                bringToFront()
-            }
-            doOnEnd {
-                isGone = (value != 0f)
-            }
-            start()
+    return ObjectAnimator.ofFloat(this, "translationY", value).apply {
+        duration = 300
+        doOnStart {
+            show()
+            bringToFront()
         }
+        doOnEnd { isGone = (value != 0f) }
+        start()
+    }
 }
 
 fun BottomSheetBehavior<*>.peekHeightAnimate(value: Int): Animator {
-    return ObjectAnimator.ofInt(this, "peekHeight", value)
-        .apply {
-            duration = ANIM_DURATION
-            start()
-        }
+    return ObjectAnimator.ofInt(this, "peekHeight", value).apply {
+        duration = ANIM_DURATION
+        start()
+    }
 }
 
 fun View.focusAndShowKeyboard() {
-    /**
-     * This is to be called when the window already has focus.
-     */
+    /** This is to be called when the window already has focus. */
     fun View.showTheKeyboardNow() {
         if (isFocused) {
             post {
                 // We still post the call, just in case we are being notified of the windows focus
                 // but InputMethodManager didn't get properly setup yet.
-                val imm =
-                    context.getSystemService<InputMethodManager>()
+                val imm = context.getSystemService<InputMethodManager>()
                 imm?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
             }
         }
@@ -218,42 +208,27 @@ fun View.focusAndShowKeyboard() {
                         viewTreeObserver.removeOnWindowFocusChangeListener(this)
                     }
                 }
-            })
+            }
+        )
     }
 }
 
-/**
- * This will draw our view above the navigation bar instead of behind it by adding margins.
- */
+/** This will draw our view above the navigation bar instead of behind it by adding margins. */
 fun View.drawAboveSystemBars(onlyPortrait: Boolean = true) {
     if (PreferenceUtil.isFullScreenMode) return
     if (onlyPortrait && LifeUtil.isLandscape) return
-    applyInsetter {
-        type(navigationBars = true) {
-            margin()
-        }
-    }
+    applyInsetter { type(navigationBars = true) { margin() } }
 }
 
-/**
- * This will draw our view above the navigation bar instead of behind it by adding padding.
- */
+/** This will draw our view above the navigation bar instead of behind it by adding padding. */
 fun View.drawAboveSystemBarsWithPadding() {
     if (PreferenceUtil.isFullScreenMode) return
-    applyInsetter {
-        type(navigationBars = true) {
-            padding()
-        }
-    }
+    applyInsetter { type(navigationBars = true) { padding() } }
 }
 
 fun View.drawNextToNavbar() {
     if (PreferenceUtil.isFullScreenMode) return
-    applyInsetter {
-        type(statusBars = true, navigationBars = true) {
-            padding(horizontal = true)
-        }
-    }
+    applyInsetter { type(statusBars = true, navigationBars = true) { padding(horizontal = true) } }
 }
 
 fun View.updateMargin(
@@ -269,13 +244,9 @@ fun View.applyBottomInsets() {
     if (PreferenceUtil.isFullScreenMode) return
     val initialPadding = recordInitialPaddingForView(this)
 
-    ViewCompat.setOnApplyWindowInsetsListener(
-        (this)
-    ) { v: View, windowInsets: WindowInsetsCompat ->
+    ViewCompat.setOnApplyWindowInsetsListener((this)) { v: View, windowInsets: WindowInsetsCompat ->
         val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-        v.updatePadding(
-            bottom = initialPadding.bottom + insets.bottom
-        )
+        v.updatePadding(bottom = initialPadding.bottom + insets.bottom)
         windowInsets
     }
     requestApplyInsetsWhenAttached()
@@ -288,22 +259,20 @@ fun View.requestApplyInsetsWhenAttached() {
     } else {
         // We're not attached to the hierarchy, add a listener to
         // request when we are
-        addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
-            override fun onViewAttachedToWindow(v: View) {
-                v.removeOnAttachStateChangeListener(this)
-                v.requestApplyInsets()
-            }
+        addOnAttachStateChangeListener(
+            object : View.OnAttachStateChangeListener {
+                override fun onViewAttachedToWindow(v: View) {
+                    v.removeOnAttachStateChangeListener(this)
+                    v.requestApplyInsets()
+                }
 
-            override fun onViewDetachedFromWindow(v: View) = Unit
-        })
+                override fun onViewDetachedFromWindow(v: View) = Unit
+            }
+        )
     }
 }
 
-data class InitialPadding(
-    val left: Int, val top: Int,
-    val right: Int, val bottom: Int,
-)
+data class InitialPadding(val left: Int, val top: Int, val right: Int, val bottom: Int)
 
-fun recordInitialPaddingForView(view: View) = InitialPadding(
-    view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom
-)
+fun recordInitialPaddingForView(view: View) =
+    InitialPadding(view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom)

@@ -18,6 +18,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import com.google.android.material.slider.Slider
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
@@ -32,13 +33,13 @@ import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.PlayPauseButtonOnClickHandler
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.google.android.material.slider.Slider
 
 class MD3PlaybackControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_md3_player_playback_controls) {
 
     private var _binding: FragmentMd3PlayerPlaybackControlsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val progressSlider: Slider
         get() = binding.progressSlider
@@ -74,12 +75,8 @@ class MD3PlaybackControlsFragment :
         }
         binding.title.isSelected = true
         binding.text.isSelected = true
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
     }
 
     override fun setColor(color: MediaNotificationProcessor) {
@@ -102,9 +99,9 @@ class MD3PlaybackControlsFragment :
             binding.playPauseButton,
             MaterialValueHelper.getPrimaryTextColor(
                 requireContext(),
-                ColorUtil.isColorLight(colorFinal)
+                ColorUtil.isColorLight(colorFinal),
             ),
-            false
+            false,
         )
         binding.playPauseCard.setCardBackgroundColor(colorFinal)
 

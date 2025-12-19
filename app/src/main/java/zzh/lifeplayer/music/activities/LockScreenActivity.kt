@@ -4,6 +4,11 @@ import android.app.KeyguardManager
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.core.content.getSystemService
+import com.bumptech.glide.Glide
+import com.r0adkll.slidr.Slidr
+import com.r0adkll.slidr.model.SlidrConfig
+import com.r0adkll.slidr.model.SlidrListener
+import com.r0adkll.slidr.model.SlidrPosition
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.activities.base.AbsMusicServiceActivity
@@ -18,11 +23,6 @@ import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
 import zzh.lifeplayer.music.glide.LifeMusicColoredTarget
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.bumptech.glide.Glide
-import com.r0adkll.slidr.Slidr
-import com.r0adkll.slidr.model.SlidrConfig
-import com.r0adkll.slidr.model.SlidrListener
-import com.r0adkll.slidr.model.SlidrPosition
 
 class LockScreenActivity : AbsMusicServiceActivity() {
     private lateinit var binding: ActivityLockScreenBinding
@@ -36,26 +36,31 @@ class LockScreenActivity : AbsMusicServiceActivity() {
         hideStatusBar()
         setTaskDescriptionColorAuto()
 
-        val config = SlidrConfig.Builder().listener(object : SlidrListener {
-            override fun onSlideStateChanged(state: Int) {
-            }
+        val config =
+            SlidrConfig.Builder()
+                .listener(
+                    object : SlidrListener {
+                        override fun onSlideStateChanged(state: Int) {}
 
-            override fun onSlideChange(percent: Float) {
-            }
+                        override fun onSlideChange(percent: Float) {}
 
-            override fun onSlideOpened() {
-            }
+                        override fun onSlideOpened() {}
 
-            override fun onSlideClosed(): Boolean {
-                if (VersionUtils.hasOreo()) {
-                    val keyguardManager =
-                        getSystemService<KeyguardManager>()
-                    keyguardManager?.requestDismissKeyguard(this@LockScreenActivity, null)
-                }
-                finish()
-                return true
-            }
-        }).position(SlidrPosition.BOTTOM).build()
+                        override fun onSlideClosed(): Boolean {
+                            if (VersionUtils.hasOreo()) {
+                                val keyguardManager = getSystemService<KeyguardManager>()
+                                keyguardManager?.requestDismissKeyguard(
+                                    this@LockScreenActivity,
+                                    null,
+                                )
+                            }
+                            finish()
+                            return true
+                        }
+                    }
+                )
+                .position(SlidrPosition.BOTTOM)
+                .build()
 
         Slidr.attach(this, config)
 
@@ -72,7 +77,7 @@ class LockScreenActivity : AbsMusicServiceActivity() {
     private fun lockScreenInit() {
         if (VersionUtils.hasOreoMR1()) {
             setShowWhenLocked(true)
-            //setTurnScreenOn(true)
+            // setTurnScreenOn(true)
         } else {
             window.addFlags(
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
@@ -98,10 +103,12 @@ class LockScreenActivity : AbsMusicServiceActivity() {
             .songCoverOptions(song)
             .load(LifeGlideExtension.getSongModel(song))
             .dontAnimate()
-            .into(object : LifeMusicColoredTarget(binding.image) {
-                override fun onColorReady(colors: MediaNotificationProcessor) {
-                    fragment?.setColor(colors)
+            .into(
+                object : LifeMusicColoredTarget(binding.image) {
+                    override fun onColorReady(colors: MediaNotificationProcessor) {
+                        fragment?.setColor(colors)
+                    }
                 }
-            })
+            )
     }
 }

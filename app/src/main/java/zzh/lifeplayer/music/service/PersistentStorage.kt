@@ -28,19 +28,20 @@ class PersistentStorage(context: Context) {
                 .setTitle(prefs.getString("song_title", ""))
                 .setSubtitle(prefs.getString("song_artist", ""))
                 .setIconUri(prefs.getString("song_cover", "")?.toUri())
-                .build(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
+                .build(),
+            MediaBrowserCompat.MediaItem.FLAG_PLAYABLE,
         )
     }
 
     companion object {
         const val PREFERENCES_NAME = "retro_recent"
 
-        @Volatile
-        private var instance: PersistentStorage? = null
+        @Volatile private var instance: PersistentStorage? = null
 
         fun getInstance(context: Context) =
-            instance ?: synchronized(this) {
-                instance ?: PersistentStorage(context).also { instance = it }
-            }
+            instance
+                ?: synchronized(this) {
+                    instance ?: PersistentStorage(context).also { instance = it }
+                }
     }
 }

@@ -14,6 +14,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.transition.MaterialArcMotion
+import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.transition.MaterialSharedAxis
+import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
+import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.song.OrderablePlaylistSongAdapter
 import zzh.lifeplayer.music.databinding.FragmentPlaylistDetailNewBinding
@@ -32,28 +44,15 @@ import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.ThemedFastScroller
-import com.bumptech.glide.Glide
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.transition.MaterialArcMotion
-import com.google.android.material.transition.MaterialContainerTransform
-import com.google.android.material.transition.MaterialSharedAxis
-import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
-import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
-
 
 class PlaylistDetailsFragment : AbsMainActivityFragment(R.layout.fragment_playlist_detail_new) {
     private val arguments by navArgs<PlaylistDetailsFragmentArgs>()
-    private val viewModel by viewModel<PlaylistDetailsViewModel> {
-        parametersOf(arguments.extraPlaylistId)
-    }
+    private val viewModel by
+        viewModel<PlaylistDetailsViewModel> { parametersOf(arguments.extraPlaylistId) }
 
     private var _binding: FragmentPlaylistDetailNewBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     private lateinit var playlist: PlaylistWithSongs
     private lateinit var playlistSongAdapter: OrderablePlaylistSongAdapter
@@ -62,12 +61,13 @@ class PlaylistDetailsFragment : AbsMainActivityFragment(R.layout.fragment_playli
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = MaterialContainerTransform(requireContext(), true).apply {
-            drawingViewId = R.id.fragment_container
-            scrimColor = Color.TRANSPARENT
-            setAllContainerColors(surfaceColor())
-            setPathMotion(MaterialArcMotion())
-        }
+        sharedElementEnterTransition =
+            MaterialContainerTransform(requireContext(), true).apply {
+                drawingViewId = R.id.fragment_container
+                scrimColor = Color.TRANSPARENT
+                setAllContainerColors(surfaceColor())
+                setPathMotion(MaterialArcMotion())
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,7 +78,7 @@ class PlaylistDetailsFragment : AbsMainActivityFragment(R.layout.fragment_playli
         mainActivity.setSupportActionBar(binding.toolbar)
         binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         binding.toolbar.title = null
-//        binding.container.transitionName = playlist.playlistEntity.playlistName
+        //        binding.container.transitionName = playlist.playlistEntity.playlistName
 
         setUpRecyclerView()
         setUpSearch()
@@ -94,9 +94,7 @@ class PlaylistDetailsFragment : AbsMainActivityFragment(R.layout.fragment_playli
                 MusicUtil.getPlaylistInfoString(requireContext(), playlist.songs.toSongs())
             binding.collapsingAppBarLayout.title = playlist.playlistEntity.playlistName
         }
-        viewModel.getSongs().observe(viewLifecycleOwner) {
-            songs(it.toSongs())
-        }
+        viewModel.getSongs().observe(viewLifecycleOwner) { songs(it.toSongs()) }
         viewModel.playlistExists().observe(viewLifecycleOwner) {
             if (!it) {
                 findNavController().navigateUp()
@@ -110,9 +108,7 @@ class PlaylistDetailsFragment : AbsMainActivityFragment(R.layout.fragment_playli
 
     private fun setupButtons() {
         binding.playButton.apply {
-            setOnClickListener {
-                MusicPlayerRemote.openQueue(playlistSongAdapter.dataSet, 0, true)
-            }
+            setOnClickListener { MusicPlayerRemote.openQueue(playlistSongAdapter.dataSet, 0, true) }
             accentColor()
         }
         binding.shuffleButton.apply {
@@ -144,19 +140,18 @@ class PlaylistDetailsFragment : AbsMainActivityFragment(R.layout.fragment_playli
             }
         }
         lifecycleScope.launch {
-            _searchFlow.debounce(300).collect { text ->
-                playlistSongAdapter.onFilter(text)
-            }
+            _searchFlow.debounce(300).collect { text -> playlistSongAdapter.onFilter(text) }
         }
     }
 
     private fun setUpRecyclerView() {
-        playlistSongAdapter = OrderablePlaylistSongAdapter(
-            arguments.extraPlaylistId,
-            requireActivity(),
-            ArrayList(),
-            R.layout.item_queue
-        )
+        playlistSongAdapter =
+            OrderablePlaylistSongAdapter(
+                arguments.extraPlaylistId,
+                requireActivity(),
+                ArrayList(),
+                R.layout.item_queue,
+            )
 
         val dragDropManager = RecyclerViewDragDropManager()
 
@@ -170,13 +165,14 @@ class PlaylistDetailsFragment : AbsMainActivityFragment(R.layout.fragment_playli
             dragDropManager.attachRecyclerView(this)
             ThemedFastScroller.create(this)
         }
-        playlistSongAdapter.registerAdapterDataObserver(object :
-            RecyclerView.AdapterDataObserver() {
-            override fun onChanged() {
-                super.onChanged()
-                checkIsEmpty()
+        playlistSongAdapter.registerAdapterDataObserver(
+            object : RecyclerView.AdapterDataObserver() {
+                override fun onChanged() {
+                    super.onChanged()
+                    checkIsEmpty()
+                }
             }
-        })
+        )
     }
 
     override fun onCreateMenu(menu: Menu, inflater: MenuInflater) {

@@ -26,8 +26,8 @@ class CardFragment : AbsPlayerFragment(R.layout.fragment_card_player) {
 
     private lateinit var playbackControlsFragment: CardPlaybackControlsFragment
     private var _binding: FragmentCardPlayerBinding? = null
-    private val binding get() = _binding!!
-
+    private val binding
+        get() = _binding!!
 
     override fun onShow() {
         playbackControlsFragment.show()
@@ -71,14 +71,16 @@ class CardFragment : AbsPlayerFragment(R.layout.fragment_card_player) {
         playbackControlsFragment = whichFragment(R.id.playbackControlsFragment)
         val playerAlbumCoverFragment: PlayerAlbumCoverFragment =
             whichFragment(R.id.playerAlbumCoverFragment)
-       playerAlbumCoverFragment.setCallbacks(this)
+        playerAlbumCoverFragment.setCallbacks(this)
         playerAlbumCoverFragment.removeSlideEffect()
     }
 
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.apply {
             inflateMenu(R.menu.menu_player)
-            setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
             setOnMenuItemClickListener(this@CardFragment)
 
             ToolbarContentTintHelper.colorizeToolbar(this, Color.WHITE, activity)

@@ -33,69 +33,133 @@ import zzh.lifeplayer.music.util.logE
 interface Repository {
 
     fun historySong(): List<HistoryEntity>
+
     fun favorites(): LiveData<List<SongEntity>>
+
     fun observableHistorySongs(): LiveData<List<Song>>
+
     fun albumById(albumId: Long): Album
+
     fun playlistSongs(playListId: Long): LiveData<List<SongEntity>>
+
     suspend fun fetchAlbums(): List<Album>
+
     suspend fun albumByIdAsync(albumId: Long): Album
+
     suspend fun allSongs(): List<Song>
+
     suspend fun fetchArtists(): List<Artist>
+
     suspend fun albumArtists(): List<Artist>
+
     suspend fun fetchLegacyPlaylist(): List<Playlist>
+
     suspend fun fetchGenres(): List<Genre>
+
     suspend fun search(query: String?, filter: Filter): MutableList<Any>
+
     suspend fun getPlaylistSongs(playlist: Playlist): List<Song>
+
     suspend fun getGenre(genreId: Long): List<Song>
+
     suspend fun artistInfo(name: String, lang: String?, cache: String?): Result<LastFmArtist>
+
     suspend fun albumInfo(artist: String, album: String): Result<LastFmAlbum>
+
     suspend fun artistById(artistId: Long): Artist
+
     suspend fun albumArtistByName(name: String): Artist
+
     suspend fun recentArtists(): List<Artist>
+
     suspend fun topArtists(): List<Artist>
+
     suspend fun topAlbums(): List<Album>
+
     suspend fun recentAlbums(): List<Album>
+
     suspend fun recentArtistsHome(): Home
+
     suspend fun topArtistsHome(): Home
+
     suspend fun topAlbumsHome(): Home
+
     suspend fun recentAlbumsHome(): Home
+
     suspend fun favoritePlaylistHome(): Home
+
     suspend fun suggestions(): List<Song>
+
     suspend fun genresHome(): Home
+
     suspend fun playlists(): Home
+
     suspend fun homeSections(): List<Home>
+
     suspend fun playlist(playlistId: Long): Playlist
+
     suspend fun fetchPlaylistWithSongs(): List<PlaylistWithSongs>
+
     suspend fun playlistSongs(playlistWithSongs: PlaylistWithSongs): List<Song>
+
     suspend fun insertSongs(songs: List<SongEntity>)
+
     suspend fun checkPlaylistExists(playlistName: String): List<PlaylistEntity>
+
     suspend fun createPlaylist(playlistEntity: PlaylistEntity): Long
+
     suspend fun fetchPlaylists(): List<PlaylistEntity>
+
     suspend fun deleteRoomPlaylist(playlists: List<PlaylistEntity>)
+
     suspend fun renameRoomPlaylist(playlistId: Long, name: String)
+
     suspend fun deleteSongsInPlaylist(songs: List<SongEntity>)
+
     suspend fun removeSongFromPlaylist(songEntity: SongEntity)
+
     suspend fun deletePlaylistSongs(playlists: List<PlaylistEntity>)
+
     suspend fun favoritePlaylist(): PlaylistEntity
+
     suspend fun isFavoriteSong(songEntity: SongEntity): List<SongEntity>
+
     suspend fun upsertSongInHistory(currentSong: Song)
+
     suspend fun favoritePlaylistSongs(): List<SongEntity>
+
     suspend fun recentSongs(): List<Song>
+
     suspend fun topPlayedSongs(): List<Song>
+
     suspend fun upsertSongInPlayCount(playCountEntity: PlayCountEntity)
+
     suspend fun deleteSongInPlayCount(playCountEntity: PlayCountEntity)
+
     suspend fun deleteSongInHistory(songId: Long)
+
     suspend fun clearSongHistory()
+
     suspend fun findSongExistInPlayCount(songId: Long): PlayCountEntity?
+
     suspend fun playCountSongs(): List<PlayCountEntity>
+
     suspend fun deleteSongs(songs: List<Song>)
+
     suspend fun contributor(): List<Contributor>
+
     suspend fun searchArtists(query: String): List<Artist>
+
     suspend fun searchSongs(query: String): List<Song>
+
     suspend fun searchAlbums(query: String): List<Album>
+
     suspend fun isSongFavorite(songId: Long): Boolean
+
     fun getSongByGenre(genreId: Long): Song
+
     fun checkPlaylistExists(playListId: Long): LiveData<Boolean>
+
     fun getPlaylist(playlistId: Long): LiveData<PlaylistWithSongs>
 }
 
@@ -184,10 +248,7 @@ class RealRepository(
         }
     }
 
-    override suspend fun albumInfo(
-        artist: String,
-        album: String,
-    ): Result<LastFmAlbum> {
+    override suspend fun albumInfo(artist: String, album: String): Result<LastFmAlbum> {
         return try {
             val lastFmAlbum = lastFMService.albumInfo(artist, album)
             Success(lastFmAlbum)
@@ -199,13 +260,14 @@ class RealRepository(
 
     override suspend fun homeSections(): List<Home> {
         val homeSections = mutableListOf<Home>()
-        val sections: List<Home> = listOf(
-            topArtistsHome(),
-            topAlbumsHome(),
-            recentArtistsHome(),
-            recentAlbumsHome(),
-            favoritePlaylistHome()
-        )
+        val sections: List<Home> =
+            listOf(
+                topArtistsHome(),
+                topAlbumsHome(),
+                recentArtistsHome(),
+                recentAlbumsHome(),
+                favoritePlaylistHome(),
+            )
         for (section in sections) {
             if (section.arrayList.isNotEmpty()) {
                 homeSections.add(section)
@@ -214,25 +276,21 @@ class RealRepository(
         return homeSections
     }
 
-
-    override suspend fun playlist(playlistId: Long) =
-        playlistRepository.playlist(playlistId)
+    override suspend fun playlist(playlistId: Long) = playlistRepository.playlist(playlistId)
 
     override suspend fun fetchPlaylistWithSongs(): List<PlaylistWithSongs> =
         roomRepository.playlistWithSongs()
 
-    override fun getPlaylist(playlistId: Long): LiveData<PlaylistWithSongs> = roomRepository.getPlaylist(playlistId)
+    override fun getPlaylist(playlistId: Long): LiveData<PlaylistWithSongs> =
+        roomRepository.getPlaylist(playlistId)
 
     override suspend fun playlistSongs(playlistWithSongs: PlaylistWithSongs): List<Song> =
-        playlistWithSongs.songs.map {
-            it.toSong()
-        }
+        playlistWithSongs.songs.map { it.toSong() }
 
     override fun playlistSongs(playListId: Long): LiveData<List<SongEntity>> =
         roomRepository.getSongs(playListId)
 
-    override suspend fun insertSongs(songs: List<SongEntity>) =
-        roomRepository.insertSongs(songs)
+    override suspend fun insertSongs(songs: List<SongEntity>) = roomRepository.insertSongs(songs)
 
     override suspend fun checkPlaylistExists(playlistName: String): List<PlaylistEntity> =
         roomRepository.checkPlaylistExists(playlistName)
@@ -292,24 +350,18 @@ class RealRepository(
     override suspend fun findSongExistInPlayCount(songId: Long): PlayCountEntity? =
         roomRepository.findSongExistInPlayCount(songId)
 
-    override suspend fun playCountSongs(): List<PlayCountEntity> =
-        roomRepository.playCountSongs()
+    override suspend fun playCountSongs(): List<PlayCountEntity> = roomRepository.playCountSongs()
 
     override fun observableHistorySongs(): LiveData<List<Song>> =
-        roomRepository.observableHistorySongs().map {
-            it.fromHistoryToSongs()
-        }
+        roomRepository.observableHistorySongs().map { it.fromHistoryToSongs() }
 
-    override fun historySong(): List<HistoryEntity> =
-        roomRepository.historySongs()
+    override fun historySong(): List<HistoryEntity> = roomRepository.historySongs()
 
     override fun favorites(): LiveData<List<SongEntity>> =
         roomRepository.favoritePlaylistLiveData(context.getString(R.string.favorites))
 
     override suspend fun suggestions(): List<Song> {
-        return NotPlayedPlaylist().songs().shuffled().takeIf {
-            it.size > 9
-        } ?: emptyList()
+        return NotPlayedPlaylist().songs().shuffled().takeIf { it.size > 9 } ?: emptyList()
     }
 
     override suspend fun genresHome(): Home {
@@ -343,9 +395,7 @@ class RealRepository(
     }
 
     override suspend fun favoritePlaylistHome(): Home {
-        val songs = favoritePlaylistSongs().map {
-            it.toSong()
-        }
+        val songs = favoritePlaylistSongs().map { it.toSong() }
         return Home(songs, FAVOURITES, R.string.favorites)
     }
 }

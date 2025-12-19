@@ -37,7 +37,8 @@ class MD3PlayerFragment : AbsPlayerFragment(R.layout.fragment_md3_player) {
     private lateinit var controlsFragment: MD3PlaybackControlsFragment
 
     private var _binding: FragmentMd3PlayerBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override fun onShow() {
         controlsFragment.show()
@@ -59,7 +60,7 @@ class MD3PlayerFragment : AbsPlayerFragment(R.layout.fragment_md3_player) {
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             ATHUtil.resolveColor(requireContext(), androidx.appcompat.R.attr.colorControlNormal),
-            requireActivity()
+            requireActivity(),
         )
     }
 
@@ -89,22 +90,26 @@ class MD3PlayerFragment : AbsPlayerFragment(R.layout.fragment_md3_player) {
 
     private fun setUpSubFragments() {
         controlsFragment =
-            childFragmentManager.findFragmentById(R.id.playbackControlsFragment) as MD3PlaybackControlsFragment
+            childFragmentManager.findFragmentById(R.id.playbackControlsFragment)
+                as MD3PlaybackControlsFragment
         val playerAlbumCoverFragment =
-            childFragmentManager.findFragmentById(R.id.playerAlbumCoverFragment) as PlayerAlbumCoverFragment
+            childFragmentManager.findFragmentById(R.id.playerAlbumCoverFragment)
+                as PlayerAlbumCoverFragment
         playerAlbumCoverFragment.setCallbacks(this)
     }
 
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.inflateMenu(R.menu.menu_player)
-        //binding.playerToolbar.menu.setUpWithIcons()
-        binding.playerToolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+        // binding.playerToolbar.menu.setUpWithIcons()
+        binding.playerToolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
         binding.playerToolbar.setOnMenuItemClickListener(this)
 
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             ATHUtil.resolveColor(requireContext(), androidx.appcompat.R.attr.colorControlNormal),
-            requireActivity()
+            requireActivity(),
         )
     }
 

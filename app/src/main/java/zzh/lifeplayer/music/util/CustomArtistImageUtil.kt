@@ -21,44 +21,40 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.core.content.edit
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import java.io.File
+import java.io.IOException
+import java.util.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.withContext
 import zzh.lifeplayer.music.App
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.extensions.showToast
 import zzh.lifeplayer.music.model.Artist
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.IOException
-import java.util.*
-
 
 class CustomArtistImageUtil private constructor(context: Context) {
 
-    private val mPreferences: SharedPreferences = context.applicationContext.getSharedPreferences(
-        CUSTOM_ARTIST_IMAGE_PREFS,
-        Context.MODE_PRIVATE
-    )
+    private val mPreferences: SharedPreferences =
+        context.applicationContext.getSharedPreferences(
+            CUSTOM_ARTIST_IMAGE_PREFS,
+            Context.MODE_PRIVATE,
+        )
 
     suspend fun setCustomArtistImage(artist: Artist, uri: Uri) {
         val context = App.getContext()
         withContext(IO) {
             runCatching {
-                Glide.with(context)
-                    .asBitmap()
-                    .load(uri)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .submit()
-                    .get()
-            }
-                .onSuccess {
-                    saveImage(context, artist, it)
+                    Glide.with(context)
+                        .asBitmap()
+                        .load(uri)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .submit()
+                        .get()
                 }
-                .onFailure {
-                    context.showToast(R.string.error_load_failed)
-                }
+                .onSuccess { saveImage(context, artist, it) }
+                .onFailure { context.showToast(R.string.error_load_failed) }
         }
     }
 
@@ -74,8 +70,9 @@ class CustomArtistImageUtil private constructor(context: Context) {
         var successful = false
         try {
             file.outputStream().buffered().use { bos ->
-                successful = ImageUtil.resizeBitmap(bitmap, 2048)
-                    .compress(Bitmap.CompressFormat.JPEG, 100, bos)
+                successful =
+                    ImageUtil.resizeBitmap(bitmap, 2048)
+                        .compress(Bitmap.CompressFormat.JPEG, 100, bos)
             }
         } catch (e: IOException) {
             context.showToast(e.toString(), Toast.LENGTH_LONG)
@@ -83,11 +80,10 @@ class CustomArtistImageUtil private constructor(context: Context) {
 
         if (successful) {
             mPreferences.edit { putBoolean(getFileName(artist), true) }
-            ArtistSignatureUtil.getInstance(context)
-                .updateArtistSignature(artist.name)
+            ArtistSignatureUtil.getInstance(context).updateArtistSignature(artist.name)
             context.contentResolver.notifyChange(
                 MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI,
-                null
+                null,
             ) // trigger media store changed to force artist image reload
         }
     }
@@ -96,10 +92,12 @@ class CustomArtistImageUtil private constructor(context: Context) {
         withContext(IO) {
             mPreferences.edit { putBoolean(getFileName(artist), false) }
             ArtistSignatureUtil.getInstance(App.getContext()).updateArtistSignature(artist.name)
-            App.getContext().contentResolver.notifyChange(
-                MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI,
-                null
-            ) // trigger media store changed to force artist image reload
+            App.getContext()
+                .contentResolver
+                .notifyChange(
+                    MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI,
+                    null,
+                ) // trigger media store changed to force artist image reload
 
             val file = getFile(artist)
             if (file.exists()) {

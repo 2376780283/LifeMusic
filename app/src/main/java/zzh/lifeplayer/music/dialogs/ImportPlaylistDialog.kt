@@ -17,11 +17,11 @@ package zzh.lifeplayer.music.dialogs
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.extensions.colorButtons
 import zzh.lifeplayer.music.extensions.materialDialog
 import zzh.lifeplayer.music.fragments.LibraryViewModel
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class ImportPlaylistDialog : DialogFragment() {
     private val libraryViewModel by activityViewModel<LibraryViewModel>()

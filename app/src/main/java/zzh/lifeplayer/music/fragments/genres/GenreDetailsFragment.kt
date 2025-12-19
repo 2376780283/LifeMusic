@@ -26,6 +26,10 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.transition.MaterialSharedAxis
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.song.SongAdapter
 import zzh.lifeplayer.music.databinding.FragmentPlaylistDetailBinding
@@ -34,10 +38,6 @@ import zzh.lifeplayer.music.fragments.base.AbsMainActivityFragment
 import zzh.lifeplayer.music.helper.menu.GenreMenuHelper
 import zzh.lifeplayer.music.model.Genre
 import zzh.lifeplayer.music.model.Song
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.transition.MaterialSharedAxis
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 class GenreDetailsFragment : AbsMainActivityFragment(R.layout.fragment_playlist_detail) {
     private val arguments by navArgs<GenreDetailsFragmentArgs>()
@@ -47,7 +47,8 @@ class GenreDetailsFragment : AbsMainActivityFragment(R.layout.fragment_playlist_
     private lateinit var genre: Genre
     private lateinit var songAdapter: SongAdapter
     private var _binding: FragmentPlaylistDetailBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,13 +62,9 @@ class GenreDetailsFragment : AbsMainActivityFragment(R.layout.fragment_playlist_
         binding.toolbar.title = arguments.extraGenre.name
         binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         setupRecyclerView()
-        detailsViewModel.getSongs().observe(viewLifecycleOwner) {
-            songs(it)
-        }
+        detailsViewModel.getSongs().observe(viewLifecycleOwner) { songs(it) }
         postponeEnterTransition()
-        view.doOnPreDraw {
-            startPostponedEnterTransition()
-        }
+        view.doOnPreDraw { startPostponedEnterTransition() }
         binding.appBarLayout.statusBarForeground =
             MaterialShapeDrawable.createWithElevationOverlay(requireContext())
     }
@@ -79,12 +76,14 @@ class GenreDetailsFragment : AbsMainActivityFragment(R.layout.fragment_playlist_
             layoutManager = LinearLayoutManager(requireContext())
             adapter = songAdapter
         }
-        songAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onChanged() {
-                super.onChanged()
-                checkIsEmpty()
+        songAdapter.registerAdapterDataObserver(
+            object : RecyclerView.AdapterDataObserver() {
+                override fun onChanged() {
+                    super.onChanged()
+                    checkIsEmpty()
+                }
             }
-        })
+        )
     }
 
     fun songs(songs: List<Song>) {

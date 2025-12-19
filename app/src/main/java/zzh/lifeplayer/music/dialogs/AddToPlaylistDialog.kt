@@ -18,6 +18,7 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import zzh.lifeplayer.music.EXTRA_PLAYLISTS
 import zzh.lifeplayer.music.EXTRA_SONG
 import zzh.lifeplayer.music.R
@@ -27,7 +28,6 @@ import zzh.lifeplayer.music.extensions.extraNotNull
 import zzh.lifeplayer.music.extensions.materialDialog
 import zzh.lifeplayer.music.fragments.LibraryViewModel
 import zzh.lifeplayer.music.model.Song
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class AddToPlaylistDialog : DialogFragment() {
     private val libraryViewModel by activityViewModel<LibraryViewModel>()
@@ -41,10 +41,7 @@ class AddToPlaylistDialog : DialogFragment() {
 
         fun create(playlistEntities: List<PlaylistEntity>, songs: List<Song>): AddToPlaylistDialog {
             return AddToPlaylistDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_SONG to songs,
-                    EXTRA_PLAYLISTS to playlistEntities
-                )
+                arguments = bundleOf(EXTRA_SONG to songs, EXTRA_PLAYLISTS to playlistEntities)
             }
         }
     }

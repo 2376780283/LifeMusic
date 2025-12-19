@@ -1,6 +1,6 @@
 package zzh.lifeplayer.music.fragments.player
 
-import android.util.TypedValue
+// import zzh.lifeplayer.music.util.PreferenceUtil.lyricsfontsize
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -9,6 +9,11 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
+import java.io.File
+import java.io.FileNotFoundException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.jaudiotagger.audio.exceptions.CannotReadException
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.SHOW_LYRICS
 import zzh.lifeplayer.music.databinding.FragmentCoverLyricsBinding
@@ -23,26 +28,28 @@ import zzh.lifeplayer.music.model.lyrics.AbsSynchronizedLyrics
 import zzh.lifeplayer.music.model.lyrics.Lyrics
 import zzh.lifeplayer.music.util.LyricUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
-// import zzh.lifeplayer.music.util.PreferenceUtil.lyricsfontsize
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.jaudiotagger.audio.exceptions.CannotReadException
-import java.io.File
-import java.io.FileNotFoundException
 
-class CoverLyricsFragment : AbsMusicServiceFragment(R.layout.fragment_cover_lyrics),
-    MusicProgressViewUpdateHelper.Callback, SharedPreferences.OnSharedPreferenceChangeListener {
+class CoverLyricsFragment :
+    AbsMusicServiceFragment(R.layout.fragment_cover_lyrics),
+    MusicProgressViewUpdateHelper.Callback,
+    SharedPreferences.OnSharedPreferenceChangeListener {
     private var progressViewUpdateHelper: MusicProgressViewUpdateHelper? = null
     private var _binding: FragmentCoverLyricsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
-    private val lyricsLayout: FrameLayout get() = binding.playerLyrics
-    private val lyricsLine1: TextView get() = binding.playerLyricsLine1
-    private val lyricsLine2: TextView get() = binding.playerLyricsLine2
-    
+    private val lyricsLayout: FrameLayout
+        get() = binding.playerLyrics
+
+    private val lyricsLine1: TextView
+        get() = binding.playerLyricsLine1
+
+    private val lyricsLine2: TextView
+        get() = binding.playerLyricsLine2
+
     private var lyrics: Lyrics? = null
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentCoverLyricsBinding.bind(view)
@@ -55,11 +62,8 @@ class CoverLyricsFragment : AbsMusicServiceFragment(R.layout.fragment_cover_lyri
         if (nps == NowPlayingScreen.Fit || nps == NowPlayingScreen.Full) {
             binding.root.background = null
         }
-      
-        binding.playerLyricsLine2.setOnClickListener {
-            goToLyrics(requireActivity())
-        }
-  
+
+        binding.playerLyricsLine2.setOnClickListener { goToLyrics(requireActivity()) }
     }
 
     fun setColors(color: MediaNotificationProcessor) {
@@ -70,7 +74,6 @@ class CoverLyricsFragment : AbsMusicServiceFragment(R.layout.fragment_cover_lyri
             playerLyricsLine2.setTextColor(color.primaryTextColor)
             playerLyricsLine2.setShadowLayer(dipToPix(10f), 0f, 0f, color.backgroundColor)
         }
-
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
@@ -83,7 +86,6 @@ class CoverLyricsFragment : AbsMusicServiceFragment(R.layout.fragment_cover_lyri
                 progressViewUpdateHelper?.stop()
                 binding.root.isVisible = false
             }
-         
         }
     }
 
@@ -105,20 +107,22 @@ class CoverLyricsFragment : AbsMusicServiceFragment(R.layout.fragment_cover_lyri
         lyrics = null
         lifecycleScope.launch(Dispatchers.IO) {
             val song = MusicPlayerRemote.currentSong
-            lyrics = try {
-                val lrcFile: File? = LyricUtil.getSyncedLyricsFile(song)
-                val data: String = LyricUtil.getStringFromLrc(lrcFile)
-                Lyrics.parse(song,
-                    data.ifEmpty {
-                        // Get Embedded Lyrics
-                        LyricUtil.getEmbeddedSyncedLyrics(song.data)
-                    }
-                )
-            } catch (err: FileNotFoundException) {
-                null
-            } catch (e: CannotReadException) {
-                null
-            }
+            lyrics =
+                try {
+                    val lrcFile: File? = LyricUtil.getSyncedLyricsFile(song)
+                    val data: String = LyricUtil.getStringFromLrc(lrcFile)
+                    Lyrics.parse(
+                        song,
+                        data.ifEmpty {
+                            // Get Embedded Lyrics
+                            LyricUtil.getEmbeddedSyncedLyrics(song.data)
+                        },
+                    )
+                } catch (err: FileNotFoundException) {
+                    null
+                } catch (e: CannotReadException) {
+                    null
+                }
         }
     }
 
@@ -149,9 +153,9 @@ class CoverLyricsFragment : AbsMusicServiceFragment(R.layout.fragment_cover_lyri
             lyricsLine2.measure(
                 View.MeasureSpec.makeMeasureSpec(
                     lyricsLine2.measuredWidth,
-                    View.MeasureSpec.EXACTLY
+                    View.MeasureSpec.EXACTLY,
                 ),
-                View.MeasureSpec.UNSPECIFIED
+                View.MeasureSpec.UNSPECIFIED,
             )
             val h: Float = lyricsLine2.measuredHeight.toFloat()
 
@@ -172,7 +176,10 @@ class CoverLyricsFragment : AbsMusicServiceFragment(R.layout.fragment_cover_lyri
     }
 
     private fun hideLyricsLayout() {
-        lyricsLayout.animate().alpha(0f).setDuration(AbsPlayerFragment.VISIBILITY_ANIM_DURATION)
+        lyricsLayout
+            .animate()
+            .alpha(0f)
+            .setDuration(AbsPlayerFragment.VISIBILITY_ANIM_DURATION)
             .withEndAction {
                 if (_binding == null) return@withEndAction
                 lyricsLayout.isVisible = false

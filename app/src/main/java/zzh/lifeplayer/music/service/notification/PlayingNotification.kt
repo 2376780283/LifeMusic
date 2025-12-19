@@ -28,6 +28,9 @@ import android.support.v4.media.session.MediaSessionCompat
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.media.app.NotificationCompat.MediaStyle
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.activities.MainActivity
@@ -41,14 +44,9 @@ import zzh.lifeplayer.music.service.MusicService.Companion.ACTION_SKIP
 import zzh.lifeplayer.music.service.MusicService.Companion.ACTION_TOGGLE_PAUSE
 import zzh.lifeplayer.music.service.MusicService.Companion.TOGGLE_FAVORITE
 import zzh.lifeplayer.music.util.PreferenceUtil
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 
-class PlayingNotification(
-    val context: MusicService,
-    mediaSessionToken: MediaSessionCompat.Token,
-) : NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID) {
+class PlayingNotification(val context: MusicService, mediaSessionToken: MediaSessionCompat.Token) :
+    NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID) {
 
     private var currentTarget: CustomTarget<Bitmap>? = null
 
@@ -61,35 +59,39 @@ class PlayingNotification(
                 context,
                 0,
                 action,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
 
         val serviceName = ComponentName(context, MusicService::class.java)
         val intent = Intent(ACTION_QUIT)
         intent.component = serviceName
-        val deleteIntent = PendingIntent.getService(
-            context,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or (PendingIntent.FLAG_IMMUTABLE)
-        )
+        val deleteIntent =
+            PendingIntent.getService(
+                context,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or (PendingIntent.FLAG_IMMUTABLE),
+            )
         val toggleFavorite = buildFavoriteAction(false)
         val playPauseAction = buildPlayAction(true)
-        val previousAction = NotificationCompat.Action(
-            R.drawable.ic_skip_previous,
-            context.getString(R.string.action_previous),
-            retrievePlaybackAction(ACTION_REWIND)
-        )
-        val nextAction = NotificationCompat.Action(
-            R.drawable.ic_skip_next,
-            context.getString(R.string.action_next),
-            retrievePlaybackAction(ACTION_SKIP)
-        )
-        val dismissAction = NotificationCompat.Action(
-            R.drawable.ic_close,
-            context.getString(R.string.action_cancel),
-            retrievePlaybackAction(ACTION_QUIT)
-        )
+        val previousAction =
+            NotificationCompat.Action(
+                R.drawable.ic_skip_previous,
+                context.getString(R.string.action_previous),
+                retrievePlaybackAction(ACTION_REWIND),
+            )
+        val nextAction =
+            NotificationCompat.Action(
+                R.drawable.ic_skip_next,
+                context.getString(R.string.action_next),
+                retrievePlaybackAction(ACTION_SKIP),
+            )
+        val dismissAction =
+            NotificationCompat.Action(
+                R.drawable.ic_close,
+                context.getString(R.string.action_cancel),
+                retrievePlaybackAction(ACTION_QUIT),
+            )
         setSmallIcon(R.drawable.ic_notification)
         setContentIntent(clickIntent)
         setDeleteIntent(deleteIntent)
@@ -103,9 +105,7 @@ class PlayingNotification(
         }
 
         setStyle(
-            MediaStyle()
-                .setMediaSession(mediaSessionToken)
-                .setShowActionsInCompactView(1, 2, 3)
+            MediaStyle().setMediaSession(mediaSessionToken).setShowActionsInCompactView(1, 2, 3)
         )
         setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
     }
@@ -122,44 +122,45 @@ class PlayingNotification(
         setAlbumArtImage(null)
         onUpdate()
 
-        val bigNotificationImageSize = context.resources
-            .getDimensionPixelSize(R.dimen.notification_big_image_size)
+        val bigNotificationImageSize =
+            context.resources.getDimensionPixelSize(R.dimen.notification_big_image_size)
         currentTarget?.let { Glide.with(context).clear(it) }
-        currentTarget = Glide.with(context)
-            .asBitmap()
-            .songCoverOptions(song)
-            .load(LifeGlideExtension.getSongModel(song))
-            //.checkIgnoreMediaStore()
-            .centerCrop()
-            .into(object : CustomTarget<Bitmap>(
-                bigNotificationImageSize,
-                bigNotificationImageSize
-            ) {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    setLargeIcon(resource)
-                    onUpdate()
-                }
+        currentTarget =
+            Glide.with(context)
+                .asBitmap()
+                .songCoverOptions(song)
+                .load(LifeGlideExtension.getSongModel(song))
+                // .checkIgnoreMediaStore()
+                .centerCrop()
+                .into(
+                    object :
+                        CustomTarget<Bitmap>(bigNotificationImageSize, bigNotificationImageSize) {
+                        override fun onResourceReady(
+                            resource: Bitmap,
+                            transition: Transition<in Bitmap>?,
+                        ) {
+                            setLargeIcon(resource)
+                            onUpdate()
+                        }
 
-                override fun onLoadFailed(errorDrawable: Drawable?) {
-                    super.onLoadFailed(errorDrawable)
-                    setAlbumArtImage(null)
-                    onUpdate()
-                }
+                        override fun onLoadFailed(errorDrawable: Drawable?) {
+                            super.onLoadFailed(errorDrawable)
+                            setAlbumArtImage(null)
+                            onUpdate()
+                        }
 
-                override fun onLoadCleared(placeholder: Drawable?) {
-                    setAlbumArtImage(null)
-                    onUpdate()
-                }
-            })
+                        override fun onLoadCleared(placeholder: Drawable?) {
+                            setAlbumArtImage(null)
+                            onUpdate()
+                        }
+                    }
+                )
     }
 
     private fun setAlbumArtImage(image: Bitmap?) {
         if (image == null) {
             setLargeIcon(
-                BitmapFactory.decodeResource(
-                    context.resources,
-                    R.drawable.default_audio_art
-                )
+                BitmapFactory.decodeResource(context.resources, R.drawable.default_audio_art)
             )
         } else {
             setLargeIcon(image)
@@ -170,20 +171,22 @@ class PlayingNotification(
         val playButtonResId =
             if (isPlaying) R.drawable.ic_pause_white_48dp else R.drawable.ic_play_arrow_white_48dp
         return NotificationCompat.Action.Builder(
-            playButtonResId,
-            context.getString(R.string.action_play_pause),
-            retrievePlaybackAction(ACTION_TOGGLE_PAUSE)
-        ).build()
+                playButtonResId,
+                context.getString(R.string.action_play_pause),
+                retrievePlaybackAction(ACTION_TOGGLE_PAUSE),
+            )
+            .build()
     }
 
     private fun buildFavoriteAction(isFavorite: Boolean): NotificationCompat.Action {
         val favoriteResId =
             if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
         return NotificationCompat.Action.Builder(
-            favoriteResId,
-            context.getString(R.string.action_toggle_favorite),
-            retrievePlaybackAction(TOGGLE_FAVORITE)
-        ).build()
+                favoriteResId,
+                context.getString(R.string.action_toggle_favorite),
+                retrievePlaybackAction(TOGGLE_FAVORITE),
+            )
+            .build()
     }
 
     @SuppressLint("RestrictedApi")
@@ -205,7 +208,10 @@ class PlayingNotification(
         val intent = Intent(action)
         intent.component = serviceName
         return PendingIntent.getService(
-            context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
     }
 
@@ -213,20 +219,17 @@ class PlayingNotification(
         internal const val NOTIFICATION_CHANNEL_ID = "playing_notification"
         const val NOTIFICATION_ID = 1
 
-
         @RequiresApi(26)
-        fun createNotificationChannel(
-            context: Context,
-            notificationManager: NotificationManager
-        ) {
-            var notificationChannel: NotificationChannel? = notificationManager
-                .getNotificationChannel(NOTIFICATION_CHANNEL_ID)
+        fun createNotificationChannel(context: Context, notificationManager: NotificationManager) {
+            var notificationChannel: NotificationChannel? =
+                notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID)
             if (notificationChannel == null) {
-                notificationChannel = NotificationChannel(
-                    NOTIFICATION_CHANNEL_ID,
-                    context.getString(R.string.playing_notification_name),
-                    NotificationManager.IMPORTANCE_LOW
-                )
+                notificationChannel =
+                    NotificationChannel(
+                        NOTIFICATION_CHANNEL_ID,
+                        context.getString(R.string.playing_notification_name),
+                        NotificationManager.IMPORTANCE_LOW,
+                    )
                 notificationChannel.description =
                     context.getString(R.string.playing_notification_description)
                 notificationChannel.enableLights(false)

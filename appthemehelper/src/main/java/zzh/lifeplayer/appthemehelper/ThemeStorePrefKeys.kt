@@ -1,8 +1,6 @@
 package zzh.lifeplayer.appthemehelper
 
-/**
- * @author Aidan Follestad (afollestad), Karim Abou Zeid (kabouzeid)
- */
+/** @author Aidan Follestad (afollestad), Karim Abou Zeid (kabouzeid) */
 internal interface ThemeStorePrefKeys {
     companion object {
         const val CONFIG_PREFS_KEY_DEFAULT = "[[kabouzeid_app-theme-helper]]"

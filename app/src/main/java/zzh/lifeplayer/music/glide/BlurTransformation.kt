@@ -6,13 +6,12 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.renderscript.*
 import androidx.annotation.FloatRange
-import zzh.lifeplayer.music.BuildConfig
-import zzh.lifeplayer.music.helper.StackBlur
-import zzh.lifeplayer.music.util.ImageUtil
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import java.security.MessageDigest
-
+import zzh.lifeplayer.music.BuildConfig
+import zzh.lifeplayer.music.helper.StackBlur
+import zzh.lifeplayer.music.util.ImageUtil
 
 @Suppress("Deprecation")
 class BlurTransformation private constructor(builder: Builder) : BitmapTransformation() {
@@ -42,7 +41,8 @@ class BlurTransformation private constructor(builder: Builder) : BitmapTransform
         }
 
         /**
-         * @param sampling The inSampleSize to use. Must be a power of 2, or 1 for no down sampling or 0 for auto detect sampling. Default is 0.
+         * @param sampling The inSampleSize to use. Must be a power of 2, or 1 for no down sampling
+         *   or 0 for auto detect sampling. Default is 0.
          * @return the same Builder
          */
         fun sampling(sampling: Int): Builder {
@@ -72,11 +72,12 @@ class BlurTransformation private constructor(builder: Builder) : BitmapTransform
         outWidth: Int,
         outHeight: Int,
     ): Bitmap {
-        val sampling = if (this.sampling == 0) {
-            ImageUtil.calculateInSampleSize(toTransform.width, toTransform.height, 100)
-        } else {
-            this.sampling
-        }
+        val sampling =
+            if (this.sampling == 0) {
+                ImageUtil.calculateInSampleSize(toTransform.width, toTransform.height, 100)
+            } else {
+                this.sampling
+            }
         val width = toTransform.width
         val height = toTransform.height
         val scaledWidth = width / sampling
@@ -90,12 +91,13 @@ class BlurTransformation private constructor(builder: Builder) : BitmapTransform
 
         try {
             val rs = RenderScript.create(context!!.applicationContext)
-            val input = Allocation.createFromBitmap(
-                rs,
-                out,
-                Allocation.MipmapControl.MIPMAP_NONE,
-                Allocation.USAGE_SCRIPT
-            )
+            val input =
+                Allocation.createFromBitmap(
+                    rs,
+                    out,
+                    Allocation.MipmapControl.MIPMAP_NONE,
+                    Allocation.USAGE_SCRIPT,
+                )
             val output = Allocation.createTyped(rs, input.type)
             val script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
 
@@ -111,7 +113,9 @@ class BlurTransformation private constructor(builder: Builder) : BitmapTransform
 
             return out
         } catch (e: RSRuntimeException) {
-            // on some devices RenderScript.create() throws: android.support.v8.renderscript.RSRuntimeException: Error loading libRSSupport library
+            // on some devices RenderScript.create() throws:
+            // android.support.v8.renderscript.RSRuntimeException: Error loading libRSSupport
+            // library
             if (BuildConfig.DEBUG) e.printStackTrace()
         }
 
@@ -120,9 +124,7 @@ class BlurTransformation private constructor(builder: Builder) : BitmapTransform
 
     override fun updateDiskCacheKey(messageDigest: MessageDigest) {
         messageDigest.update(
-            "BlurTransformation(radius=$blurRadius, sampling=$sampling)".toByteArray(
-                CHARSET
-            )
+            "BlurTransformation(radius=$blurRadius, sampling=$sampling)".toByteArray(CHARSET)
         )
     }
 

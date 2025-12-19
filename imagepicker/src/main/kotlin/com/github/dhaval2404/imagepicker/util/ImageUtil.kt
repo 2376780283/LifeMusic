@@ -26,10 +26,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 /**
- * Created on : June 18, 2016
- * Author     : zetbaitsu
- * Name       : Zetra
- * GitHub     : https://github.com/zetbaitsu
+ * Created on : June 18, 2016 Author : zetbaitsu Name : Zetra GitHub : https://github.com/zetbaitsu
  *
  * For More Info Visit: https://github.com/zetbaitsu/Compressor
  */
@@ -50,11 +47,8 @@ object ImageUtil {
         try {
             fileOutputStream = FileOutputStream(destinationPath)
             // write the compressed bitmap at the destination specified by destinationPath.
-            decodeSampledBitmapFromFile(imageFile, reqWidth, reqHeight)?.compress(
-                compressFormat,
-                100,
-                fileOutputStream,
-            )
+            decodeSampledBitmapFromFile(imageFile, reqWidth, reqHeight)
+                ?.compress(compressFormat, 100, fileOutputStream)
         } finally {
             if (fileOutputStream != null) {
                 fileOutputStream.flush()
@@ -182,9 +176,7 @@ object ImageUtil {
         return inSampleSize
     }
 
-    /**
-     * Ref: https://developer.android.com/topic/performance/graphics/manage-memory#kotlin
-     */
+    /** Ref: https://developer.android.com/topic/performance/graphics/manage-memory#kotlin */
     private fun canUseForInBitmap(
         candidate: Bitmap,
         targetOptions: BitmapFactory.Options,
@@ -211,7 +203,8 @@ object ImageUtil {
     private fun getBytesPerPixel(config: Bitmap.Config): Int =
         when (config) {
             Bitmap.Config.ARGB_8888 -> 4
-            Bitmap.Config.RGB_565, Bitmap.Config.ARGB_4444 -> 2
+            Bitmap.Config.RGB_565,
+            Bitmap.Config.ARGB_4444 -> 2
             Bitmap.Config.ALPHA_8 -> 1
             else -> 1
         }

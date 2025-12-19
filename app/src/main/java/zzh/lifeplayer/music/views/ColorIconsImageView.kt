@@ -21,21 +21,18 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
+import com.google.android.material.color.MaterialColors
 import zzh.lifeplayer.appthemehelper.ThemeStore
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.music.R
-import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.LifeColorUtil
-import com.google.android.material.color.MaterialColors
+import zzh.lifeplayer.music.util.PreferenceUtil
 
-
-class ColorIconsImageView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = -1
-) : AppCompatImageView(context, attrs, defStyleAttr) {
-
+class ColorIconsImageView
+@JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = -1) :
+    AppCompatImageView(context, attrs, defStyleAttr) {
 
     init {
         // Load the styled attributes and set their properties
@@ -51,12 +48,11 @@ class ColorIconsImageView @JvmOverloads constructor(
             val desaturatedColor = LifeColorUtil.desaturateColor(color, 0.4f)
             backgroundTintList = ColorStateList.valueOf(desaturatedColor)
             imageTintList =
-                ColorStateList.valueOf(ATHUtil.resolveColor(context, com.google.android.material.R.attr.colorSurface))
+                ColorStateList.valueOf(
+                    ATHUtil.resolveColor(context, com.google.android.material.R.attr.colorSurface)
+                )
         } else {
-            val finalColor = MaterialColors.harmonize(
-                color,
-                ThemeStore.accentColor(context)
-            )
+            val finalColor = MaterialColors.harmonize(color, ThemeStore.accentColor(context))
             backgroundTintList = ColorStateList.valueOf(ColorUtil.adjustAlpha(finalColor, 0.22f))
             imageTintList = ColorStateList.valueOf(ColorUtil.withAlpha(finalColor, 0.75f))
         }

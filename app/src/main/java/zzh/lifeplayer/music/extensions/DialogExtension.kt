@@ -16,22 +16,18 @@ package zzh.lifeplayer.music.extensions
 
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import zzh.lifeplayer.music.BuildConfig
-import zzh.lifeplayer.music.R
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import zzh.lifeplayer.music.BuildConfig
+import zzh.lifeplayer.music.R
 
 fun Fragment.materialDialog(title: Int): MaterialAlertDialogBuilder {
     return if (BuildConfig.DEBUG) {
-        MaterialAlertDialogBuilder(
-            requireContext(),
-            R.style.MaterialAlertDialogTheme
-        )
-    } else {
-        MaterialAlertDialogBuilder(
-            requireContext()
-        )
-    }.setTitle(title)
+            MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialogTheme)
+        } else {
+            MaterialAlertDialogBuilder(requireContext())
+        }
+        .setTitle(title)
 }
 
 fun AlertDialog.colorButtons(): AlertDialog {
@@ -44,6 +40,5 @@ fun AlertDialog.colorButtons(): AlertDialog {
 }
 
 fun Fragment.materialDialog(): MaterialDialog {
-    return MaterialDialog(requireContext())
-        .cornerRadius(res = R.dimen.m3_dialog_corner_size)
+    return MaterialDialog(requireContext()).cornerRadius(res = R.dimen.m3_dialog_corner_size)
 }

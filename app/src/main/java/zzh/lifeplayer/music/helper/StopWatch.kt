@@ -21,32 +21,25 @@ package zzh.lifeplayer.music.helper
  */
 class StopWatch {
 
-    /**
-     * The time the stop watch was last started.
-     */
+    /** The time the stop watch was last started. */
     private var startTime: Long = 0
 
-    /**
-     * The time elapsed before the current [.startTime].
-     */
+    /** The time elapsed before the current [.startTime]. */
     private var previousElapsedTime: Long = 0
 
-    /**
-     * Whether the stop watch is currently running or not.
-     */
+    /** Whether the stop watch is currently running or not. */
     private var isRunning: Boolean = false
 
-    /**
-     * @return the total elapsed time in milliseconds
-     */
+    /** @return the total elapsed time in milliseconds */
     val elapsedTime: Long
-        get() = synchronized(this) {
-            var currentElapsedTime: Long = 0
-            if (isRunning) {
-                currentElapsedTime = System.currentTimeMillis() - startTime
+        get() =
+            synchronized(this) {
+                var currentElapsedTime: Long = 0
+                if (isRunning) {
+                    currentElapsedTime = System.currentTimeMillis() - startTime
+                }
+                return previousElapsedTime + currentElapsedTime
             }
-            return previousElapsedTime + currentElapsedTime
-        }
 
     /**
      * Starts or continues the stop watch.

@@ -12,14 +12,17 @@ import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.ItemPermissionBinding
 import zzh.lifeplayer.music.extensions.accentOutlineColor
 
-class PermissionItem @JvmOverloads constructor(
+class PermissionItem
+@JvmOverloads
+constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = -1,
-    defStyleRes: Int = -1
+    defStyleRes: Int = -1,
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
     private var binding: ItemPermissionBinding
-    val checkImage get() = binding.checkImage
+    val checkImage
+        get() = binding.checkImage
 
     init {
         binding = ItemPermissionBinding.inflate(LayoutInflater.from(context), this, true)
@@ -30,10 +33,7 @@ class PermissionItem @JvmOverloads constructor(
             binding.number.text = getText(R.styleable.PermissionItem_permissionTitleNumber)
             binding.button.text = getText(R.styleable.PermissionItem_permissionButtonTitle)
             binding.button.setIconResource(
-                getResourceId(
-                    R.styleable.PermissionItem_permissionIcon,
-                    R.drawable.ic_album
-                )
+                getResourceId(R.styleable.PermissionItem_permissionIcon, R.drawable.ic_album)
             )
             val color = ThemeStore.accentColor(context)
             binding.number.backgroundTintList =

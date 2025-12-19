@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.core.os.LocaleListCompat
 import zzh.lifeplayer.appthemehelper.common.ATHToolbarActivity
-import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.extensions.exitFullscreen
 import zzh.lifeplayer.music.extensions.hideStatusBar
@@ -53,7 +52,7 @@ abstract class AbsThemeActivity : ATHToolbarActivity(), Runnable {
         maybeShowWhenLocked()
         setLightNavigationBarAuto()
         setLightStatusBarAuto(surfaceColor())
-/*        if (VersionUtils.hasQ()) {
+        /*        if (VersionUtils.hasQ()) {
             window.decorView.isForceDarkAllowed = false
         }*/
     }

@@ -22,12 +22,9 @@ import androidx.preference.TwoStatePreference
 import zzh.lifeplayer.music.*
 import zzh.lifeplayer.music.util.PreferenceUtil
 
-/**
- * @author Hemanth S (h4h13).
- */
-
-class NowPlayingSettingsFragment : AbsSettingsFragment(),
-    SharedPreferences.OnSharedPreferenceChangeListener {
+/** @author Hemanth S (h4h13). */
+class NowPlayingSettingsFragment :
+    AbsSettingsFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     override fun invalidateSettings() {
         updateNowPlayingScreenSummary()
@@ -35,7 +32,7 @@ class NowPlayingSettingsFragment : AbsSettingsFragment(),
 
         val carouselEffect: TwoStatePreference? = findPreference(CAROUSEL_EFFECT)
         carouselEffect?.setOnPreferenceChangeListener { _, newValue ->
-        /*！ if (newValue as Boolean && !App.isProVersion()) {
+            /*！ if (newValue as Boolean && !App.isProVersion()) {
                 showProToastAndNavigate(getString(R.string.pref_title_toggle_carousel_effect))
                 return@setOnPreferenceChangeListener false
             }*/
@@ -76,7 +73,8 @@ class NowPlayingSettingsFragment : AbsSettingsFragment(),
         when (key) {
             NOW_PLAYING_SCREEN_ID -> updateNowPlayingScreenSummary()
             ALBUM_COVER_STYLE -> updateAlbumCoverStyleSummary()
-            CIRCULAR_ALBUM_ART, CAROUSEL_EFFECT -> invalidateSettings()
+            CIRCULAR_ALBUM_ART,
+            CAROUSEL_EFFECT -> invalidateSettings()
         }
     }
 }

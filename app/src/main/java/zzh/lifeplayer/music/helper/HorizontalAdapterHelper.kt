@@ -30,10 +30,9 @@ object HorizontalAdapterHelper {
     fun applyMarginToLayoutParams(
         context: Context,
         layoutParams: ViewGroup.MarginLayoutParams,
-        viewType: Int
+        viewType: Int,
     ) {
-        val listMargin = context.resources
-            .getDimensionPixelSize(R.dimen.now_playing_top_margin)
+        val listMargin = context.resources.getDimensionPixelSize(R.dimen.now_playing_top_margin)
         if (viewType == TYPE_FIRST) {
             layoutParams.leftMargin = listMargin
         } else if (viewType == TYPE_LAST) {

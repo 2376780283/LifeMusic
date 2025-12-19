@@ -8,13 +8,13 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.MenuRes
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.NumberRollViewBinding
 import zzh.lifeplayer.music.views.NumberRollView
 
 abstract class AbsMultiSelectAdapter<V : RecyclerView.ViewHolder?, I>(
-    open val activity: FragmentActivity, @MenuRes menuRes: Int,
+    open val activity: FragmentActivity,
+    @MenuRes menuRes: Int,
 ) : RecyclerView.Adapter<V>(), ActionMode.Callback {
     var actionMode: ActionMode? = null
     private val checked: MutableList<I>
@@ -74,6 +74,7 @@ abstract class AbsMultiSelectAdapter<V : RecyclerView.ViewHolder?, I>(
         get() = actionMode != null
 
     protected abstract fun onMultipleItemAction(menuItem: MenuItem, selection: List<I>)
+
     protected fun setMultiSelectMenuRes(@MenuRes menuRes: Int) {
         this.menuRes = menuRes
     }
@@ -95,9 +96,10 @@ abstract class AbsMultiSelectAdapter<V : RecyclerView.ViewHolder?, I>(
 
     private fun updateCab() {
         if (actionMode == null) {
-            actionMode = activity.startActionMode(this)?.apply {
-                customView = NumberRollViewBinding.inflate(activity.layoutInflater).root
-            }
+            actionMode =
+                activity.startActionMode(this)?.apply {
+                    customView = NumberRollViewBinding.inflate(activity.layoutInflater).root
+                }
             activity.onBackPressedDispatcher.addCallback(onBackPressedCallback)
         }
         val size = checked.size
@@ -106,7 +108,9 @@ abstract class AbsMultiSelectAdapter<V : RecyclerView.ViewHolder?, I>(
                 actionMode?.finish()
             }
             else -> {
-                actionMode?.customView?.findViewById<NumberRollView>(R.id.selection_mode_number)
+                actionMode
+                    ?.customView
+                    ?.findViewById<NumberRollView>(R.id.selection_mode_number)
                     ?.setNumber(size, true)
             }
         }
@@ -117,12 +121,13 @@ abstract class AbsMultiSelectAdapter<V : RecyclerView.ViewHolder?, I>(
         this.menuRes = menuRes
     }
 
-    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            if (actionMode != null) {
-                actionMode?.finish()
-                remove()
+    private val onBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (actionMode != null) {
+                    actionMode?.finish()
+                    remove()
+                }
             }
         }
-    }
 }

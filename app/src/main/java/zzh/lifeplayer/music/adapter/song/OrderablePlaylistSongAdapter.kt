@@ -19,6 +19,11 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
+import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter
+import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.db.PlaylistEntity
 import zzh.lifeplayer.music.db.toSongEntity
@@ -28,18 +33,14 @@ import zzh.lifeplayer.music.fragments.LibraryViewModel
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.ViewUtil
-import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter
-import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OrderablePlaylistSongAdapter(
     private val playlistId: Long,
     activity: FragmentActivity,
     dataSet: MutableList<Song>,
     itemLayoutRes: Int,
-) : SongAdapter(activity, dataSet, itemLayoutRes),
+) :
+    SongAdapter(activity, dataSet, itemLayoutRes),
     DraggableItemAdapter<OrderablePlaylistSongAdapter.ViewHolder> {
 
     val libraryViewModel: LibraryViewModel by activity.viewModel()
@@ -72,12 +73,9 @@ class OrderablePlaylistSongAdapter(
 
     override fun onMultipleItemAction(menuItem: MenuItem, selection: List<Song>) {
         when (menuItem.itemId) {
-            R.id.action_remove_from_playlist -> RemoveSongFromPlaylistDialog.create(
-                selection.toSongsEntity(
-                    playlistId
-                )
-            )
-                .show(activity.supportFragmentManager, "REMOVE_FROM_PLAYLIST")
+            R.id.action_remove_from_playlist ->
+                RemoveSongFromPlaylistDialog.create(selection.toSongsEntity(playlistId))
+                    .show(activity.supportFragmentManager, "REMOVE_FROM_PLAYLIST")
 
             else -> super.onMultipleItemAction(menuItem, selection)
         }
@@ -120,11 +118,8 @@ class OrderablePlaylistSongAdapter(
         if (isInQuickSelectMode || filtered) {
             return false
         }
-        return ViewUtil.hitTest(holder.imageText!!, x, y) || ViewUtil.hitTest(
-            holder.dragView!!,
-            x,
-            y
-        )
+        return ViewUtil.hitTest(holder.imageText!!, x, y) ||
+            ViewUtil.hitTest(holder.dragView!!, x, y)
     }
 
     override fun onMoveItem(fromPosition: Int, toPosition: Int) {
@@ -154,7 +149,6 @@ class OrderablePlaylistSongAdapter(
         }
     }
 
-
     fun onFilter(text: CharSequence?) {
         filter = text
         if (text.isNullOrEmpty()) {
@@ -162,8 +156,10 @@ class OrderablePlaylistSongAdapter(
             dataSet = fullDataSet
         } else {
             filtered = true
-            dataSet = fullDataSet.filter { song -> song.title.contains(text, ignoreCase = true) }
-                .toMutableList()
+            dataSet =
+                fullDataSet
+                    .filter { song -> song.title.contains(text, ignoreCase = true) }
+                    .toMutableList()
         }
         notifyDataSetChanged()
     }

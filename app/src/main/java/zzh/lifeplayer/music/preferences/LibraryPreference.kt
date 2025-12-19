@@ -33,18 +33,20 @@ import zzh.lifeplayer.music.extensions.showToast
 import zzh.lifeplayer.music.model.CategoryInfo
 import zzh.lifeplayer.music.util.PreferenceUtil
 
-
-class LibraryPreference @JvmOverloads constructor(
+class LibraryPreference
+@JvmOverloads
+constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    defStyleRes: Int = 0
+    defStyleRes: Int = 0,
 ) : ATEDialogPreference(context, attrs, defStyleAttr, defStyleRes) {
     init {
-        icon?.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-            context.colorControlNormal(),
-            SRC_IN
-        )
+        icon?.colorFilter =
+            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                context.colorControlNormal(),
+                SRC_IN,
+            )
     }
 }
 
@@ -61,13 +63,13 @@ class LibraryPreferenceDialog : DialogFragment() {
         }
 
         return materialDialog(R.string.library_categories)
-            .setNeutralButton(
-                R.string.reset_action
-            ) { _, _ ->
+            .setNeutralButton(R.string.reset_action) { _, _ ->
                 updateCategories(PreferenceUtil.defaultCategories)
             }
             .setNegativeButton(android.R.string.cancel, null)
-            .setPositiveButton(R.string.done) { _, _ -> updateCategories(categoryAdapter.categoryInfos) }
+            .setPositiveButton(R.string.done) { _, _ ->
+                updateCategories(categoryAdapter.categoryInfos)
+            }
             .setView(binding.root)
             .create()
             .colorButtons()
@@ -85,8 +87,7 @@ class LibraryPreferenceDialog : DialogFragment() {
     private fun getSelected(categories: List<CategoryInfo>): Int {
         var selected = 0
         for (categoryInfo in categories) {
-            if (categoryInfo.visible)
-                selected++
+            if (categoryInfo.visible) selected++
         }
         return selected
     }

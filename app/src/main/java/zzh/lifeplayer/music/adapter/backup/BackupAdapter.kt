@@ -7,15 +7,14 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import java.io.File
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.ItemListBackupBinding
-import java.io.File
-
 
 class BackupAdapter(
     val activity: FragmentActivity,
     var dataSet: MutableList<File>,
-    val backupClickedListener: BackupClickedListener
+    val backupClickedListener: BackupClickedListener,
 ) : RecyclerView.Adapter<BackupAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -46,7 +45,7 @@ class BackupAdapter(
                 popupMenu.setOnMenuItemClickListener { menuItem ->
                     return@setOnMenuItemClickListener backupClickedListener.onBackupMenuClicked(
                         dataSet[bindingAdapterPosition],
-                        menuItem
+                        menuItem,
                     )
                 }
                 popupMenu.show()

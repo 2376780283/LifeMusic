@@ -16,9 +16,7 @@ package zzh.lifeplayer.music.util
 import android.content.Context
 import android.util.TypedValue
 
-/**
- * Created by hefuyi on 16/7/30.
- */
+/** Created by hefuyi on 16/7/30. */
 object DensityUtil {
     fun getScreenHeight(context: Context): Int {
         val displayMetrics = context.resources.displayMetrics
@@ -32,9 +30,11 @@ object DensityUtil {
 
     private fun toDP(context: Context, value: Int): Int {
         return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            value.toFloat(), context.resources.displayMetrics
-        ).toInt()
+                TypedValue.COMPLEX_UNIT_DIP,
+                value.toFloat(),
+                context.resources.displayMetrics,
+            )
+            .toInt()
     }
 
     @JvmStatic

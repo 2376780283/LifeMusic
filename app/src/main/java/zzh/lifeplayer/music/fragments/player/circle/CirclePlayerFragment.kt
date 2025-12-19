@@ -27,6 +27,10 @@ import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.getSystemService
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
+import com.google.android.material.slider.Slider
+import me.tankery.lib.circularseekbar.CircularSeekBar
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
 import zzh.lifeplayer.appthemehelper.util.TintHelper
@@ -50,16 +54,11 @@ import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 import zzh.lifeplayer.music.volume.AudioVolumeObserver
 import zzh.lifeplayer.music.volume.OnAudioVolumeChangedListener
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
-import com.google.android.material.slider.Slider
-import me.tankery.lib.circularseekbar.CircularSeekBar
 
-/**
- * Created by hemanths on 2020-01-06.
- */
-
-class CirclePlayerFragment : AbsPlayerFragment(R.layout.fragment_circle_player), Callback,
+/** Created by hemanths on 2020-01-06. */
+class CirclePlayerFragment :
+    AbsPlayerFragment(R.layout.fragment_circle_player),
+    Callback,
     OnAudioVolumeChangedListener,
     CircularSeekBar.OnCircularSeekBarChangeListener {
 
@@ -70,7 +69,8 @@ class CirclePlayerFragment : AbsPlayerFragment(R.layout.fragment_circle_player),
         get() = requireContext().getSystemService()!!
 
     private var _binding: FragmentCirclePlayerBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     private var rotateAnimator: ObjectAnimator? = null
     private var lastRequest: RequestBuilder<Drawable>? = null
@@ -88,25 +88,19 @@ class CirclePlayerFragment : AbsPlayerFragment(R.layout.fragment_circle_player),
 
         setupViews()
         binding.title.isSelected = true
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
         binding.songInfo.drawAboveSystemBars()
     }
 
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.apply {
             inflateMenu(R.menu.menu_player)
-            setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
             setOnMenuItemClickListener(this@CirclePlayerFragment)
-            ToolbarContentTintHelper.colorizeToolbar(
-                this,
-                colorControlNormal(),
-                requireActivity()
-            )
+            ToolbarContentTintHelper.colorizeToolbar(this, colorControlNormal(), requireActivity())
         }
     }
 
@@ -117,12 +111,13 @@ class CirclePlayerFragment : AbsPlayerFragment(R.layout.fragment_circle_player),
         setUpPlayPauseFab()
         setUpPrevNext()
         setUpPlayerToolbar()
-        binding.albumCoverOverlay.background = ColorDrawable(
-            MaterialValueHelper.getPrimaryTextColor(
-                requireContext(),
-                accentColor().isColorLight
+        binding.albumCoverOverlay.background =
+            ColorDrawable(
+                MaterialValueHelper.getPrimaryTextColor(
+                    requireContext(),
+                    accentColor().isColorLight,
+                )
             )
-        )
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -130,10 +125,7 @@ class CirclePlayerFragment : AbsPlayerFragment(R.layout.fragment_circle_player),
         updatePrevNextColor()
         binding.nextButton.setOnTouchListener(MusicSeekSkipTouchListener(requireActivity(), true))
         binding.previousButton.setOnTouchListener(
-            MusicSeekSkipTouchListener(
-                requireActivity(),
-                false
-            )
+            MusicSeekSkipTouchListener(requireActivity(), false)
         )
     }
 
@@ -144,23 +136,20 @@ class CirclePlayerFragment : AbsPlayerFragment(R.layout.fragment_circle_player),
     }
 
     private fun setUpPlayPauseFab() {
-        TintHelper.setTintAuto(
-            binding.playPauseButton,
-            accentColor(),
-            false
-        )
+        TintHelper.setTintAuto(binding.playPauseButton, accentColor(), false)
         binding.playPauseButton.setOnClickListener(PlayPauseButtonOnClickHandler())
     }
 
     private fun setupRotateAnimation() {
-        rotateAnimator = ObjectAnimator.ofFloat(binding.albumCover, View.ROTATION, 360F).apply {
-            interpolator = LinearInterpolator()
-            repeatCount = Animation.INFINITE
-            duration = 10000
-            if (MusicPlayerRemote.isPlaying) {
-                start()
+        rotateAnimator =
+            ObjectAnimator.ofFloat(binding.albumCover, View.ROTATION, 360F).apply {
+                interpolator = LinearInterpolator()
+                repeatCount = Animation.INFINITE
+                duration = 10000
+                if (MusicPlayerRemote.isPlaying) {
+                    start()
+                }
             }
-        }
     }
 
     override fun onResume() {
@@ -189,28 +178,24 @@ class CirclePlayerFragment : AbsPlayerFragment(R.layout.fragment_circle_player),
         return binding.playerToolbar
     }
 
-    override fun onShow() {
-    }
+    override fun onShow() {}
 
-    override fun onHide() {
-    }
+    override fun onHide() {}
 
-    override fun toolbarIconColor(): Int =
-        colorControlNormal()
+    override fun toolbarIconColor(): Int = colorControlNormal()
 
     override val paletteColor: Int
         get() = Color.BLACK
 
-    override fun onColorChanged(color: MediaNotificationProcessor) {
-    }
+    override fun onColorChanged(color: MediaNotificationProcessor) {}
 
-    override fun onFavoriteToggled() {
-    }
+    override fun onFavoriteToggled() {}
 
     override fun onPlayStateChanged() {
         updatePlayPauseDrawableState()
         if (MusicPlayerRemote.isPlaying) {
-            if (rotateAnimator?.isStarted == true) rotateAnimator?.resume() else rotateAnimator?.start()
+            if (rotateAnimator?.isStarted == true) rotateAnimator?.resume()
+            else rotateAnimator?.start()
         } else {
             rotateAnimator?.pause()
         }
@@ -244,16 +229,17 @@ class CirclePlayerFragment : AbsPlayerFragment(R.layout.fragment_circle_player),
             .simpleSongCoverOptions(MusicPlayerRemote.currentSong)
             .thumbnail(lastRequest)
             .error(Glide.with(this).load(R.drawable.default_audio_art).fitCenter())
-            .fitCenter().also {
+            .fitCenter()
+            .also {
                 lastRequest = it.clone()
-                it.crossfadeListener()
-                    .into(binding.albumCover)
+                it.crossfadeListener().into(binding.albumCover)
             }
     }
 
     private fun updatePlayPauseDrawableState() {
         when {
-            MusicPlayerRemote.isPlaying -> binding.playPauseButton.setImageResource(R.drawable.ic_pause)
+            MusicPlayerRemote.isPlaying ->
+                binding.playPauseButton.setImageResource(R.drawable.ic_pause)
             else -> binding.playPauseButton.setImageResource(R.drawable.ic_play_arrow)
         }
     }
@@ -271,7 +257,6 @@ class CirclePlayerFragment : AbsPlayerFragment(R.layout.fragment_circle_player),
         _binding = null
     }
 
-
     override fun onProgressChanged(
         circularSeekBar: CircularSeekBar?,
         progress: Float,
@@ -281,35 +266,34 @@ class CirclePlayerFragment : AbsPlayerFragment(R.layout.fragment_circle_player),
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress.toInt(), 0)
     }
 
-    override fun onStartTrackingTouch(seekBar: CircularSeekBar?) {
-    }
+    override fun onStartTrackingTouch(seekBar: CircularSeekBar?) {}
 
-    override fun onStopTrackingTouch(seekBar: CircularSeekBar?) {
-    }
+    override fun onStopTrackingTouch(seekBar: CircularSeekBar?) {}
 
     private fun setUpProgressSlider() {
         binding.progressSlider.applyColor(accentColor())
         val progressSlider = binding.progressSlider
-        progressSlider.addOnChangeListener(Slider.OnChangeListener { _, value, fromUser ->
-            if (fromUser) {
-                onUpdateProgressViews(
-                    value.toInt(),
-                    MusicPlayerRemote.songDurationMillis
-                )
+        progressSlider.addOnChangeListener(
+            Slider.OnChangeListener { _, value, fromUser ->
+                if (fromUser) {
+                    onUpdateProgressViews(value.toInt(), MusicPlayerRemote.songDurationMillis)
+                }
             }
-        })
-        progressSlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-            override fun onStartTrackingTouch(slider: Slider) {
-                isSeeking = true
-                progressViewUpdateHelper.stop()
-            }
+        )
+        progressSlider.addOnSliderTouchListener(
+            object : Slider.OnSliderTouchListener {
+                override fun onStartTrackingTouch(slider: Slider) {
+                    isSeeking = true
+                    progressViewUpdateHelper.stop()
+                }
 
-            override fun onStopTrackingTouch(slider: Slider) {
-                isSeeking = false
-                MusicPlayerRemote.seekTo(slider.value.toInt())
-                progressViewUpdateHelper.start()
+                override fun onStopTrackingTouch(slider: Slider) {
+                    isSeeking = false
+                    MusicPlayerRemote.seekTo(slider.value.toInt())
+                    progressViewUpdateHelper.start()
+                }
             }
-        })
+        )
     }
 
     override fun onUpdateProgressViews(progress: Int, total: Int) {

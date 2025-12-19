@@ -10,10 +10,7 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 
 object ColorUtil {
-    fun desaturateColor(
-        color: Int,
-        ratio: Float,
-    ): Int {
+    fun desaturateColor(color: Int, ratio: Float): Int {
         val hsv = FloatArray(3)
         Color.colorToHSV(color, hsv)
 
@@ -22,15 +19,10 @@ object ColorUtil {
         return Color.HSVToColor(hsv)
     }
 
-    fun stripAlpha(
-        @ColorInt color: Int,
-    ): Int = -0x1000000 or color
+    fun stripAlpha(@ColorInt color: Int): Int = -0x1000000 or color
 
     @ColorInt
-    fun shiftColor(
-        @ColorInt color: Int,
-        @FloatRange(from = 0.0, to = 2.0) by: Float,
-    ): Int {
+    fun shiftColor(@ColorInt color: Int, @FloatRange(from = 0.0, to = 2.0) by: Float): Int {
         if (by == 1f) return color
         val alpha = Color.alpha(color)
         val hsv = FloatArray(3)
@@ -39,26 +31,14 @@ object ColorUtil {
         return (alpha shl 24) + (0x00ffffff and Color.HSVToColor(hsv))
     }
 
-    @ColorInt
-    fun darkenColor(
-        @ColorInt color: Int,
-    ): Int = shiftColor(color, 0.9f)
+    @ColorInt fun darkenColor(@ColorInt color: Int): Int = shiftColor(color, 0.9f)
+
+    @ColorInt fun darkenColorTheme(@ColorInt color: Int): Int = shiftColor(color, 0.8f)
+
+    @ColorInt fun lightenColor(@ColorInt color: Int): Int = shiftColor(color, 1.1f)
 
     @ColorInt
-    fun darkenColorTheme(
-        @ColorInt color: Int,
-    ): Int = shiftColor(color, 0.8f)
-
-    @ColorInt
-    fun lightenColor(
-        @ColorInt color: Int,
-    ): Int = shiftColor(color, 1.1f)
-
-    @ColorInt
-    fun lightenColor(
-        @ColorInt color: Int,
-        value: Float,
-    ): Int {
+    fun lightenColor(@ColorInt color: Int, value: Float): Int {
         val hsl = FloatArray(3)
         ColorUtils.colorToHSL(color, hsl)
         hsl[2] += value
@@ -67,10 +47,7 @@ object ColorUtil {
     }
 
     @ColorInt
-    fun darkenColor(
-        @ColorInt color: Int,
-        value: Float,
-    ): Int {
+    fun darkenColor(@ColorInt color: Int, value: Float): Int {
         val hsl = FloatArray(3)
         ColorUtils.colorToHSL(color, hsl)
         hsl[2] -= value
@@ -79,10 +56,7 @@ object ColorUtil {
     }
 
     @ColorInt
-    fun getReadableColorLight(
-        @ColorInt color: Int,
-        @ColorInt bgColor: Int,
-    ): Int {
+    fun getReadableColorLight(@ColorInt color: Int, @ColorInt bgColor: Int): Int {
         var foregroundColor = color
         while (ColorUtils.calculateContrast(foregroundColor, bgColor) <= 3.0) {
             foregroundColor = darkenColor(foregroundColor, 0.1F)
@@ -91,10 +65,7 @@ object ColorUtil {
     }
 
     @ColorInt
-    fun getReadableColorDark(
-        @ColorInt color: Int,
-        @ColorInt bgColor: Int,
-    ): Int {
+    fun getReadableColorDark(@ColorInt color: Int, @ColorInt bgColor: Int): Int {
         var foregroundColor = color
         while (ColorUtils.calculateContrast(foregroundColor, bgColor) <= 3.0) {
             foregroundColor = lightenColor(foregroundColor, 0.1F)
@@ -102,18 +73,17 @@ object ColorUtil {
         return foregroundColor
     }
 
-    fun isColorLight(
-        @ColorInt color: Int,
-    ): Boolean {
+    fun isColorLight(@ColorInt color: Int): Boolean {
         val darkness =
-            1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255
+            1 -
+                (0.299 * Color.red(color) +
+                    0.587 * Color.green(color) +
+                    0.114 * Color.blue(color)) / 255
         return darkness < 0.4
     }
 
     @ColorInt
-    fun invertColor(
-        @ColorInt color: Int,
-    ): Int {
+    fun invertColor(@ColorInt color: Int): Int {
         val r = 255 - Color.red(color)
         val g = 255 - Color.green(color)
         val b = 255 - Color.blue(color)
@@ -121,10 +91,7 @@ object ColorUtil {
     }
 
     @ColorInt
-    fun adjustAlpha(
-        @ColorInt color: Int,
-        @FloatRange(from = 0.0, to = 1.0) factor: Float,
-    ): Int {
+    fun adjustAlpha(@ColorInt color: Int, @FloatRange(from = 0.0, to = 1.0) factor: Float): Int {
         val alpha = (Color.alpha(color) * factor).roundToInt()
         val red = Color.red(color)
         val green = Color.green(color)
@@ -133,23 +100,14 @@ object ColorUtil {
     }
 
     @ColorInt
-    fun withAlpha(
-        @ColorInt baseColor: Int,
-        @FloatRange(from = 0.0, to = 1.0) alpha: Float,
-    ): Int {
+    fun withAlpha(@ColorInt baseColor: Int, @FloatRange(from = 0.0, to = 1.0) alpha: Float): Int {
         val a = min(255, max(0, (alpha * 255).toInt())) shl 24
         val rgb = 0x00ffffff and baseColor
         return a + rgb
     }
 
-    /**
-     * Taken from CollapsingToolbarLayout's CollapsingTextHelper class.
-     */
-    fun blendColors(
-        color1: Int,
-        color2: Int,
-        @FloatRange(from = 0.0, to = 1.0) ratio: Float,
-    ): Int {
+    /** Taken from CollapsingToolbarLayout's CollapsingTextHelper class. */
+    fun blendColors(color1: Int, color2: Int, @FloatRange(from = 0.0, to = 1.0) ratio: Float): Int {
         val inverseRatio = 1f - ratio
         val a = Color.alpha(color1) * inverseRatio + Color.alpha(color2) * ratio
         val r = Color.red(color1) * inverseRatio + Color.red(color2) * ratio
@@ -158,25 +116,21 @@ object ColorUtil {
         return Color.argb(a.toInt(), r.toInt(), g.toInt(), b.toInt())
     }
 
-    private fun getColorDarkness(
-        @ColorInt color: Int,
-    ): Double =
+    private fun getColorDarkness(@ColorInt color: Int): Double =
         if (color == Color.BLACK) {
             1.0
         } else if (color == Color.WHITE || color == Color.TRANSPARENT) {
             0.0
         } else {
-            1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255
+            1 -
+                (0.299 * Color.red(color) +
+                    0.587 * Color.green(color) +
+                    0.114 * Color.blue(color)) / 255
         }
 
-    @ColorInt
-    fun getInverseColor(
-        @ColorInt color: Int,
-    ): Int = 0xFFFFFF - color or -0x1
+    @ColorInt fun getInverseColor(@ColorInt color: Int): Int = 0xFFFFFF - color or -0x1
 
-    fun isColorSaturated(
-        @ColorInt color: Int,
-    ): Boolean {
+    fun isColorSaturated(@ColorInt color: Int): Boolean {
         val max =
             max(
                 0.299 * Color.red(color),
@@ -192,20 +146,14 @@ object ColorUtil {
     }
 
     @ColorInt
-    fun getMixedColor(
-        @ColorInt color1: Int,
-        @ColorInt color2: Int,
-    ): Int =
+    fun getMixedColor(@ColorInt color1: Int, @ColorInt color2: Int): Int =
         Color.rgb(
             (Color.red(color1) + Color.red(color2)) / 2,
             (Color.green(color1) + Color.green(color2)) / 2,
             (Color.blue(color1) + Color.blue(color2)) / 2,
         )
 
-    private fun getDifference(
-        @ColorInt color1: Int,
-        @ColorInt color2: Int,
-    ): Double {
+    private fun getDifference(@ColorInt color1: Int, @ColorInt color2: Int): Double {
         var diff = abs(0.299 * (Color.red(color1) - Color.red(color2)))
         diff += abs(0.587 * (Color.green(color1) - Color.green(color2)))
         diff += abs(0.114 * (Color.blue(color1) - Color.blue(color2)))
@@ -213,10 +161,8 @@ object ColorUtil {
     }
 
     @ColorInt
-    fun getReadableText(
-        @ColorInt textColor: Int,
-        @ColorInt backgroundColor: Int,
-    ): Int = getReadableText(textColor, backgroundColor, 100)
+    fun getReadableText(@ColorInt textColor: Int, @ColorInt backgroundColor: Int): Int =
+        getReadableText(textColor, backgroundColor, 100)
 
     @ColorInt
     fun getReadableText(
@@ -237,12 +183,13 @@ object ColorUtil {
     }
 
     @ColorInt
-    fun getContrastColor(
-        @ColorInt color: Int,
-    ): Int {
+    fun getContrastColor(@ColorInt color: Int): Int {
         // Counting the perceptive luminance - human eye favors green color...
         val a =
-            1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255
+            1 -
+                (0.299 * Color.red(color) +
+                    0.587 * Color.green(color) +
+                    0.114 * Color.blue(color)) / 255
         return if (a < 0.5) Color.BLACK else Color.WHITE
     }
 }

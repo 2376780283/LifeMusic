@@ -7,20 +7,17 @@ import android.os.Build
 import androidx.annotation.IntRange
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.pm.PackageInfoCompat
+import java.util.*
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.PreferenceUtil.isAdaptiveColor
 import zzh.lifeplayer.music.util.PreferenceUtil.nowPlayingScreen
-import java.util.*
 
 class DeviceInfo(context: Context) {
-    @SuppressLint("NewApi")
-    private val abis = Build.SUPPORTED_ABIS
+    @SuppressLint("NewApi") private val abis = Build.SUPPORTED_ABIS
 
-    @SuppressLint("NewApi")
-    private val abis32Bits = Build.SUPPORTED_32_BIT_ABIS
+    @SuppressLint("NewApi") private val abis32Bits = Build.SUPPORTED_32_BIT_ABIS
 
-    @SuppressLint("NewApi")
-    private val abis64Bits = Build.SUPPORTED_64_BIT_ABIS
+    @SuppressLint("NewApi") private val abis64Bits = Build.SUPPORTED_64_BIT_ABIS
     private val baseTheme: String
     private val brand = Build.BRAND
     private val buildID = Build.DISPLAY
@@ -34,11 +31,11 @@ class DeviceInfo(context: Context) {
     private val product = Build.PRODUCT
     private val releaseVersion = Build.VERSION.RELEASE
 
-    @IntRange(from = 0)
-    private val sdkVersion = Build.VERSION.SDK_INT
+    @IntRange(from = 0) private val sdkVersion = Build.VERSION.SDK_INT
     private var versionCode = 0L
     private var versionName: String? = null
     private val selectedLang: String
+
     fun toMarkdown(): String {
         return """
                Device info:
@@ -62,7 +59,8 @@ class DeviceInfo(context: Context) {
                <tr><td>Language</td><td>$selectedLang</td></tr>
                </table>
                
-               """.trimIndent()
+               """
+            .trimIndent()
     }
 
     override fun toString(): String {
@@ -87,15 +85,17 @@ class DeviceInfo(context: Context) {
             Adaptive: $isAdaptive
             System language: ${Locale.getDefault().toLanguageTag()}
             In-App Language: $selectedLang
-            """.trimIndent()
+            """
+            .trimIndent()
     }
 
     init {
-        val packageInfo = try {
-            context.packageManager.getPackageInfo(context.packageName, 0)
-        } catch (e: PackageManager.NameNotFoundException) {
-            null
-        }
+        val packageInfo =
+            try {
+                context.packageManager.getPackageInfo(context.packageName, 0)
+            } catch (e: PackageManager.NameNotFoundException) {
+                null
+            }
         if (packageInfo != null) {
             versionCode = PackageInfoCompat.getLongVersionCode(packageInfo)
             versionName = packageInfo.versionName

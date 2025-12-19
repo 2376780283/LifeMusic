@@ -1,19 +1,18 @@
 package zzh.lifeplayer.music.network
 
 import android.content.Context
-import zzh.lifeplayer.music.App
-import zzh.lifeplayer.music.BuildConfig
-import zzh.lifeplayer.music.network.conversion.LyricsConverterFactory
 import com.google.gson.GsonBuilder
+import java.io.File
+import java.util.concurrent.TimeUnit
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.File
-import java.util.concurrent.TimeUnit
-
+import zzh.lifeplayer.music.App
+import zzh.lifeplayer.music.BuildConfig
+import zzh.lifeplayer.music.network.conversion.LyricsConverterFactory
 
 fun provideDefaultCache(): Cache? {
     val cacheDir = File(App.getContext().cacheDir.absolutePath, "/okhttp-lastfm/")
@@ -37,11 +36,13 @@ fun logInterceptor(): Interceptor {
 fun headerInterceptor(context: Context): Interceptor {
     return Interceptor {
         val original = it.request()
-        val request = original.newBuilder()
-            .header("User-Agent", context.packageName)
-            .addHeader("Content-Type", "application/json; charset=utf-8")
-            .method(original.method, original.body)
-            .build()
+        val request =
+            original
+                .newBuilder()
+                .header("User-Agent", context.packageName)
+                .addHeader("Content-Type", "application/json; charset=utf-8")
+                .method(original.method, original.body)
+                .build()
         it.proceed(request)
     }
 }
@@ -57,9 +58,7 @@ fun provideOkHttp(context: Context, cache: Cache): OkHttpClient {
 }
 
 fun provideLastFmRetrofit(client: OkHttpClient): Retrofit {
-    val gson = GsonBuilder()
-        .setLenient()
-        .create()
+    val gson = GsonBuilder().setLenient().create()
     return Retrofit.Builder()
         .baseUrl("https://ws.audioscrobbler.com/2.0/")
         .addConverterFactory(GsonConverterFactory.create(gson))
@@ -72,16 +71,16 @@ fun provideLastFmRest(retrofit: Retrofit): LastFMService {
 }
 
 fun provideDeezerRest(retrofit: Retrofit): DeezerService {
-    val newBuilder = retrofit.newBuilder()
-        .baseUrl("https://api.deezer.com/")
-        .build()
+    val newBuilder = retrofit.newBuilder().baseUrl("https://api.deezer.com/").build()
     return newBuilder.create(DeezerService::class.java)
 }
 
 fun provideLyrics(retrofit: Retrofit): LyricsRestService {
-    val newBuilder = retrofit.newBuilder()
-        .baseUrl("https://makeitpersonal.co")
-        .addConverterFactory(LyricsConverterFactory())
-        .build()
+    val newBuilder =
+        retrofit
+            .newBuilder()
+            .baseUrl("https://makeitpersonal.co")
+            .addConverterFactory(LyricsConverterFactory())
+            .build()
     return newBuilder.create(LyricsRestService::class.java)
 }

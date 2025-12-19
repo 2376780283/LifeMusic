@@ -25,8 +25,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
-import zzh.lifeplayer.music.util.PreferenceUtil
 import com.google.android.material.appbar.MaterialToolbar
+import zzh.lifeplayer.music.util.PreferenceUtil
 
 fun Fragment.getIntRes(@IntegerRes int: Int): Int {
     return resources.getInteger(int)
@@ -40,10 +40,10 @@ val Context.generalThemeValue
     get() = PreferenceUtil.getGeneralThemeValue(isSystemDarkModeEnabled())
 
 fun Context.isSystemDarkModeEnabled(): Boolean {
-    val isBatterySaverEnabled =
-        (getSystemService<PowerManager>())?.isPowerSaveMode ?: false
+    val isBatterySaverEnabled = (getSystemService<PowerManager>())?.isPowerSaveMode ?: false
     val isDarkModeEnabled =
-        (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+        (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
+            Configuration.UI_MODE_NIGHT_YES
     return isBatterySaverEnabled or isDarkModeEnabled
 }
 

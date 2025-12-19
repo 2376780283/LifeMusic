@@ -13,21 +13,20 @@ import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.VisibleForTesting
-import zzh.lifeplayer.music.R
 import java.text.NumberFormat
+import zzh.lifeplayer.music.R
 
 /**
- * View that shows an integer number. It provides a smooth roll animation on changing the
- * number.
+ * View that shows an integer number. It provides a smooth roll animation on changing the number.
  */
-class NumberRollView(context: Context?, attrs: AttributeSet?) :
-    FrameLayout(context!!, attrs) {
+class NumberRollView(context: Context?, attrs: AttributeSet?) : FrameLayout(context!!, attrs) {
     private var mUpNumber: TextView? = null
     private var mDownNumber: TextView? = null
     private var mNumber = 0f
     private var mLastRollAnimator: Animator? = null
     private var mStringId = R.string.x_selected
     private var mStringIdForZero = 0
+
     override fun onFinishInflate() {
         super.onFinishInflate()
         mUpNumber = findViewById(R.id.up)
@@ -39,6 +38,7 @@ class NumberRollView(context: Context?, attrs: AttributeSet?) :
 
     /**
      * Sets a number to display.
+     *
      * @param animate Whether it should smoothly animate to the number.
      */
     fun setNumber(number: Int, animate: Boolean) {
@@ -56,7 +56,7 @@ class NumberRollView(context: Context?, attrs: AttributeSet?) :
 
     /**
      * @param stringId The id of the string to use for the description. The string must be a plural
-     * that has one placeholder for a quantity.
+     *   that has one placeholder for a quantity.
      */
     fun setString(stringId: Int) {
         mStringId = stringId
@@ -64,46 +64,40 @@ class NumberRollView(context: Context?, attrs: AttributeSet?) :
 
     /**
      * @param stringIdForZero The id of the string to use for the description when the number is
-     * zero.
+     *   zero.
      */
     fun setStringForZero(stringIdForZero: Int) {
         mStringIdForZero = stringIdForZero
     }
 
-    /**
-     * Gets the current number roll position.
-     */
+    /** Gets the current number roll position. */
     private fun getNumberRoll(): Float {
         return mNumber
     }
 
-    /**
-     * Sets the number roll position.
-     */
+    /** Sets the number roll position. */
     private fun setNumberRoll(number: Float) {
         mNumber = number
         val downNumber = number.toInt()
         val upNumber = downNumber + 1
         val numberFormatter = NumberFormat.getIntegerInstance()
-        var newString = if (mStringId != 0) {
-            if (upNumber == 0 && mStringIdForZero != 0) resources.getString(mStringIdForZero) else resources.getString(
-                mStringId,
-                upNumber
-            )
-        } else {
-            numberFormatter.format(upNumber.toLong())
-        }
+        var newString =
+            if (mStringId != 0) {
+                if (upNumber == 0 && mStringIdForZero != 0) resources.getString(mStringIdForZero)
+                else resources.getString(mStringId, upNumber)
+            } else {
+                numberFormatter.format(upNumber.toLong())
+            }
         if (newString != mUpNumber!!.text.toString()) {
             mUpNumber!!.text = newString
         }
-        newString = if (mStringId != 0) {
-            if (downNumber == 0 && mStringIdForZero != 0) resources.getString(mStringIdForZero) else resources.getString(
-                mStringId,
-                downNumber
-            )
-        } else {
-            numberFormatter.format(downNumber.toLong())
-        }
+        newString =
+            if (mStringId != 0) {
+                if (downNumber == 0 && mStringIdForZero != 0) resources.getString(mStringIdForZero)
+                else resources.getString(mStringId, downNumber)
+            } else {
+                numberFormatter.format(downNumber.toLong())
+            }
         if (newString != mDownNumber!!.text.toString()) {
             mDownNumber!!.text = newString
         }
@@ -114,7 +108,7 @@ class NumberRollView(context: Context?, attrs: AttributeSet?) :
         mDownNumber!!.alpha = 1.0f - offset
     }
 
-    /** Ends any in-progress animations.  */
+    /** Ends any in-progress animations. */
     @VisibleForTesting
     fun endAnimationsForTesting() {
         if (mLastRollAnimator != null) mLastRollAnimator!!.end()
@@ -122,6 +116,7 @@ class NumberRollView(context: Context?, attrs: AttributeSet?) :
 
     /**
      * Update the text color with [ColorStateList] for both [TextView].
+     *
      * @param resId The new text [ColorStateList] to use.
      */
     fun setTextColorStateList(colorStateList: ColorStateList?) {
@@ -132,13 +127,10 @@ class NumberRollView(context: Context?, attrs: AttributeSet?) :
     companion object {
         /**
          * A Property wrapper around the `number` functionality handled by the
-         * [NumberRollView.setNumberRoll] and [NumberRollView.getNumberRoll]
-         * methods.
+         * [NumberRollView.setNumberRoll] and [NumberRollView.getNumberRoll] methods.
          */
         val NUMBER_PROPERTY: Property<NumberRollView, Float> =
-            object : Property<NumberRollView, Float>(
-                Float::class.java, ""
-            ) {
+            object : Property<NumberRollView, Float>(Float::class.java, "") {
                 override fun set(view: NumberRollView, value: Float) {
                     view.setNumberRoll(value)
                 }

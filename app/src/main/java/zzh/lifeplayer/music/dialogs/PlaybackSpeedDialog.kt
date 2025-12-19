@@ -3,13 +3,13 @@ package zzh.lifeplayer.music.dialogs
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.slider.Slider
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.DialogPlaybackSpeedBinding
 import zzh.lifeplayer.music.extensions.accent
 import zzh.lifeplayer.music.extensions.colorButtons
 import zzh.lifeplayer.music.extensions.materialDialog
 import zzh.lifeplayer.music.util.PreferenceUtil
-import com.google.android.material.slider.Slider
 
 class PlaybackSpeedDialog : DialogFragment() {
 
@@ -19,12 +19,12 @@ class PlaybackSpeedDialog : DialogFragment() {
         binding.playbackPitchSlider.accent()
         PreferenceUtil.playbackSpeed.toString().also { binding.speedValue.text = it }
         PreferenceUtil.playbackPitch.toString().also { binding.pitchValue.text = it }
-        binding.playbackSpeedSlider.addOnChangeListener(Slider.OnChangeListener { _, value, _ ->
-            binding.speedValue.text = "$value"
-        })
-        binding.playbackPitchSlider.addOnChangeListener(Slider.OnChangeListener { _, value, _ ->
-            binding.pitchValue.text = "$value"
-        })
+        binding.playbackSpeedSlider.addOnChangeListener(
+            Slider.OnChangeListener { _, value, _ -> binding.speedValue.text = "$value" }
+        )
+        binding.playbackPitchSlider.addOnChangeListener(
+            Slider.OnChangeListener { _, value, _ -> binding.pitchValue.text = "$value" }
+        )
         binding.playbackSpeedSlider.value = PreferenceUtil.playbackSpeed
         binding.playbackPitchSlider.value = PreferenceUtil.playbackPitch
 
@@ -33,15 +33,10 @@ class PlaybackSpeedDialog : DialogFragment() {
             .setPositiveButton(R.string.save) { _, _ ->
                 updatePlaybackAndPitch(
                     binding.playbackSpeedSlider.value,
-                    binding.playbackPitchSlider.value
+                    binding.playbackPitchSlider.value,
                 )
             }
-            .setNeutralButton(R.string.reset_action) {_, _ ->
-                updatePlaybackAndPitch(
-                    1F,
-                    1F
-                )
-            }
+            .setNeutralButton(R.string.reset_action) { _, _ -> updatePlaybackAndPitch(1F, 1F) }
             .setView(binding.root)
             .create()
             .colorButtons()

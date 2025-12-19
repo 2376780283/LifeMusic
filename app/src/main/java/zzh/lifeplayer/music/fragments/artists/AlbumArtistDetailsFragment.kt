@@ -27,6 +27,7 @@ class AlbumArtistDetailsFragment : AbsArtistDetailsFragment() {
     }
     override val artistId: Long?
         get() = null
+
     override val artistName: String
         get() = arguments.extraArtistName
 }

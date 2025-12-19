@@ -21,6 +21,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.preference.PreferenceManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
 import zzh.lifeplayer.appthemehelper.util.ToolbarContentTintHelper
 import zzh.lifeplayer.music.NEW_BLUR_AMOUNT
 import zzh.lifeplayer.music.R
@@ -38,10 +40,9 @@ import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.PreferenceUtil.blurAmount
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
 
-class CardBlurFragment : AbsPlayerFragment(R.layout.fragment_card_blur_player),
+class CardBlurFragment :
+    AbsPlayerFragment(R.layout.fragment_card_blur_player),
     SharedPreferences.OnSharedPreferenceChangeListener {
     override fun playerToolbar(): Toolbar {
         return binding.playerToolbar
@@ -50,10 +51,13 @@ class CardBlurFragment : AbsPlayerFragment(R.layout.fragment_card_blur_player),
     private var lastColor: Int = 0
     override val paletteColor: Int
         get() = lastColor
+
     private lateinit var playbackControlsFragment: CardBlurPlaybackControlsFragment
 
     private var _binding: FragmentCardBlurPlayerBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
+
     private var lastRequest: RequestBuilder<Drawable>? = null
 
     override fun onShow() {
@@ -108,7 +112,9 @@ class CardBlurFragment : AbsPlayerFragment(R.layout.fragment_card_blur_player),
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.apply {
             inflateMenu(R.menu.menu_player)
-            setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
             setTitleTextColor(Color.WHITE)
             setSubtitleTextColor(Color.WHITE)
             ToolbarContentTintHelper.colorizeToolbar(binding.playerToolbar, Color.WHITE, activity)
@@ -142,13 +148,14 @@ class CardBlurFragment : AbsPlayerFragment(R.layout.fragment_card_blur_player),
             .load(LifeGlideExtension.getSongModel(MusicPlayerRemote.currentSong))
             .simpleSongCoverOptions(MusicPlayerRemote.currentSong)
             .transform(
-                BlurTransformation.Builder(requireContext()).blurRadius(blurAmount.toFloat())
+                BlurTransformation.Builder(requireContext())
+                    .blurRadius(blurAmount.toFloat())
                     .build()
             )
-            .thumbnail(lastRequest).also {
+            .thumbnail(lastRequest)
+            .also {
                 lastRequest = it.clone()
-                it.crossfadeListener()
-                    .into(binding.colorBackground)
+                it.crossfadeListener().into(binding.colorBackground)
             }
     }
 

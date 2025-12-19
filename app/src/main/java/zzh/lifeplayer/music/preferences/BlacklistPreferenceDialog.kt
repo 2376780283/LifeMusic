@@ -23,6 +23,8 @@ import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat.SRC_IN
 import androidx.core.text.parseAsHtml
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.io.File
 import zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATEDialogPreference
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.dialogs.BlacklistFolderChooserDialog
@@ -31,10 +33,10 @@ import zzh.lifeplayer.music.extensions.colorButtons
 import zzh.lifeplayer.music.extensions.colorControlNormal
 import zzh.lifeplayer.music.extensions.materialDialog
 import zzh.lifeplayer.music.providers.BlacklistStore
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.io.File
 
-class BlacklistPreference @JvmOverloads constructor(
+class BlacklistPreference
+@JvmOverloads
+constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = -1,
@@ -45,7 +47,7 @@ class BlacklistPreference @JvmOverloads constructor(
         icon?.colorFilter =
             BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
                 context.colorControlNormal(),
-                SRC_IN
+                SRC_IN,
             )
     }
 }
@@ -59,15 +61,14 @@ class BlacklistPreferenceDialog : DialogFragment(), BlacklistFolderChooserDialog
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val chooserDialog =
-            childFragmentManager.findFragmentByTag("FOLDER_CHOOSER") as BlacklistFolderChooserDialog?
+            childFragmentManager.findFragmentByTag("FOLDER_CHOOSER")
+                as BlacklistFolderChooserDialog?
         chooserDialog?.setCallback(this)
         val context = requireActivity()
 
         refreshBlacklistData(context)
         return materialDialog(R.string.blacklist)
-            .setPositiveButton(R.string.done) { _, _ ->
-                dismiss()
-            }
+            .setPositiveButton(R.string.done) { _, _ -> dismiss() }
             .setNeutralButton(R.string.clear_action) { _, _ ->
                 materialDialog(R.string.clear_blacklist)
                     .setMessage(R.string.do_you_want_to_clear_the_blacklist)
@@ -88,9 +89,10 @@ class BlacklistPreferenceDialog : DialogFragment(), BlacklistFolderChooserDialog
                 materialDialog(R.string.remove_from_blacklist)
                     .setMessage(
                         String.format(
-                            getString(R.string.do_you_want_to_remove_from_the_blacklist),
-                            paths[which]
-                        ).parseAsHtml()
+                                getString(R.string.do_you_want_to_remove_from_the_blacklist),
+                                paths[which],
+                            )
+                            .parseAsHtml()
                     )
                     .setPositiveButton(R.string.remove_action) { _, _ ->
                         BlacklistStore.getInstance(context).removePath(File(paths[which]))
@@ -100,7 +102,8 @@ class BlacklistPreferenceDialog : DialogFragment(), BlacklistFolderChooserDialog
                     .colorButtons()
                     .show()
             }
-            .create().apply {
+            .create()
+            .apply {
                 setOnShowListener {
                     getButton(AlertDialog.BUTTON_POSITIVE).accentTextColor()
                     getButton(AlertDialog.BUTTON_NEGATIVE).accentTextColor()

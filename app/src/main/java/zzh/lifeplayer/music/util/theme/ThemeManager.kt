@@ -22,8 +22,9 @@ fun Context.getThemeResValue(): Int =
         }
     }
 
-fun Context.getNightMode(): Int = when (generalThemeValue) {
-    LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
-    DARK -> AppCompatDelegate.MODE_NIGHT_YES
-    else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-}
+fun Context.getNightMode(): Int =
+    when (generalThemeValue) {
+        LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
+        DARK -> AppCompatDelegate.MODE_NIGHT_YES
+        else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+    }

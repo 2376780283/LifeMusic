@@ -28,6 +28,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.transition.MaterialSharedAxis
 import zzh.lifeplayer.music.*
 import zzh.lifeplayer.music.adapter.album.AlbumAdapter
 import zzh.lifeplayer.music.adapter.artist.ArtistAdapter
@@ -41,16 +44,16 @@ import zzh.lifeplayer.music.interfaces.IArtistClickListener
 import zzh.lifeplayer.music.model.Album
 import zzh.lifeplayer.music.model.Artist
 import zzh.lifeplayer.music.util.LifeUtil
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.transition.MaterialSharedAxis
 
-
-class DetailListFragment : AbsMainActivityFragment(R.layout.fragment_playlist_detail),
-    IArtistClickListener, IAlbumClickListener {
+class DetailListFragment :
+    AbsMainActivityFragment(R.layout.fragment_playlist_detail),
+    IArtistClickListener,
+    IAlbumClickListener {
     private val args by navArgs<DetailListFragmentArgs>()
     private var _binding: FragmentPlaylistDetailBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
+
     private var showClearHistoryOption = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,8 +63,7 @@ class DetailListFragment : AbsMainActivityFragment(R.layout.fragment_playlist_de
             RECENT_ARTISTS,
             TOP_ALBUMS,
             RECENT_ALBUMS,
-            FAVOURITES,
-            -> {
+            FAVOURITES -> {
                 enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
                 returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
             }
@@ -99,11 +101,8 @@ class DetailListFragment : AbsMainActivityFragment(R.layout.fragment_playlist_de
 
     private fun lastAddedSongs() {
         binding.toolbar.setTitle(R.string.last_added)
-        val songAdapter = ShuffleButtonSongAdapter(
-            requireActivity(),
-            mutableListOf(),
-            R.layout.item_list
-        )
+        val songAdapter =
+            ShuffleButtonSongAdapter(requireActivity(), mutableListOf(), R.layout.item_list)
         binding.recyclerView.apply {
             adapter = songAdapter
             layoutManager = linearLayoutManager()
@@ -116,11 +115,8 @@ class DetailListFragment : AbsMainActivityFragment(R.layout.fragment_playlist_de
 
     private fun topPlayed() {
         binding.toolbar.setTitle(R.string.my_top_tracks)
-        val songAdapter = ShuffleButtonSongAdapter(
-            requireActivity(),
-            mutableListOf(),
-            R.layout.item_list
-        )
+        val songAdapter =
+            ShuffleButtonSongAdapter(requireActivity(), mutableListOf(), R.layout.item_list)
         binding.recyclerView.apply {
             adapter = songAdapter
             layoutManager = linearLayoutManager()
@@ -133,11 +129,8 @@ class DetailListFragment : AbsMainActivityFragment(R.layout.fragment_playlist_de
     private fun loadHistory() {
         binding.toolbar.setTitle(R.string.history)
 
-        val songAdapter = ShuffleButtonSongAdapter(
-            requireActivity(),
-            mutableListOf(),
-            R.layout.item_list
-        )
+        val songAdapter =
+            ShuffleButtonSongAdapter(requireActivity(), mutableListOf(), R.layout.item_list)
         binding.recyclerView.apply {
             adapter = songAdapter
             layoutManager = linearLayoutManager()
@@ -147,16 +140,11 @@ class DetailListFragment : AbsMainActivityFragment(R.layout.fragment_playlist_de
             songAdapter.swapDataSet(it)
             binding.empty.isVisible = it.isEmpty()
         }
-
     }
 
     private fun loadFavorite() {
         binding.toolbar.setTitle(R.string.favorites)
-        val songAdapter = SongAdapter(
-            requireActivity(),
-            mutableListOf(),
-            R.layout.item_list
-        )
+        val songAdapter = SongAdapter(requireActivity(), mutableListOf(), R.layout.item_list)
         binding.recyclerView.apply {
             adapter = songAdapter
             layoutManager = linearLayoutManager()
@@ -166,7 +154,6 @@ class DetailListFragment : AbsMainActivityFragment(R.layout.fragment_playlist_de
             songAdapter.swapDataSet(songs)
         }
     }
-
 
     private fun loadArtists(title: Int, type: Int) {
         binding.toolbar.setTitle(title)
@@ -192,19 +179,11 @@ class DetailListFragment : AbsMainActivityFragment(R.layout.fragment_playlist_de
         }
     }
 
-    private fun artistAdapter(artists: List<Artist>): ArtistAdapter = ArtistAdapter(
-        requireActivity(),
-        artists,
-        R.layout.item_grid_circle,
-        this
-    )
+    private fun artistAdapter(artists: List<Artist>): ArtistAdapter =
+        ArtistAdapter(requireActivity(), artists, R.layout.item_grid_circle, this)
 
-    private fun albumAdapter(albums: List<Album>): AlbumAdapter = AlbumAdapter(
-        requireActivity(),
-        albums,
-        R.layout.item_grid,
-        this
-    )
+    private fun albumAdapter(albums: List<Album>): AlbumAdapter =
+        AlbumAdapter(requireActivity(), albums, R.layout.item_grid, this)
 
     private fun linearLayoutManager(): LinearLayoutManager =
         LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -219,25 +198,24 @@ class DetailListFragment : AbsMainActivityFragment(R.layout.fragment_playlist_de
         return if (LifeUtil.isLandscape) 4 else 2
     }
 
-
     override fun onArtist(artistId: Long, view: View) {
-        findNavController().navigate(
-            R.id.artistDetailsFragment,
-            bundleOf(EXTRA_ARTIST_ID to artistId),
-            null,
-            FragmentNavigatorExtras(view to artistId.toString())
-        )
+        findNavController()
+            .navigate(
+                R.id.artistDetailsFragment,
+                bundleOf(EXTRA_ARTIST_ID to artistId),
+                null,
+                FragmentNavigatorExtras(view to artistId.toString()),
+            )
     }
 
     override fun onAlbumClick(albumId: Long, view: View) {
-        findNavController().navigate(
-            R.id.albumDetailsFragment,
-            bundleOf(EXTRA_ALBUM_ID to albumId),
-            null,
-            FragmentNavigatorExtras(
-                view to albumId.toString()
+        findNavController()
+            .navigate(
+                R.id.albumDetailsFragment,
+                bundleOf(EXTRA_ALBUM_ID to albumId),
+                null,
+                FragmentNavigatorExtras(view to albumId.toString()),
             )
-        )
     }
 
     override fun onDestroyView() {
@@ -261,10 +239,10 @@ class DetailListFragment : AbsMainActivityFragment(R.layout.fragment_playlist_de
 
                     val snackBar =
                         Snackbar.make(
-                            binding.container,
-                            getString(R.string.history_cleared),
-                            Snackbar.LENGTH_LONG
-                        )
+                                binding.container,
+                                getString(R.string.history_cleared),
+                                Snackbar.LENGTH_LONG,
+                            )
                             .setAction(getString(R.string.history_undo_button)) {
                                 libraryViewModel.restoreHistory()
                             }

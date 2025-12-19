@@ -7,7 +7,6 @@ import android.graphics.Paint
 import androidx.core.graphics.scale
 import com.bumptech.glide.util.Util.assertBackgroundThread
 
-
 internal object MergedImageUtils {
 
     private const val IMAGE_SIZE = 1600
@@ -19,16 +18,8 @@ internal object MergedImageUtils {
 
         val arranged = arrangeBitmaps(list)
 
-        val mergedImage = create(
-            arranged,
-            IMAGE_SIZE,
-            PARTS
-        )
-        val finalImage = rotate(
-            mergedImage,
-            IMAGE_SIZE,
-            DEGREES
-        )
+        val mergedImage = create(arranged, IMAGE_SIZE, PARTS)
+        val finalImage = rotate(mergedImage, IMAGE_SIZE, DEGREES)
         mergedImage.recycle()
         return finalImage
     }
@@ -81,7 +72,7 @@ internal object MergedImageUtils {
                 bit,
                 (onePartSize * (i % parts)).toFloat() + (i % 3) * 50,
                 (onePartSize * (i / parts)).toFloat() + (i / 3) * 50,
-                paint
+                paint,
             )
             bit.recycle()
         }
@@ -96,17 +87,16 @@ internal object MergedImageUtils {
         bitmap.recycle()
         val cropStart = imageSize * 25 / 100
         val cropEnd: Int = (cropStart * 1.5).toInt()
-        val cropped = Bitmap.createBitmap(
-            rotated,
-            cropStart,
-            cropStart,
-            imageSize - cropEnd,
-            imageSize - cropEnd
-        )
+        val cropped =
+            Bitmap.createBitmap(
+                rotated,
+                cropStart,
+                cropStart,
+                imageSize - cropEnd,
+                imageSize - cropEnd,
+            )
         rotated.recycle()
 
         return cropped
     }
-
-
 }

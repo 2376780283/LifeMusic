@@ -26,9 +26,10 @@ class PlainPlayerFragment : AbsPlayerFragment(R.layout.fragment_plain_player) {
     private var lastColor: Int = 0
     override val paletteColor: Int
         get() = lastColor
-    private var _binding: FragmentPlainPlayerBinding? = null
-    private val binding get() = _binding!!
 
+    private var _binding: FragmentPlainPlayerBinding? = null
+    private val binding
+        get() = _binding!!
 
     override fun onPlayingMetaChanged() {
         super.onPlayingMetaChanged()
@@ -49,13 +50,11 @@ class PlainPlayerFragment : AbsPlayerFragment(R.layout.fragment_plain_player) {
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.apply {
             inflateMenu(R.menu.menu_player)
-            setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
             setOnMenuItemClickListener(this@PlainPlayerFragment)
-            ToolbarContentTintHelper.colorizeToolbar(
-                this,
-                colorControlNormal(),
-                requireActivity()
-            )
+            ToolbarContentTintHelper.colorizeToolbar(this, colorControlNormal(), requireActivity())
         }
     }
 
@@ -66,12 +65,8 @@ class PlainPlayerFragment : AbsPlayerFragment(R.layout.fragment_plain_player) {
         setUpPlayerToolbar()
         binding.title.isSelected = true
         binding.text.isSelected = true
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
         playerToolbar().drawAboveSystemBars()
     }
 
@@ -99,7 +94,7 @@ class PlainPlayerFragment : AbsPlayerFragment(R.layout.fragment_plain_player) {
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             colorControlNormal(),
-            requireActivity()
+            requireActivity(),
         )
     }
 

@@ -19,6 +19,9 @@ import android.os.Bundle
 import android.text.TextUtils
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import zzh.lifeplayer.music.EXTRA_SONG
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.DialogPlaylistBinding
@@ -27,13 +30,12 @@ import zzh.lifeplayer.music.extensions.extra
 import zzh.lifeplayer.music.extensions.materialDialog
 import zzh.lifeplayer.music.fragments.LibraryViewModel
 import zzh.lifeplayer.music.model.Song
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class CreatePlaylistDialog : DialogFragment() {
     private var _binding: DialogPlaylistBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
+
     private val libraryViewModel by activityViewModel<LibraryViewModel>()
 
     companion object {
@@ -44,12 +46,9 @@ class CreatePlaylistDialog : DialogFragment() {
         }
 
         fun create(songs: List<Song>): CreatePlaylistDialog {
-            return CreatePlaylistDialog().apply {
-                arguments = bundleOf(EXTRA_SONG to songs)
-            }
+            return CreatePlaylistDialog().apply { arguments = bundleOf(EXTRA_SONG to songs) }
         }
     }
-
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogPlaylistBinding.inflate(layoutInflater)
@@ -59,9 +58,7 @@ class CreatePlaylistDialog : DialogFragment() {
         val playlistContainer: TextInputLayout = binding.actionNewPlaylistContainer
         return materialDialog(R.string.new_playlist_title)
             .setView(binding.root)
-            .setPositiveButton(
-                R.string.create_action
-            ) { _, _ ->
+            .setPositiveButton(R.string.create_action) { _, _ ->
                 val playlistName = playlistView.text.toString()
                 if (!TextUtils.isEmpty(playlistName)) {
                     libraryViewModel.addToPlaylist(requireContext(), playlistName, songs)

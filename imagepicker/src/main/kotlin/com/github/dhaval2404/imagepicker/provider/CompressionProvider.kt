@@ -16,12 +16,10 @@ import java.io.File
  * Compress Selected/Captured Image
  *
  * @author Dhaval Patel
- * @version 1.0
  * @since 04 January 2019
+ * @version 1.0
  */
-class CompressionProvider(
-    activity: ImagePickerActivity,
-) : BaseProvider(activity) {
+class CompressionProvider(activity: ImagePickerActivity) : BaseProvider(activity) {
     companion object {
         private val TAG = CompressionProvider::class.java.simpleName
     }
@@ -56,6 +54,7 @@ class CompressionProvider(
 
     /**
      * Check if compression is required
+     *
      * @param file File object to apply Compression
      */
     private fun isCompressionRequired(file: File): Boolean {
@@ -70,6 +69,7 @@ class CompressionProvider(
 
     /**
      * Check if compression is required
+     *
      * @param uri Uri object to apply Compression
      */
     fun isCompressionRequired(uri: Uri): Boolean {
@@ -98,29 +98,32 @@ class CompressionProvider(
         startCompressionWorker(uri)
     }
 
-    /**
-     * Start Compression in Background
-     */
+    /** Start Compression in Background */
     @SuppressLint("StaticFieldLeak")
     private fun startCompressionWorker(uri: Uri) {
         object : AsyncTask<Uri, Void, File>() {
-            override fun doInBackground(vararg params: Uri): File? {
-                // Perform operation in background
-                val file = FileUtil.getTempFile(this@CompressionProvider, params[0]) ?: return null
-                return startCompression(file)
-            }
+                override fun doInBackground(vararg params: Uri): File? {
+                    // Perform operation in background
+                    val file =
+                        FileUtil.getTempFile(this@CompressionProvider, params[0]) ?: return null
+                    return startCompression(file)
+                }
 
-            override fun onPostExecute(file: File?) {
-                super.onPostExecute(file)
-                if (file != null) {
-                    // Post Result
-                    handleResult(file)
-                } else {
-                    // Post Error
-                    setError(com.github.dhaval2404.imagepicker.R.string.error_failed_to_compress_image)
+                override fun onPostExecute(file: File?) {
+                    super.onPostExecute(file)
+                    if (file != null) {
+                        // Post Result
+                        handleResult(file)
+                    } else {
+                        // Post Error
+                        setError(
+                            com.github.dhaval2404.imagepicker.R.string
+                                .error_failed_to_compress_image
+                        )
+                    }
                 }
             }
-        }.execute(uri)
+            .execute(uri)
     }
 
     /**
@@ -164,13 +167,8 @@ class CompressionProvider(
         return newFile
     }
 
-    /**
-     * Compress the file
-     */
-    private fun applyCompression(
-        file: File,
-        attempt: Int,
-    ): File? {
+    /** Compress the file */
+    private fun applyCompression(file: File, attempt: Int): File? {
         val resList = resolutionList()
         if (attempt >= resList.size) {
             return null
@@ -210,10 +208,7 @@ class CompressionProvider(
         }
     }
 
-    /**
-     * Image Resolution will be reduce with below parameters.
-     *
-     */
+    /** Image Resolution will be reduce with below parameters. */
     private fun resolutionList(): List<IntArray> =
         listOf(
             intArrayOf(2448, 3264), // 8.0 Megapixel
@@ -233,9 +228,7 @@ class CompressionProvider(
             intArrayOf(30, 40), // 0.02 Megapixel
         )
 
-    /**
-     * This method will be called when final result fot this provider is enabled.
-     */
+    /** This method will be called when final result fot this provider is enabled. */
     private fun handleResult(file: File) {
         activity.setCompressedImage(Uri.fromFile(file))
     }

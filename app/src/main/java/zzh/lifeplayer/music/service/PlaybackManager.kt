@@ -1,38 +1,39 @@
 package zzh.lifeplayer.music.service
 
 import android.content.Context
-import android.content.Intent
-import android.media.audiofx.AudioEffect
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
+import com.zmusicfx.musicfx.ControlPanelEffect
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.service.playback.Playback
 import zzh.lifeplayer.music.util.PreferenceUtil
-import com.zmusicfx.musicfx.ControlPanelEffect
-
-import android.os.Handler
-import android.os.Looper
 
 class PlaybackManager(val context: Context) {
 
     var playback: Playback? = null
     private var playbackLocation = PlaybackLocation.LOCAL
 
-    val isLocalPlayback get() = playbackLocation == PlaybackLocation.LOCAL
+    val isLocalPlayback
+        get() = playbackLocation == PlaybackLocation.LOCAL
 
     val audioSessionId: Int
-        get() = if (playback != null) {
-            playback!!.audioSessionId
-        } else 0
+        get() =
+            if (playback != null) {
+                playback!!.audioSessionId
+            } else 0
 
     val songDurationMillis: Int
-        get() = if (playback != null) {
-            playback!!.duration()
-        } else -1
+        get() =
+            if (playback != null) {
+                playback!!.duration()
+            } else -1
 
     val songProgressMillis: Int
-        get() = if (playback != null) {
-            playback!!.position()
-        } else -1
+        get() =
+            if (playback != null) {
+                playback!!.position()
+            } else -1
 
     val isPlaying: Boolean
         get() = playback != null && playback!!.isPlaying
@@ -73,7 +74,7 @@ class PlaybackManager(val context: Context) {
                 onPause()
             } else {
                 AudioFader.startFadeAnimator(playback!!, false) {
-                    //Code to run when Animator Ends
+                    // Code to run when Animator Ends
                     playback?.pause()
                     closeAudioEffectSession()
                     onPause()
@@ -84,11 +85,7 @@ class PlaybackManager(val context: Context) {
 
     fun seek(millis: Int, force: Boolean): Int = playback!!.seek(millis, force)
 
-    fun setDataSource(
-        song: Song,
-        force: Boolean,
-        completion: (success: Boolean) -> Unit,
-    ) {
+    fun setDataSource(song: Song, force: Boolean, completion: (success: Boolean) -> Unit) {
         playback?.setDataSource(song, force, completion)
     }
 
@@ -106,7 +103,7 @@ class PlaybackManager(val context: Context) {
      */
     fun maybeSwitchToCrossFade(crossFadeDuration: Int): Boolean {
         /* Switch to RetroExoPlayer if CrossFade duration is 0 and
-                Playback is not an instance of RetroExoPlayer */
+        Playback is not an instance of RetroExoPlayer */
         if (playback !is LifeExoPlayer && crossFadeDuration == 0) {
             if (playback != null) {
                 playback?.release()
@@ -130,15 +127,24 @@ class PlaybackManager(val context: Context) {
         playback = null
         closeAudioEffectSession()
     }
-    
+
     private fun openAudioEffectSession() {
         val audioSessionId = playback!!.audioSessionId
         if (audioSessionId != 0) {
-            Handler(Looper.getMainLooper()).postDelayed({
-                 // 直接使用 ControlPanelEffect 初始化效果会话
-                ControlPanelEffect.openSession(context, context.packageName, audioSessionId)
-                ControlPanelEffect.setEnabledAll(context, context.packageName, audioSessionId, true)
-            }, 500)
+            Handler(Looper.getMainLooper())
+                .postDelayed(
+                    {
+                        // 直接使用 ControlPanelEffect 初始化效果会话
+                        ControlPanelEffect.openSession(context, context.packageName, audioSessionId)
+                        ControlPanelEffect.setEnabledAll(
+                            context,
+                            context.packageName,
+                            audioSessionId,
+                            true,
+                        )
+                    },
+                    500,
+                )
         }
     }
 
@@ -149,7 +155,7 @@ class PlaybackManager(val context: Context) {
             ControlPanelEffect.closeSession(context, context.packageName, audioSessionId)
         }
     }
-    
+
     /**
      * Reopens the audio effect session. This should be called when the audio session ID changes
      * (e.g., when a new track starts) to ensure equalizer and other audio effects remain active.
@@ -202,5 +208,5 @@ class PlaybackManager(val context: Context) {
 
 enum class PlaybackLocation {
     LOCAL,
-    REMOTE
+    REMOTE,
 }

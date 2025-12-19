@@ -22,9 +22,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class PlaylistWithSongs(
     @Embedded val playlistEntity: PlaylistEntity,
-    @Relation(
-        parentColumn = "playlist_id",
-        entityColumn = "playlist_creator_id"
-    )
-    val songs: List<SongEntity>
+    @Relation(parentColumn = "playlist_id", entityColumn = "playlist_creator_id")
+    val songs: List<SongEntity>,
 ) : Parcelable

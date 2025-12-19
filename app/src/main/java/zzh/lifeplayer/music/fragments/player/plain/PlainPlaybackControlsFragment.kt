@@ -19,6 +19,7 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageButton
 import android.widget.TextView
+import com.google.android.material.slider.Slider
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
@@ -30,17 +31,14 @@ import zzh.lifeplayer.music.fragments.base.AbsPlayerControlsFragment
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.google.android.material.slider.Slider
 
-/**
- * @author Hemanth S (h4h13).
- */
-
+/** @author Hemanth S (h4h13). */
 class PlainPlaybackControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_plain_controls_fragment) {
 
     private var _binding: FragmentPlainControlsFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val progressSlider: Slider
         get() = binding.progressSlider
@@ -127,11 +125,12 @@ class PlainPlaybackControlsFragment :
                 MaterialValueHelper.getPrimaryDisabledTextColor(requireContext(), false)
         }
 
-        val colorFinal = if (PreferenceUtil.isAdaptiveColor) {
-            color.primaryTextColor
-        } else {
-            accentColor()
-        }
+        val colorFinal =
+            if (PreferenceUtil.isAdaptiveColor) {
+                color.primaryTextColor
+            } else {
+                accentColor()
+            }
         volumeFragment?.setTintable(colorFinal)
         binding.progressSlider.applyColor(colorFinal)
 
@@ -139,9 +138,9 @@ class PlainPlaybackControlsFragment :
             binding.playPauseButton,
             MaterialValueHelper.getPrimaryTextColor(
                 requireContext(),
-                ColorUtil.isColorLight(colorFinal)
+                ColorUtil.isColorLight(colorFinal),
             ),
-            false
+            false,
         )
         TintHelper.setTintAuto(binding.playPauseButton, colorFinal, true)
 
@@ -151,7 +150,8 @@ class PlainPlaybackControlsFragment :
     }
 
     public override fun show() {
-        binding.playPauseButton.animate()
+        binding.playPauseButton
+            .animate()
             .scaleX(1f)
             .scaleY(1f)
             .rotation(360f)

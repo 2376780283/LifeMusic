@@ -12,8 +12,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
-import androidx.core.net.toUri
-import androidx.core.text.parseAsHtml
 import androidx.core.view.isVisible
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.R
@@ -32,9 +30,7 @@ class PermissionActivity : AbsMusicServiceActivity() {
         setTaskDescriptionColorAuto()
         setupTitle()
 
-        binding.storagePermission.setButtonClick {
-            requestPermissions()
-        }        
+        binding.storagePermission.setButtonClick { requestPermissions() }
 
         if (VersionUtils.hasS()) {
             binding.bluetoothPermission.show()
@@ -42,7 +38,7 @@ class PermissionActivity : AbsMusicServiceActivity() {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(BLUETOOTH_CONNECT),
-                    BLUETOOTH_PERMISSION_REQUEST
+                    BLUETOOTH_PERMISSION_REQUEST,
                 )
             }
             binding.alarmPermission.show()
@@ -58,28 +54,24 @@ class PermissionActivity : AbsMusicServiceActivity() {
         binding.finish.setOnClickListener {
             if (hasPermissions()) {
                 startActivity(
-                    Intent(this, MainActivity::class.java).addFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK or
-                                Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    )
+                    Intent(this, MainActivity::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 )
                 finish()
             }
         }
-        onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                finishAffinity()
-                remove()
+        onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    finishAffinity()
+                    remove()
+                }
             }
-        })
+        )
     }
 
-    private fun setupTitle() {           
-        val appName =
-            getString(
-                R.string.message_welcome,
-                "PixelMusic"
-            )
+    private fun setupTitle() {
+        val appName = getString(R.string.message_welcome, "PixelMusic")
         binding.appNameText.text = appName
     }
 
@@ -90,7 +82,7 @@ class PermissionActivity : AbsMusicServiceActivity() {
             binding.storagePermission.checkImage.isVisible = true
             binding.storagePermission.checkImage.imageTintList =
                 ColorStateList.valueOf(accentColor())
-        }        
+        }
         if (VersionUtils.hasS()) {
             if (hasBluetoothPermission()) {
                 binding.bluetoothPermission.checkImage.isVisible = true
@@ -111,10 +103,8 @@ class PermissionActivity : AbsMusicServiceActivity() {
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun hasBluetoothPermission(): Boolean {
-        return ActivityCompat.checkSelfPermission(
-            this,
-            BLUETOOTH_CONNECT
-        ) == PackageManager.PERMISSION_GRANTED
+        return ActivityCompat.checkSelfPermission(this, BLUETOOTH_CONNECT) ==
+            PackageManager.PERMISSION_GRANTED
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

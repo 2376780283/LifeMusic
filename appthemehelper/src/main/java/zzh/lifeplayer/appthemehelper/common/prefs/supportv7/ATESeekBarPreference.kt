@@ -15,53 +15,45 @@ import zzh.lifeplayer.appthemehelper.R
 import zzh.lifeplayer.appthemehelper.ThemeStore
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 import zzh.lifeplayer.appthemehelper.util.TintHelper
-import zzh.lifeplayer.appthemehelper.util.VersionUtils
 
 class ATESeekBarPreference
-    @JvmOverloads
-    constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = -1,
-        defStyleRes: Int = -1,
-    ) : SeekBarPreference(context, attrs, defStyleAttr, defStyleRes) {
-        var unit: String = ""
+@JvmOverloads
+constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = -1,
+    defStyleRes: Int = -1,
+) : SeekBarPreference(context, attrs, defStyleAttr, defStyleRes) {
+    var unit: String = ""
 
-        init {
-            context.withStyledAttributes(attrs, R.styleable.ATESeekBarPreference, 0, 0) {
-                getString(R.styleable.ATESeekBarPreference_ateKey_pref_unit)?.let {
-                    unit = it
-                }
-            }
-            icon?.colorFilter =
-                BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                    ATHUtil.resolveColor(
-                        context,
-                        android.R.attr.colorControlNormal,
-                    ),
-                    BlendModeCompat.SRC_IN,
-                )
+    init {
+        context.withStyledAttributes(attrs, R.styleable.ATESeekBarPreference, 0, 0) {
+            getString(R.styleable.ATESeekBarPreference_ateKey_pref_unit)?.let { unit = it }
         }
-
-        override fun onBindViewHolder(view: PreferenceViewHolder) {
-            super.onBindViewHolder(view)
-            val seekBar = view.findViewById(androidx.preference.R.id.seekbar) as SeekBar
-            TintHelper.setTintAuto(
-                seekBar, // Set MD3 accent if MD3 is enabled or in-app accent otherwise
-                ThemeStore.accentColor(context),
-                false,
+        icon?.colorFilter =
+            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                ATHUtil.resolveColor(context, android.R.attr.colorControlNormal),
+                BlendModeCompat.SRC_IN,
             )
-            (view.findViewById(androidx.preference.R.id.seekbar_value) as TextView).apply {
-                appendUnit(editableText)
-                doAfterTextChanged {
-                    appendUnit(it)
-                }
-            }
-        }
+    }
 
-        private fun TextView.appendUnit(editable: Editable?) {
-            if (!editable.toString().endsWith(unit)) {
-                append(unit)
-            }
+    override fun onBindViewHolder(view: PreferenceViewHolder) {
+        super.onBindViewHolder(view)
+        val seekBar = view.findViewById(androidx.preference.R.id.seekbar) as SeekBar
+        TintHelper.setTintAuto(
+            seekBar, // Set MD3 accent if MD3 is enabled or in-app accent otherwise
+            ThemeStore.accentColor(context),
+            false,
+        )
+        (view.findViewById(androidx.preference.R.id.seekbar_value) as TextView).apply {
+            appendUnit(editableText)
+            doAfterTextChanged { appendUnit(it) }
         }
     }
+
+    private fun TextView.appendUnit(editable: Editable?) {
+        if (!editable.toString().endsWith(unit)) {
+            append(unit)
+        }
+    }
+}

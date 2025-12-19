@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
+import com.google.android.material.slider.Slider
 import zzh.lifeplayer.appthemehelper.ThemeStore
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.FragmentVolumeBinding
@@ -31,13 +32,13 @@ import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.volume.AudioVolumeObserver
 import zzh.lifeplayer.music.volume.OnAudioVolumeChangedListener
-import com.google.android.material.slider.Slider
 
-class VolumeFragment : Fragment(), Slider.OnChangeListener, OnAudioVolumeChangedListener,
-    View.OnClickListener {
+class VolumeFragment :
+    Fragment(), Slider.OnChangeListener, OnAudioVolumeChangedListener, View.OnClickListener {
 
     private var _binding: FragmentVolumeBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     private var audioVolumeObserver: AudioVolumeObserver? = null
 
@@ -79,7 +80,9 @@ class VolumeFragment : Fragment(), Slider.OnChangeListener, OnAudioVolumeChanged
         if (_binding != null) {
             binding.volumeSeekBar.valueTo = maxVolume.toFloat()
             binding.volumeSeekBar.value = currentVolume.toFloat()
-            binding.volumeDown.setImageResource(if (currentVolume == 0) R.drawable.ic_volume_off else R.drawable.ic_volume_down)
+            binding.volumeDown.setImageResource(
+                if (currentVolume == 0) R.drawable.ic_volume_off else R.drawable.ic_volume_down
+            )
         }
     }
 
@@ -93,18 +96,26 @@ class VolumeFragment : Fragment(), Slider.OnChangeListener, OnAudioVolumeChanged
         val audioManager = audioManager
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, value.toInt(), 0)
         setPauseWhenZeroVolume(value < 1f)
-        binding.volumeDown.setImageResource(if (value == 0f) R.drawable.ic_volume_off else R.drawable.ic_volume_down)
+        binding.volumeDown.setImageResource(
+            if (value == 0f) R.drawable.ic_volume_off else R.drawable.ic_volume_down
+        )
     }
 
     override fun onClick(view: View) {
         val audioManager = audioManager
         when (view.id) {
-            R.id.volumeDown -> audioManager.adjustStreamVolume(
-                AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0
-            )
-            R.id.volumeUp -> audioManager.adjustStreamVolume(
-                AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0
-            )
+            R.id.volumeDown ->
+                audioManager.adjustStreamVolume(
+                    AudioManager.STREAM_MUSIC,
+                    AudioManager.ADJUST_LOWER,
+                    0,
+                )
+            R.id.volumeUp ->
+                audioManager.adjustStreamVolume(
+                    AudioManager.STREAM_MUSIC,
+                    AudioManager.ADJUST_RAISE,
+                    0,
+                )
         }
     }
 
@@ -121,8 +132,7 @@ class VolumeFragment : Fragment(), Slider.OnChangeListener, OnAudioVolumeChanged
 
     private fun setPauseWhenZeroVolume(pauseWhenZeroVolume: Boolean) {
         if (PreferenceUtil.isPauseOnZeroVolume)
-            if (MusicPlayerRemote.isPlaying && pauseWhenZeroVolume)
-                MusicPlayerRemote.pauseSong()
+            if (MusicPlayerRemote.isPlaying && pauseWhenZeroVolume) MusicPlayerRemote.pauseSong()
     }
 
     fun setTintableColor(color: Int) {

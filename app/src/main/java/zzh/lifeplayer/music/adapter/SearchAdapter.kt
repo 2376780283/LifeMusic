@@ -11,6 +11,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import java.util.*
 import zzh.lifeplayer.appthemehelper.ThemeStore
 import zzh.lifeplayer.music.*
 import zzh.lifeplayer.music.adapter.base.MediaEntryViewHolder
@@ -26,13 +28,9 @@ import zzh.lifeplayer.music.model.Artist
 import zzh.lifeplayer.music.model.Genre
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.MusicUtil
-import com.bumptech.glide.Glide
-import java.util.*
 
-class SearchAdapter(
-    private val activity: FragmentActivity,
-    private var dataSet: List<Any>
-) : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
+class SearchAdapter(private val activity: FragmentActivity, private var dataSet: List<Any>) :
+    RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
     @SuppressLint("NotifyDataSetChanged")
     fun swapDataSet(dataSet: List<Any>) {
@@ -42,7 +40,8 @@ class SearchAdapter(
 
     override fun getItemViewType(position: Int): Int {
         if (dataSet[position] is Album) return ALBUM
-        if (dataSet[position] is Artist) return if ((dataSet[position] as Artist).isAlbumArtist) ALBUM_ARTIST else ARTIST
+        if (dataSet[position] is Artist)
+            return if ((dataSet[position] as Artist).isAlbumArtist) ALBUM_ARTIST else ARTIST
         if (dataSet[position] is Genre) return GENRE
         if (dataSet[position] is PlaylistWithSongs) return PLAYLIST
         return if (dataSet[position] is Song) SONG else HEADER
@@ -50,26 +49,25 @@ class SearchAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType) {
-            HEADER -> ViewHolder(
-                LayoutInflater.from(activity).inflate(
-                    R.layout.sub_header,
-                    parent,
-                    false
-                ), viewType
-            )
+            HEADER ->
+                ViewHolder(
+                    LayoutInflater.from(activity).inflate(R.layout.sub_header, parent, false),
+                    viewType,
+                )
 
-            ALBUM, ARTIST, ALBUM_ARTIST -> ViewHolder(
-                LayoutInflater.from(activity).inflate(
-                    R.layout.item_list_big,
-                    parent,
-                    false
-                ), viewType
-            )
+            ALBUM,
+            ARTIST,
+            ALBUM_ARTIST ->
+                ViewHolder(
+                    LayoutInflater.from(activity).inflate(R.layout.item_list_big, parent, false),
+                    viewType,
+                )
 
-            else -> ViewHolder(
-                LayoutInflater.from(activity).inflate(R.layout.item_list, parent, false),
-                viewType
-            )
+            else ->
+                ViewHolder(
+                    LayoutInflater.from(activity).inflate(R.layout.item_list, parent, false),
+                    viewType,
+                )
         }
     }
 
@@ -80,7 +78,9 @@ class SearchAdapter(
                 val album = dataSet[position] as Album
                 holder.title?.text = album.title
                 holder.text?.text = album.artistName
-                Glide.with(activity).asDrawable().albumCoverOptions(album.safeGetFirstSong())
+                Glide.with(activity)
+                    .asDrawable()
+                    .albumCoverOptions(album.safeGetFirstSong())
                     .load(LifeGlideExtension.getSongModel(album.safeGetFirstSong()))
                     .into(holder.image!!)
             }
@@ -90,9 +90,11 @@ class SearchAdapter(
                 val artist = dataSet[position] as Artist
                 holder.title?.text = artist.name
                 holder.text?.text = MusicUtil.getArtistInfoString(activity, artist)
-                Glide.with(activity).asDrawable().artistImageOptions(artist).load(
-                    LifeGlideExtension.getArtistModel(artist)
-                ).into(holder.image!!)
+                Glide.with(activity)
+                    .asDrawable()
+                    .artistImageOptions(artist)
+                    .load(LifeGlideExtension.getArtistModel(artist))
+                    .into(holder.image!!)
             }
 
             SONG -> {
@@ -100,27 +102,30 @@ class SearchAdapter(
                 val song = dataSet[position] as Song
                 holder.title?.text = song.title
                 holder.text?.text = song.albumName
-                Glide.with(activity).asDrawable().songCoverOptions(song)
-                    .load(LifeGlideExtension.getSongModel(song)).into(holder.image!!)
+                Glide.with(activity)
+                    .asDrawable()
+                    .songCoverOptions(song)
+                    .load(LifeGlideExtension.getSongModel(song))
+                    .into(holder.image!!)
             }
 
             GENRE -> {
                 val genre = dataSet[position] as Genre
                 holder.title?.text = genre.name
-                holder.text?.text = String.format(
-                    Locale.getDefault(),
-                    "%d %s",
-                    genre.songCount,
-                    if (genre.songCount > 1) activity.getString(R.string.songs) else activity.getString(
-                        R.string.song
+                holder.text?.text =
+                    String.format(
+                        Locale.getDefault(),
+                        "%d %s",
+                        genre.songCount,
+                        if (genre.songCount > 1) activity.getString(R.string.songs)
+                        else activity.getString(R.string.song),
                     )
-                )
             }
 
             PLAYLIST -> {
                 val playlist = dataSet[position] as PlaylistWithSongs
                 holder.title?.text = playlist.playlistEntity.playlistName
-                //holder.text?.text = MusicUtil.playlistInfoString(activity, playlist.songs)
+                // holder.text?.text = MusicUtil.playlistInfoString(activity, playlist.songs)
             }
 
             ALBUM_ARTIST -> {
@@ -128,9 +133,11 @@ class SearchAdapter(
                 val artist = dataSet[position] as Artist
                 holder.title?.text = artist.name
                 holder.text?.text = MusicUtil.getArtistInfoString(activity, artist)
-                Glide.with(activity).asDrawable().artistImageOptions(artist).load(
-                    LifeGlideExtension.getArtistModel(artist)
-                ).into(holder.image!!)
+                Glide.with(activity)
+                    .asDrawable()
+                    .artistImageOptions(artist)
+                    .load(LifeGlideExtension.getArtistModel(artist))
+                    .into(holder.image!!)
             }
 
             else -> {
@@ -151,17 +158,20 @@ class SearchAdapter(
             if (itemViewType == SONG) {
                 imageTextContainer?.isGone = true
                 menu?.isVisible = true
-                menu?.setOnClickListener(object : SongMenuHelper.OnClickSongMenu(activity) {
-                    override val song: Song
-                        get() = dataSet[layoutPosition] as Song
-                })
+                menu?.setOnClickListener(
+                    object : SongMenuHelper.OnClickSongMenu(activity) {
+                        override val song: Song
+                            get() = dataSet[layoutPosition] as Song
+                    }
+                )
             } else {
                 menu?.isVisible = false
             }
 
             when (itemViewType) {
                 ALBUM -> setImageTransitionName(activity.getString(R.string.transition_album_art))
-                ARTIST -> setImageTransitionName(activity.getString(R.string.transition_artist_image))
+                ARTIST ->
+                    setImageTransitionName(activity.getString(R.string.transition_artist_image))
                 else -> {
                     val container = itemView.findViewById<View>(R.id.imageContainer)
                     container?.isVisible = false
@@ -173,38 +183,51 @@ class SearchAdapter(
             val item = dataSet[layoutPosition]
             when (itemViewType) {
                 ALBUM -> {
-                    activity.findNavController(R.id.fragment_container).navigate(
-                        R.id.albumDetailsFragment,
-                        bundleOf(EXTRA_ALBUM_ID to (item as Album).id)
-                    )
+                    activity
+                        .findNavController(R.id.fragment_container)
+                        .navigate(
+                            R.id.albumDetailsFragment,
+                            bundleOf(EXTRA_ALBUM_ID to (item as Album).id),
+                        )
                 }
 
                 ARTIST -> {
-                    activity.findNavController(R.id.fragment_container).navigate(
-                        R.id.artistDetailsFragment,
-                        bundleOf(EXTRA_ARTIST_ID to (item as Artist).id)
-                    )
+                    activity
+                        .findNavController(R.id.fragment_container)
+                        .navigate(
+                            R.id.artistDetailsFragment,
+                            bundleOf(EXTRA_ARTIST_ID to (item as Artist).id),
+                        )
                 }
 
                 ALBUM_ARTIST -> {
-                    activity.findNavController(R.id.fragment_container).navigate(
-                        R.id.albumArtistDetailsFragment,
-                        bundleOf(EXTRA_ARTIST_NAME to (item as Artist).name)
-                    )
+                    activity
+                        .findNavController(R.id.fragment_container)
+                        .navigate(
+                            R.id.albumArtistDetailsFragment,
+                            bundleOf(EXTRA_ARTIST_NAME to (item as Artist).name),
+                        )
                 }
 
                 GENRE -> {
-                    activity.findNavController(R.id.fragment_container).navigate(
-                        R.id.genreDetailsFragment,
-                        bundleOf(EXTRA_GENRE to (item as Genre))
-                    )
+                    activity
+                        .findNavController(R.id.fragment_container)
+                        .navigate(
+                            R.id.genreDetailsFragment,
+                            bundleOf(EXTRA_GENRE to (item as Genre)),
+                        )
                 }
 
                 PLAYLIST -> {
-                    activity.findNavController(R.id.fragment_container).navigate(
-                        R.id.playlistDetailsFragment,
-                        bundleOf(EXTRA_PLAYLIST_ID to (item as PlaylistWithSongs).playlistEntity.playListId)
-                    )
+                    activity
+                        .findNavController(R.id.fragment_container)
+                        .navigate(
+                            R.id.playlistDetailsFragment,
+                            bundleOf(
+                                EXTRA_PLAYLIST_ID to
+                                    (item as PlaylistWithSongs).playlistEntity.playListId
+                            ),
+                        )
                 }
 
                 SONG -> {

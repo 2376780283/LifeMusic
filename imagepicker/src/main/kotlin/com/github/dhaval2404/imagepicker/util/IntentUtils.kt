@@ -14,18 +14,13 @@ import java.io.File
  * Get Gallery/Camera Intent
  *
  * @author Dhaval Patel
- * @version 1.0
  * @since 04 January 2018
+ * @version 1.0
  */
 object IntentUtils {
-    /**
-     * @return Intent Gallery Intent
-     */
+    /** @return Intent Gallery Intent */
     @JvmStatic
-    fun getGalleryIntent(
-        context: Context,
-        mimeTypes: Array<String>,
-    ): Intent {
+    fun getGalleryIntent(context: Context, mimeTypes: Array<String>): Intent {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             val intent = getGalleryDocumentIntent(mimeTypes)
             if (intent.resolveActivity(context.packageManager) != null) {
@@ -36,7 +31,8 @@ object IntentUtils {
     }
 
     /**
-     * Ref: https://developer.android.com/reference/android/content/Intent#FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+     * Ref:
+     * https://developer.android.com/reference/android/content/Intent#FLAG_GRANT_PERSISTABLE_URI_PERMISSION
      *
      * @return Intent Gallery Document Intent
      */
@@ -50,9 +46,7 @@ object IntentUtils {
         return intent
     }
 
-    /**
-     * @return Intent Gallery Pick Intent
-     */
+    /** @return Intent Gallery Pick Intent */
     private fun getLegacyGalleryPickIntent(mimeTypes: Array<String>): Intent {
         // Show Gallery Intent, Will open google photos
         return Intent(Intent.ACTION_PICK).applyImageTypes(mimeTypes)
@@ -67,20 +61,16 @@ object IntentUtils {
         return this
     }
 
-    /**
-     * @return Intent Camera Intent
-     */
+    /** @return Intent Camera Intent */
     @JvmStatic
-    fun getCameraIntent(
-        context: Context,
-        file: File,
-    ): Intent? {
+    fun getCameraIntent(context: Context, file: File): Intent? {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             // authority = com.github.dhaval2404.imagepicker.provider
             val authority =
-                context.packageName + context.getString(R.string.image_picker_provider_authority_suffix)
+                context.packageName +
+                    context.getString(R.string.image_picker_provider_authority_suffix)
             val photoURI = FileProvider.getUriForFile(context, authority, file)
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
         } else {
@@ -109,10 +99,7 @@ object IntentUtils {
      * @return Intent
      */
     @JvmStatic
-    fun getUriViewIntent(
-        context: Context,
-        uri: Uri,
-    ): Intent {
+    fun getUriViewIntent(context: Context, uri: Uri): Intent {
         val intent = Intent(Intent.ACTION_VIEW)
         val authority =
             context.packageName + context.getString(R.string.image_picker_provider_authority_suffix)

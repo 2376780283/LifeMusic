@@ -20,11 +20,8 @@ import androidx.fragment.app.FragmentActivity
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.MusicUtil
 
-class SimpleSongAdapter(
-    context: FragmentActivity,
-    songs: ArrayList<Song>,
-    layoutRes: Int
-) : SongAdapter(context, songs, layoutRes) {
+class SimpleSongAdapter(context: FragmentActivity, songs: ArrayList<Song>, layoutRes: Int) :
+    SongAdapter(context, songs, layoutRes) {
 
     override fun swapDataSet(dataSet: List<Song>) {
         this.dataSet = dataSet.toMutableList()
@@ -37,7 +34,7 @@ class SimpleSongAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
- /*       val fixedTrackNumber = MusicUtil.getFixedTrackNumber(dataSet[position].trackNumber)
+        /*       val fixedTrackNumber = MusicUtil.getFixedTrackNumber(dataSet[position].trackNumber)
 
         holder.imageText?.text = if (fixedTrackNumber > 0) fixedTrackNumber.toString() else "-"
         holder.time?.text = MusicUtil.getReadableDurationString(dataSet[position].duration)*/

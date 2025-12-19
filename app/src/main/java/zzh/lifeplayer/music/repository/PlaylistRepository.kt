@@ -31,9 +31,7 @@ import zzh.lifeplayer.music.model.Playlist
 import zzh.lifeplayer.music.model.PlaylistSong
 import zzh.lifeplayer.music.model.Song
 
-/**
- * Created by hemanths on 16/08/17.
- */
+/** Created by hemanths on 16/08/17. */
 interface PlaylistRepository {
     fun playlist(cursor: Cursor?): Playlist
 
@@ -53,10 +51,9 @@ interface PlaylistRepository {
 
     fun playlistSongs(playlistId: Long): List<Song>
 }
+
 @Suppress("Deprecation")
-class RealPlaylistRepository(
-    private val contentResolver: ContentResolver
-) : PlaylistRepository {
+class RealPlaylistRepository(private val contentResolver: ContentResolver) : PlaylistRepository {
 
     override fun playlist(cursor: Cursor?): Playlist {
         return cursor.use {
@@ -73,12 +70,7 @@ class RealPlaylistRepository(
     }
 
     override fun playlist(playlistId: Long): Playlist {
-        return playlist(
-            makePlaylistCursor(
-                BaseColumns._ID + "=?",
-                arrayOf(playlistId.toString())
-            )
-        )
+        return playlist(makePlaylistCursor(BaseColumns._ID + "=?", arrayOf(playlistId.toString())))
     }
 
     override fun searchPlaylist(query: String): List<Playlist> {
@@ -102,12 +94,7 @@ class RealPlaylistRepository(
     }
 
     override fun favoritePlaylist(playlistName: String): List<Playlist> {
-        return playlists(
-            makePlaylistCursor(
-                PlaylistsColumns.NAME + "=?",
-                arrayOf(playlistName)
-            )
-        )
+        return playlists(makePlaylistCursor(PlaylistsColumns.NAME + "=?", arrayOf(playlistName)))
     }
 
     override fun deletePlaylist(playlistId: Long) {
@@ -119,9 +106,7 @@ class RealPlaylistRepository(
         contentResolver.delete(localUri, localStringBuilder.toString(), null)
     }
 
-    private fun getPlaylistFromCursorImpl(
-        cursor: Cursor
-    ): Playlist {
+    private fun getPlaylistFromCursorImpl(cursor: Cursor): Playlist {
         val id = cursor.getLong(0)
         val name = cursor.getString(1)
         return if (name != null) {
@@ -175,26 +160,19 @@ class RealPlaylistRepository(
             playlistId,
             idInPlaylist,
             composer ?: "",
-            albumArtist
+            albumArtist,
         )
     }
 
-    private fun makePlaylistCursor(
-        selection: String?,
-        values: Array<String>?
-    ): Cursor? {
+    private fun makePlaylistCursor(selection: String?, values: Array<String>?): Cursor? {
         return contentResolver.query(
             EXTERNAL_CONTENT_URI,
-            arrayOf(
-                BaseColumns._ID, /* 0 */
-                PlaylistsColumns.NAME /* 1 */
-            ),
+            arrayOf(BaseColumns._ID, /* 0 */ PlaylistsColumns.NAME /* 1 */),
             selection,
             values,
-            DEFAULT_SORT_ORDER
+            DEFAULT_SORT_ORDER,
         )
     }
-
 
     private fun makePlaylistSongCursor(playlistId: Long): Cursor? {
         return contentResolver.query(
@@ -211,10 +189,13 @@ class RealPlaylistRepository(
                 AudioColumns.ALBUM, // 8
                 AudioColumns.ARTIST_ID, // 9
                 AudioColumns.ARTIST, // 10
-                Members._ID,//11
-                AudioColumns.COMPOSER,//12
-                "album_artist"//13
-            ), Constants.IS_MUSIC, null, Members.DEFAULT_SORT_ORDER
+                Members._ID, // 11
+                AudioColumns.COMPOSER, // 12
+                "album_artist", // 13
+            ),
+            Constants.IS_MUSIC,
+            null,
+            Members.DEFAULT_SORT_ORDER,
         )
     }
 }

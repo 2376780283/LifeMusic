@@ -23,7 +23,8 @@ import zzh.lifeplayer.music.util.ViewUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 import zzh.lifeplayer.music.views.DrawableGradient
 
-class PlayerFragment : AbsPlayerFragment(R.layout.fragment_player),
+class PlayerFragment :
+    AbsPlayerFragment(R.layout.fragment_player),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var lastColor: Int = 0
@@ -34,28 +35,23 @@ class PlayerFragment : AbsPlayerFragment(R.layout.fragment_player),
     private var valueAnimator: ValueAnimator? = null
 
     private var _binding: FragmentPlayerBinding? = null
-    private val binding get() = _binding!!
-
+    private val binding
+        get() = _binding!!
 
     private fun colorize(i: Int) {
         if (valueAnimator != null) {
             valueAnimator?.cancel()
         }
 
-        valueAnimator = ValueAnimator.ofObject(
-            ArgbEvaluator(),
-            surfaceColor(),
-            i
-        )
+        valueAnimator = ValueAnimator.ofObject(ArgbEvaluator(), surfaceColor(), i)
         valueAnimator?.addUpdateListener { animation ->
             if (isAdded) {
-                val drawable = DrawableGradient(
-                    GradientDrawable.Orientation.TOP_BOTTOM,
-                    intArrayOf(
-                        animation.animatedValue as Int,
-                        surfaceColor()
-                    ), 0
-                )
+                val drawable =
+                    DrawableGradient(
+                        GradientDrawable.Orientation.TOP_BOTTOM,
+                        intArrayOf(animation.animatedValue as Int, surfaceColor()),
+                        0,
+                    )
                 binding.colorGradientBackground.background = drawable
             }
         }
@@ -80,7 +76,7 @@ class PlayerFragment : AbsPlayerFragment(R.layout.fragment_player),
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             colorControlNormal(),
-            requireActivity()
+            requireActivity(),
         )
 
         if (PreferenceUtil.isAdaptiveColor) {
@@ -122,19 +118,21 @@ class PlayerFragment : AbsPlayerFragment(R.layout.fragment_player),
         controlsFragment = whichFragment(R.id.playbackControlsFragment)
         val playerAlbumCoverFragment: PlayerAlbumCoverFragment =
             whichFragment(R.id.playerAlbumCoverFragment)
-      //  playerAlbumCoverFragment.setCallbacks(this)
+        //  playerAlbumCoverFragment.setCallbacks(this)
     }
 
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.inflateMenu(R.menu.menu_player)
-        //binding.playerToolbar.menu.setUpWithIcons()
-        binding.playerToolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+        // binding.playerToolbar.menu.setUpWithIcons()
+        binding.playerToolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
         binding.playerToolbar.setOnMenuItemClickListener(this)
 
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             colorControlNormal(),
-            requireActivity()
+            requireActivity(),
         )
     }
 

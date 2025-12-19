@@ -16,6 +16,12 @@ package zzh.lifeplayer.music.helper.menu
 
 import android.view.MenuItem
 import androidx.fragment.app.FragmentActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.db.PlaylistWithSongs
 import zzh.lifeplayer.music.db.toSongs
@@ -25,19 +31,13 @@ import zzh.lifeplayer.music.dialogs.RenamePlaylistDialog
 import zzh.lifeplayer.music.dialogs.SavePlaylistDialog
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.repository.RealRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 
 object PlaylistMenuHelper : KoinComponent {
 
     fun handleMenuClick(
         activity: FragmentActivity,
         playlistWithSongs: PlaylistWithSongs,
-        item: MenuItem
+        item: MenuItem,
     ): Boolean {
         when (item.itemId) {
             R.id.action_play -> {

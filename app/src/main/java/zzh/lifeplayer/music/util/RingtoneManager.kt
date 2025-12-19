@@ -20,12 +20,11 @@ import android.provider.BaseColumns
 import android.provider.MediaStore
 import android.provider.Settings
 import androidx.core.net.toUri
-import zzh.lifeplayer.appthemehelper.util.VersionUtils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.extensions.showToast
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.MusicUtil.getSongFileUri
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 object RingtoneManager {
     fun setRingtone(context: Context, song: Song) {
@@ -33,28 +32,32 @@ object RingtoneManager {
         val resolver = context.contentResolver
 
         try {
-            val cursor = resolver.query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                arrayOf(MediaStore.MediaColumns.TITLE),
-                BaseColumns._ID + "=?",
-                arrayOf(song.id.toString()), null
-            )
+            val cursor =
+                resolver.query(
+                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    arrayOf(MediaStore.MediaColumns.TITLE),
+                    BaseColumns._ID + "=?",
+                    arrayOf(song.id.toString()),
+                    null,
+                )
             cursor.use { cursorSong ->
                 if (cursorSong != null && cursorSong.count == 1) {
                     cursorSong.moveToFirst()
                     Settings.System.putString(resolver, Settings.System.RINGTONE, uri.toString())
-                    val message = context
-                        .getString(R.string.x_has_been_set_as_ringtone, cursorSong.getString(0))
+                    val message =
+                        context.getString(
+                            R.string.x_has_been_set_as_ringtone,
+                            cursorSong.getString(0),
+                        )
                     context.showToast(message)
                 }
             }
-        } catch (ignored: SecurityException) {
-        }
+        } catch (ignored: SecurityException) {}
     }
 
     fun requiresDialog(context: Context): Boolean {
         if (!Settings.System.canWrite(context)) {
-          return true
+            return true
         }
         return false
     }
@@ -69,6 +72,7 @@ object RingtoneManager {
                 context.startActivity(intent)
             }
             .setNegativeButton(android.R.string.cancel, null)
-            .create().show()
+            .create()
+            .show()
     }
 }

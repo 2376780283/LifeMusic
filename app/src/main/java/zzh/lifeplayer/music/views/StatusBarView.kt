@@ -18,18 +18,13 @@ import android.content.res.Resources
 import android.util.AttributeSet
 import android.view.View
 
-class StatusBarView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr) {
+class StatusBarView
+@JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    View(context, attrs, defStyleAttr) {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        setMeasuredDimension(
-            MeasureSpec.getSize(widthMeasureSpec), getStatusBarHeight(
-                resources
-            )
-        )
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), getStatusBarHeight(resources))
     }
 
     companion object {

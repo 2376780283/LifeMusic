@@ -6,7 +6,7 @@ class Report(
     val title: String,
     private val description: String,
     private val deviceInfo: DeviceInfo?,
-    private val extraInfo: ExtraInfo
+    private val extraInfo: ExtraInfo,
 ) {
     fun getDescription(): String {
         return """
@@ -17,6 +17,7 @@ class Report(
             ${deviceInfo?.toMarkdown()}
             
             ${extraInfo.toMarkdown()}
-            """.trimIndent()
+            """
+            .trimIndent()
     }
 }

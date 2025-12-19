@@ -19,7 +19,6 @@ import android.app.Dialog
 import android.app.PendingIntent
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.SystemClock
@@ -51,11 +50,17 @@ class SleepTimerDialog : DialogFragment() {
     private lateinit var dialog: AlertDialog
 
     private var _binding: DialogSleepTimerBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
-    private val shouldFinishLastSong: CheckBox get() = binding.shouldFinishLastSong
-    private val seekBar: SeekBar get() = binding.seekBar
-    private val timerDisplay: TextView get() = binding.timerDisplay
+    private val shouldFinishLastSong: CheckBox
+        get() = binding.shouldFinishLastSong
+
+    private val seekBar: SeekBar
+        get() = binding.seekBar
+
+    private val timerDisplay: TextView
+        get() = binding.timerDisplay
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         timerUpdater = TimerUpdater()
@@ -73,23 +78,24 @@ class SleepTimerDialog : DialogFragment() {
             progress = seekArcProgress
         }
 
-        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-                if (i < 1) {
-                    seekBar.progress = 1
-                    return
+        binding.seekBar.setOnSeekBarChangeListener(
+            object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+                    if (i < 1) {
+                        seekBar.progress = 1
+                        return
+                    }
+                    seekArcProgress = i
+                    updateTimeDisplayTime()
                 }
-                seekArcProgress = i
-                updateTimeDisplayTime()
-            }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-            }
+                override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                PreferenceUtil.lastSleepTimerValue = seekArcProgress
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    PreferenceUtil.lastSleepTimerValue = seekArcProgress
+                }
             }
-        })
+        )
 
         materialDialog(R.string.action_sleep_timer).apply {
             if (PreferenceUtil.nextSleepTimerElapsedRealTime > System.currentTimeMillis()) {
@@ -105,18 +111,22 @@ class SleepTimerDialog : DialogFragment() {
                         am?.cancel(previous)
                         previous.cancel()
                         Toast.makeText(
-                            requireContext(),
-                            requireContext().resources.getString(R.string.sleep_timer_canceled),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                                requireContext(),
+                                requireContext().resources.getString(R.string.sleep_timer_canceled),
+                                Toast.LENGTH_SHORT,
+                            )
+                            .show()
                         val musicService = MusicPlayerRemote.musicService
                         if (musicService != null && musicService.pendingQuit) {
                             musicService.pendingQuit = false
                             Toast.makeText(
-                                requireContext(),
-                                requireContext().resources.getString(R.string.sleep_timer_canceled),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                                    requireContext(),
+                                    requireContext()
+                                        .resources
+                                        .getString(R.string.sleep_timer_canceled),
+                                    Toast.LENGTH_SHORT,
+                                )
+                                .show()
                         }
                     }
                 }
@@ -134,29 +144,34 @@ class SleepTimerDialog : DialogFragment() {
 
                     if (VersionUtils.hasS() && am?.canScheduleExactAlarms() != true) {
                         Toast.makeText(
-                            requireContext(),
-                            requireContext().resources.getString(R.string.sleep_timer_no_permission),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                                requireContext(),
+                                requireContext()
+                                    .resources
+                                    .getString(R.string.sleep_timer_no_permission),
+                                Toast.LENGTH_SHORT,
+                            )
+                            .show()
                         val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
                         startActivity(intent)
                     } else {
                         am?.setExact(
-                           AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                           nextSleepTimerElapsedTime,
-                           pi
-                       )
+                            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                            nextSleepTimerElapsedTime,
+                            pi,
+                        )
                         Toast.makeText(
-                            requireContext(),
-                            requireContext().resources.getString(R.string.sleep_timer_set, minutes),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                                requireContext(),
+                                requireContext()
+                                    .resources
+                                    .getString(R.string.sleep_timer_set, minutes),
+                                Toast.LENGTH_SHORT,
+                            )
+                            .show()
                     }
                 }
             }
             setView(binding.root)
             dialog = create()
-
         }
         return dialog
     }
@@ -167,7 +182,10 @@ class SleepTimerDialog : DialogFragment() {
 
     private fun makeTimerPendingIntent(flag: Int): PendingIntent {
         return PendingIntent.getService(
-            requireActivity(), 0, makeTimerIntent(), flag or PendingIntent.FLAG_IMMUTABLE
+            requireActivity(),
+            0,
+            makeTimerIntent(),
+            flag or PendingIntent.FLAG_IMMUTABLE,
         )
     }
 
@@ -187,7 +205,7 @@ class SleepTimerDialog : DialogFragment() {
     private inner class TimerUpdater :
         CountDownTimer(
             PreferenceUtil.nextSleepTimerElapsedRealTime - SystemClock.elapsedRealtime(),
-            1000
+            1000,
         ) {
 
         override fun onTick(millisUntilFinished: Long) {

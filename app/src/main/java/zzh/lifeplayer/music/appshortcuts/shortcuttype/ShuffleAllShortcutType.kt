@@ -26,12 +26,20 @@ import zzh.lifeplayer.music.appshortcuts.AppShortcutLauncherActivity
 class ShuffleAllShortcutType(context: Context) : BaseShortcutType(context) {
 
     override val shortcutInfo: ShortcutInfo
-        get() = ShortcutInfo.Builder(context, id)
-            .setShortLabel(context.getString(R.string.app_shortcut_shuffle_all_short))
-            .setLongLabel(context.getString(R.string.app_shortcut_shuffle_all_long))
-            .setIcon(AppShortcutIconGenerator.generateThemedIcon(context, R.drawable.ic_app_shortcut_shuffle_all))
-            .setIntent(getPlaySongsIntent(AppShortcutLauncherActivity.SHORTCUT_TYPE_SHUFFLE_ALL))
-            .build()
+        get() =
+            ShortcutInfo.Builder(context, id)
+                .setShortLabel(context.getString(R.string.app_shortcut_shuffle_all_short))
+                .setLongLabel(context.getString(R.string.app_shortcut_shuffle_all_long))
+                .setIcon(
+                    AppShortcutIconGenerator.generateThemedIcon(
+                        context,
+                        R.drawable.ic_app_shortcut_shuffle_all,
+                    )
+                )
+                .setIntent(
+                    getPlaySongsIntent(AppShortcutLauncherActivity.SHORTCUT_TYPE_SHUFFLE_ALL)
+                )
+                .build()
 
     companion object {
 

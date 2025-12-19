@@ -3,17 +3,16 @@ package zzh.lifeplayer.music.fragments.settings
 import android.Manifest.permission.BLUETOOTH_CONNECT
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.media.audiofx.AudioEffect
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.preference.Preference
+import com.zmusicfx.musicfx.*
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.BLUETOOTH_PLAYBACK
 import zzh.lifeplayer.music.EQUALIZER
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.activities.base.AbsBaseActivity.Companion.BLUETOOTH_PERMISSION_REQUEST
 import zzh.lifeplayer.music.util.NavigationUtil
-import com.zmusicfx.musicfx.*
 
 class AudioSettings : AbsSettingsFragment() {
     override fun invalidateSettings() {
@@ -32,15 +31,14 @@ class AudioSettings : AbsSettingsFragment() {
         if (VersionUtils.hasS()) {
             bluetoothPreference?.setOnPreferenceChangeListener { _, newValue ->
                 if (newValue as Boolean) {
-                    if (ActivityCompat.checkSelfPermission(
-                            requireContext(),
-                            BLUETOOTH_CONNECT
-                        ) != PERMISSION_GRANTED
+                    if (
+                        ActivityCompat.checkSelfPermission(requireContext(), BLUETOOTH_CONNECT) !=
+                            PERMISSION_GRANTED
                     ) {
                         ActivityCompat.requestPermissions(
-                            requireActivity(), arrayOf(
-                                BLUETOOTH_CONNECT
-                            ), BLUETOOTH_PERMISSION_REQUEST
+                            requireActivity(),
+                            arrayOf(BLUETOOTH_CONNECT),
+                            BLUETOOTH_PERMISSION_REQUEST,
                         )
                     }
                 }

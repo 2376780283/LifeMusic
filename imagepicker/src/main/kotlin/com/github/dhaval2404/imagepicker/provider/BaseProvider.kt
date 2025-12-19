@@ -10,12 +10,11 @@ import java.io.File
  * Abstract Provider class
  *
  * @author Dhaval Patel
- * @version 1.0
  * @since 04 January 2019
+ * @version 1.0
  */
-abstract class BaseProvider(
-    protected val activity: ImagePickerActivity,
-) : ContextWrapper(activity) {
+abstract class BaseProvider(protected val activity: ImagePickerActivity) :
+    ContextWrapper(activity) {
     fun getFileDir(path: String?): File =
         if (path != null) {
             File(path)
@@ -42,26 +41,17 @@ abstract class BaseProvider(
         setError(getString(errorRes))
     }
 
-    /**
-     * Call this method when task is cancel in between the operation.
-     * E.g. user hit back-press
-     */
+    /** Call this method when task is cancel in between the operation. E.g. user hit back-press */
     protected fun setResultCancel() {
         onFailure()
         activity.setResultCancel()
     }
 
-    /**
-     * This method will be Call on Error, It can be used for clean up Tasks
-     */
-    protected open fun onFailure() {
-    }
+    /** This method will be Call on Error, It can be used for clean up Tasks */
+    protected open fun onFailure() {}
 
-    /**
-     * Save all appropriate provider state.
-     */
-    open fun onSaveInstanceState(outState: Bundle) {
-    }
+    /** Save all appropriate provider state. */
+    open fun onSaveInstanceState(outState: Bundle) {}
 
     /**
      * Restores the saved state for all Providers.
@@ -69,6 +59,5 @@ abstract class BaseProvider(
      * @param savedInstanceState the Bundle returned by {@link #onSaveInstanceState()}
      * @see #onSaveInstanceState()
      */
-    open fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-    }
+    open fun onRestoreInstanceState(savedInstanceState: Bundle?) {}
 }

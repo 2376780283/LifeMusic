@@ -18,6 +18,9 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import zzh.lifeplayer.music.EXTRA_PLAYLIST_ID
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.db.PlaylistEntity
@@ -27,9 +30,6 @@ import zzh.lifeplayer.music.extensions.extraNotNull
 import zzh.lifeplayer.music.extensions.materialDialog
 import zzh.lifeplayer.music.fragments.LibraryViewModel
 import zzh.lifeplayer.music.fragments.ReloadType
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class RenamePlaylistDialog : DialogFragment() {
 
@@ -38,9 +38,7 @@ class RenamePlaylistDialog : DialogFragment() {
     companion object {
         fun create(playlistEntity: PlaylistEntity): RenamePlaylistDialog {
             return RenamePlaylistDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_PLAYLIST_ID to playlistEntity
-                )
+                arguments = bundleOf(EXTRA_PLAYLIST_ID to playlistEntity)
             }
         }
     }

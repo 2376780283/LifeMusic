@@ -20,6 +20,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.google.android.material.slider.Slider
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
 import zzh.lifeplayer.music.R
@@ -32,17 +33,14 @@ import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.PlayPauseButtonOnClickHandler
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.google.android.material.slider.Slider
 
-/**
- * @author Hemanth S (h4h13).
- */
+/** @author Hemanth S (h4h13). */
 class MaterialControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_material_playback_controls) {
 
-
     private var _binding: FragmentMaterialPlaybackControlsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val progressSlider: Slider
         get() = binding.progressSlider
@@ -71,12 +69,8 @@ class MaterialControlsFragment :
         setUpPlayPauseFab()
         binding.title.isSelected = true
         binding.text.isSelected = true
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
     }
 
     private fun updateSong() {
@@ -131,11 +125,13 @@ class MaterialControlsFragment :
         updateRepeatState()
         updateShuffleState()
 
-        val colorFinal = if (PreferenceUtil.isAdaptiveColor) {
-            lastPlaybackControlsColor
-        } else {
-            textColorSecondary()
-        }.ripAlpha()
+        val colorFinal =
+            if (PreferenceUtil.isAdaptiveColor) {
+                    lastPlaybackControlsColor
+                } else {
+                    textColorSecondary()
+                }
+                .ripAlpha()
 
         binding.text.setTextColor(colorFinal)
         binding.progressSlider.applyColor(colorFinal)
@@ -159,17 +155,11 @@ class MaterialControlsFragment :
     private fun updatePlayPauseDrawableState() {
         if (MusicPlayerRemote.isPlaying) {
             binding.playPauseButton.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_pause_outline
-                )
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_pause_outline)
             )
         } else if (!MusicPlayerRemote.isPlaying) {
             binding.playPauseButton.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_play_arrow_outline
-                )
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_play_arrow_outline)
             )
         }
     }

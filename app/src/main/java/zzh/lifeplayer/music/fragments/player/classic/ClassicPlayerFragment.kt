@@ -28,11 +28,19 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.commit
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.from
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
+import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
+import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager
+import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchActionGuardManager
+import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.TintHelper
 import zzh.lifeplayer.appthemehelper.util.ToolbarContentTintHelper
@@ -57,24 +65,15 @@ import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.ViewUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.from
-import com.google.android.material.card.MaterialCardView
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.ShapeAppearanceModel
-import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
-import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
-import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager
-import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchActionGuardManager
-import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 
-
-class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player),
+class ClassicPlayerFragment :
+    AbsPlayerFragment(R.layout.fragment_classic_player),
     View.OnLayoutChangeListener,
     MusicProgressViewUpdateHelper.Callback {
 
     private var _binding: FragmentClassicPlayerBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     private var lastColor: Int = 0
     private var lastPlaybackControlsColor: Int = 0
@@ -89,37 +88,38 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
     private var playingQueueAdapter: PlayingQueueAdapter? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
 
-    private val bottomSheetCallbackList = object : BottomSheetBehavior.BottomSheetCallback() {
-        override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            mainActivity.getBottomSheetBehavior().isDraggable = false
-            binding.playerQueueSheet.setContentPadding(
-                binding.playerQueueSheet.contentPaddingLeft,
-                (slideOffset * binding.statusBar.height).toInt(),
-                binding.playerQueueSheet.contentPaddingRight,
-                binding.playerQueueSheet.contentPaddingBottom
-            )
+    private val bottomSheetCallbackList =
+        object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                mainActivity.getBottomSheetBehavior().isDraggable = false
+                binding.playerQueueSheet.setContentPadding(
+                    binding.playerQueueSheet.contentPaddingLeft,
+                    (slideOffset * binding.statusBar.height).toInt(),
+                    binding.playerQueueSheet.contentPaddingRight,
+                    binding.playerQueueSheet.contentPaddingBottom,
+                )
 
-            shapeDrawable.interpolation = 1 - slideOffset
-        }
+                shapeDrawable.interpolation = 1 - slideOffset
+            }
 
-        override fun onStateChanged(bottomSheet: View, newState: Int) {
-            when (newState) {
-                BottomSheetBehavior.STATE_EXPANDED,
-                BottomSheetBehavior.STATE_DRAGGING -> {
-                    mainActivity.getBottomSheetBehavior().isDraggable = false
-                }
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_EXPANDED,
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                        mainActivity.getBottomSheetBehavior().isDraggable = false
+                    }
 
-                BottomSheetBehavior.STATE_COLLAPSED -> {
-                    resetToCurrentPosition()
-                    mainActivity.getBottomSheetBehavior().isDraggable = true
-                }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        resetToCurrentPosition()
+                        mainActivity.getBottomSheetBehavior().isDraggable = true
+                    }
 
-                else -> {
-                    mainActivity.getBottomSheetBehavior().isDraggable = true
+                    else -> {
+                        mainActivity.getBottomSheetBehavior().isDraggable = true
+                    }
                 }
             }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,15 +146,12 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
 
         getQueuePanel().addBottomSheetCallback(bottomSheetCallbackList)
 
-        shapeDrawable = MaterialShapeDrawable(
-            ShapeAppearanceModel.builder(
-                requireContext(),
-                R.style.ClassicThemeOverLay,
-                0
-            ).build()
-        )
-        shapeDrawable.fillColor =
-            ColorStateList.valueOf(surfaceColor())
+        shapeDrawable =
+            MaterialShapeDrawable(
+                ShapeAppearanceModel.builder(requireContext(), R.style.ClassicThemeOverLay, 0)
+                    .build()
+            )
+        shapeDrawable.fillColor = ColorStateList.valueOf(surfaceColor())
         binding.playerQueueSheet.background = shapeDrawable
 
         binding.playerQueueSheet.setOnTouchListener { _, _ ->
@@ -166,30 +163,28 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             Color.WHITE,
-            requireActivity()
+            requireActivity(),
         )
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (getQueuePanel().state == BottomSheetBehavior.STATE_EXPANDED) {
-                    getQueuePanel().state = BottomSheetBehavior.STATE_COLLAPSED
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        if (getQueuePanel().state == BottomSheetBehavior.STATE_EXPANDED) {
+                            getQueuePanel().state = BottomSheetBehavior.STATE_COLLAPSED
+                        } else {
+                            mainActivity.getBottomSheetBehavior().state =
+                                BottomSheetBehavior.STATE_COLLAPSED
+                        }
+                    }
                 }
-                else{
-                    mainActivity.getBottomSheetBehavior().state=BottomSheetBehavior.STATE_COLLAPSED
-                }
-            }
-        })
+            )
     }
 
-
     private fun resizePlayingQueue() {
-        val layoutParams =
-            binding.playerQueueSheet.layoutParams as CoordinatorLayout.LayoutParams
+        val layoutParams = binding.playerQueueSheet.layoutParams as CoordinatorLayout.LayoutParams
         layoutParams.width = (resources.displayMetrics.widthPixels * 0.5).toInt()
         layoutParams.height = resources.displayMetrics.heightPixels
         binding.playerQueueSheet.layoutParams = layoutParams
@@ -201,8 +196,7 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
                 replace(R.id.volumeFragmentContainer, VolumeFragment.newInstance())
             }
             childFragmentManager.executePendingTransactions()
-            volumeFragment =
-                whichFragment(R.id.volumeFragmentContainer) as VolumeFragment?
+            volumeFragment = whichFragment(R.id.volumeFragmentContainer) as VolumeFragment?
         }
     }
 
@@ -281,11 +275,9 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
         return binding.playerToolbar
     }
 
-    override fun onShow() {
-    }
+    override fun onShow() {}
 
-    override fun onHide() {
-    }
+    override fun onHide() {}
 
     override fun toolbarIconColor(): Int {
         return Color.WHITE
@@ -315,19 +307,19 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
         ViewUtil.setProgressDrawable(
             binding.playerControlsContainer.progressSlider,
             color.primaryTextColor,
-            true
+            true,
         )
         volumeFragment?.setTintableColor(color.primaryTextColor)
 
         TintHelper.setTintAuto(
             binding.playerControlsContainer.playPauseButton,
             color.primaryTextColor,
-            true
+            true,
         )
         TintHelper.setTintAuto(
             binding.playerControlsContainer.playPauseButton,
             color.backgroundColor,
-            false
+            false,
         )
 
         updateRepeatState()
@@ -337,7 +329,7 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             Color.WHITE,
-            requireActivity()
+            requireActivity(),
         )
     }
 
@@ -355,11 +347,12 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
     override fun onUpdateProgressViews(progress: Int, total: Int) {
         binding.playerControlsContainer.progressSlider.max = total
 
-        val animator = ObjectAnimator.ofInt(
-            binding.playerControlsContainer.progressSlider,
-            "progress",
-            progress
-        )
+        val animator =
+            ObjectAnimator.ofInt(
+                binding.playerControlsContainer.progressSlider,
+                "progress",
+                progress,
+            )
         animator.duration = AbsPlayerControlsFragment.SLIDER_ANIMATION_TIME
         animator.interpolator = LinearInterpolator()
         animator.start()
@@ -407,10 +400,9 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
         }
     }
 
-
     /**
-     * What am doing here is getting the controls  height, and adding the toolbar and statusbar height to itm
-     * then i subtract it from the screen height to get a peek height
+     * What am doing here is getting the controls height, and adding the toolbar and statusbar
+     * height to itm then i subtract it from the screen height to get a peek height
      */
     private fun calculateLandScapePeekHeight() {
         val height = binding.playerControlsContainer.root.height
@@ -428,23 +420,26 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
 
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.inflateMenu(R.menu.menu_player)
-        binding.playerToolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+        binding.playerToolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
         binding.playerToolbar.setOnMenuItemClickListener(this)
 
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             Color.WHITE,
-            requireActivity()
+            requireActivity(),
         )
     }
 
     private fun setupRecyclerView() {
-        playingQueueAdapter = PlayingQueueAdapter(
-            requireActivity() as AppCompatActivity,
-            MusicPlayerRemote.playingQueue.toMutableList(),
-            MusicPlayerRemote.position,
-            R.layout.item_queue
-        )
+        playingQueueAdapter =
+            PlayingQueueAdapter(
+                requireActivity() as AppCompatActivity,
+                MusicPlayerRemote.playingQueue.toMutableList(),
+                MusicPlayerRemote.position,
+                R.layout.item_queue,
+            )
         linearLayoutManager = LinearLayoutManager(requireContext())
         recyclerViewTouchActionGuardManager = RecyclerViewTouchActionGuardManager()
         recyclerViewDragDropManager = RecyclerViewDragDropManager()
@@ -453,9 +448,11 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
         val animator = DraggableItemAnimator()
         animator.supportsChangeAnimations = false
         wrappedAdapter =
-            recyclerViewDragDropManager?.createWrappedAdapter(playingQueueAdapter!!) as RecyclerView.Adapter<*>
+            recyclerViewDragDropManager?.createWrappedAdapter(playingQueueAdapter!!)
+                as RecyclerView.Adapter<*>
         wrappedAdapter =
-            recyclerViewSwipeManager?.createWrappedAdapter(wrappedAdapter) as RecyclerView.Adapter<*>
+            recyclerViewSwipeManager?.createWrappedAdapter(wrappedAdapter)
+                as RecyclerView.Adapter<*>
         binding.recyclerView.layoutManager = linearLayoutManager
         binding.recyclerView.adapter = wrappedAdapter
         binding.recyclerView.itemAnimator = animator
@@ -467,18 +464,19 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
     }
 
     private fun setUpProgressSlider() {
-        binding.playerControlsContainer.progressSlider.setOnSeekBarChangeListener(object :
-            SimpleOnSeekbarChangeListener() {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    MusicPlayerRemote.seekTo(progress)
-                    onUpdateProgressViews(
-                        MusicPlayerRemote.songProgressMillis,
-                        MusicPlayerRemote.songDurationMillis
-                    )
+        binding.playerControlsContainer.progressSlider.setOnSeekBarChangeListener(
+            object : SimpleOnSeekbarChangeListener() {
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    if (fromUser) {
+                        MusicPlayerRemote.seekTo(progress)
+                        onUpdateProgressViews(
+                            MusicPlayerRemote.songProgressMillis,
+                            MusicPlayerRemote.songDurationMillis,
+                        )
+                    }
                 }
             }
-        })
+        )
     }
 
     private fun setUpPlayPauseFab() {
@@ -491,7 +489,9 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
         if (MusicPlayerRemote.isPlaying) {
             binding.playerControlsContainer.playPauseButton.setImageResource(R.drawable.ic_pause)
         } else {
-            binding.playerControlsContainer.playPauseButton.setImageResource(R.drawable.ic_play_arrow)
+            binding.playerControlsContainer.playPauseButton.setImageResource(
+                R.drawable.ic_play_arrow
+            )
         }
     }
 
@@ -507,32 +507,28 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
     private fun setUpPrevNext() {
         updatePrevNextColor()
         binding.playerControlsContainer.nextButton.setOnTouchListener(
-            MusicSeekSkipTouchListener(
-                requireActivity(),
-                true
-            )
+            MusicSeekSkipTouchListener(requireActivity(), true)
         )
         binding.playerControlsContainer.previousButton.setOnTouchListener(
-            MusicSeekSkipTouchListener(
-                requireActivity(),
-                false
-            )
+            MusicSeekSkipTouchListener(requireActivity(), false)
         )
     }
 
     private fun updatePrevNextColor() {
         binding.playerControlsContainer.nextButton.setColorFilter(
             lastPlaybackControlsColor,
-            PorterDuff.Mode.SRC_IN
+            PorterDuff.Mode.SRC_IN,
         )
         binding.playerControlsContainer.previousButton.setColorFilter(
             lastPlaybackControlsColor,
-            PorterDuff.Mode.SRC_IN
+            PorterDuff.Mode.SRC_IN,
         )
     }
 
     private fun setUpShuffleButton() {
-        binding.playerControlsContainer.shuffleButton.setOnClickListener { MusicPlayerRemote.toggleShuffleMode() }
+        binding.playerControlsContainer.shuffleButton.setOnClickListener {
+            MusicPlayerRemote.toggleShuffleMode()
+        }
     }
 
     fun updateShuffleState() {
@@ -540,18 +536,21 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
             MusicService.SHUFFLE_MODE_SHUFFLE ->
                 binding.playerControlsContainer.shuffleButton.setColorFilter(
                     lastPlaybackControlsColor,
-                    PorterDuff.Mode.SRC_IN
+                    PorterDuff.Mode.SRC_IN,
                 )
 
-            else -> binding.playerControlsContainer.shuffleButton.setColorFilter(
-                lastDisabledPlaybackControlsColor,
-                PorterDuff.Mode.SRC_IN
-            )
+            else ->
+                binding.playerControlsContainer.shuffleButton.setColorFilter(
+                    lastDisabledPlaybackControlsColor,
+                    PorterDuff.Mode.SRC_IN,
+                )
         }
     }
 
     private fun setUpRepeatButton() {
-        binding.playerControlsContainer.repeatButton.setOnClickListener { MusicPlayerRemote.cycleRepeatMode() }
+        binding.playerControlsContainer.repeatButton.setOnClickListener {
+            MusicPlayerRemote.cycleRepeatMode()
+        }
     }
 
     fun updateRepeatState() {
@@ -560,7 +559,7 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
                 binding.playerControlsContainer.repeatButton.setImageResource(R.drawable.ic_repeat)
                 binding.playerControlsContainer.repeatButton.setColorFilter(
                     lastDisabledPlaybackControlsColor,
-                    PorterDuff.Mode.SRC_IN
+                    PorterDuff.Mode.SRC_IN,
                 )
             }
 
@@ -568,15 +567,17 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
                 binding.playerControlsContainer.repeatButton.setImageResource(R.drawable.ic_repeat)
                 binding.playerControlsContainer.repeatButton.setColorFilter(
                     lastPlaybackControlsColor,
-                    PorterDuff.Mode.SRC_IN
+                    PorterDuff.Mode.SRC_IN,
                 )
             }
 
             MusicService.REPEAT_MODE_THIS -> {
-                binding.playerControlsContainer.repeatButton.setImageResource(R.drawable.ic_repeat_one)
+                binding.playerControlsContainer.repeatButton.setImageResource(
+                    R.drawable.ic_repeat_one
+                )
                 binding.playerControlsContainer.repeatButton.setColorFilter(
                     lastPlaybackControlsColor,
-                    PorterDuff.Mode.SRC_IN
+                    PorterDuff.Mode.SRC_IN,
                 )
             }
         }
@@ -591,17 +592,17 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
         oldLeft: Int,
         oldTop: Int,
         oldRight: Int,
-        oldBottom: Int
+        oldBottom: Int,
     ) {
 
         // Check if the device is in landscape mode
         if (isLandscapeMode()) {
             calculateLandScapePeekHeight()
 
-            //get background color from viewModel
+            // get background color from viewModel
             val backgroundColor = libraryViewModel.paletteColor.value
 
-            //check if color is already applied, if not applied then update navigationBarColor
+            // check if color is already applied, if not applied then update navigationBarColor
             backgroundColor?.let { color ->
                 if (isLandscapeMode()) {
                     val window = requireActivity().window
@@ -623,7 +624,7 @@ class ClassicPlayerFragment : AbsPlayerFragment(R.layout.fragment_classic_player
     }
 
     private fun isLandscapeMode(): Boolean {
-        val config = resources.configuration;
+        val config = resources.configuration
 
         // Check if the device is in landscape mode
         return config.orientation == Configuration.ORIENTATION_LANDSCAPE

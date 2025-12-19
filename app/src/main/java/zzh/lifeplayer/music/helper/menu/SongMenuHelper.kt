@@ -21,6 +21,14 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
+import java.io.File
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 import zzh.lifeplayer.music.EXTRA_ALBUM_ID
 import zzh.lifeplayer.music.EXTRA_ARTIST_ID
 import zzh.lifeplayer.music.R
@@ -38,14 +46,6 @@ import zzh.lifeplayer.music.providers.BlacklistStore
 import zzh.lifeplayer.music.repository.RealRepository
 import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.RingtoneManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.androidx.viewmodel.ext.android.getViewModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
-import java.io.File
 
 object SongMenuHelper : KoinComponent {
     val MENU_RES
@@ -64,10 +64,7 @@ object SongMenuHelper : KoinComponent {
             }
             R.id.action_share -> {
                 activity.startActivity(
-                    Intent.createChooser(
-                        MusicUtil.createShareSongFileIntent(activity, song),
-                        null
-                    )
+                    Intent.createChooser(MusicUtil.createShareSongFileIntent(activity, song), null)
                 )
                 return true
             }
@@ -99,7 +96,7 @@ object SongMenuHelper : KoinComponent {
                 if (activity is IPaletteColorHolder)
                     tagEditorIntent.putExtra(
                         AbsTagEditorActivity.EXTRA_PALETTE,
-                        (activity as IPaletteColorHolder).paletteColor
+                        (activity as IPaletteColorHolder).paletteColor,
                     )
                 activity.startActivity(tagEditorIntent)
                 return true
@@ -109,17 +106,18 @@ object SongMenuHelper : KoinComponent {
                 return true
             }
             R.id.action_go_to_album -> {
-                activity.findNavController(R.id.fragment_container).navigate(
-                    R.id.albumDetailsFragment,
-                    bundleOf(EXTRA_ALBUM_ID to song.albumId)
-                )
+                activity
+                    .findNavController(R.id.fragment_container)
+                    .navigate(R.id.albumDetailsFragment, bundleOf(EXTRA_ALBUM_ID to song.albumId))
                 return true
             }
             R.id.action_go_to_artist -> {
-                activity.findNavController(R.id.fragment_container).navigate(
-                    R.id.artistDetailsFragment,
-                    bundleOf(EXTRA_ARTIST_ID to song.artistId)
-                )
+                activity
+                    .findNavController(R.id.fragment_container)
+                    .navigate(
+                        R.id.artistDetailsFragment,
+                        bundleOf(EXTRA_ARTIST_ID to song.artistId),
+                    )
                 return true
             }
             R.id.action_add_to_blacklist -> {

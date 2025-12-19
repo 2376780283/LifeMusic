@@ -23,7 +23,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.findNavController
 import androidx.navigation.navOptions
 import androidx.viewpager.widget.ViewPager
-import zzh.lifeplayer.appthemehelper.util.VersionUtils
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlin.math.abs
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.get
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import zzh.lifeplayer.music.EXTRA_ALBUM_ID
 import zzh.lifeplayer.music.EXTRA_ARTIST_ID
 import zzh.lifeplayer.music.R
@@ -46,17 +53,12 @@ import zzh.lifeplayer.music.service.MusicService
 import zzh.lifeplayer.music.util.NavigationUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.RingtoneManager
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.android.ext.android.get
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import kotlin.math.abs
 
-abstract class AbsPlayerFragment(@LayoutRes layout: Int) : AbsMusicServiceFragment(layout),
-    Toolbar.OnMenuItemClickListener, IPaletteColorHolder, PlayerAlbumCoverFragment.Callbacks {
+abstract class AbsPlayerFragment(@LayoutRes layout: Int) :
+    AbsMusicServiceFragment(layout),
+    Toolbar.OnMenuItemClickListener,
+    IPaletteColorHolder,
+    PlayerAlbumCoverFragment.Callbacks {
 
     val libraryViewModel: LibraryViewModel by activityViewModel()
 
@@ -65,9 +67,7 @@ abstract class AbsPlayerFragment(@LayoutRes layout: Int) : AbsMusicServiceFragme
 
     private var playerAlbumCoverFragment: PlayerAlbumCoverFragment? = null
 
-    override fun onMenuItemClick(
-        item: MenuItem,
-    ): Boolean {
+    override fun onMenuItemClick(item: MenuItem): Boolean {
         val song = MusicPlayerRemote.currentSong
         when (item.itemId) {
             R.id.action_playback_speed -> {
@@ -146,13 +146,12 @@ abstract class AbsPlayerFragment(@LayoutRes layout: Int) : AbsMusicServiceFragme
             }
 
             R.id.action_go_to_album -> {
-                //Hide Bottom Bar First, else Bottom Sheet doesn't collapse fully
+                // Hide Bottom Bar First, else Bottom Sheet doesn't collapse fully
                 mainActivity.setBottomNavVisibility(false)
                 mainActivity.collapsePanel()
-                requireActivity().findNavController(R.id.fragment_container).navigate(
-                    R.id.albumDetailsFragment,
-                    bundleOf(EXTRA_ALBUM_ID to song.albumId)
-                )
+                requireActivity()
+                    .findNavController(R.id.fragment_container)
+                    .navigate(R.id.albumDetailsFragment, bundleOf(EXTRA_ALBUM_ID to song.albumId))
                 return true
             }
 
@@ -162,11 +161,13 @@ abstract class AbsPlayerFragment(@LayoutRes layout: Int) : AbsMusicServiceFragme
             }
 
             R.id.now_playing -> {
-                requireActivity().findNavController(R.id.fragment_container).navigate(
-                    R.id.playing_queue_fragment,
-                    null,
-                    navOptions { launchSingleTop = true }
-                )
+                requireActivity()
+                    .findNavController(R.id.fragment_container)
+                    .navigate(
+                        R.id.playing_queue_fragment,
+                        null,
+                        navOptions { launchSingleTop = true },
+                    )
                 mainActivity.collapsePanel()
                 return true
             }
@@ -176,7 +177,7 @@ abstract class AbsPlayerFragment(@LayoutRes layout: Int) : AbsMusicServiceFragme
                 return true
             }
 
-            R.id.action_equalizer -> { //均衡器
+            R.id.action_equalizer -> { // 均衡器
                 NavigationUtil.openEqualizer(requireActivity())
                 return true
             }
@@ -201,10 +202,7 @@ abstract class AbsPlayerFragment(@LayoutRes layout: Int) : AbsMusicServiceFragme
             R.id.action_go_to_genre -> {
                 val retriever = MediaMetadataRetriever()
                 val trackUri =
-                    ContentUris.withAppendedId(
-                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        song.id
-                    )
+                    ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, song.id)
                 retriever.setDataSource(activity, trackUri)
                 var genre: String? =
                     retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE)
@@ -221,10 +219,7 @@ abstract class AbsPlayerFragment(@LayoutRes layout: Int) : AbsMusicServiceFragme
     private fun showLyricsIcon(item: MenuItem) {
         val icon =
             if (PreferenceUtil.showLyrics) R.drawable.ic_lyrics else R.drawable.ic_lyrics_outline
-        val drawable = requireContext().getTintedDrawable(
-            icon,
-            toolbarIconColor()
-        )
+        val drawable = requireContext().getTintedDrawable(icon, toolbarIconColor())
         item.isChecked = PreferenceUtil.showLyrics
         item.icon = drawable
     }
@@ -270,15 +265,13 @@ abstract class AbsPlayerFragment(@LayoutRes layout: Int) : AbsMusicServiceFragme
             val isFavorite: Boolean =
                 libraryViewModel.isSongFavorite(MusicPlayerRemote.currentSong.id)
             withContext(Main) {
-                val icon = if (animate) {
-                    if (isFavorite) R.drawable.avd_favorite else R.drawable.avd_unfavorite
-                } else {
-                    if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
-                }
-                val drawable = requireContext().getTintedDrawable(
-                    icon,
-                    toolbarIconColor()
-                )
+                val icon =
+                    if (animate) {
+                        if (isFavorite) R.drawable.avd_favorite else R.drawable.avd_unfavorite
+                    } else {
+                        if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                    }
+                val drawable = requireContext().getTintedDrawable(icon, toolbarIconColor())
                 if (playerToolbar() != null) {
                     playerToolbar()?.menu?.findItem(R.id.action_toggle_favorite)?.apply {
                         setIcon(drawable)
@@ -307,9 +300,7 @@ abstract class AbsPlayerFragment(@LayoutRes layout: Int) : AbsMusicServiceFragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (PreferenceUtil.isFullScreenMode &&
-            view.findViewById<View>(R.id.status_bar) != null
-        ) {
+        if (PreferenceUtil.isFullScreenMode && view.findViewById<View>(R.id.status_bar) != null) {
             view.findViewById<View>(R.id.status_bar).isVisible = false
         }
         playerAlbumCoverFragment = whichFragment(R.id.playerAlbumCoverFragment)
@@ -323,7 +314,11 @@ abstract class AbsPlayerFragment(@LayoutRes layout: Int) : AbsMusicServiceFragme
         super.onResume()
         val nps = PreferenceUtil.nowPlayingScreen
 
-        if (nps == NowPlayingScreen.Circle || nps == NowPlayingScreen.Peek || nps == NowPlayingScreen.Tiny) {
+        if (
+            nps == NowPlayingScreen.Circle ||
+                nps == NowPlayingScreen.Peek ||
+                nps == NowPlayingScreen.Tiny
+        ) {
             playerToolbar()?.menu?.removeItem(R.id.action_toggle_lyrics)
         } else {
             playerToolbar()?.menu?.findItem(R.id.action_toggle_lyrics)?.apply {
@@ -341,39 +336,38 @@ abstract class AbsPlayerFragment(@LayoutRes layout: Int) : AbsMusicServiceFragme
     fun addSwipeDetector() {
         view?.setOnTouchListener(
             if (PreferenceUtil.swipeAnywhereToChangeSong) {
-                SwipeDetector(
-                    requireContext(),
-                    playerAlbumCoverFragment?.viewPager,
-                    requireView()
-                )
+                SwipeDetector(requireContext(), playerAlbumCoverFragment?.viewPager, requireView())
             } else null
         )
     }
 
     class SwipeDetector(val context: Context, val viewPager: ViewPager?, val view: View) :
         View.OnTouchListener {
-        private var flingPlayBackController: GestureDetector = GestureDetector(
-            context,
-            object : GestureDetector.SimpleOnGestureListener() {
-                override fun onScroll(
-                    e1: MotionEvent?,
-                    e2: MotionEvent,
-                    distanceX: Float,
-                    distanceY: Float,
-                ): Boolean {
-                    return when {
-                        abs(distanceX) > abs(distanceY) -> {
-                            // Disallow Intercept Touch Event so that parent(BottomSheet) doesn't consume the events
-                            view.parent.requestDisallowInterceptTouchEvent(true)
-                            true
-                        }
+        private var flingPlayBackController: GestureDetector =
+            GestureDetector(
+                context,
+                object : GestureDetector.SimpleOnGestureListener() {
+                    override fun onScroll(
+                        e1: MotionEvent?,
+                        e2: MotionEvent,
+                        distanceX: Float,
+                        distanceY: Float,
+                    ): Boolean {
+                        return when {
+                            abs(distanceX) > abs(distanceY) -> {
+                                // Disallow Intercept Touch Event so that parent(BottomSheet)
+                                // doesn't consume the events
+                                view.parent.requestDisallowInterceptTouchEvent(true)
+                                true
+                            }
 
-                        else -> {
-                            false
+                            else -> {
+                                false
+                            }
                         }
                     }
-                }
-            })
+                },
+            )
 
         @SuppressLint("ClickableViewAccessibility")
         override fun onTouch(v: View, event: MotionEvent): Boolean {
@@ -397,16 +391,14 @@ fun goToArtist(activity: Activity) {
         // it doesn't exit with a weird transition
         currentFragment(R.id.fragment_container)?.exitTransition = null
 
-        //Hide Bottom Bar First, else Bottom Sheet doesn't collapse fully
+        // Hide Bottom Bar First, else Bottom Sheet doesn't collapse fully
         setBottomNavVisibility(false)
         if (getBottomSheetBehavior().state == BottomSheetBehavior.STATE_EXPANDED) {
             collapsePanel()
         }
 
-        findNavController(R.id.fragment_container).navigate(
-            R.id.artistDetailsFragment,
-            bundleOf(EXTRA_ARTIST_ID to song.artistId)
-        )
+        findNavController(R.id.fragment_container)
+            .navigate(R.id.artistDetailsFragment, bundleOf(EXTRA_ARTIST_ID to song.artistId))
     }
 }
 
@@ -416,32 +408,27 @@ fun goToAlbum(activity: Activity) {
     activity.apply {
         currentFragment(R.id.fragment_container)?.exitTransition = null
 
-        //Hide Bottom Bar First, else Bottom Sheet doesn't collapse fully
+        // Hide Bottom Bar First, else Bottom Sheet doesn't collapse fully
         setBottomNavVisibility(false)
         if (getBottomSheetBehavior().state == BottomSheetBehavior.STATE_EXPANDED) {
             collapsePanel()
         }
 
-        findNavController(R.id.fragment_container).navigate(
-            R.id.albumDetailsFragment,
-            bundleOf(EXTRA_ALBUM_ID to song.albumId)
-        )
+        findNavController(R.id.fragment_container)
+            .navigate(R.id.albumDetailsFragment, bundleOf(EXTRA_ALBUM_ID to song.albumId))
     }
 }
 
 fun goToLyrics(activity: Activity) {
     if (activity !is MainActivity) return
     activity.apply {
-        //Hide Bottom Bar First, else Bottom Sheet doesn't collapse fully
+        // Hide Bottom Bar First, else Bottom Sheet doesn't collapse fully
         setBottomNavVisibility(false)
         if (getBottomSheetBehavior().state == BottomSheetBehavior.STATE_EXPANDED) {
             collapsePanel()
         }
 
-        findNavController(R.id.fragment_container).navigate(
-            R.id.lyrics_fragment,
-            null,
-            navOptions { launchSingleTop = true }
-        )
+        findNavController(R.id.fragment_container)
+            .navigate(R.id.lyrics_fragment, null, navOptions { launchSingleTop = true })
     }
 }

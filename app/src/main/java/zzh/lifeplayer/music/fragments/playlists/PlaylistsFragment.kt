@@ -1,10 +1,12 @@
 package zzh.lifeplayer.music.fragments.playlists
+
 import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.core.view.MenuCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.transition.MaterialSharedAxis
 import zzh.lifeplayer.music.EXTRA_PLAYLIST_ID
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.playlist.PlaylistAdapter
@@ -13,9 +15,8 @@ import zzh.lifeplayer.music.fragments.ReloadType
 import zzh.lifeplayer.music.fragments.base.AbsRecyclerViewCustomGridSizeFragment
 import zzh.lifeplayer.music.helper.SortOrder.PlaylistSortOrder
 import zzh.lifeplayer.music.interfaces.IPlaylistClickListener
-import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.LifeUtil
-import com.google.android.material.transition.MaterialSharedAxis
+import zzh.lifeplayer.music.util.PreferenceUtil
 
 class PlaylistsFragment :
     AbsRecyclerViewCustomGridSizeFragment<PlaylistAdapter, GridLayoutManager>(),
@@ -24,10 +25,7 @@ class PlaylistsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         libraryViewModel.getPlaylists().observe(viewLifecycleOwner) {
-            if (it.isNotEmpty())
-                adapter?.swapDataSet(it)
-            else
-                adapter?.swapDataSet(listOf())
+            if (it.isNotEmpty()) adapter?.swapDataSet(it) else adapter?.swapDataSet(listOf())
         }
     }
 
@@ -46,12 +44,7 @@ class PlaylistsFragment :
 
     override fun createAdapter(): PlaylistAdapter {
         val dataSet = if (adapter == null) mutableListOf() else adapter!!.dataSet
-        return PlaylistAdapter(
-            requireActivity(),
-            dataSet,
-            itemLayoutRes(),
-            this
-        )
+        return PlaylistAdapter(requireActivity(), dataSet, itemLayoutRes(), this)
     }
 
     override fun onCreateMenu(menu: Menu, inflater: MenuInflater) {
@@ -118,37 +111,38 @@ class PlaylistsFragment :
             subMenu,
             R.id.action_song_sort_order_asc,
             R.string.sort_order_a_z,
-            order == PlaylistSortOrder.PLAYLIST_A_Z
+            order == PlaylistSortOrder.PLAYLIST_A_Z,
         )
         createId(
             subMenu,
             R.id.action_song_sort_order_desc,
             R.string.sort_order_z_a,
-            order == PlaylistSortOrder.PLAYLIST_Z_A
+            order == PlaylistSortOrder.PLAYLIST_Z_A,
         )
         createId(
             subMenu,
             R.id.action_playlist_sort_order,
             R.string.sort_order_num_songs,
-            order == PlaylistSortOrder.PLAYLIST_SONG_COUNT
+            order == PlaylistSortOrder.PLAYLIST_SONG_COUNT,
         )
         createId(
             subMenu,
             R.id.action_playlist_sort_order_desc,
             R.string.sort_order_num_songs_desc,
-            order == PlaylistSortOrder.PLAYLIST_SONG_COUNT_DESC
+            order == PlaylistSortOrder.PLAYLIST_SONG_COUNT_DESC,
         )
         subMenu.setGroupCheckable(0, true, true)
     }
 
     private fun handleSortOrderMenuItem(item: MenuItem): Boolean {
-        val sortOrder: String = when (item.itemId) {
-            R.id.action_song_sort_order_asc -> PlaylistSortOrder.PLAYLIST_A_Z
-            R.id.action_song_sort_order_desc -> PlaylistSortOrder.PLAYLIST_Z_A
-            R.id.action_playlist_sort_order -> PlaylistSortOrder.PLAYLIST_SONG_COUNT
-            R.id.action_playlist_sort_order_desc -> PlaylistSortOrder.PLAYLIST_SONG_COUNT_DESC
-            else -> PreferenceUtil.playlistSortOrder
-        }
+        val sortOrder: String =
+            when (item.itemId) {
+                R.id.action_song_sort_order_asc -> PlaylistSortOrder.PLAYLIST_A_Z
+                R.id.action_song_sort_order_desc -> PlaylistSortOrder.PLAYLIST_Z_A
+                R.id.action_playlist_sort_order -> PlaylistSortOrder.PLAYLIST_SONG_COUNT
+                R.id.action_playlist_sort_order_desc -> PlaylistSortOrder.PLAYLIST_SONG_COUNT_DESC
+                else -> PreferenceUtil.playlistSortOrder
+            }
         if (sortOrder != PreferenceUtil.playlistSortOrder) {
             item.isChecked = true
             setAndSaveSortOrder(sortOrder)
@@ -158,17 +152,18 @@ class PlaylistsFragment :
     }
 
     private fun handleGridSizeMenuItem(item: MenuItem): Boolean {
-        val gridSize = when (item.itemId) {
-            R.id.action_grid_size_1 -> 1
-            R.id.action_grid_size_2 -> 2
-            R.id.action_grid_size_3 -> 3
-            R.id.action_grid_size_4 -> 4
-            R.id.action_grid_size_5 -> 5
-            R.id.action_grid_size_6 -> 6
-            R.id.action_grid_size_7 -> 7
-            R.id.action_grid_size_8 -> 8
-            else -> 0
-        }
+        val gridSize =
+            when (item.itemId) {
+                R.id.action_grid_size_1 -> 1
+                R.id.action_grid_size_2 -> 2
+                R.id.action_grid_size_3 -> 3
+                R.id.action_grid_size_4 -> 4
+                R.id.action_grid_size_5 -> 5
+                R.id.action_grid_size_6 -> 6
+                R.id.action_grid_size_7 -> 7
+                R.id.action_grid_size_8 -> 8
+                else -> 0
+            }
         if (gridSize > 0) {
             item.isChecked = true
             setAndSaveGridSize(gridSize)
@@ -218,15 +213,16 @@ class PlaylistsFragment :
     }
 
     override fun saveLayoutRes(layoutRes: Int) {
-        //Save layout
+        // Save layout
     }
 
     override fun onPlaylistClick(playlistWithSongs: PlaylistWithSongs, view: View) {
         exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).addTarget(requireView())
         reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
-        findNavController().navigate(
-            R.id.playlistDetailsFragment,
-            bundleOf(EXTRA_PLAYLIST_ID to playlistWithSongs.playlistEntity.playListId)
-        )
+        findNavController()
+            .navigate(
+                R.id.playlistDetailsFragment,
+                bundleOf(EXTRA_PLAYLIST_ID to playlistWithSongs.playlistEntity.playListId),
+            )
     }
 }

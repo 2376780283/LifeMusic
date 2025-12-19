@@ -16,19 +16,16 @@ import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.SortOrder.AlbumSortOrder
 import zzh.lifeplayer.music.interfaces.IAlbumClickListener
 import zzh.lifeplayer.music.service.MusicService
-import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.LifeUtil
+import zzh.lifeplayer.music.util.PreferenceUtil
 
-class AlbumsFragment : AbsRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridLayoutManager>(),
-    IAlbumClickListener {
+class AlbumsFragment :
+    AbsRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridLayoutManager>(), IAlbumClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         libraryViewModel.getAlbums().observe(viewLifecycleOwner) {
-            if (it.isNotEmpty())
-                adapter?.swapDataSet(it)
-            else
-                adapter?.swapDataSet(listOf())
+            if (it.isNotEmpty()) adapter?.swapDataSet(it) else adapter?.swapDataSet(listOf())
         }
     }
 
@@ -47,7 +44,7 @@ class AlbumsFragment : AbsRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridL
             MusicPlayerRemote.openQueue(
                 queue = it.shuffled().flatMap { album -> album.songs },
                 startPosition = 0,
-                startPlaying = true
+                startPlaying = true,
             )
         }
     }
@@ -58,12 +55,7 @@ class AlbumsFragment : AbsRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridL
 
     override fun createAdapter(): AlbumAdapter {
         val dataSet = if (adapter == null) ArrayList() else adapter!!.dataSet
-        return AlbumAdapter(
-            requireActivity(),
-            dataSet,
-            itemLayoutRes(),
-            this
-        )
+        return AlbumAdapter(requireActivity(), dataSet, itemLayoutRes(), this)
     }
 
     override fun setGridSize(gridSize: Int) {
@@ -104,9 +96,8 @@ class AlbumsFragment : AbsRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridL
     }
 
     override fun saveLayoutRes(layoutRes: Int) {
-        PreferenceUtil.albumGridStyle = GridStyle.values().first { gridStyle ->
-            gridStyle.layoutResId == layoutRes
-        }
+        PreferenceUtil.albumGridStyle =
+            GridStyle.values().first { gridStyle -> gridStyle.layoutResId == layoutRes }
     }
 
     companion object {
@@ -116,14 +107,13 @@ class AlbumsFragment : AbsRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridL
     }
 
     override fun onAlbumClick(albumId: Long, view: View) {
-        findNavController().navigate(
-            R.id.albumDetailsFragment,
-            bundleOf(EXTRA_ALBUM_ID to albumId),
-            null,
-            FragmentNavigatorExtras(
-                view to albumId.toString()
+        findNavController()
+            .navigate(
+                R.id.albumDetailsFragment,
+                bundleOf(EXTRA_ALBUM_ID to albumId),
+                null,
+                FragmentNavigatorExtras(view to albumId.toString()),
             )
-        )
         reenterTransition = null
     }
 
@@ -137,57 +127,33 @@ class AlbumsFragment : AbsRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridL
         val layoutItem = menu.findItem(R.id.action_layout_type)
         setupLayoutMenu(layoutItem.subMenu!!)
         setUpSortOrderMenu(menu.findItem(R.id.action_sort_order).subMenu!!)
-        //Setting up cast button
-      
+        // Setting up cast button
+
     }
 
-    private fun setUpSortOrderMenu(
-        sortOrderMenu: SubMenu
-    ) {
+    private fun setUpSortOrderMenu(sortOrderMenu: SubMenu) {
         val currentSortOrder: String? = getSortOrder()
         sortOrderMenu.clear()
-        sortOrderMenu.add(
-            0,
-            R.id.action_album_sort_order_asc,
-            0,
-            R.string.sort_order_a_z
-        ).isChecked =
-            currentSortOrder.equals(AlbumSortOrder.ALBUM_A_Z)
-        sortOrderMenu.add(
-            0,
-            R.id.action_album_sort_order_desc,
-            1,
-            R.string.sort_order_z_a
-        ).isChecked =
-            currentSortOrder.equals(AlbumSortOrder.ALBUM_Z_A)
-        sortOrderMenu.add(
-            0,
-            R.id.action_album_sort_order_artist,
-            2,
-            R.string.sort_order_album_artist
-        ).isChecked =
-            currentSortOrder.equals(AlbumSortOrder.ALBUM_ARTIST)
-        sortOrderMenu.add(
-            0,
-            R.id.action_album_sort_order_year,
-            3,
-            R.string.sort_order_year
-        ).isChecked =
-            currentSortOrder.equals(AlbumSortOrder.ALBUM_YEAR)
-        sortOrderMenu.add(
-            0,
-            R.id.action_album_sort_order_num_songs,
-            4,
-            R.string.sort_order_num_songs
-        ).isChecked =
-            currentSortOrder.equals(AlbumSortOrder.ALBUM_NUMBER_OF_SONGS)
+        sortOrderMenu
+            .add(0, R.id.action_album_sort_order_asc, 0, R.string.sort_order_a_z)
+            .isChecked = currentSortOrder.equals(AlbumSortOrder.ALBUM_A_Z)
+        sortOrderMenu
+            .add(0, R.id.action_album_sort_order_desc, 1, R.string.sort_order_z_a)
+            .isChecked = currentSortOrder.equals(AlbumSortOrder.ALBUM_Z_A)
+        sortOrderMenu
+            .add(0, R.id.action_album_sort_order_artist, 2, R.string.sort_order_album_artist)
+            .isChecked = currentSortOrder.equals(AlbumSortOrder.ALBUM_ARTIST)
+        sortOrderMenu
+            .add(0, R.id.action_album_sort_order_year, 3, R.string.sort_order_year)
+            .isChecked = currentSortOrder.equals(AlbumSortOrder.ALBUM_YEAR)
+        sortOrderMenu
+            .add(0, R.id.action_album_sort_order_num_songs, 4, R.string.sort_order_num_songs)
+            .isChecked = currentSortOrder.equals(AlbumSortOrder.ALBUM_NUMBER_OF_SONGS)
 
         sortOrderMenu.setGroupCheckable(0, true, true)
     }
 
-    private fun setupLayoutMenu(
-        subMenu: SubMenu
-    ) {
+    private fun setupLayoutMenu(subMenu: SubMenu) {
         when (itemLayoutRes()) {
             R.layout.item_card -> subMenu.findItem(R.id.action_layout_card).isChecked = true
             R.layout.item_grid -> subMenu.findItem(R.id.action_layout_normal).isChecked = true
@@ -201,12 +167,9 @@ class AlbumsFragment : AbsRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridL
         }
     }
 
-    private fun setUpGridSizeMenu(
-        gridSizeMenu: SubMenu
-    ) {
+    private fun setUpGridSizeMenu(gridSizeMenu: SubMenu) {
         when (getGridSize()) {
-            1 -> gridSizeMenu.findItem(R.id.action_grid_size_1).isChecked =
-                true
+            1 -> gridSizeMenu.findItem(R.id.action_grid_size_1).isChecked = true
             2 -> gridSizeMenu.findItem(R.id.action_grid_size_2).isChecked = true
             3 -> gridSizeMenu.findItem(R.id.action_grid_size_3).isChecked = true
             4 -> gridSizeMenu.findItem(R.id.action_grid_size_4).isChecked = true
@@ -249,17 +212,16 @@ class AlbumsFragment : AbsRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridL
         return super.onMenuItemSelected(item)
     }
 
-    private fun handleSortOrderMenuItem(
-        item: MenuItem
-    ): Boolean {
-        val sortOrder: String = when (item.itemId) {
-            R.id.action_album_sort_order_asc -> AlbumSortOrder.ALBUM_A_Z
-            R.id.action_album_sort_order_desc -> AlbumSortOrder.ALBUM_Z_A
-            R.id.action_album_sort_order_artist -> AlbumSortOrder.ALBUM_ARTIST
-            R.id.action_album_sort_order_year -> AlbumSortOrder.ALBUM_YEAR
-            R.id.action_album_sort_order_num_songs -> AlbumSortOrder.ALBUM_NUMBER_OF_SONGS
-            else -> PreferenceUtil.albumSortOrder
-        }
+    private fun handleSortOrderMenuItem(item: MenuItem): Boolean {
+        val sortOrder: String =
+            when (item.itemId) {
+                R.id.action_album_sort_order_asc -> AlbumSortOrder.ALBUM_A_Z
+                R.id.action_album_sort_order_desc -> AlbumSortOrder.ALBUM_Z_A
+                R.id.action_album_sort_order_artist -> AlbumSortOrder.ALBUM_ARTIST
+                R.id.action_album_sort_order_year -> AlbumSortOrder.ALBUM_YEAR
+                R.id.action_album_sort_order_num_songs -> AlbumSortOrder.ALBUM_NUMBER_OF_SONGS
+                else -> PreferenceUtil.albumSortOrder
+            }
         if (sortOrder != PreferenceUtil.albumSortOrder) {
             item.isChecked = true
             setAndSaveSortOrder(sortOrder)
@@ -268,18 +230,17 @@ class AlbumsFragment : AbsRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridL
         return false
     }
 
-    private fun handleLayoutResType(
-        item: MenuItem
-    ): Boolean {
-        val layoutRes = when (item.itemId) {
-            R.id.action_layout_normal -> R.layout.item_grid
-            R.id.action_layout_card -> R.layout.item_card
-            R.id.action_layout_colored_card -> R.layout.item_card_color
-            R.id.action_layout_circular -> R.layout.item_grid_circle
-            R.id.action_layout_image -> R.layout.image
-            R.id.action_layout_gradient_image -> R.layout.item_image_gradient
-            else -> PreferenceUtil.albumGridStyle.layoutResId
-        }
+    private fun handleLayoutResType(item: MenuItem): Boolean {
+        val layoutRes =
+            when (item.itemId) {
+                R.id.action_layout_normal -> R.layout.item_grid
+                R.id.action_layout_card -> R.layout.item_card
+                R.id.action_layout_colored_card -> R.layout.item_card_color
+                R.id.action_layout_circular -> R.layout.item_grid_circle
+                R.id.action_layout_image -> R.layout.image
+                R.id.action_layout_gradient_image -> R.layout.item_image_gradient
+                else -> PreferenceUtil.albumGridStyle.layoutResId
+            }
         if (layoutRes != PreferenceUtil.albumGridStyle.layoutResId) {
             item.isChecked = true
             setAndSaveLayoutRes(layoutRes)
@@ -288,20 +249,19 @@ class AlbumsFragment : AbsRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridL
         return false
     }
 
-    private fun handleGridSizeMenuItem(
-        item: MenuItem
-    ): Boolean {
-        val gridSize = when (item.itemId) {
-            R.id.action_grid_size_1 -> 1
-            R.id.action_grid_size_2 -> 2
-            R.id.action_grid_size_3 -> 3
-            R.id.action_grid_size_4 -> 4
-            R.id.action_grid_size_5 -> 5
-            R.id.action_grid_size_6 -> 6
-            R.id.action_grid_size_7 -> 7
-            R.id.action_grid_size_8 -> 8
-            else -> 0
-        }
+    private fun handleGridSizeMenuItem(item: MenuItem): Boolean {
+        val gridSize =
+            when (item.itemId) {
+                R.id.action_grid_size_1 -> 1
+                R.id.action_grid_size_2 -> 2
+                R.id.action_grid_size_3 -> 3
+                R.id.action_grid_size_4 -> 4
+                R.id.action_grid_size_5 -> 5
+                R.id.action_grid_size_6 -> 6
+                R.id.action_grid_size_7 -> 7
+                R.id.action_grid_size_8 -> 8
+                else -> 0
+            }
         if (gridSize > 0) {
             item.isChecked = true
             setAndSaveGridSize(gridSize)

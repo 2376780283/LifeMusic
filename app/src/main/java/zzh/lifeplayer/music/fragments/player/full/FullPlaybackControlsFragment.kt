@@ -27,8 +27,12 @@ import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.material.slider.Slider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
-import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.FragmentFullPlayerControlsBinding
 import zzh.lifeplayer.music.db.PlaylistEntity
@@ -45,23 +49,16 @@ import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.service.MusicService
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.google.android.material.slider.Slider
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-/**
- * Created by hemanths on 20/09/17.
- */
-
+/** Created by hemanths on 20/09/17. */
 class FullPlaybackControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_full_player_controls),
     PopupMenu.OnMenuItemClickListener {
 
     private val libraryViewModel: LibraryViewModel by activityViewModel()
     private var _binding: FragmentFullPlayerControlsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val progressSlider: Slider
         get() = binding.progressSlider
@@ -92,16 +89,13 @@ class FullPlaybackControlsFragment :
         binding.songTotalTime.setTextColor(Color.WHITE)
         binding.songCurrentProgress.setTextColor(Color.WHITE)
         binding.title.isSelected = true
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
     }
 
     public override fun show() {
-        binding.playPauseButton.animate()
+        binding.playPauseButton
+            .animate()
             .scaleX(1f)
             .scaleY(1f)
             .setInterpolator(DecelerateInterpolator())
@@ -213,9 +207,7 @@ class FullPlaybackControlsFragment :
     }
 
     private fun setupFavourite() {
-        binding.songFavourite.setOnClickListener {
-            toggleFavorite(MusicPlayerRemote.currentSong)
-        }
+        binding.songFavourite.setOnClickListener { toggleFavorite(MusicPlayerRemote.currentSong) }
     }
 
     override fun onFavoriteStateChanged() {
@@ -227,15 +219,13 @@ class FullPlaybackControlsFragment :
             val isFavorite: Boolean =
                 libraryViewModel.isSongFavorite(MusicPlayerRemote.currentSong.id)
             withContext(Dispatchers.Main) {
-                val icon = if (animate) {
-                    if (isFavorite) R.drawable.avd_favorite else R.drawable.avd_unfavorite
-                } else {
-                    if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
-                }
-                val drawable = requireContext().getTintedDrawable(
-                    icon,
-                    Color.WHITE
-                )
+                val icon =
+                    if (animate) {
+                        if (isFavorite) R.drawable.avd_favorite else R.drawable.avd_unfavorite
+                    } else {
+                        if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                    }
+                val drawable = requireContext().getTintedDrawable(icon, Color.WHITE)
                 binding.songFavourite.apply {
                     setImageDrawable(drawable)
                     if (drawable is AnimatedVectorDrawable) {

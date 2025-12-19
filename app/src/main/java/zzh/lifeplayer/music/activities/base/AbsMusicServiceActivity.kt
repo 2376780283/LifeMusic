@@ -4,9 +4,12 @@ import android.Manifest
 import android.content.*
 import android.os.Bundle
 import android.os.IBinder
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import java.lang.ref.WeakReference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.db.toPlayCount
@@ -22,10 +25,6 @@ import zzh.lifeplayer.music.service.MusicService.Companion.REPEAT_MODE_CHANGED
 import zzh.lifeplayer.music.service.MusicService.Companion.SHUFFLE_MODE_CHANGED
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.logD
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
-import java.lang.ref.WeakReference
 
 abstract class AbsMusicServiceActivity : AbsBaseActivity(), IMusicServiceEventListener {
 
@@ -37,15 +36,19 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), IMusicServiceEventLi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        serviceToken = MusicPlayerRemote.bindToService(this, object : ServiceConnection {
-            override fun onServiceConnected(name: ComponentName, service: IBinder) {
-                this@AbsMusicServiceActivity.onServiceConnected()
-            }
+        serviceToken =
+            MusicPlayerRemote.bindToService(
+                this,
+                object : ServiceConnection {
+                    override fun onServiceConnected(name: ComponentName, service: IBinder) {
+                        this@AbsMusicServiceActivity.onServiceConnected()
+                    }
 
-            override fun onServiceDisconnected(name: ComponentName) {
-                this@AbsMusicServiceActivity.onServiceDisconnected()
-            }
-        })
+                    override fun onServiceDisconnected(name: ComponentName) {
+                        this@AbsMusicServiceActivity.onServiceDisconnected()
+                    }
+                },
+            )
 
         setPermissionDeniedMessage(getString(R.string.permission_external_storage_denied))
     }
@@ -112,9 +115,10 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), IMusicServiceEventLi
             if (!PreferenceUtil.pauseHistory) {
                 repository.upsertSongInHistory(MusicPlayerRemote.currentSong)
             }
-            val song = repository.findSongExistInPlayCount(MusicPlayerRemote.currentSong.id)
-                ?.apply { playCount += 1 }
-                ?: MusicPlayerRemote.currentSong.toPlayCount()
+            val song =
+                repository.findSongExistInPlayCount(MusicPlayerRemote.currentSong.id)?.apply {
+                    playCount += 1
+                } ?: MusicPlayerRemote.currentSong.toPlayCount()
 
             repository.upsertSongInPlayCount(song)
         }
@@ -161,20 +165,22 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), IMusicServiceEventLi
         val intent = Intent(MEDIA_STORE_CHANGED)
         intent.putExtra(
             "from_permissions_changed",
-            true
+            true,
         ) // just in case we need to know this at some point
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
         logD("sendBroadcast $hasPermissions")
     }
 
     override fun getPermissionsToRequest(): Array<String> {
-        return mutableListOf<String>().apply {
-            if (VersionUtils.hasT()) {
-                add(Manifest.permission.READ_MEDIA_AUDIO)
-                add(Manifest.permission.POST_NOTIFICATIONS)
-            }            
-            add(Manifest.permission.MANAGE_EXTERNAL_STORAGE)                          
-        }.toTypedArray()
+        return mutableListOf<String>()
+            .apply {
+                if (VersionUtils.hasT()) {
+                    add(Manifest.permission.READ_MEDIA_AUDIO)
+                    add(Manifest.permission.POST_NOTIFICATIONS)
+                }
+                add(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+            }
+            .toTypedArray()
     }
 
     private class MusicStateReceiver(activity: AbsMusicServiceActivity) : BroadcastReceiver() {

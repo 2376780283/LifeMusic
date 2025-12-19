@@ -18,8 +18,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.bumptech.glide.signature.ObjectKey
 
-/** @author Karim Abou Zeid (kabouzeid)
- */
+/** @author Karim Abou Zeid (kabouzeid) */
 class ArtistSignatureUtil private constructor(context: Context) {
     private val mPreferences: SharedPreferences =
         context.getSharedPreferences(ARTIST_SIGNATURE_PREFS, Context.MODE_PRIVATE)
@@ -39,6 +38,7 @@ class ArtistSignatureUtil private constructor(context: Context) {
     companion object {
         private const val ARTIST_SIGNATURE_PREFS = "artist_signatures"
         private var INSTANCE: ArtistSignatureUtil? = null
+
         fun getInstance(context: Context): ArtistSignatureUtil {
             if (INSTANCE == null) {
                 INSTANCE = ArtistSignatureUtil(context.applicationContext)
@@ -46,5 +46,4 @@ class ArtistSignatureUtil private constructor(context: Context) {
             return INSTANCE!!
         }
     }
-
 }

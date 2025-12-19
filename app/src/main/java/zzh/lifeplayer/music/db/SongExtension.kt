@@ -17,15 +17,11 @@ package zzh.lifeplayer.music.db
 import zzh.lifeplayer.music.model.Song
 
 fun List<HistoryEntity>.fromHistoryToSongs(): List<Song> {
-    return map {
-        it.toSong()
-    }
+    return map { it.toSong() }
 }
 
 fun List<SongEntity>.toSongs(): List<Song> {
-    return map {
-        it.toSong()
-    }
+    return map { it.toSong() }
 }
 
 fun Song.toHistoryEntity(timePlayed: Long): HistoryEntity {
@@ -43,7 +39,7 @@ fun Song.toHistoryEntity(timePlayed: Long): HistoryEntity {
         artistName = artistName,
         composer = composer,
         albumArtist = albumArtist,
-        timePlayed = timePlayed
+        timePlayed = timePlayed,
     )
 }
 
@@ -62,7 +58,7 @@ fun Song.toSongEntity(playListId: Long): SongEntity {
         artistId = artistId,
         artistName = artistName,
         composer = composer,
-        albumArtist = albumArtist
+        albumArtist = albumArtist,
     )
 }
 
@@ -80,7 +76,7 @@ fun SongEntity.toSong(): Song {
         artistId = artistId,
         artistName = artistName,
         composer = composer,
-        albumArtist = albumArtist
+        albumArtist = albumArtist,
     )
 }
 
@@ -98,7 +94,7 @@ fun PlayCountEntity.toSong(): Song {
         artistId = artistId,
         artistName = artistName,
         composer = composer,
-        albumArtist = albumArtist
+        albumArtist = albumArtist,
     )
 }
 
@@ -116,7 +112,7 @@ fun HistoryEntity.toSong(): Song {
         artistId = artistId,
         artistName = artistName,
         composer = composer,
-        albumArtist = albumArtist
+        albumArtist = albumArtist,
     )
 }
 
@@ -136,18 +132,14 @@ fun Song.toPlayCount(): PlayCountEntity {
         composer = composer,
         albumArtist = albumArtist,
         timePlayed = System.currentTimeMillis(),
-        playCount = 1
+        playCount = 1,
     )
 }
 
 fun List<Song>.toSongsEntity(playlistEntity: PlaylistEntity): List<SongEntity> {
-    return map {
-        it.toSongEntity(playlistEntity.playListId)
-    }
+    return map { it.toSongEntity(playlistEntity.playListId) }
 }
 
 fun List<Song>.toSongsEntity(playlistId: Long): List<SongEntity> {
-    return map {
-        it.toSongEntity(playlistId)
-    }
+    return map { it.toSongEntity(playlistId) }
 }

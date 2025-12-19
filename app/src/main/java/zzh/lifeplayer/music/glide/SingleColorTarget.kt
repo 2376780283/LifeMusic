@@ -16,11 +16,11 @@ package zzh.lifeplayer.music.glide
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
+import com.bumptech.glide.request.transition.Transition
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 import zzh.lifeplayer.music.glide.palette.BitmapPaletteTarget
 import zzh.lifeplayer.music.glide.palette.BitmapPaletteWrapper
 import zzh.lifeplayer.music.util.ColorUtil
-import com.bumptech.glide.request.transition.Transition
 
 abstract class SingleColorTarget(view: ImageView) : BitmapPaletteTarget(view) {
 
@@ -36,13 +36,13 @@ abstract class SingleColorTarget(view: ImageView) : BitmapPaletteTarget(view) {
 
     override fun onResourceReady(
         resource: BitmapPaletteWrapper,
-        transition: Transition<in BitmapPaletteWrapper>?
+        transition: Transition<in BitmapPaletteWrapper>?,
     ) {
         super.onResourceReady(resource, transition)
         onColorReady(
             ColorUtil.getColor(
                 resource.palette,
-                ATHUtil.resolveColor(view.context, androidx.appcompat.R.attr.colorPrimary)
+                ATHUtil.resolveColor(view.context, androidx.appcompat.R.attr.colorPrimary),
             )
         )
     }

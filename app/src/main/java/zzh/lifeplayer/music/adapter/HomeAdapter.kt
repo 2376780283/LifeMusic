@@ -56,24 +56,35 @@ class HomeAdapter(private val activity: AppCompatActivity) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            RECENT_ARTISTS, TOP_ARTISTS -> {
-                val layout = LayoutInflater.from(activity).inflate(R.layout.section_recycler_view, parent, false)
+            RECENT_ARTISTS,
+            TOP_ARTISTS -> {
+                val layout =
+                    LayoutInflater.from(activity)
+                        .inflate(R.layout.section_recycler_view, parent, false)
                 ArtistViewHolder(layout)
             }
             FAVOURITES -> {
-                val layout = LayoutInflater.from(activity).inflate(R.layout.section_recycler_view, parent, false)
+                val layout =
+                    LayoutInflater.from(activity)
+                        .inflate(R.layout.section_recycler_view, parent, false)
                 PlaylistViewHolder(layout)
             }
-            TOP_ALBUMS, RECENT_ALBUMS -> {
-                val layout = LayoutInflater.from(activity).inflate(R.layout.section_recycler_view, parent, false)
+            TOP_ALBUMS,
+            RECENT_ALBUMS -> {
+                val layout =
+                    LayoutInflater.from(activity)
+                        .inflate(R.layout.section_recycler_view, parent, false)
                 AlbumViewHolder(layout)
             }
             EMPTY_VIEW -> {
-                val layout = LayoutInflater.from(activity).inflate(R.layout.empty_state_view, parent, false)
+                val layout =
+                    LayoutInflater.from(activity).inflate(R.layout.empty_state_view, parent, false)
                 EmptyViewHolder(layout)
             }
             else -> {
-                val layout = LayoutInflater.from(activity).inflate(R.layout.section_recycler_view, parent, false)
+                val layout =
+                    LayoutInflater.from(activity)
+                        .inflate(R.layout.section_recycler_view, parent, false)
                 ArtistViewHolder(layout)
             }
         }
@@ -86,10 +97,9 @@ class HomeAdapter(private val activity: AppCompatActivity) :
                 holder.bindView(home)
                 holder.clickableArea.setOnClickListener {
                     it.findFragment<HomeFragment>().setSharedAxisXTransitions()
-                    activity.findNavController(R.id.fragment_container).navigate(
-                        R.id.detailListFragment,
-                        bundleOf("type" to home.homeSection)
-                    )
+                    activity
+                        .findNavController(R.id.fragment_container)
+                        .navigate(R.id.detailListFragment, bundleOf("type" to home.homeSection))
                 }
             }
             is ArtistViewHolder -> {
@@ -97,10 +107,9 @@ class HomeAdapter(private val activity: AppCompatActivity) :
                 holder.bindView(home)
                 holder.clickableArea.setOnClickListener {
                     it.findFragment<HomeFragment>().setSharedAxisXTransitions()
-                    activity.findNavController(R.id.fragment_container).navigate(
-                        R.id.detailListFragment,
-                        bundleOf("type" to home.homeSection)
-                    )
+                    activity
+                        .findNavController(R.id.fragment_container)
+                        .navigate(R.id.detailListFragment, bundleOf("type" to home.homeSection))
                 }
             }
             is PlaylistViewHolder -> {
@@ -108,19 +117,18 @@ class HomeAdapter(private val activity: AppCompatActivity) :
                 holder.bindView(home)
                 holder.clickableArea.setOnClickListener {
                     it.findFragment<HomeFragment>().setSharedAxisXTransitions()
-                    activity.findNavController(R.id.fragment_container).navigate(
-                        R.id.detailListFragment,
-                        bundleOf("type" to home.homeSection)
-                    )
+                    activity
+                        .findNavController(R.id.fragment_container)
+                        .navigate(R.id.detailListFragment, bundleOf("type" to home.homeSection))
                 }
             }
-/*            is EmptyViewHolder -> {
-                holder.bindView()
-                holder.browseButton.setOnClickListener {
-                    //empty
-                }
-            }*/
-            // 懒得写了
+        /*            is EmptyViewHolder -> {
+            holder.bindView()
+            holder.browseButton.setOnClickListener {
+                //empty
+            }
+        }*/
+        // 懒得写了
         }
     }
 
@@ -136,8 +144,8 @@ class HomeAdapter(private val activity: AppCompatActivity) :
 
     // 空状态视图持有者
     inner class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-/*        val browseButton: View = view.findViewById(R.id.browseButton)
-        
+        /*        val browseButton: View = view.findViewById(R.id.browseButton)
+
         fun bindView() {
             // 可以在这里添加动态文本或图标
         }*/
@@ -170,11 +178,12 @@ class HomeAdapter(private val activity: AppCompatActivity) :
         fun bindView(home: Home) {
             title.setText(home.titleRes)
             recyclerView.apply {
-                val songAdapter = SongAdapter(
-                    activity,
-                    home.arrayList as MutableList<Song>,
-                    R.layout.item_favourite_card
-                )
+                val songAdapter =
+                    SongAdapter(
+                        activity,
+                        home.arrayList as MutableList<Song>,
+                        R.layout.item_favourite_card,
+                    )
                 layoutManager = linearLayoutManager()
                 adapter = songAdapter
             }
@@ -200,24 +209,24 @@ class HomeAdapter(private val activity: AppCompatActivity) :
         LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
 
     override fun onArtist(artistId: Long, view: View) {
-        activity.findNavController(R.id.fragment_container).navigate(
-            R.id.artistDetailsFragment,
-            bundleOf(EXTRA_ARTIST_ID to artistId),
-            null,
-            FragmentNavigatorExtras(
-                view to artistId.toString()
+        activity
+            .findNavController(R.id.fragment_container)
+            .navigate(
+                R.id.artistDetailsFragment,
+                bundleOf(EXTRA_ARTIST_ID to artistId),
+                null,
+                FragmentNavigatorExtras(view to artistId.toString()),
             )
-        )
     }
 
     override fun onAlbumClick(albumId: Long, view: View) {
-        activity.findNavController(R.id.fragment_container).navigate(
-            R.id.albumDetailsFragment,
-            bundleOf(EXTRA_ALBUM_ID to albumId),
-            null,
-            FragmentNavigatorExtras(
-                view to albumId.toString()
+        activity
+            .findNavController(R.id.fragment_container)
+            .navigate(
+                R.id.albumDetailsFragment,
+                bundleOf(EXTRA_ALBUM_ID to albumId),
+                null,
+                FragmentNavigatorExtras(view to albumId.toString()),
             )
-        )
     }
 }

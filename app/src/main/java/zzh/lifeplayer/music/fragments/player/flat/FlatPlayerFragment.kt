@@ -35,8 +35,8 @@ class FlatPlayerFragment : AbsPlayerFragment(R.layout.fragment_flat_player) {
         get() = lastColor
 
     private var _binding: FragmentFlatPlayerBinding? = null
-    private val binding get() = _binding!!
-
+    private val binding
+        get() = _binding!!
 
     private fun setUpSubFragments() {
         controlsFragment = whichFragment(R.id.playbackControlsFragment)
@@ -47,12 +47,14 @@ class FlatPlayerFragment : AbsPlayerFragment(R.layout.fragment_flat_player) {
 
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.inflateMenu(R.menu.menu_player)
-        binding.playerToolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+        binding.playerToolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
         binding.playerToolbar.setOnMenuItemClickListener(this)
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             colorControlNormal(),
-            requireActivity()
+            requireActivity(),
         )
     }
 
@@ -63,10 +65,12 @@ class FlatPlayerFragment : AbsPlayerFragment(R.layout.fragment_flat_player) {
 
         valueAnimator = ValueAnimator.ofObject(ArgbEvaluator(), android.R.color.transparent, i)
         valueAnimator?.addUpdateListener { animation ->
-            val drawable = DrawableGradient(
-                GradientDrawable.Orientation.TOP_BOTTOM,
-                intArrayOf(animation.animatedValue as Int, android.R.color.transparent), 0
-            )
+            val drawable =
+                DrawableGradient(
+                    GradientDrawable.Orientation.TOP_BOTTOM,
+                    intArrayOf(animation.animatedValue as Int, android.R.color.transparent),
+                    0,
+                )
             _binding?.colorGradientBackground?.background = drawable
         }
         valueAnimator?.setDuration(ViewUtil.RETRO_MUSIC_ANIM_TIME.toLong())?.start()
@@ -92,8 +96,7 @@ class FlatPlayerFragment : AbsPlayerFragment(R.layout.fragment_flat_player) {
         val isLight = ColorUtil.isColorLight(paletteColor)
         return if (PreferenceUtil.isAdaptiveColor)
             MaterialValueHelper.getPrimaryTextColor(requireContext(), isLight)
-        else
-            colorControlNormal()
+        else colorControlNormal()
     }
 
     override fun onColorChanged(color: MediaNotificationProcessor) {
@@ -103,7 +106,7 @@ class FlatPlayerFragment : AbsPlayerFragment(R.layout.fragment_flat_player) {
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             colorControlNormal(),
-            requireActivity()
+            requireActivity(),
         )
         if (PreferenceUtil.isAdaptiveColor) {
             colorize(color.backgroundColor)

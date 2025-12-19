@@ -27,9 +27,8 @@ class LegacyPlaylistAdapter(
     private val activity: FragmentActivity,
     private var list: List<Playlist>,
     private val layoutRes: Int,
-    private val playlistClickListener: PlaylistClickListener
-) :
-    RecyclerView.Adapter<LegacyPlaylistAdapter.ViewHolder>() {
+    private val playlistClickListener: PlaylistClickListener,
+) : RecyclerView.Adapter<LegacyPlaylistAdapter.ViewHolder>() {
 
     fun swapData(list: List<Playlist>) {
         this.list = list
@@ -38,22 +37,15 @@ class LegacyPlaylistAdapter(
 
     class ViewHolder(itemView: View) : MediaEntryViewHolder(itemView)
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(layoutRes, parent, false)
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(layoutRes, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val playlist: Playlist = list[position]
         holder.title?.text = playlist.name
         holder.text?.text = MusicUtil.getPlaylistInfoString(activity, playlist.getSongs())
-        holder.itemView.setOnClickListener {
-            playlistClickListener.onPlaylistClick(playlist)
-        }
+        holder.itemView.setOnClickListener { playlistClickListener.onPlaylistClick(playlist) }
     }
 
     override fun getItemCount(): Int {

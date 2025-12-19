@@ -19,8 +19,8 @@ import java.util.Locale
  * File Utility Methods
  *
  * @author Dhaval Patel
- * @version 1.0
  * @since 04 January 2019
+ * @version 1.0
  */
 object FileUtil {
     /**
@@ -33,10 +33,7 @@ object FileUtil {
      * @return Return Empty file to store camera image.
      * @throws IOException if permission denied of failed to create new file.
      */
-    fun getImageFile(
-        fileDir: File,
-        extension: String? = null,
-    ): File? {
+    fun getImageFile(fileDir: File, extension: String? = null): File? {
         try {
             // Create an image file name
             val ext = extension ?: ".jpg"
@@ -60,13 +57,13 @@ object FileUtil {
     }
 
     private fun getFileName() = "IMG_${getTimestamp()}"
+
     // private fun getFileName() = "IMAGE_PICKER"
 
     /**
      * Get Current Time in yyyyMMdd HHmmssSSS format
      *
-     * 2019/01/30 10:30:20 000
-     * E.g. 20190130_103020000
+     * 2019/01/30 10:30:20 000 E.g. 20190130_103020000
      */
     private fun getTimestamp(): String {
         val timeFormat = "yyyyMMdd_HHmmssSSS"
@@ -75,6 +72,7 @@ object FileUtil {
 
     /**
      * Get Free Space size
+     *
      * @param file directory object to check free space.
      */
     fun getFreeSpace(file: File): Long {
@@ -90,10 +88,7 @@ object FileUtil {
      * @param uri Uri to get Image Size
      * @return Int Array, Index 0 has width and Index 1 has height
      */
-    fun getImageResolution(
-        context: Context,
-        uri: Uri,
-    ): Pair<Int, Int> {
+    fun getImageResolution(context: Context, uri: Uri): Pair<Int, Int> {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
         val stream = context.contentResolver.openInputStream(uri)
@@ -120,10 +115,8 @@ object FileUtil {
      * @param uri Uri to get Image Size
      * @return Int Image File Size
      */
-    fun getImageSize(
-        context: Context,
-        uri: Uri,
-    ): Long = getDocumentFile(context, uri)?.length() ?: 0
+    fun getImageSize(context: Context, uri: Uri): Long =
+        getDocumentFile(context, uri)?.length() ?: 0
 
     /**
      * Create copy of Uri into application specific local path
@@ -132,10 +125,7 @@ object FileUtil {
      * @param uri Source Uri
      * @return File return copy of Uri object
      */
-    fun getTempFile(
-        context: Context,
-        uri: Uri,
-    ): File? {
+    fun getTempFile(context: Context, uri: Uri): File? {
         try {
             val destination = File(context.cacheDir, "image_picker.png")
 
@@ -162,10 +152,7 @@ object FileUtil {
      * @param uri Source Uri
      * @return DocumentFile return DocumentFile from Uri
      */
-    fun getDocumentFile(
-        context: Context,
-        uri: Uri,
-    ): DocumentFile? {
+    fun getDocumentFile(context: Context, uri: Uri): DocumentFile? {
         var file: DocumentFile? = null
         if (isFileUri(uri)) {
             val path = FileUriUtils.getRealPath(context, uri)

@@ -1,31 +1,25 @@
 package zzh.lifeplayer.music.dialogs
 
-import android.app.Activity
+// import zzh.lifeplayer.music.activities.saf.SAFGuideActivity
+
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
-import androidx.core.text.parseAsHtml
 import androidx.fragment.app.DialogFragment
-import zzh.lifeplayer.appthemehelper.util.VersionUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import zzh.lifeplayer.music.EXTRA_SONG
-import zzh.lifeplayer.music.R
-//import zzh.lifeplayer.music.activities.saf.SAFGuideActivity
 import zzh.lifeplayer.music.extensions.extraNotNull
-import zzh.lifeplayer.music.extensions.materialDialog
 import zzh.lifeplayer.music.fragments.LibraryViewModel
 import zzh.lifeplayer.music.fragments.ReloadType
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.MusicUtil
-import zzh.lifeplayer.music.util.SAFUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class DeleteSongsDialog : DialogFragment() {
     lateinit var libraryViewModel: LibraryViewModel
@@ -39,9 +33,7 @@ class DeleteSongsDialog : DialogFragment() {
 
         fun create(songs: List<Song>): DeleteSongsDialog {
             return DeleteSongsDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_SONG to ArrayList(songs)
-                )
+                arguments = bundleOf(EXTRA_SONG to ArrayList(songs))
             }
         }
     }
@@ -49,27 +41,27 @@ class DeleteSongsDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         libraryViewModel = activity?.getViewModel() as LibraryViewModel
         val songs = extraNotNull<List<Song>>(EXTRA_SONG).value
- //       if (VersionUtils.hasR()) {
-            val deleteResultLauncher =
-                registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-  //                  if (result.resultCode == Activity.RESULT_OK) {
-                        if ((songs.size == 1) && MusicPlayerRemote.isPlaying(songs[0])) {
-                            MusicPlayerRemote.playNextSong()
-                        }
-                        MusicPlayerRemote.removeFromQueue(songs)
-                        reloadTabs()
-      //              }
-                    dismiss()
+        //       if (VersionUtils.hasR()) {
+        val deleteResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result
+                ->
+                //                  if (result.resultCode == Activity.RESULT_OK) {
+                if ((songs.size == 1) && MusicPlayerRemote.isPlaying(songs[0])) {
+                    MusicPlayerRemote.playNextSong()
                 }
-            val pendingIntent =
-                MediaStore.createDeleteRequest(requireActivity().contentResolver, songs.map {
-                    MusicUtil.getSongFileUri(it.id)
-                })
-            deleteResultLauncher.launch(
-                IntentSenderRequest.Builder(pendingIntent.intentSender).build()
+                MusicPlayerRemote.removeFromQueue(songs)
+                reloadTabs()
+                //              }
+                dismiss()
+            }
+        val pendingIntent =
+            MediaStore.createDeleteRequest(
+                requireActivity().contentResolver,
+                songs.map { MusicUtil.getSongFileUri(it.id) },
             )
-            return super.onCreateDialog(savedInstanceState)
-/*        } else {
+        deleteResultLauncher.launch(IntentSenderRequest.Builder(pendingIntent.intentSender).build())
+        return super.onCreateDialog(savedInstanceState)
+        /*        } else {
 
             val pair = if (songs.size > 1) {
                 Pair(
@@ -115,24 +107,25 @@ class DeleteSongsDialog : DialogFragment() {
                 }
         }*/
     }
-/*
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            SAFGuideActivity.REQUEST_CODE_SAF_GUIDE -> {
-                SAFUtil.openTreePicker(this)
-            }
-            SAFUtil.REQUEST_SAF_PICK_TREE,
-            SAFUtil.REQUEST_SAF_PICK_FILE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    SAFUtil.saveTreeUri(requireActivity(), data)
-                    val songs = extraNotNull<List<Song>>(EXTRA_SONG).value
-                    deleteSongs(songs)
+
+    /*
+        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+            super.onActivityResult(requestCode, resultCode, data)
+            when (requestCode) {
+                SAFGuideActivity.REQUEST_CODE_SAF_GUIDE -> {
+                    SAFUtil.openTreePicker(this)
+                }
+                SAFUtil.REQUEST_SAF_PICK_TREE,
+                SAFUtil.REQUEST_SAF_PICK_FILE -> {
+                    if (resultCode == Activity.RESULT_OK) {
+                        SAFUtil.saveTreeUri(requireActivity(), data)
+                        val songs = extraNotNull<List<Song>>(EXTRA_SONG).value
+                        deleteSongs(songs)
+                    }
                 }
             }
         }
-    }
-*/
+    */
     fun deleteSongs(songs: List<Song>) {
         CoroutineScope(Dispatchers.IO).launch {
             dismiss()

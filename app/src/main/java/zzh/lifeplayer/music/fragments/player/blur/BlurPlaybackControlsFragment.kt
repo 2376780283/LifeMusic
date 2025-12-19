@@ -17,6 +17,7 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.google.android.material.slider.Slider
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
 import zzh.lifeplayer.appthemehelper.util.TintHelper
@@ -32,12 +33,12 @@ import zzh.lifeplayer.music.fragments.base.goToArtist
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.google.android.material.slider.Slider
 
 class BlurPlaybackControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_blur_player_playback_controls) {
     private var _binding: FragmentBlurPlayerPlaybackControlsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val progressSlider: Slider
         get() = binding.progressSlider
@@ -66,12 +67,8 @@ class BlurPlaybackControlsFragment :
         setUpPlayPauseFab()
         binding.title.isSelected = true
         binding.text.isSelected = true
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
     }
 
     private fun updateSong() {
@@ -114,7 +111,10 @@ class BlurPlaybackControlsFragment :
     override fun setColor(color: MediaNotificationProcessor) {
         lastPlaybackControlsColor = Color.WHITE
         lastDisabledPlaybackControlsColor =
-            ContextCompat.getColor(requireContext(), zzh.lifeplayer.appthemehelper.R.color.md_grey_500)
+            ContextCompat.getColor(
+                requireContext(),
+                zzh.lifeplayer.appthemehelper.R.color.md_grey_500,
+            )
 
         binding.title.setTextColor(lastPlaybackControlsColor)
 
@@ -137,7 +137,7 @@ class BlurPlaybackControlsFragment :
         TintHelper.setTintAuto(
             binding.playPauseButton,
             MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.isColorLight(i)),
-            false
+            false,
         )
         TintHelper.setTintAuto(binding.playPauseButton, i, true)
     }
@@ -162,7 +162,8 @@ class BlurPlaybackControlsFragment :
     }
 
     public override fun show() {
-        binding.playPauseButton.animate()
+        binding.playPauseButton
+            .animate()
             .scaleX(1f)
             .scaleY(1f)
             .rotation(360f)

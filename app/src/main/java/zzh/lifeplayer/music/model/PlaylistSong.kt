@@ -15,9 +15,7 @@ package zzh.lifeplayer.music.model
 
 import kotlinx.parcelize.Parcelize
 
-/**
- * Created by hemanths on 3/4/19
- */
+/** Created by hemanths on 3/4/19 */
 @Parcelize
 class PlaylistSong(
     override val id: Long,
@@ -34,22 +32,23 @@ class PlaylistSong(
     val playlistId: Long,
     val idInPlayList: Long,
     override val composer: String?,
-    override val albumArtist: String?
-) : Song(
-    id = id,
-    title = title,
-    trackNumber = trackNumber,
-    year = year,
-    duration = duration,
-    data = data,
-    dateModified = dateModified,
-    albumId = albumId,
-    albumName = albumName,
-    artistId = artistId,
-    artistName = artistName,
-    composer = composer,
-    albumArtist = albumArtist
-) {
+    override val albumArtist: String?,
+) :
+    Song(
+        id = id,
+        title = title,
+        trackNumber = trackNumber,
+        year = year,
+        duration = duration,
+        data = data,
+        dateModified = dateModified,
+        albumId = albumId,
+        albumName = albumName,
+        artistId = artistId,
+        artistName = artistName,
+        composer = composer,
+        albumArtist = albumArtist,
+    ) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

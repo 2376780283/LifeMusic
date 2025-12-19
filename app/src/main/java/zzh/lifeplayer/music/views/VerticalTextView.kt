@@ -19,10 +19,9 @@ import android.util.AttributeSet
 import android.view.Gravity
 import androidx.appcompat.widget.AppCompatTextView
 
-class VerticalTextView(context: Context, attrs: AttributeSet?) : AppCompatTextView(
-    context, attrs
-) {
+class VerticalTextView(context: Context, attrs: AttributeSet?) : AppCompatTextView(context, attrs) {
     private var topDown = false
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(heightMeasureSpec, widthMeasureSpec)
         setMeasuredDimension(measuredHeight, measuredWidth)
@@ -47,11 +46,13 @@ class VerticalTextView(context: Context, attrs: AttributeSet?) : AppCompatTextVi
 
     init {
         val gravity = gravity
-        topDown = if (Gravity.isVertical(gravity)
-            && gravity and Gravity.VERTICAL_GRAVITY_MASK == Gravity.BOTTOM
-        ) {
-            setGravity(gravity and Gravity.HORIZONTAL_GRAVITY_MASK or Gravity.TOP)
-            false
-        } else true
+        topDown =
+            if (
+                Gravity.isVertical(gravity) &&
+                    gravity and Gravity.VERTICAL_GRAVITY_MASK == Gravity.BOTTOM
+            ) {
+                setGravity(gravity and Gravity.HORIZONTAL_GRAVITY_MASK or Gravity.TOP)
+                false
+            } else true
     }
 }

@@ -7,16 +7,9 @@ import android.media.MediaScannerConnection
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import zzh.lifeplayer.music.R
-import zzh.lifeplayer.music.extensions.showToast
-import zzh.lifeplayer.music.misc.UpdateToastMediaScannerCompletionListener
-import zzh.lifeplayer.music.model.AudioTagInfo
-import zzh.lifeplayer.music.util.MusicUtil.createAlbumArtFile
-import zzh.lifeplayer.music.util.MusicUtil.deleteAlbumArt
-import zzh.lifeplayer.music.util.MusicUtil.insertAlbumArt
+import java.io.File
+import java.io.IOException
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jaudiotagger.audio.AudioFileIO
 import org.jaudiotagger.audio.exceptions.CannotReadException
@@ -27,21 +20,28 @@ import org.jaudiotagger.tag.FieldDataInvalidException
 import org.jaudiotagger.tag.TagException
 import org.jaudiotagger.tag.images.AndroidArtwork
 import org.jaudiotagger.tag.images.Artwork
-import java.io.File
-import java.io.IOException
+import zzh.lifeplayer.music.R
+import zzh.lifeplayer.music.extensions.showToast
+import zzh.lifeplayer.music.misc.UpdateToastMediaScannerCompletionListener
+import zzh.lifeplayer.music.model.AudioTagInfo
+import zzh.lifeplayer.music.util.MusicUtil.createAlbumArtFile
+import zzh.lifeplayer.music.util.MusicUtil.deleteAlbumArt
+import zzh.lifeplayer.music.util.MusicUtil.insertAlbumArt
 
 class TagWriter {
 
     companion object {
-    
-         /**
+
+        /**
          * Works around JAudioTagger's character encoding limitations by using unique safe markers.
-         * JAudioTagger corrupts certain Unicode characters, so we use unique markers that won't conflict with normal text.
+         * JAudioTagger corrupts certain Unicode characters, so we use unique markers that won't
+         * conflict with normal text.
          */
         private fun ensureUtf8Encoding(text: String): String {
             return try {
                 // Use unique markers that are unlikely to appear in normal text
-                text.replace("°", "___DEG___")
+                text
+                    .replace("°", "___DEG___")
                     .replace("ä", "___ae___")
                     .replace("ö", "___oe___")
                     .replace("ü", "___ue___")
@@ -66,10 +66,10 @@ class TagWriter {
                 toBeScanned.toTypedArray(),
                 null,
                 withContext(Dispatchers.Main) {
-                    if (context is Activity) UpdateToastMediaScannerCompletionListener(
-                        context, toBeScanned
-                    ) else null
-                }
+                    if (context is Activity)
+                        UpdateToastMediaScannerCompletionListener(context, toBeScanned)
+                    else null
+                },
             )
         }
 
@@ -83,7 +83,7 @@ class TagWriter {
                         info.artworkInfo.artwork.compress(
                             Bitmap.CompressFormat.JPEG,
                             100,
-                            albumArtFile.outputStream()
+                            albumArtFile.outputStream(),
                         )
                         artwork = AndroidArtwork.createArtworkFromFile(albumArtFile)
                     } catch (e: IOException) {
@@ -104,7 +104,7 @@ class TagWriter {
                                         if (newValue.isEmpty()) {
                                             tag.deleteField(key)
                                         } else {
-                                         // tag.setField(key, newValue)
+                                            // tag.setField(key, newValue)
                                             val encodedValue = ensureUtf8Encoding(newValue)
                                             tag.setField(key, encodedValue)
                                         }
@@ -166,7 +166,7 @@ class TagWriter {
                         info.artworkInfo.artwork.compress(
                             Bitmap.CompressFormat.JPEG,
                             100,
-                            albumArtFile.outputStream()
+                            albumArtFile.outputStream(),
                         )
                         artwork = AndroidArtwork.createArtworkFromFile(albumArtFile)
                     } catch (e: IOException) {
@@ -184,9 +184,7 @@ class TagWriter {
                         cacheFiles.add(cacheFile)
 
                         originFile.inputStream().use { input ->
-                            cacheFile.outputStream().use { output ->
-                                input.copyTo(output)
-                            }
+                            cacheFile.outputStream().use { output -> input.copyTo(output) }
                         }
 
                         val audioFile = AudioFileIO.read(cacheFile)

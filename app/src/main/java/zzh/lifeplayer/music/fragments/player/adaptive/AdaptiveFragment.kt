@@ -30,7 +30,9 @@ import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 class AdaptiveFragment : AbsPlayerFragment(R.layout.fragment_adaptive_player) {
 
     private var _binding: FragmentAdaptivePlayerBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
+
     override fun playerToolbar(): Toolbar {
         return binding.playerToolbar
     }
@@ -60,7 +62,9 @@ class AdaptiveFragment : AbsPlayerFragment(R.layout.fragment_adaptive_player) {
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.apply {
             inflateMenu(R.menu.menu_player)
-            setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
             ToolbarContentTintHelper.colorizeToolbar(this, surfaceColor(), requireActivity())
             setTitleTextColor(textColorPrimary())
             setSubtitleTextColor(textColorSecondary())
@@ -105,15 +109,13 @@ class AdaptiveFragment : AbsPlayerFragment(R.layout.fragment_adaptive_player) {
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             colorControlNormal(),
-            requireActivity()
+            requireActivity(),
         )
     }
 
-    override fun onShow() {
-    }
+    override fun onShow() {}
 
-    override fun onHide() {
-    }
+    override fun onHide() {}
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -42,7 +42,7 @@ object AppShortcutIconGenerator {
             context,
             iconId,
             context.getColor(R.color.app_shortcut_default_foreground),
-            context.getColor(R.color.app_shortcut_default_background)
+            context.getColor(R.color.app_shortcut_default_background),
         )
     }
 
@@ -53,7 +53,10 @@ object AppShortcutIconGenerator {
 
         // Return an Icon of iconId with those colors
         return generateThemedIcon(
-            context, iconId, ThemeStore.accentColor(context), typedColorBackground.data
+            context,
+            iconId,
+            ThemeStore.accentColor(context),
+            typedColorBackground.data,
         )
     }
 

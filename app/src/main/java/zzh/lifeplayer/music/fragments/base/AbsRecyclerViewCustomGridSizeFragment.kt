@@ -17,13 +17,15 @@ package zzh.lifeplayer.music.fragments.base
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
+import com.google.android.material.transition.MaterialFade
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.util.LifeUtil
 import zzh.lifeplayer.music.util.logD
-import com.google.android.material.transition.MaterialFade
 
-abstract class AbsRecyclerViewCustomGridSizeFragment<A : RecyclerView.Adapter<*>, LM : RecyclerView.LayoutManager> :
-    AbsRecyclerViewFragment<A, LM>() {
+abstract class AbsRecyclerViewCustomGridSizeFragment<
+    A : RecyclerView.Adapter<*>,
+    LM : RecyclerView.LayoutManager,
+> : AbsRecyclerViewFragment<A, LM>() {
 
     private var gridSize: Int = 0
     private var sortOrder: String? = null
@@ -32,11 +34,12 @@ abstract class AbsRecyclerViewCustomGridSizeFragment<A : RecyclerView.Adapter<*>
         get() = LifeUtil.isLandscape
 
     val maxGridSize: Int
-        get() = if (isLandscape) {
-            resources.getInteger(R.integer.max_columns_land)
-        } else {
-            resources.getInteger(R.integer.max_columns)
-        }
+        get() =
+            if (isLandscape) {
+                resources.getInteger(R.integer.max_columns_land)
+            } else {
+                resources.getInteger(R.integer.max_columns)
+            }
 
     fun itemLayoutRes(): Int {
         return if (getGridSize() > maxGridSizeForList) {
@@ -50,17 +53,19 @@ abstract class AbsRecyclerViewCustomGridSizeFragment<A : RecyclerView.Adapter<*>
     }
 
     private val maxGridSizeForList: Int
-        get() = if (isLandscape) {
-            resources.getInteger(R.integer.default_list_columns_land)
-        } else resources.getInteger(R.integer.default_list_columns)
+        get() =
+            if (isLandscape) {
+                resources.getInteger(R.integer.default_list_columns_land)
+            } else resources.getInteger(R.integer.default_list_columns)
 
     fun getGridSize(): Int {
         if (gridSize == 0) {
-            gridSize = if (isLandscape) {
-                loadGridSizeLand()
-            } else {
-                loadGridSize()
-            }
+            gridSize =
+                if (isLandscape) {
+                    loadGridSizeLand()
+                } else {
+                    loadGridSize()
+                }
         }
         return gridSize
     }
@@ -95,9 +100,7 @@ abstract class AbsRecyclerViewCustomGridSizeFragment<A : RecyclerView.Adapter<*>
         } else {
             setGridSize(gridSize)
         }
-        val transition = MaterialFade().apply {
-            addTarget(recyclerView)
-        }
+        val transition = MaterialFade().apply { addTarget(recyclerView) }
         TransitionManager.beginDelayedTransition(container, transition)
         recyclerView.isVisible = true
     }

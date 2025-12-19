@@ -23,5 +23,5 @@ class Contributor(
     @SerializedName("name") val name: String = "",
     @SerializedName("summary") val summary: String = "",
     @SerializedName("link") val link: String = "",
-    @SerializedName("image") val image: String = ""
+    @SerializedName("image") val image: String = "",
 ) : Parcelable

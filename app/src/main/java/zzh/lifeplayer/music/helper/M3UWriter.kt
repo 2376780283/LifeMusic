@@ -14,19 +14,16 @@
  */
 package zzh.lifeplayer.music.helper
 
+import java.io.*
 import zzh.lifeplayer.music.db.PlaylistWithSongs
 import zzh.lifeplayer.music.db.toSongs
 import zzh.lifeplayer.music.model.Playlist
 import zzh.lifeplayer.music.model.Song
-import java.io.*
 
 object M3UWriter : M3UConstants {
     @JvmStatic
     @Throws(IOException::class)
-    fun write(
-        dir: File,
-        playlist: Playlist
-    ): File {
+    fun write(dir: File, playlist: Playlist): File {
         if (!dir.exists()) dir.mkdirs()
         val file = File(dir, playlist.name + "." + M3UConstants.EXTENSION)
         val songs = playlist.getSongs()
@@ -35,7 +32,14 @@ object M3UWriter : M3UConstants {
                 bw.write(M3UConstants.HEADER)
                 for (song in songs) {
                     bw.newLine()
-                    bw.write(M3UConstants.ENTRY + song.duration + M3UConstants.DURATION_SEPARATOR + song.artistName + " - " + song.title)
+                    bw.write(
+                        M3UConstants.ENTRY +
+                            song.duration +
+                            M3UConstants.DURATION_SEPARATOR +
+                            song.artistName +
+                            " - " +
+                            song.title
+                    )
                     bw.newLine()
                     bw.write(song.data)
                 }
@@ -50,15 +54,20 @@ object M3UWriter : M3UConstants {
         if (!dir.exists()) dir.mkdirs()
         val fileName = "${playlistWithSongs.playlistEntity.playlistName}.${M3UConstants.EXTENSION}"
         val file = File(dir, fileName)
-        val songs: List<Song> = playlistWithSongs.songs.sortedBy {
-            it.songPrimaryKey
-        }.toSongs()
+        val songs: List<Song> = playlistWithSongs.songs.sortedBy { it.songPrimaryKey }.toSongs()
         if (songs.isNotEmpty()) {
-            BufferedWriter(FileWriter(file)).use { bw->
+            BufferedWriter(FileWriter(file)).use { bw ->
                 bw.write(M3UConstants.HEADER)
                 songs.forEach {
                     bw.newLine()
-                    bw.write(M3UConstants.ENTRY + it.duration + M3UConstants.DURATION_SEPARATOR + it.artistName + " - " + it.title)
+                    bw.write(
+                        M3UConstants.ENTRY +
+                            it.duration +
+                            M3UConstants.DURATION_SEPARATOR +
+                            it.artistName +
+                            " - " +
+                            it.title
+                    )
                     bw.newLine()
                     bw.write(it.data)
                 }
@@ -68,16 +77,21 @@ object M3UWriter : M3UConstants {
     }
 
     fun writeIO(outputStream: OutputStream, playlistWithSongs: PlaylistWithSongs) {
-        val songs: List<Song> = playlistWithSongs.songs.sortedBy {
-            it.songPrimaryKey
-        }.toSongs()
+        val songs: List<Song> = playlistWithSongs.songs.sortedBy { it.songPrimaryKey }.toSongs()
         if (songs.isNotEmpty()) {
             outputStream.use { os ->
-                os.bufferedWriter().use { bw->
+                os.bufferedWriter().use { bw ->
                     bw.write(M3UConstants.HEADER)
                     songs.forEach {
                         bw.newLine()
-                        bw.write(M3UConstants.ENTRY + it.duration + M3UConstants.DURATION_SEPARATOR + it.artistName + " - " + it.title)
+                        bw.write(
+                            M3UConstants.ENTRY +
+                                it.duration +
+                                M3UConstants.DURATION_SEPARATOR +
+                                it.artistName +
+                                " - " +
+                                it.title
+                        )
                         bw.newLine()
                         bw.write(it.data)
                     }

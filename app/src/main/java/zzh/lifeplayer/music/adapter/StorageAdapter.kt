@@ -5,22 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import zzh.lifeplayer.music.R
 import java.io.File
+import zzh.lifeplayer.music.R
 
 class StorageAdapter(
     val storageList: List<Storage>,
-    val storageClickListener: StorageClickListener
-) :
-    RecyclerView.Adapter<StorageAdapter.ViewHolder>() {
+    val storageClickListener: StorageClickListener,
+) : RecyclerView.Adapter<StorageAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_storage,
-                parent,
-                false
-            )
+            LayoutInflater.from(parent.context).inflate(R.layout.item_storage, parent, false)
         )
     }
 
@@ -40,7 +35,9 @@ class StorageAdapter(
         }
 
         init {
-            itemView.setOnClickListener { storageClickListener.onStorageClicked(storageList[bindingAdapterPosition]) }
+            itemView.setOnClickListener {
+                storageClickListener.onStorageClicked(storageList[bindingAdapterPosition])
+            }
         }
     }
 }

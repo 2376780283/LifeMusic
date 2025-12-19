@@ -14,22 +14,18 @@
 package zzh.lifeplayer.music.util
 
 import android.util.Log
-import zzh.lifeplayer.music.model.Song
-import zzh.lifeplayer.music.model.lyrics.AbsSynchronizedLyrics
+import java.io.*
 import org.jaudiotagger.audio.AudioFileIO
 import org.jaudiotagger.tag.FieldKey
-import java.io.*
+import zzh.lifeplayer.music.model.Song
+import zzh.lifeplayer.music.model.lyrics.AbsSynchronizedLyrics
 
-/**
- * Created by hefuyi on 2016/11/8.
- */
+/** Created by hefuyi on 2016/11/8. */
 object LyricUtil {
-    private val lrcRootPath =
-        getExternalStorageDirectory().toString() + "/Life/lyrics/"
+    private val lrcRootPath = getExternalStorageDirectory().toString() + "/Life/lyrics/"
     private const val TAG = "LyricUtil"
-    fun writeLrcToLoc(
-        title: String, artist: String, lrcContext: String
-    ): File? {
+
+    fun writeLrcToLoc(title: String, artist: String, lrcContext: String): File? {
         var writer: FileWriter? = null
         return try {
             val file = File(getLrcPath(title, artist))
@@ -51,7 +47,7 @@ object LyricUtil {
         }
     }
 
-    //So in Retro, Lrc file can be same folder as Music File or in RetroMusic Folder
+    // So in Retro, Lrc file can be same folder as Music File or in RetroMusic Folder
     // In this case we pass location of the file and Contents to write to file
     fun writeLrc(song: Song, lrcContext: String) {
         var writer: FileWriter? = null
@@ -160,11 +156,12 @@ object LyricUtil {
     }
 
     fun getEmbeddedSyncedLyrics(data: String): String? {
-        val embeddedLyrics = try {
-            AudioFileIO.read(File(data)).tagOrCreateDefault.getFirst(FieldKey.LYRICS)
-        } catch (e: Exception) {
-            return null
-        }
+        val embeddedLyrics =
+            try {
+                AudioFileIO.read(File(data)).tagOrCreateDefault.getFirst(FieldKey.LYRICS)
+            } catch (e: Exception) {
+                return null
+            }
         return if (AbsSynchronizedLyrics.isSynchronized(embeddedLyrics)) {
             embeddedLyrics
         } else {

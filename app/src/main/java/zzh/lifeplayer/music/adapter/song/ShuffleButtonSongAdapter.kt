@@ -17,21 +17,20 @@ package zzh.lifeplayer.music.adapter.song
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
+import com.google.android.material.button.MaterialButton
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.extensions.accentColor
 import zzh.lifeplayer.music.extensions.accentOutlineColor
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.model.Song
-import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.LifeUtil
-import com.google.android.material.button.MaterialButton
+import zzh.lifeplayer.music.util.PreferenceUtil
 
 class ShuffleButtonSongAdapter(
     activity: FragmentActivity,
     dataSet: MutableList<Song>,
-    itemLayoutRes: Int
+    itemLayoutRes: Int,
 ) : AbsOffsetSongAdapter(activity, dataSet, itemLayoutRes) {
-
 
     override fun createViewHolder(view: View): SongAdapter.ViewHolder {
         return ViewHolder(view)
@@ -45,21 +44,20 @@ class ShuffleButtonSongAdapter(
         if (holder.itemViewType == OFFSET_ITEM) {
             val viewHolder = holder as ViewHolder
             viewHolder.playAction?.let {
-                it.setOnClickListener {
-                    MusicPlayerRemote.openQueue(dataSet, 0, true)
-                }
+                it.setOnClickListener { MusicPlayerRemote.openQueue(dataSet, 0, true) }
                 it.accentOutlineColor()
             }
             viewHolder.shuffleAction?.let {
-                it.setOnClickListener {
-                    MusicPlayerRemote.openAndShuffleQueue(dataSet, true)
-                }
+                it.setOnClickListener { MusicPlayerRemote.openAndShuffleQueue(dataSet, true) }
                 it.accentColor()
             }
         } else {
             super.onBindViewHolder(holder, position - 1)
             val landscape = LifeUtil.isLandscape
-            if ((PreferenceUtil.songGridSize > 2 && !landscape) || (PreferenceUtil.songGridSizeLand > 5 && landscape)) {
+            if (
+                (PreferenceUtil.songGridSize > 2 && !landscape) ||
+                    (PreferenceUtil.songGridSizeLand > 5 && landscape)
+            ) {
                 holder.menu?.isVisible = false
             }
         }
@@ -77,5 +75,4 @@ class ShuffleButtonSongAdapter(
             super.onClick(v)
         }
     }
-
 }

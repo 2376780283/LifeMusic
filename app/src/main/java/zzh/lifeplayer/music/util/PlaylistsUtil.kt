@@ -13,16 +13,14 @@
  */
 package zzh.lifeplayer.music.util
 
-import zzh.lifeplayer.music.db.PlaylistWithSongs
-import zzh.lifeplayer.music.helper.M3UWriter.writeIO
 import java.io.File
 import java.io.IOException
+import zzh.lifeplayer.music.db.PlaylistWithSongs
+import zzh.lifeplayer.music.helper.M3UWriter.writeIO
 
 object PlaylistsUtil {
     @Throws(IOException::class)
     fun savePlaylistWithSongs(playlist: PlaylistWithSongs?): File {
-        return writeIO(
-            File(getExternalStorageDirectory(), "Playlists"), playlist!!
-        )
+        return writeIO(File(getExternalStorageDirectory(), "Playlists"), playlist!!)
     }
 }

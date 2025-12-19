@@ -24,14 +24,11 @@ import zzh.lifeplayer.music.databinding.ListItemViewNoCardBinding
 import zzh.lifeplayer.music.extensions.hide
 import zzh.lifeplayer.music.extensions.show
 
-/**
- * Created by hemanths on 2019-10-02.
- */
-class ListItemView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = -1
-) : FrameLayout(context, attrs, defStyleAttr) {
+/** Created by hemanths on 2019-10-02. */
+class ListItemView
+@JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = -1) :
+    FrameLayout(context, attrs, defStyleAttr) {
 
     private var binding =
         ListItemViewNoCardBinding.inflate(LayoutInflater.from(context), this, true)

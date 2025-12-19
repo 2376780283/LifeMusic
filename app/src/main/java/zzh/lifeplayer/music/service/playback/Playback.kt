@@ -3,7 +3,6 @@ package zzh.lifeplayer.music.service.playback
 import android.net.Uri
 import zzh.lifeplayer.music.model.Song
 
-
 interface Playback {
 
     val isInitialized: Boolean
@@ -12,9 +11,7 @@ interface Playback {
 
     val audioSessionId: Int
 
-    fun setDataSource(
-        song: Song, force: Boolean, completion: (success: Boolean) -> Unit,
-    )
+    fun setDataSource(song: Song, force: Boolean, completion: (success: Boolean) -> Unit)
 
     fun setNextDataSource(path: Uri?)
 

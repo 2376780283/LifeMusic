@@ -28,9 +28,11 @@ abstract class BaseShortcutType(internal var context: Context) {
     internal abstract val shortcutInfo: ShortcutInfo
 
     /**
-     * Creates an Intent that will launch MainActivtiy and immediately play {@param songs} in either shuffle or normal mode
+     * Creates an Intent that will launch MainActivtiy and immediately play {@param songs} in either
+     * shuffle or normal mode
      *
-     * @param shortcutType Describes the type of shortcut to create (ShuffleAll, TopTracks, custom playlist, etc.)
+     * @param shortcutType Describes the type of shortcut to create (ShuffleAll, TopTracks, custom
+     *   playlist, etc.)
      * @return
      */
     internal fun getPlaySongsIntent(shortcutType: Long): Intent {

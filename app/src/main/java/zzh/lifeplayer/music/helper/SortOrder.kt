@@ -19,9 +19,7 @@ import zzh.lifeplayer.music.ALBUM_ARTIST
 
 class SortOrder {
 
-    /**
-     * Artist sort order entries.
-     */
+    /** Artist sort order entries. */
     interface ArtistSortOrder {
 
         companion object {
@@ -40,9 +38,7 @@ class SortOrder {
         }
     }
 
-    /**
-     * Album sort order entries.
-     */
+    /** Album sort order entries. */
     interface AlbumSortOrder {
 
         companion object {
@@ -58,16 +54,15 @@ class SortOrder {
                 MediaStore.Audio.AlbumColumns.NUMBER_OF_SONGS + " DESC"
 
             /* Album Artist sort order artist */
-            const val ALBUM_ARTIST = "case when lower(album_artist) is null then 1 else 0 end, lower(album_artist)"
+            const val ALBUM_ARTIST =
+                "case when lower(album_artist) is null then 1 else 0 end, lower(album_artist)"
 
             /* Album sort order year */
             const val ALBUM_YEAR = MediaStore.Audio.Media.YEAR + " DESC"
         }
     }
 
-    /**
-     * Song sort order entries.
-     */
+    /** Song sort order entries. */
     interface SongSortOrder {
 
         companion object {
@@ -106,9 +101,7 @@ class SortOrder {
         }
     }
 
-    /**
-     * Album song sort order entries.
-     */
+    /** Album song sort order entries. */
     interface AlbumSongSortOrder {
 
         companion object {
@@ -120,17 +113,15 @@ class SortOrder {
             const val SONG_Z_A = "$SONG_A_Z DESC"
 
             /* Album song sort order track list */
-            const val SONG_TRACK_LIST = (MediaStore.Audio.Media.TRACK + ", " +
-                    MediaStore.Audio.Media.DEFAULT_SORT_ORDER)
+            const val SONG_TRACK_LIST =
+                (MediaStore.Audio.Media.TRACK + ", " + MediaStore.Audio.Media.DEFAULT_SORT_ORDER)
 
             /* Album song sort order duration */
             const val SONG_DURATION = SongSortOrder.SONG_DURATION
         }
     }
 
-    /**
-     * Artist song sort order entries.
-     */
+    /** Artist song sort order entries. */
     interface ArtistSongSortOrder {
 
         companion object {
@@ -155,9 +146,7 @@ class SortOrder {
         }
     }
 
-    /**
-     * Artist album sort order entries.
-     */
+    /** Artist album sort order entries. */
     interface ArtistAlbumSortOrder {
 
         companion object {
@@ -176,9 +165,7 @@ class SortOrder {
         }
     }
 
-    /**
-     * Genre sort order entries.
-     */
+    /** Genre sort order entries. */
     interface GenreSortOrder {
 
         companion object {
@@ -191,9 +178,7 @@ class SortOrder {
         }
     }
 
-    /**
-     * Playlist sort order entries.
-     */
+    /** Playlist sort order entries. */
     interface PlaylistSortOrder {
 
         companion object {

@@ -24,13 +24,11 @@ import zzh.lifeplayer.music.service.MusicService.Companion.PLAY_STATE_CHANGED
 
 abstract class BaseAppWidget : AppWidgetProvider() {
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
+        appWidgetIds: IntArray,
     ) {
         defaultAppWidget(context, appWidgetIds)
         val updateIntent = Intent(APP_WIDGET_UPDATE)
@@ -40,22 +38,18 @@ abstract class BaseAppWidget : AppWidgetProvider() {
         LocalBroadcastManager.getInstance(context).sendBroadcast(updateIntent)
     }
 
-    /**
-     * Handle a change notification coming over from [MusicService]
-     */
+    /** Handle a change notification coming over from [MusicService] */
     fun notifyChange(service: MusicService, what: String) {
         if (hasInstances(service)) {
-            if (META_CHANGED == what || PLAY_STATE_CHANGED == what || FAVORITE_STATE_CHANGED == what) {
+            if (
+                META_CHANGED == what || PLAY_STATE_CHANGED == what || FAVORITE_STATE_CHANGED == what
+            ) {
                 performUpdate(service, null)
             }
         }
     }
 
-    protected fun pushUpdate(
-        context: Context,
-        appWidgetIds: IntArray?,
-        views: RemoteViews
-    ) {
+    protected fun pushUpdate(context: Context, appWidgetIds: IntArray?, views: RemoteViews) {
         val appWidgetManager = AppWidgetManager.getInstance(context)
         if (appWidgetIds != null) {
             appWidgetManager.updateAppWidget(appWidgetIds, views)
@@ -64,32 +58,24 @@ abstract class BaseAppWidget : AppWidgetProvider() {
         }
     }
 
-    /**
-     * Check against [AppWidgetManager] if there are any instances of this widget.
-     */
+    /** Check against [AppWidgetManager] if there are any instances of this widget. */
     private fun hasInstances(context: Context): Boolean {
         val appWidgetManager = AppWidgetManager.getInstance(context)
-        val mAppWidgetIds = appWidgetManager.getAppWidgetIds(
-            ComponentName(
-                context, javaClass
-            )
-        )
+        val mAppWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(context, javaClass))
         return mAppWidgetIds.isNotEmpty()
     }
 
     protected fun buildPendingIntent(
         context: Context,
         action: String,
-        serviceName: ComponentName
+        serviceName: ComponentName,
     ): PendingIntent {
         val intent = Intent(action)
         intent.component = serviceName
         return if (VersionUtils.hasOreo()) {
             PendingIntent.getForegroundService(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         } else {
-            PendingIntent.getService(
-                context, 0, intent, PendingIntent.FLAG_IMMUTABLE
-            )
+            PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         }
     }
 
@@ -126,7 +112,7 @@ abstract class BaseAppWidget : AppWidgetProvider() {
             tl: Float,
             tr: Float,
             bl: Float,
-            br: Float
+            br: Float,
         ): Bitmap? {
             if (drawable == null) {
                 return null
@@ -145,8 +131,13 @@ abstract class BaseAppWidget : AppWidgetProvider() {
             paint.isAntiAlias = true
             canvas.drawPath(
                 composeRoundedRectPath(
-                    RectF(0f, 0f, width.toFloat(), height.toFloat()), tl, tr, bl, br
-                ), paint
+                    RectF(0f, 0f, width.toFloat(), height.toFloat()),
+                    tl,
+                    tr,
+                    bl,
+                    br,
+                ),
+                paint,
             )
 
             return rounded
@@ -157,7 +148,7 @@ abstract class BaseAppWidget : AppWidgetProvider() {
             tl: Float,
             tr: Float,
             bl: Float,
-            br: Float
+            br: Float,
         ): Path {
             val path = Path()
             path.moveTo(rect.left + tl, rect.top)

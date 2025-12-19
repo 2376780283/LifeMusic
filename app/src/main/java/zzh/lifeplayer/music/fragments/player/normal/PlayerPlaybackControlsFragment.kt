@@ -19,6 +19,7 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageButton
 import android.widget.TextView
+import com.google.android.material.slider.Slider
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
@@ -32,13 +33,13 @@ import zzh.lifeplayer.music.fragments.base.goToArtist
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.google.android.material.slider.Slider
 
 class PlayerPlaybackControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_player_playback_controls) {
 
     private var _binding: FragmentPlayerPlaybackControlsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val progressSlider: Slider
         get() = binding.progressSlider
@@ -68,12 +69,8 @@ class PlayerPlaybackControlsFragment :
         setUpPlayPauseFab()
         binding.title.isSelected = true
         binding.text.isSelected = true
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
     }
 
     override fun setColor(color: MediaNotificationProcessor) {
@@ -90,19 +87,21 @@ class PlayerPlaybackControlsFragment :
                 MaterialValueHelper.getPrimaryDisabledTextColor(requireContext(), false)
         }
 
-        val colorFinal = if (PreferenceUtil.isAdaptiveColor) {
-            color.primaryTextColor
-        } else {
-            accentColor()
-        }.ripAlpha()
+        val colorFinal =
+            if (PreferenceUtil.isAdaptiveColor) {
+                    color.primaryTextColor
+                } else {
+                    accentColor()
+                }
+                .ripAlpha()
 
         TintHelper.setTintAuto(
             binding.playPauseButton,
             MaterialValueHelper.getPrimaryTextColor(
                 requireContext(),
-                ColorUtil.isColorLight(colorFinal)
+                ColorUtil.isColorLight(colorFinal),
             ),
-            false
+            false,
         )
         TintHelper.setTintAuto(binding.playPauseButton, colorFinal, true)
         binding.progressSlider.applyColor(colorFinal)
@@ -124,7 +123,6 @@ class PlayerPlaybackControlsFragment :
             binding.songInfo.hide()
         }
     }
-
 
     override fun onServiceConnected() {
         updatePlayPauseDrawableState()
@@ -170,7 +168,8 @@ class PlayerPlaybackControlsFragment :
     }
 
     public override fun show() {
-        binding.playPauseButton.animate()
+        binding.playPauseButton
+            .animate()
             .scaleX(1f)
             .scaleY(1f)
             .rotation(360f)

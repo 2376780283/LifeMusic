@@ -20,6 +20,7 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageButton
 import android.widget.TextView
+import com.google.android.material.slider.Slider
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.TintHelper
 import zzh.lifeplayer.music.R
@@ -33,13 +34,13 @@ import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.PlayPauseButtonOnClickHandler
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.google.android.material.slider.Slider
 
 class CardBlurPlaybackControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_card_blur_player_playback_controls) {
 
     private var _binding: FragmentCardBlurPlayerPlaybackControlsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val progressSlider: Slider
         get() = binding.progressSlider
@@ -91,8 +92,12 @@ class CardBlurPlaybackControlsFragment :
 
     private fun updatePlayPauseDrawableState() {
         when {
-            MusicPlayerRemote.isPlaying -> binding.mediaButton.playPauseButton.setImageResource(R.drawable.ic_pause)
-            else -> binding.mediaButton.playPauseButton.setImageResource(R.drawable.ic_play_arrow_white_32dp)
+            MusicPlayerRemote.isPlaying ->
+                binding.mediaButton.playPauseButton.setImageResource(R.drawable.ic_pause)
+            else ->
+                binding.mediaButton.playPauseButton.setImageResource(
+                    R.drawable.ic_play_arrow_white_32dp
+                )
         }
     }
 
@@ -137,7 +142,8 @@ class CardBlurPlaybackControlsFragment :
     }
 
     public override fun show() {
-        binding.mediaButton.playPauseButton.animate()
+        binding.mediaButton.playPauseButton
+            .animate()
             .scaleX(1f)
             .scaleY(1f)
             .rotation(360f)

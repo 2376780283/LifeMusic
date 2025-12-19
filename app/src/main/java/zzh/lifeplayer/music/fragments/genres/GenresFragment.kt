@@ -9,27 +9,22 @@ import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.transition.MaterialSharedAxis
 import zzh.lifeplayer.music.EXTRA_GENRE
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.GenreAdapter
-
 import zzh.lifeplayer.music.fragments.ReloadType
 import zzh.lifeplayer.music.fragments.base.AbsRecyclerViewFragment
 import zzh.lifeplayer.music.interfaces.IGenreClickListener
 import zzh.lifeplayer.music.model.Genre
 import zzh.lifeplayer.music.util.LifeUtil
-import com.google.android.material.transition.MaterialSharedAxis
 
-class
-GenresFragment : AbsRecyclerViewFragment<GenreAdapter, LinearLayoutManager>(),
-    IGenreClickListener {
+class GenresFragment :
+    AbsRecyclerViewFragment<GenreAdapter, LinearLayoutManager>(), IGenreClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         libraryViewModel.getGenre().observe(viewLifecycleOwner) {
-            if (it.isNotEmpty())
-                adapter?.swapDataSet(it)
-            else
-                adapter?.swapDataSet(listOf())
+            if (it.isNotEmpty()) adapter?.swapDataSet(it) else adapter?.swapDataSet(listOf())
         }
     }
 
@@ -59,8 +54,6 @@ GenresFragment : AbsRecyclerViewFragment<GenreAdapter, LinearLayoutManager>(),
         libraryViewModel.forceReload(ReloadType.Genres)
     }
 
-
-
     override val titleRes: Int
         get() = R.string.genres
 
@@ -71,8 +64,7 @@ GenresFragment : AbsRecyclerViewFragment<GenreAdapter, LinearLayoutManager>(),
         get() = false
 
     companion object {
-        @JvmField
-        val TAG: String = GenresFragment::class.java.simpleName
+        @JvmField val TAG: String = GenresFragment::class.java.simpleName
 
         @JvmStatic
         fun newInstance(): GenresFragment {
@@ -83,9 +75,6 @@ GenresFragment : AbsRecyclerViewFragment<GenreAdapter, LinearLayoutManager>(),
     override fun onClickGenre(genre: Genre, view: View) {
         exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).addTarget(requireView())
         reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
-        findNavController().navigate(
-            R.id.genreDetailsFragment,
-            bundleOf(EXTRA_GENRE to genre)
-        )
+        findNavController().navigate(R.id.genreDetailsFragment, bundleOf(EXTRA_GENRE to genre))
     }
 }

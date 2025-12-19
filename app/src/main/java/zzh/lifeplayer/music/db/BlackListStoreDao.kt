@@ -24,12 +24,9 @@ interface BlackListStoreDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBlacklistPath(blackListStoreEntities: List<BlackListStoreEntity>)
 
-    @Delete
-    suspend fun deleteBlacklistPath(blackListStoreEntity: BlackListStoreEntity)
+    @Delete suspend fun deleteBlacklistPath(blackListStoreEntity: BlackListStoreEntity)
 
-    @Query("DELETE FROM BlackListStoreEntity")
-    suspend fun clearBlacklist()
+    @Query("DELETE FROM BlackListStoreEntity") suspend fun clearBlacklist()
 
-    @Query("SELECT * FROM BlackListStoreEntity")
-    fun blackListPaths(): List<BlackListStoreEntity>
+    @Query("SELECT * FROM BlackListStoreEntity") fun blackListPaths(): List<BlackListStoreEntity>
 }

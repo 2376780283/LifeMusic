@@ -12,23 +12,23 @@ import androidx.core.graphics.BlendModeCompat.SRC_IN
 import androidx.fragment.app.DialogFragment
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.bumptech.glide.Glide
 import zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATEDialogPreference
-import zzh.lifeplayer.music.App
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.PreferenceDialogNowPlayingScreenBinding
 import zzh.lifeplayer.music.databinding.PreferenceNowPlayingScreenItemBinding
 import zzh.lifeplayer.music.extensions.*
-import zzh.lifeplayer.music.fragments.AlbumCoverStyle
 import zzh.lifeplayer.music.fragments.AlbumCoverStyle.*
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.ViewUtil
-import com.bumptech.glide.Glide
 
-class AlbumCoverStylePreference @JvmOverloads constructor(
+class AlbumCoverStylePreference
+@JvmOverloads
+constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = -1,
-    defStyleRes: Int = -1
+    defStyleRes: Int = -1,
 ) : ATEDialogPreference(context, attrs, defStyleAttr, defStyleRes) {
 
     private val mLayoutRes = R.layout.preference_dialog_now_playing_screen
@@ -41,13 +41,12 @@ class AlbumCoverStylePreference @JvmOverloads constructor(
         icon?.colorFilter =
             BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
                 context.colorControlNormal(),
-                SRC_IN
+                SRC_IN,
             )
     }
 }
 
-class AlbumCoverStylePreferenceDialog : DialogFragment(),
-    ViewPager.OnPageChangeListener {
+class AlbumCoverStylePreferenceDialog : DialogFragment(), ViewPager.OnPageChangeListener {
 
     private var viewPagerPosition: Int = 0
 
@@ -63,25 +62,22 @@ class AlbumCoverStylePreferenceDialog : DialogFragment(),
         return materialDialog(R.string.pref_title_album_cover_style)
             .setPositiveButton(R.string.set) { _, _ ->
                 val coverStyle = values()[viewPagerPosition]
-                PreferenceUtil.albumCoverStyle = coverStyle              
+                PreferenceUtil.albumCoverStyle = coverStyle
             }
             .setView(binding.root)
             .create()
             .colorButtons()
     }
 
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-    }
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
     override fun onPageSelected(position: Int) {
         this.viewPagerPosition = position
     }
 
-    override fun onPageScrollStateChanged(state: Int) {
-    }
+    override fun onPageScrollStateChanged(state: Int) {}
 
-    private class AlbumCoverStyleAdapter(private val context: Context) :
-        PagerAdapter() {
+    private class AlbumCoverStyleAdapter(private val context: Context) : PagerAdapter() {
 
         override fun instantiateItem(collection: ViewGroup, position: Int): Any {
             val albumCoverStyle = values()[position]
@@ -91,16 +87,12 @@ class AlbumCoverStylePreferenceDialog : DialogFragment(),
 
             Glide.with(context).load(albumCoverStyle.drawableResId).into(binding.image)
             binding.title.setText(albumCoverStyle.titleRes)
-                binding.proText.show()
-                binding.proText.setText(R.string.pro)
+            binding.proText.show()
+            binding.proText.setText(R.string.pro)
             return binding.root
         }
 
-        override fun destroyItem(
-            collection: ViewGroup,
-            position: Int,
-            view: Any
-        ) {
+        override fun destroyItem(collection: ViewGroup, position: Int, view: Any) {
             collection.removeView(view as View)
         }
 

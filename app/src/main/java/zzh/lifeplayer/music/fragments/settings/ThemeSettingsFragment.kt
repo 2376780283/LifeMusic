@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.TwoStatePreference
+import com.afollestad.materialdialogs.color.colorChooser
+import com.google.android.material.color.DynamicColors
 import zzh.lifeplayer.appthemehelper.ACCENT_COLORS
 import zzh.lifeplayer.appthemehelper.ACCENT_COLORS_SUB
 import zzh.lifeplayer.appthemehelper.ThemeStore
@@ -17,13 +19,8 @@ import zzh.lifeplayer.music.appshortcuts.DynamicShortcutManager
 import zzh.lifeplayer.music.extensions.materialDialog
 import zzh.lifeplayer.music.fragments.NowPlayingScreen.*
 import zzh.lifeplayer.music.util.PreferenceUtil
-import com.afollestad.materialdialogs.color.colorChooser
-import com.google.android.material.color.DynamicColors
 
-/**
- * @author Hemanth S (h4h13).
- */
-
+/** @author Hemanth S (h4h13). */
 class ThemeSettingsFragment : AbsSettingsFragment() {
     @SuppressLint("CheckResult")
     override fun invalidateSettings() {
@@ -51,7 +48,8 @@ class ThemeSettingsFragment : AbsSettingsFragment() {
                     initialSelection = accentColor,
                     showAlphaSelector = false,
                     colors = ACCENT_COLORS,
-                    subColors = ACCENT_COLORS_SUB, allowCustomArgb = true
+                    subColors = ACCENT_COLORS_SUB,
+                    allowCustomArgb = true,
                 ) { _, color ->
                     ThemeStore.editTheme(requireContext()).accentColor(color).commit()
                     if (VersionUtils.hasNougatMR())
@@ -63,7 +61,7 @@ class ThemeSettingsFragment : AbsSettingsFragment() {
         }
         val blackTheme: ATESwitchPreference? = findPreference(BLACK_THEME)
         blackTheme?.setOnPreferenceChangeListener { _, _ ->
-        /*   if (!App.isProVersion()) {
+            /*   if (!App.isProVersion()) {
                 showProToastAndNavigate("Just Black theme")
                 return@setOnPreferenceChangeListener false
             }*/
@@ -79,9 +77,7 @@ class ThemeSettingsFragment : AbsSettingsFragment() {
         val desaturatedColor: ATESwitchPreference? = findPreference(DESATURATED_COLOR)
         desaturatedColor?.setOnPreferenceChangeListener { _, value ->
             val desaturated = value as Boolean
-            ThemeStore.prefs(requireContext()).edit {
-                putBoolean("desaturated_color", desaturated)
-            }
+            ThemeStore.prefs(requireContext()).edit { putBoolean("desaturated_color", desaturated) }
             PreferenceUtil.isDesaturatedColor = desaturated
             restartActivity()
             true
@@ -119,8 +115,7 @@ class ThemeSettingsFragment : AbsSettingsFragment() {
         }
 
         val adaptiveColor: ATESwitchPreference? = findPreference(ADAPTIVE_COLOR_APP)
-        adaptiveColor?.isEnabled =
-            PreferenceUtil.nowPlayingScreen in listOf(Normal, Material, Flat)
+        adaptiveColor?.isEnabled = PreferenceUtil.nowPlayingScreen in listOf(Normal, Material, Flat)
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

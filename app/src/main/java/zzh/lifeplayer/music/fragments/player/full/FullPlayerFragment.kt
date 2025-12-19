@@ -19,6 +19,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import com.bumptech.glide.Glide
 import zzh.lifeplayer.appthemehelper.util.ToolbarContentTintHelper
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.FragmentFullBinding
@@ -35,11 +36,11 @@ import zzh.lifeplayer.music.glide.LifeGlideExtension.artistImageOptions
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.bumptech.glide.Glide
 
 class FullPlayerFragment : AbsPlayerFragment(R.layout.fragment_full) {
     private var _binding: FragmentFullBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override fun playerToolbar(): Toolbar {
         return binding.playerToolbar
@@ -48,11 +49,14 @@ class FullPlayerFragment : AbsPlayerFragment(R.layout.fragment_full) {
     private var lastColor: Int = 0
     override val paletteColor: Int
         get() = lastColor
+
     private lateinit var controlsFragment: FullPlaybackControlsFragment
 
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.apply {
-            setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 
@@ -68,9 +72,7 @@ class FullPlayerFragment : AbsPlayerFragment(R.layout.fragment_full) {
     }
 
     private fun setupArtist() {
-        binding.artistImage.setOnClickListener {
-            goToArtist(mainActivity)
-        }
+        binding.artistImage.setOnClickListener { goToArtist(mainActivity) }
     }
 
     private fun setUpSubFragments() {
@@ -80,11 +82,9 @@ class FullPlayerFragment : AbsPlayerFragment(R.layout.fragment_full) {
         coverFragment.removeSlideEffect()
     }
 
-    override fun onShow() {
-    }
+    override fun onShow() {}
 
-    override fun onHide() {
-    }
+    override fun onHide() {}
 
     override fun toolbarIconColor(): Int {
         return Color.WHITE
@@ -129,16 +129,16 @@ class FullPlayerFragment : AbsPlayerFragment(R.layout.fragment_full) {
     }
 
     private fun updateArtistImage() {
-        libraryViewModel.artist(MusicPlayerRemote.currentSong.artistId)
-            .observe(viewLifecycleOwner) { artist ->
-                if (artist.id != -1L) {
-                    Glide.with(requireActivity())
-                        .load(LifeGlideExtension.getArtistModel(artist))
-                        .artistImageOptions(artist)
-                        .into(binding.artistImage)
-                }
-
+        libraryViewModel.artist(MusicPlayerRemote.currentSong.artistId).observe(
+            viewLifecycleOwner
+        ) { artist ->
+            if (artist.id != -1L) {
+                Glide.with(requireActivity())
+                    .load(LifeGlideExtension.getArtistModel(artist))
+                    .artistImageOptions(artist)
+                    .into(binding.artistImage)
             }
+        }
     }
 
     override fun onQueueChanged() {

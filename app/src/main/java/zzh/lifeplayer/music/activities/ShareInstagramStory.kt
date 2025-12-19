@@ -10,6 +10,7 @@ import android.view.MenuItem
 import androidx.core.net.toUri
 import androidx.core.os.BundleCompat
 import androidx.core.view.drawToBitmap
+import com.bumptech.glide.Glide
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
 import zzh.lifeplayer.music.activities.base.AbsThemeActivity
@@ -23,12 +24,8 @@ import zzh.lifeplayer.music.glide.LifeMusicColoredTarget
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.Share
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.bumptech.glide.Glide
 
-/**
- * Created by hemanths on 2020-02-02.
- */
-
+/** Created by hemanths on 2020-02-02. */
 class ShareInstagramStory : AbsThemeActivity() {
 
     private lateinit var binding: ActivityShareInstagramBinding
@@ -54,47 +51,45 @@ class ShareInstagramStory : AbsThemeActivity() {
         binding.toolbar.setBackgroundColor(Color.TRANSPARENT)
         setSupportActionBar(binding.toolbar)
 
-        val song = intent.extras?.let { BundleCompat.getParcelable(it, EXTRA_SONG, Song::class.java) }
+        val song =
+            intent.extras?.let { BundleCompat.getParcelable(it, EXTRA_SONG, Song::class.java) }
         song?.let { songFinal ->
             Glide.with(this)
                 .asBitmapPalette()
                 .songCoverOptions(songFinal)
                 .load(LifeGlideExtension.getSongModel(songFinal))
-                .into(object : LifeMusicColoredTarget(binding.image) {
-                    override fun onColorReady(colors: MediaNotificationProcessor) {
-                        setColors(colors.backgroundColor)
+                .into(
+                    object : LifeMusicColoredTarget(binding.image) {
+                        override fun onColorReady(colors: MediaNotificationProcessor) {
+                            setColors(colors.backgroundColor)
+                        }
                     }
-                })
+                )
 
             binding.shareTitle.text = songFinal.title
             binding.shareText.text = songFinal.artistName
             binding.shareButton.setOnClickListener {
-                val path: String = Media.insertImage(
-                    contentResolver,
-                    binding.mainContent.drawToBitmap(Bitmap.Config.ARGB_8888),
-                    "Design", null
-                )
-                Share.shareStoryToSocial(
-                    this@ShareInstagramStory,
-                    path.toUri()
-                )
+                val path: String =
+                    Media.insertImage(
+                        contentResolver,
+                        binding.mainContent.drawToBitmap(Bitmap.Config.ARGB_8888),
+                        "Design",
+                        null,
+                    )
+                Share.shareStoryToSocial(this@ShareInstagramStory, path.toUri())
             }
         }
         binding.shareButton.setTextColor(
-            MaterialValueHelper.getPrimaryTextColor(
-                this,
-                ColorUtil.isColorLight(accentColor())
-            )
+            MaterialValueHelper.getPrimaryTextColor(this, ColorUtil.isColorLight(accentColor()))
         )
-        binding.shareButton.backgroundTintList =
-            ColorStateList.valueOf(accentColor())
+        binding.shareButton.backgroundTintList = ColorStateList.valueOf(accentColor())
     }
 
     private fun setColors(color: Int) {
         binding.mainContent.background =
             GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
-                intArrayOf(color, Color.BLACK)
+                intArrayOf(color, Color.BLACK),
             )
     }
 }

@@ -25,6 +25,8 @@ import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import androidx.core.text.parseAsHtml
 import androidx.fragment.app.DialogFragment
+import java.io.File
+import org.jaudiotagger.audio.AudioFileIO
 import zzh.lifeplayer.music.EXTRA_SONG
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.DialogFileDetailsBinding
@@ -32,8 +34,6 @@ import zzh.lifeplayer.music.extensions.colorButtons
 import zzh.lifeplayer.music.extensions.materialDialog
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.MusicUtil
-import org.jaudiotagger.audio.AudioFileIO
-import java.io.File
 
 class SongDetailDialog : DialogFragment() {
 
@@ -60,16 +60,18 @@ class SongDetailDialog : DialogFragment() {
                 binding.filePath.text =
                     makeTextWithTitle(context, R.string.label_file_path, songFile.absolutePath)
 
-                binding.dateModified.text = makeTextWithTitle(
-                    context, R.string.label_last_modified,
-                    MusicUtil.getDateModifiedString(songFile.lastModified())
-                )
+                binding.dateModified.text =
+                    makeTextWithTitle(
+                        context,
+                        R.string.label_last_modified,
+                        MusicUtil.getDateModifiedString(songFile.lastModified()),
+                    )
 
                 binding.fileSize.text =
                     makeTextWithTitle(
                         context,
                         R.string.label_file_size,
-                        getFileSizeString(songFile.length())
+                        getFileSizeString(songFile.length()),
                     )
                 try {
 
@@ -79,27 +81,38 @@ class SongDetailDialog : DialogFragment() {
                         try {
                             retriever.setDataSource(songFile.absolutePath)
 
-                            val bitrate = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)?.toIntOrNull() ?: 0
-                            val sampleRate = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_SAMPLERATE)?.toIntOrNull() ?: 0
-                            val duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLongOrNull() ?: 0L
+                            val bitrate =
+                                retriever
+                                    .extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)
+                                    ?.toIntOrNull() ?: 0
+                            val sampleRate =
+                                retriever
+                                    .extractMetadata(MediaMetadataRetriever.METADATA_KEY_SAMPLERATE)
+                                    ?.toIntOrNull() ?: 0
+                            val duration =
+                                retriever
+                                    .extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                                    ?.toLongOrNull() ?: 0L
 
                             binding.fileFormat.text =
                                 makeTextWithTitle(context, R.string.label_file_format, "Opus")
-                            binding.trackLength.text = makeTextWithTitle(
-                                context,
-                                R.string.label_track_length,
-                                MusicUtil.getReadableDurationString(duration)
-                            )
-                            binding.bitrate.text = makeTextWithTitle(
-                                context,
-                                R.string.label_bit_rate,
-                                "${bitrate / 1000} kb/s"
-                            )
+                            binding.trackLength.text =
+                                makeTextWithTitle(
+                                    context,
+                                    R.string.label_track_length,
+                                    MusicUtil.getReadableDurationString(duration),
+                                )
+                            binding.bitrate.text =
+                                makeTextWithTitle(
+                                    context,
+                                    R.string.label_bit_rate,
+                                    "${bitrate / 1000} kb/s",
+                                )
                             binding.samplingRate.text =
                                 makeTextWithTitle(
                                     context,
                                     R.string.label_sampling_rate,
-                                    "$sampleRate Hz"
+                                    "$sampleRate Hz",
                                 )
                         } finally {
                             retriever.release()
@@ -110,42 +123,52 @@ class SongDetailDialog : DialogFragment() {
                         val audioHeader = audioFile.audioHeader
 
                         binding.fileFormat.text =
-                            makeTextWithTitle(context, R.string.label_file_format, audioHeader.format)
-                        binding.trackLength.text = makeTextWithTitle(
-                            context,
-                            R.string.label_track_length,
-                            MusicUtil.getReadableDurationString((audioHeader.trackLength * 1000).toLong())
-                        )
-                        binding.bitrate.text = makeTextWithTitle(
-                            context,
-                            R.string.label_bit_rate,
-                            audioHeader.bitRate + " kb/s"
-                        )
+                            makeTextWithTitle(
+                                context,
+                                R.string.label_file_format,
+                                audioHeader.format,
+                            )
+                        binding.trackLength.text =
+                            makeTextWithTitle(
+                                context,
+                                R.string.label_track_length,
+                                MusicUtil.getReadableDurationString(
+                                    (audioHeader.trackLength * 1000).toLong()
+                                ),
+                            )
+                        binding.bitrate.text =
+                            makeTextWithTitle(
+                                context,
+                                R.string.label_bit_rate,
+                                audioHeader.bitRate + " kb/s",
+                            )
                         binding.samplingRate.text =
                             makeTextWithTitle(
                                 context,
                                 R.string.label_sampling_rate,
-                                audioHeader.sampleRate + " Hz"
+                                audioHeader.sampleRate + " Hz",
                             )
                     }
                 } catch (e: Exception) {
                     Log.e(TAG, "error while reading the song file", e)
                     // fallback
-                    binding.trackLength.text = makeTextWithTitle(
-                        context,
-                        R.string.label_track_length,
-                        MusicUtil.getReadableDurationString(song.duration)
-                    )
+                    binding.trackLength.text =
+                        makeTextWithTitle(
+                            context,
+                            R.string.label_track_length,
+                            MusicUtil.getReadableDurationString(song.duration),
+                        )
                 }
             } else {
                 // fallback
                 binding.fileName.text =
                     makeTextWithTitle(context, R.string.label_file_name, song.title)
-                binding.trackLength.text = makeTextWithTitle(
-                    context,
-                    R.string.label_track_length,
-                    MusicUtil.getReadableDurationString(song.duration)
-                )
+                binding.trackLength.text =
+                    makeTextWithTitle(
+                        context,
+                        R.string.label_track_length,
+                        MusicUtil.getReadableDurationString(song.duration),
+                    )
             }
         }
         return materialDialog(R.string.action_details)
@@ -160,11 +183,7 @@ class SongDetailDialog : DialogFragment() {
         val TAG: String = SongDetailDialog::class.java.simpleName
 
         fun create(song: Song): SongDetailDialog {
-            return SongDetailDialog().apply {
-                arguments = bundleOf(
-                    EXTRA_SONG to song
-                )
-            }
+            return SongDetailDialog().apply { arguments = bundleOf(EXTRA_SONG to song) }
         }
 
         private fun makeTextWithTitle(context: Context, titleResId: Int, text: String?): Spanned {

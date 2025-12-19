@@ -17,10 +17,8 @@ package zzh.lifeplayer.music.service
 import android.database.ContentObserver
 import android.os.Handler
 
-class MediaStoreObserver(
-    private val musicService: MusicService,
-    private val mHandler: Handler
-) : ContentObserver(mHandler), Runnable {
+class MediaStoreObserver(private val musicService: MusicService, private val mHandler: Handler) :
+    ContentObserver(mHandler), Runnable {
 
     override fun onChange(selfChange: Boolean) {
         // if a change is detected, remove any scheduled callback

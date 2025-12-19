@@ -21,6 +21,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.signature.MediaStoreSignature
+import java.io.File
+import java.text.DecimalFormat
+import kotlin.math.log10
+import kotlin.math.pow
+import me.zhanghai.android.fastscroll.PopupTextProvider
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.base.AbsMultiSelectAdapter
@@ -30,23 +38,15 @@ import zzh.lifeplayer.music.glide.LifeGlideExtension
 import zzh.lifeplayer.music.glide.audiocover.AudioFileCover
 import zzh.lifeplayer.music.interfaces.ICallbacks
 import zzh.lifeplayer.music.util.MusicUtil
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.signature.MediaStoreSignature
-import me.zhanghai.android.fastscroll.PopupTextProvider
-import java.io.File
-import java.text.DecimalFormat
-import kotlin.math.log10
-import kotlin.math.pow
 
 class SongFileAdapter(
     override val activity: AppCompatActivity,
     private var dataSet: List<File>,
     private val itemLayoutRes: Int,
-    private val iCallbacks: ICallbacks?
-) : AbsMultiSelectAdapter<SongFileAdapter.ViewHolder, File>(
-    activity, R.menu.menu_media_selection
-), PopupTextProvider {
+    private val iCallbacks: ICallbacks?,
+) :
+    AbsMultiSelectAdapter<SongFileAdapter.ViewHolder, File>(activity, R.menu.menu_media_selection),
+    PopupTextProvider {
 
     init {
         this.setHasStableIds(true)
@@ -102,10 +102,7 @@ class SongFileAdapter(
                 it.setImageResource(R.drawable.ic_folder)
             }
             holder.imageTextContainer?.setCardBackgroundColor(
-                ATHUtil.resolveColor(
-                    activity,
-                    com.google.android.material.R.attr.colorSurface
-                )
+                ATHUtil.resolveColor(activity, com.google.android.material.R.attr.colorSurface)
             )
         } else {
             val error = activity.getTintedDrawable(R.drawable.ic_audio_file, iconColor)
@@ -191,7 +188,9 @@ class SongFileAdapter(
             if (size <= 0) return "$size B"
             val units = arrayOf("B", "KB", "MB", "GB", "TB")
             val digitGroups = (log10(size.toDouble()) / log10(1024.0)).toInt()
-            return DecimalFormat("#,##0.##").format(size / 1024.0.pow(digitGroups.toDouble())) + " " + units[digitGroups]
+            return DecimalFormat("#,##0.##").format(size / 1024.0.pow(digitGroups.toDouble())) +
+                " " +
+                units[digitGroups]
         }
     }
 }

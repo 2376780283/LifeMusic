@@ -2,6 +2,7 @@ package zzh.lifeplayer.music.activities.bugreport.model.github
 
 class ExtraInfo {
     private val extraInfo: MutableMap<String, String> = LinkedHashMap()
+
     fun put(key: String, value: String) {
         extraInfo[key] = value
     }
@@ -41,11 +42,12 @@ class ExtraInfo {
         val output = StringBuilder()
         output.append(
             """
-    Extra info:
-    ---
-    <table>
-    
-    """.trimIndent()
+            Extra info:
+            ---
+            <table>
+
+            """
+                .trimIndent()
         )
         for (key in extraInfo.keys) {
             output

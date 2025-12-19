@@ -8,8 +8,10 @@ import zzh.lifeplayer.music.service.playback.Playback
 class CastPlayer : Playback {
     override val isInitialized: Boolean
         get() = true
+
     override val isPlaying: Boolean
         get() = true
+
     override val audioSessionId: Int
         get() = 0
 
@@ -17,8 +19,7 @@ class CastPlayer : Playback {
         song: Song,
         force: Boolean,
         completion: (success: Boolean) -> Unit,
-    ) {
-    }
+    ) {}
 
     override fun setNextDataSource(path: Uri?) {}
 

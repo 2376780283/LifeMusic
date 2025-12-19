@@ -1,15 +1,13 @@
 package zzh.lifeplayer.music.fragments.lyric
 
-
 import java.io.File
 
-/**
- * LyricsManager handles fetching and displaying synchronized lyrics (LRC format).
- */
+/** LyricsManager handles fetching and displaying synchronized lyrics (LRC format). */
 class LyricsManager {
 
     /**
      * Fetches synchronized lyrics from a local LRC file.
+     *
      * @param title The title of the song.
      * @param artist The artist of the song.
      * @return The content of the LRC file as a string, or null if not found.
@@ -29,6 +27,7 @@ class LyricsManager {
 
     /**
      * Parses the content of an LRC file into a map of timestamps and lyrics.
+     *
      * @param lrcContent The content of the LRC file.
      * @return A map where the key is the timestamp and the value is the lyric line.
      */

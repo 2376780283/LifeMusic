@@ -30,16 +30,17 @@ import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.SwipeAndDragHelper
 import zzh.lifeplayer.music.util.SwipeAndDragHelper.ActionCompletionContract
 
-class CategoryInfoAdapter : RecyclerView.Adapter<CategoryInfoAdapter.ViewHolder>(),
-    ActionCompletionContract {
-    var categoryInfos: MutableList<CategoryInfo> =
-        PreferenceUtil.libraryCategory.toMutableList()
+class CategoryInfoAdapter :
+    RecyclerView.Adapter<CategoryInfoAdapter.ViewHolder>(), ActionCompletionContract {
+    var categoryInfos: MutableList<CategoryInfo> = PreferenceUtil.libraryCategory.toMutableList()
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
     private val touchHelper: ItemTouchHelper
+
     fun attachToRecyclerView(recyclerView: RecyclerView?) {
         touchHelper.attachToRecyclerView(recyclerView)
     }
@@ -70,14 +71,12 @@ class CategoryInfoAdapter : RecyclerView.Adapter<CategoryInfoAdapter.ViewHolder>
         }
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup, viewType: Int
-    ): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             PreferenceDialogLibraryCategoriesListitemBinding.inflate(
-                LayoutInflater.from(
-                    parent.context
-                ), parent, false
+                LayoutInflater.from(parent.context),
+                parent,
+                false,
             )
         )
     }

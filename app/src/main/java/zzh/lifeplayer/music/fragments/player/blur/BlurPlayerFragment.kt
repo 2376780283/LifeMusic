@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.preference.PreferenceManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
 import zzh.lifeplayer.appthemehelper.util.ToolbarContentTintHelper
 import zzh.lifeplayer.music.NEW_BLUR_AMOUNT
 import zzh.lifeplayer.music.R
@@ -24,12 +26,9 @@ import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.PreferenceUtil.blurAmount
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
 
-
-class BlurPlayerFragment : AbsPlayerFragment(R.layout.fragment_blur),
-    SharedPreferences.OnSharedPreferenceChangeListener {
+class BlurPlayerFragment :
+    AbsPlayerFragment(R.layout.fragment_blur), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var lastRequest: RequestBuilder<Drawable>? = null
 
@@ -42,8 +41,8 @@ class BlurPlayerFragment : AbsPlayerFragment(R.layout.fragment_blur),
     private var lastColor: Int = 0
 
     private var _binding: FragmentBlurBinding? = null
-    private val binding get() = _binding!!
-
+    private val binding
+        get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,11 +60,15 @@ class BlurPlayerFragment : AbsPlayerFragment(R.layout.fragment_blur),
     }
 
     private fun setUpPlayerToolbar() {
-        binding.playerToolbar.apply {
-            inflateMenu(R.menu.menu_player)
-            setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
-            ToolbarContentTintHelper.colorizeToolbar(this, Color.WHITE, activity)
-        }.setOnMenuItemClickListener(this)
+        binding.playerToolbar
+            .apply {
+                inflateMenu(R.menu.menu_player)
+                setNavigationOnClickListener {
+                    requireActivity().onBackPressedDispatcher.onBackPressed()
+                }
+                ToolbarContentTintHelper.colorizeToolbar(this, Color.WHITE, activity)
+            }
+            .setOnMenuItemClickListener(this)
     }
 
     override fun onFavoriteToggled() {
@@ -86,11 +89,9 @@ class BlurPlayerFragment : AbsPlayerFragment(R.layout.fragment_blur),
         }
     }
 
-    override fun onShow() {
-    }
+    override fun onShow() {}
 
-    override fun onHide() {
-    }
+    override fun onHide() {}
 
     override fun toolbarIconColor(): Int {
         return Color.WHITE
@@ -105,14 +106,15 @@ class BlurPlayerFragment : AbsPlayerFragment(R.layout.fragment_blur),
             .load(LifeGlideExtension.getSongModel(MusicPlayerRemote.currentSong))
             .simpleSongCoverOptions(MusicPlayerRemote.currentSong)
             .transform(
-                BlurTransformation.Builder(requireContext()).blurRadius(blurAmount.toFloat())
+                BlurTransformation.Builder(requireContext())
+                    .blurRadius(blurAmount.toFloat())
                     .build()
-            ).thumbnail(lastRequest)
+            )
+            .thumbnail(lastRequest)
             .error(Glide.with(this).load(ColorDrawable(Color.DKGRAY)).fitCenter())
             .also {
                 lastRequest = it.clone()
-                it.crossfadeListener()
-                    .into(binding.colorBackground)
+                it.crossfadeListener().into(binding.colorBackground)
             }
     }
 

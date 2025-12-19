@@ -15,16 +15,13 @@
 package zzh.lifeplayer.music.repository
 
 import android.provider.MediaStore.Audio.AudioColumns
+import java.text.Collator
 import zzh.lifeplayer.music.helper.SortOrder
 import zzh.lifeplayer.music.model.Album
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.PreferenceUtil
-import java.text.Collator
 
-
-/**
- * Created by hemanths on 11/08/17.
- */
+/** Created by hemanths on 11/08/17. */
 interface AlbumRepository {
     fun albums(): List<Album>
 
@@ -33,37 +30,35 @@ interface AlbumRepository {
     fun album(albumId: Long): Album
 }
 
-class RealAlbumRepository(private val songRepository: RealSongRepository) :
-    AlbumRepository {
+class RealAlbumRepository(private val songRepository: RealSongRepository) : AlbumRepository {
 
     override fun albums(): List<Album> {
-        val songs = songRepository.songs(
-            songRepository.makeSongCursor(
-                null,
-                null,
-                getSongLoaderSortOrder()
+        val songs =
+            songRepository.songs(
+                songRepository.makeSongCursor(null, null, getSongLoaderSortOrder())
             )
-        )
         return splitIntoAlbums(songs)
     }
 
     override fun albums(query: String): List<Album> {
-        val songs = songRepository.songs(
-            songRepository.makeSongCursor(
-                AudioColumns.ALBUM + " LIKE ?",
-                arrayOf("%$query%"),
-                getSongLoaderSortOrder()
+        val songs =
+            songRepository.songs(
+                songRepository.makeSongCursor(
+                    AudioColumns.ALBUM + " LIKE ?",
+                    arrayOf("%$query%"),
+                    getSongLoaderSortOrder(),
+                )
             )
-        )
         return splitIntoAlbums(songs)
     }
 
     override fun album(albumId: Long): Album {
-        val cursor = songRepository.makeSongCursor(
-            AudioColumns.ALBUM_ID + "=?",
-            arrayOf(albumId.toString()),
-            getSongLoaderSortOrder()
-        )
+        val cursor =
+            songRepository.makeSongCursor(
+                AudioColumns.ALBUM_ID + "=?",
+                arrayOf(albumId.toString()),
+                getSongLoaderSortOrder(),
+            )
         val songs = songRepository.songs(cursor)
         val album = Album(albumId, songs)
         return sortAlbumSongs(album)
@@ -71,10 +66,7 @@ class RealAlbumRepository(private val songRepository: RealSongRepository) :
 
     // We don't need sorted list of songs (with sortAlbumSongs())
     // cuz we are just displaying Albums(Cover Arts) anyway and not songs
-    fun splitIntoAlbums(
-        songs: List<Song>,
-        sorted: Boolean = true
-    ): List<Album> {
+    fun splitIntoAlbums(songs: List<Song>, sorted: Boolean = true): List<Album> {
         val grouped = songs.groupBy { it.albumId }.map { Album(it.key, it.value) }
         if (!sorted) return grouped
         val collator = Collator.getInstance()
@@ -97,21 +89,23 @@ class RealAlbumRepository(private val songRepository: RealSongRepository) :
 
     private fun sortAlbumSongs(album: Album): Album {
         val collator = Collator.getInstance()
-        val songs = when (PreferenceUtil.albumDetailSongSortOrder) {
-            SortOrder.AlbumSongSortOrder.SONG_TRACK_LIST -> album.songs.sortedWith { o1, o2 ->
-                o1.trackNumber.compareTo(o2.trackNumber)
+        val songs =
+            when (PreferenceUtil.albumDetailSongSortOrder) {
+                SortOrder.AlbumSongSortOrder.SONG_TRACK_LIST ->
+                    album.songs.sortedWith { o1, o2 -> o1.trackNumber.compareTo(o2.trackNumber) }
+                SortOrder.AlbumSongSortOrder.SONG_A_Z -> {
+                    album.songs.sortedWith { o1, o2 -> collator.compare(o1.title, o2.title) }
+                }
+                SortOrder.AlbumSongSortOrder.SONG_Z_A -> {
+                    album.songs.sortedWith { o1, o2 -> collator.compare(o2.title, o1.title) }
+                }
+                SortOrder.AlbumSongSortOrder.SONG_DURATION ->
+                    album.songs.sortedWith { o1, o2 -> o1.duration.compareTo(o2.duration) }
+                else ->
+                    throw IllegalArgumentException(
+                        "invalid ${PreferenceUtil.albumDetailSongSortOrder}"
+                    )
             }
-            SortOrder.AlbumSongSortOrder.SONG_A_Z -> {
-                album.songs.sortedWith { o1, o2 -> collator.compare(o1.title, o2.title) }
-            }
-            SortOrder.AlbumSongSortOrder.SONG_Z_A -> {
-                album.songs.sortedWith { o1, o2 -> collator.compare(o2.title, o1.title) }
-            }
-            SortOrder.AlbumSongSortOrder.SONG_DURATION -> album.songs.sortedWith { o1, o2 ->
-                o1.duration.compareTo(o2.duration)
-            }
-            else -> throw IllegalArgumentException("invalid ${PreferenceUtil.albumDetailSongSortOrder}")
-        }
         return album.copy(songs = songs)
     }
 
@@ -119,7 +113,6 @@ class RealAlbumRepository(private val songRepository: RealSongRepository) :
         var albumSortOrder = PreferenceUtil.albumSortOrder
         if (albumSortOrder == SortOrder.AlbumSortOrder.ALBUM_NUMBER_OF_SONGS)
             albumSortOrder = SortOrder.AlbumSortOrder.ALBUM_A_Z
-        return albumSortOrder + ", " +
-                PreferenceUtil.albumSongSortOrder
+        return albumSortOrder + ", " + PreferenceUtil.albumSongSortOrder
     }
 }

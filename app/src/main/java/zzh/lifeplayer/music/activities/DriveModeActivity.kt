@@ -20,6 +20,12 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.bumptech.glide.Glide
+import com.google.android.material.slider.Slider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.activities.base.AbsMusicServiceActivity
 import zzh.lifeplayer.music.databinding.ActivityDriveModeBinding
@@ -37,18 +43,8 @@ import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.repository.RealRepository
 import zzh.lifeplayer.music.service.MusicService
 import zzh.lifeplayer.music.util.MusicUtil
-import com.bumptech.glide.Glide
-import com.google.android.material.slider.Slider
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.android.ext.android.inject
 
-
-/**
- * Created by hemanths on 2020-02-02.
- */
-
+/** Created by hemanths on 2020-02-02. */
 class DriveModeActivity : AbsMusicServiceActivity(), Callback {
 
     private lateinit var binding: ActivityDriveModeBinding
@@ -65,9 +61,7 @@ class DriveModeActivity : AbsMusicServiceActivity(), Callback {
 
         progressViewUpdateHelper = MusicProgressViewUpdateHelper(this)
         lastPlaybackControlsColor = accentColor()
-        binding.close.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
+        binding.close.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
         binding.repeatButton.drawAboveSystemBars()
     }
 
@@ -81,9 +75,7 @@ class DriveModeActivity : AbsMusicServiceActivity(), Callback {
     }
 
     private fun setupFavouriteToggle() {
-        binding.songFavourite.setOnClickListener {
-            toggleFavorite(MusicPlayerRemote.currentSong)
-        }
+        binding.songFavourite.setOnClickListener { toggleFavorite(MusicPlayerRemote.currentSong) }
     }
 
     private fun toggleFavorite(song: Song) {
@@ -103,21 +95,23 @@ class DriveModeActivity : AbsMusicServiceActivity(), Callback {
 
     private fun updateFavorite() {
         lifecycleScope.launch(Dispatchers.IO) {
-            val isFavorite: Boolean =
-                repository.isSongFavorite(MusicPlayerRemote.currentSong.id)
+            val isFavorite: Boolean = repository.isSongFavorite(MusicPlayerRemote.currentSong.id)
             withContext(Dispatchers.Main) {
-                binding.songFavourite.setImageResource(if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border)
+                binding.songFavourite.setImageResource(
+                    if (isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                )
             }
         }
     }
 
     private fun setUpProgressSlider() {
-        binding.progressSlider.addOnChangeListener { _: Slider, progress: Float, fromUser: Boolean ->
+        binding.progressSlider.addOnChangeListener { _: Slider, progress: Float, fromUser: Boolean
+            ->
             if (fromUser) {
                 MusicPlayerRemote.seekTo(progress.toInt())
                 onUpdateProgressViews(
                     MusicPlayerRemote.songProgressMillis,
-                    MusicPlayerRemote.songDurationMillis
+                    MusicPlayerRemote.songDurationMillis,
                 )
             }
         }
@@ -184,15 +178,17 @@ class DriveModeActivity : AbsMusicServiceActivity(), Callback {
 
     fun updateShuffleState() {
         when (MusicPlayerRemote.shuffleMode) {
-            MusicService.SHUFFLE_MODE_SHUFFLE -> binding.shuffleButton.setColorFilter(
-                lastPlaybackControlsColor,
-                PorterDuff.Mode.SRC_IN
-            )
+            MusicService.SHUFFLE_MODE_SHUFFLE ->
+                binding.shuffleButton.setColorFilter(
+                    lastPlaybackControlsColor,
+                    PorterDuff.Mode.SRC_IN,
+                )
 
-            else -> binding.shuffleButton.setColorFilter(
-                lastDisabledPlaybackControlsColor,
-                PorterDuff.Mode.SRC_IN
-            )
+            else ->
+                binding.shuffleButton.setColorFilter(
+                    lastDisabledPlaybackControlsColor,
+                    PorterDuff.Mode.SRC_IN,
+                )
         }
     }
 
@@ -202,7 +198,7 @@ class DriveModeActivity : AbsMusicServiceActivity(), Callback {
                 binding.repeatButton.setImageResource(R.drawable.ic_repeat)
                 binding.repeatButton.setColorFilter(
                     lastDisabledPlaybackControlsColor,
-                    PorterDuff.Mode.SRC_IN
+                    PorterDuff.Mode.SRC_IN,
                 )
             }
 
@@ -210,7 +206,7 @@ class DriveModeActivity : AbsMusicServiceActivity(), Callback {
                 binding.repeatButton.setImageResource(R.drawable.ic_repeat)
                 binding.repeatButton.setColorFilter(
                     lastPlaybackControlsColor,
-                    PorterDuff.Mode.SRC_IN
+                    PorterDuff.Mode.SRC_IN,
                 )
             }
 
@@ -218,7 +214,7 @@ class DriveModeActivity : AbsMusicServiceActivity(), Callback {
                 binding.repeatButton.setImageResource(R.drawable.ic_repeat_one)
                 binding.repeatButton.setColorFilter(
                     lastPlaybackControlsColor,
-                    PorterDuff.Mode.SRC_IN
+                    PorterDuff.Mode.SRC_IN,
                 )
             }
         }

@@ -1,5 +1,7 @@
 package zzh.lifeplayer.music.fragments.lyrics
 
+// import zzh.lifeplayer.music.util.MusicUtil
+// import kotlinx.coroutines.withContext
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.net.Uri
@@ -13,6 +15,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.transition.Fade
+import com.afollestad.materialdialogs.input.input
+import java.io.File
+import java.io.FileOutputStream
+import java.util.*
+import kotlin.collections.set
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.jaudiotagger.audio.AudioFileIO
+import org.jaudiotagger.tag.FieldKey
 import zzh.lifeplayer.appthemehelper.common.ATHToolbarActivity
 import zzh.lifeplayer.appthemehelper.util.ToolbarContentTintHelper
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
@@ -23,37 +34,24 @@ import zzh.lifeplayer.music.extensions.accentColor
 import zzh.lifeplayer.music.extensions.materialDialog
 import zzh.lifeplayer.music.extensions.openUrl
 import zzh.lifeplayer.music.extensions.uri
-import zzh.lifeplayer.music.fragments.base.goToLyrics // goto function
 import zzh.lifeplayer.music.fragments.base.AbsMainActivityFragment
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.MusicProgressViewUpdateHelper
 import zzh.lifeplayer.music.lyrics.LrcView
 import zzh.lifeplayer.music.model.AudioTagInfo
 import zzh.lifeplayer.music.model.Song
-// import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.FileUtils
 import zzh.lifeplayer.music.util.LyricUtil
 import zzh.lifeplayer.music.util.UriUtil
-import com.afollestad.materialdialogs.input.input
-
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.Dispatchers
-// import kotlinx.coroutines.withContext
-
-import org.jaudiotagger.audio.AudioFileIO
-import org.jaudiotagger.tag.FieldKey
-import java.io.File
-import java.io.FileOutputStream
-import java.util.*
-import kotlin.collections.set
 
 // import androidx.lifecycle.lifecycleScope
-class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
-    MusicProgressViewUpdateHelper.Callback {
+class LyricsFragment :
+    AbsMainActivityFragment(R.layout.fragment_lyrics), MusicProgressViewUpdateHelper.Callback {
 
     private var _binding: FragmentLyricsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
+
     private lateinit var song: Song
 
     private lateinit var normalLyricsLauncher: ActivityResultLauncher<IntentSenderRequest>
@@ -96,7 +94,7 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
                 }
             }
     }
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         enterTransition = Fade()
@@ -110,10 +108,7 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
         setupWakelock()
         setupViews()
         setupToolbar()
-
     }
-    
-   
 
     private fun setupLyricsView() {
         binding.lyricsView.apply {
@@ -121,12 +116,14 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
             setTimeTextColor(accentColor())
             setTimelineColor(accentColor())
             setTimelineTextColor(accentColor())
-            setDraggable(true, LrcView.OnPlayClickListener {
-                MusicPlayerRemote.seekTo(it.toInt())
-                return@OnPlayClickListener true
-            })
+            setDraggable(
+                true,
+                LrcView.OnPlayClickListener {
+                    MusicPlayerRemote.seekTo(it.toInt())
+                    return@OnPlayClickListener true
+                },
+            )
         }
-      
     }
 
     override fun onUpdateProgressViews(progress: Int, total: Int) {
@@ -166,9 +163,7 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
     private fun setupToolbar() {
         mainActivity.setSupportActionBar(binding.toolbar)
         ToolbarContentTintHelper.colorBackButton(binding.toolbar)
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
+        binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
     }
 
     private fun setupWakelock() {
@@ -181,7 +176,7 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
             requireContext(),
             binding.toolbar,
             menu,
-            ATHToolbarActivity.getToolbarBackgroundColor(binding.toolbar)
+            ATHToolbarActivity.getToolbarBackgroundColor(binding.toolbar),
         )
     }
 
@@ -195,12 +190,14 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
     @SuppressLint("CheckResult")
     private fun editNormalLyrics(lyrics: String? = null) {
         val file = File(song.data)
-        val content = lyrics ?: try {
-            AudioFileIO.read(file).tagOrCreateDefault.getFirst(FieldKey.LYRICS)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            ""
-        }
+        val content =
+            lyrics
+                ?: try {
+                    AudioFileIO.read(file).tagOrCreateDefault.getFirst(FieldKey.LYRICS)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    ""
+                }
 
         val song = song
 
@@ -209,21 +206,21 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
             input(
                 hintRes = R.string.paste_lyrics_here,
                 prefill = content,
-                inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_CLASS_TEXT
+                inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_CLASS_TEXT,
             ) { _, input ->
                 val fieldKeyValueMap = EnumMap<FieldKey, String>(FieldKey::class.java)
                 fieldKeyValueMap[FieldKey.LYRICS] = input.toString()
                 GlobalScope.launch {
                     if (VersionUtils.hasR()) {
-                        cacheFile = TagWriter.writeTagsToFilesR(
-                            requireContext(), AudioTagInfo(
-                                listOf(song.data), fieldKeyValueMap, null
-                            )
-                        )[0]
+                        cacheFile =
+                            TagWriter.writeTagsToFilesR(
+                                    requireContext(),
+                                    AudioTagInfo(listOf(song.data), fieldKeyValueMap, null),
+                                )[0]
                         val pendingIntent =
                             MediaStore.createWriteRequest(
                                 requireContext().contentResolver,
-                                listOf(song.uri)
+                                listOf(song.uri),
                             )
 
                         normalLyricsLauncher.launch(
@@ -231,20 +228,16 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
                         )
                     } else {
                         TagWriter.writeTagsToFiles(
-                            requireContext(), AudioTagInfo(
-                                listOf(song.data), fieldKeyValueMap, null
-                            )
+                            requireContext(),
+                            AudioTagInfo(listOf(song.data), fieldKeyValueMap, null),
                         )
                     }
                 }
             }
-            positiveButton(res = R.string.save) {
-                loadNormalLyrics()
-            }
+            positiveButton(res = R.string.save) { loadNormalLyrics() }
             negativeButton(res = android.R.string.cancel)
         }
     }
-
 
     @SuppressLint("CheckResult")
     private fun editSyncedLyrics(lyrics: String? = null) {
@@ -256,7 +249,7 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
             input(
                 hintRes = R.string.paste_timeframe_lyrics_here,
                 prefill = content,
-                inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_CLASS_TEXT
+                inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_CLASS_TEXT,
             ) { _, input ->
                 if (VersionUtils.hasR()) {
                     syncedLyrics = input.toString()
@@ -267,7 +260,7 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
                         val pendingIntent =
                             MediaStore.createWriteRequest(
                                 requireContext().contentResolver,
-                                listOf(syncedFileUri)
+                                listOf(syncedFileUri),
                             )
                         editSyncedLyricsLauncher.launch(
                             IntentSenderRequest.Builder(pendingIntent).build()
@@ -276,14 +269,16 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
                         val fieldKeyValueMap = EnumMap<FieldKey, String>(FieldKey::class.java)
                         fieldKeyValueMap[FieldKey.LYRICS] = input.toString()
                         GlobalScope.launch {
-                            cacheFile = TagWriter.writeTagsToFilesR(
-                                requireContext(),
-                                AudioTagInfo(listOf(song.data), fieldKeyValueMap, null)
-                            )[0]
-                            val pendingIntent = MediaStore.createWriteRequest(
-                                requireContext().contentResolver,
-                                listOf(song.uri)
-                            )
+                            cacheFile =
+                                TagWriter.writeTagsToFilesR(
+                                        requireContext(),
+                                        AudioTagInfo(listOf(song.data), fieldKeyValueMap, null),
+                                    )[0]
+                            val pendingIntent =
+                                MediaStore.createWriteRequest(
+                                    requireContext().contentResolver,
+                                    listOf(song.uri),
+                                )
 
                             normalLyricsLauncher.launch(
                                 IntentSenderRequest.Builder(pendingIntent).build()
@@ -294,29 +289,26 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
                     LyricUtil.writeLrc(song, input.toString())
                 }
             }
-            positiveButton(res = R.string.save) {
-                loadLRCLyrics()
-            }
+            positiveButton(res = R.string.save) { loadLRCLyrics() }
             negativeButton(res = android.R.string.cancel)
         }
     }
 
     private fun loadNormalLyrics() {
         val file = File(song.data)
-        val lyrics = try {
-            AudioFileIO.read(file).tagOrCreateDefault.getFirst(FieldKey.LYRICS)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            ""
-        }
+        val lyrics =
+            try {
+                AudioFileIO.read(file).tagOrCreateDefault.getFirst(FieldKey.LYRICS)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                ""
+            }
         binding.normalLyrics.isVisible = !lyrics.isNullOrEmpty()
         binding.noLyricsFound.isVisible = lyrics.isNullOrEmpty()
         binding.normalLyrics.text = lyrics
     }
 
-    /**
-     * @return success
-     */
+    /** @return success */
     private fun loadLRCLyrics(): Boolean {
         val lrcFile = LyricUtil.getSyncedLyricsFile(song)
         if (lrcFile != null) {
@@ -334,16 +326,17 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
     }
 
     private fun loadLyrics() {
-        lyricsType = if (!loadLRCLyrics()) {
-            binding.lyricsView.isVisible = false
-            loadNormalLyrics()
-            LyricsType.NORMAL_LYRICS
-        } else {
-            binding.normalLyrics.isVisible = false
-            binding.noLyricsFound.isVisible = false
-            binding.lyricsView.isVisible = true
-            LyricsType.SYNCED_LYRICS
-        }
+        lyricsType =
+            if (!loadLRCLyrics()) {
+                binding.lyricsView.isVisible = false
+                loadNormalLyrics()
+                LyricsType.NORMAL_LYRICS
+            } else {
+                binding.normalLyrics.isVisible = false
+                binding.noLyricsFound.isVisible = false
+                binding.lyricsView.isVisible = true
+                LyricsType.SYNCED_LYRICS
+            }
     }
 
     override fun onResume() {
@@ -358,13 +351,12 @@ class LyricsFragment : AbsMainActivityFragment(R.layout.fragment_lyrics),
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (MusicPlayerRemote.playingQueue.isNotEmpty())
-            mainActivity.expandPanel()
+        if (MusicPlayerRemote.playingQueue.isNotEmpty()) mainActivity.expandPanel()
         _binding = null
     }
 
     enum class LyricsType {
         NORMAL_LYRICS,
-        SYNCED_LYRICS
+        SYNCED_LYRICS,
     }
 }

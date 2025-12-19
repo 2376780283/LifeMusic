@@ -15,18 +15,18 @@
 package zzh.lifeplayer.music.fragments.artists
 
 import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import zzh.lifeplayer.music.interfaces.IMusicServiceEventListener
 import zzh.lifeplayer.music.model.Artist
 import zzh.lifeplayer.music.network.Result
 import zzh.lifeplayer.music.network.model.LastFmArtist
 import zzh.lifeplayer.music.repository.RealRepository
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
 
 class ArtistDetailsViewModel(
     private val realRepository: RealRepository,
     private val artistId: Long?,
-    private val artistName: String?
+    private val artistName: String?,
 ) : ViewModel(), IMusicServiceEventListener {
     private val artistDetails = MutableLiveData<Artist>()
 
@@ -44,26 +44,30 @@ class ArtistDetailsViewModel(
 
     fun getArtist(): LiveData<Artist> = artistDetails
 
-    fun getArtistInfo(
-        name: String,
-        lang: String?,
-        cache: String?
-    ): LiveData<Result<LastFmArtist>> = liveData(IO) {
-        emit(Result.Loading)
-        val info = realRepository.artistInfo(name, lang, cache)
-        emit(info)
-    }
+    fun getArtistInfo(name: String, lang: String?, cache: String?): LiveData<Result<LastFmArtist>> =
+        liveData(IO) {
+            emit(Result.Loading)
+            val info = realRepository.artistInfo(name, lang, cache)
+            emit(info)
+        }
 
     override fun onMediaStoreChanged() {
         fetchArtist()
     }
 
     override fun onServiceConnected() {}
+
     override fun onServiceDisconnected() {}
+
     override fun onQueueChanged() {}
+
     override fun onPlayingMetaChanged() {}
+
     override fun onPlayStateChanged() {}
+
     override fun onRepeatModeChanged() {}
+
     override fun onShuffleModeChanged() {}
+
     override fun onFavoriteStateChanged() {}
 }

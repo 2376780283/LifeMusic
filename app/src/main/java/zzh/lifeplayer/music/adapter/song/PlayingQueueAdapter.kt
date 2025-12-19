@@ -18,16 +18,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
-import zzh.lifeplayer.music.R
-import zzh.lifeplayer.music.glide.LifeGlideExtension
-import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
-import zzh.lifeplayer.music.helper.MusicPlayerRemote
-import zzh.lifeplayer.music.helper.MusicPlayerRemote.isPlaying
-import zzh.lifeplayer.music.helper.MusicPlayerRemote.playNextSong
-import zzh.lifeplayer.music.helper.MusicPlayerRemote.removeFromQueue
-import zzh.lifeplayer.music.model.Song
-import zzh.lifeplayer.music.util.MusicUtil
-import zzh.lifeplayer.music.util.ViewUtil
 import com.bumptech.glide.Glide
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange
@@ -38,13 +28,24 @@ import com.h6ah4i.android.widget.advrecyclerview.swipeable.action.SwipeResultAct
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.action.SwipeResultActionDefault
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.action.SwipeResultActionRemoveItem
 import me.zhanghai.android.fastscroll.PopupTextProvider
+import zzh.lifeplayer.music.R
+import zzh.lifeplayer.music.glide.LifeGlideExtension
+import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
+import zzh.lifeplayer.music.helper.MusicPlayerRemote
+import zzh.lifeplayer.music.helper.MusicPlayerRemote.isPlaying
+import zzh.lifeplayer.music.helper.MusicPlayerRemote.playNextSong
+import zzh.lifeplayer.music.helper.MusicPlayerRemote.removeFromQueue
+import zzh.lifeplayer.music.model.Song
+import zzh.lifeplayer.music.util.MusicUtil
+import zzh.lifeplayer.music.util.ViewUtil
 
 class PlayingQueueAdapter(
     activity: FragmentActivity,
     dataSet: MutableList<Song>,
     private var current: Int,
     itemLayoutRes: Int,
-) : SongAdapter(activity, dataSet, itemLayoutRes),
+) :
+    SongAdapter(activity, dataSet, itemLayoutRes),
     DraggableItemAdapter<PlayingQueueAdapter.ViewHolder>,
     SwipeableItemAdapter<PlayingQueueAdapter.ViewHolder>,
     PopupTextProvider {
@@ -108,11 +109,8 @@ class PlayingQueueAdapter(
     }
 
     override fun onCheckCanStartDrag(holder: ViewHolder, position: Int, x: Int, y: Int): Boolean {
-        return ViewUtil.hitTest(holder.imageText!!, x, y) || ViewUtil.hitTest(
-            holder.dragView!!,
-            x,
-            y
-        )
+        return ViewUtil.hitTest(holder.imageText!!, x, y) ||
+            ViewUtil.hitTest(holder.dragView!!, x, y)
     }
 
     override fun onGetItemDraggableRange(holder: ViewHolder, position: Int): ItemDraggableRange? {
@@ -140,8 +138,7 @@ class PlayingQueueAdapter(
     }
 
     inner class ViewHolder(itemView: View) : SongAdapter.ViewHolder(itemView) {
-        @DraggableItemStateFlags
-        private var mDragStateFlags: Int = 0
+        @DraggableItemStateFlags private var mDragStateFlags: Int = 0
 
         override var songMenuRes: Int
             get() = R.menu.menu_item_playing_queue_song
@@ -208,11 +205,9 @@ class PlayingQueueAdapter(
         }
     }
 
-    override fun onSwipeItemStarted(holder: ViewHolder, p1: Int) {
-    }
+    override fun onSwipeItemStarted(holder: ViewHolder, p1: Int) {}
 
-    override fun onSetSwipeBackground(holder: ViewHolder, position: Int, result: Int) {
-    }
+    override fun onSetSwipeBackground(holder: ViewHolder, position: Int, result: Int) {}
 
     internal class SwipedResultActionRemoveItem(
         private val adapter: PlayingQueueAdapter,
@@ -220,6 +215,7 @@ class PlayingQueueAdapter(
     ) : SwipeResultActionRemoveItem() {
 
         private var songToRemove: Song? = null
+
         override fun onPerformAction() {
             // currentlyShownSnackbar = null
         }

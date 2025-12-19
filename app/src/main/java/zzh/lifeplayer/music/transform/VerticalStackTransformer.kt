@@ -27,6 +27,5 @@ class VerticalStackTransformer : ViewPager.PageTransformer {
                 translationY = -30 * position
             }
         }
-
     }
 }

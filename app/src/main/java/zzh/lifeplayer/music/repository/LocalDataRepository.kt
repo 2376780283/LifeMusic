@@ -1,21 +1,19 @@
 package zzh.lifeplayer.music.repository
 
 import android.content.Context
-import zzh.lifeplayer.music.model.Contributor
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import zzh.lifeplayer.music.model.Contributor
 
 interface LocalDataRepository {
     fun contributors(): List<Contributor>
 }
 
-class RealLocalDataRepository(
-    private val context: Context
-) : LocalDataRepository {
+class RealLocalDataRepository(private val context: Context) : LocalDataRepository {
 
     override fun contributors(): List<Contributor> {
-        val jsonString = context.assets.open("contributors.json")
-            .bufferedReader().use { it.readText() }
+        val jsonString =
+            context.assets.open("contributors.json").bufferedReader().use { it.readText() }
 
         val gsonBuilder = GsonBuilder()
         val gson = gsonBuilder.create()

@@ -27,6 +27,14 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.ImageViewTarget
+import com.bumptech.glide.request.transition.Transition
+import com.google.android.material.shape.MaterialShapeDrawable
+import java.util.*
+import org.jaudiotagger.tag.FieldKey
+import org.koin.android.ext.android.inject
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.ActivitySongTagEditorBinding
@@ -36,25 +44,17 @@ import zzh.lifeplayer.music.glide.palette.BitmapPaletteWrapper
 import zzh.lifeplayer.music.model.ArtworkInfo
 import zzh.lifeplayer.music.repository.SongRepository
 import zzh.lifeplayer.music.util.ImageUtil
-import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.LifeColorUtil
+import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.logD
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.target.ImageViewTarget
-import com.bumptech.glide.request.transition.Transition
-import com.google.android.material.shape.MaterialShapeDrawable
-import org.jaudiotagger.tag.FieldKey
-import org.koin.android.ext.android.inject
-import java.util.*
+
 /*
-*  Mistakes on android 11 is crashed
-*/
+ *  Mistakes on android 11 is crashed
+ */
 class SongTagEditorActivity : AbsTagEditorActivity<ActivitySongTagEditorBinding>() {
 
     override val bindingInflater: (LayoutInflater) -> ActivitySongTagEditorBinding =
         ActivitySongTagEditorBinding::inflate
-
 
     private val songRepository by inject<SongRepository>()
 
@@ -113,10 +113,7 @@ class SongTagEditorActivity : AbsTagEditorActivity<ActivitySongTagEditorBinding>
         val bitmap = albumArt
         setImageBitmap(
             bitmap,
-            LifeColorUtil.getColor(
-                LifeColorUtil.generatePalette(bitmap),
-                defaultFooterColor()
-            )
+            LifeColorUtil.getColor(LifeColorUtil.generatePalette(bitmap), defaultFooterColor()),
         )
         deleteAlbumArt = false
     }
@@ -128,7 +125,7 @@ class SongTagEditorActivity : AbsTagEditorActivity<ActivitySongTagEditorBinding>
     override fun deleteImage() {
         setImageBitmap(
             BitmapFactory.decodeResource(resources, R.drawable.default_audio_art),
-            defaultFooterColor()
+            defaultFooterColor(),
         )
         deleteAlbumArt = true
         dataChanged()
@@ -136,15 +133,11 @@ class SongTagEditorActivity : AbsTagEditorActivity<ActivitySongTagEditorBinding>
 
     override fun setColors(color: Int) {
         super.setColors(color)
-        ColorStateList.valueOf(
-            MaterialValueHelper.getPrimaryTextColor(
-                this,
-                color.isColorLight
-            )
-        ).also {
-            saveFab.iconTint = it
-            saveFab.setTextColor(it)
-        }
+        ColorStateList.valueOf(MaterialValueHelper.getPrimaryTextColor(this, color.isColorLight))
+            .also {
+                saveFab.iconTint = it
+                saveFab.setTextColor(it)
+            }
     }
 
     override fun save() {
@@ -160,11 +153,12 @@ class SongTagEditorActivity : AbsTagEditorActivity<ActivitySongTagEditorBinding>
         fieldKeyValueMap[FieldKey.ALBUM_ARTIST] = binding.albumArtistText.text.toString()
         fieldKeyValueMap[FieldKey.COMPOSER] = binding.songComposerText.text.toString()
         writeValuesToFiles(
-            fieldKeyValueMap, when {
+            fieldKeyValueMap,
+            when {
                 deleteAlbumArt -> ArtworkInfo(id, null)
                 albumArtBitmap == null -> null
                 else -> ArtworkInfo(id, albumArtBitmap!!)
-            }
+            },
         )
     }
 
@@ -178,32 +172,31 @@ class SongTagEditorActivity : AbsTagEditorActivity<ActivitySongTagEditorBinding>
             .load(selectedFile)
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
-            .into(object : ImageViewTarget<BitmapPaletteWrapper>(binding.editorImage) {
-                override fun onResourceReady(
-                    resource: BitmapPaletteWrapper,
-                    transition: Transition<in BitmapPaletteWrapper>?
-                ) {
-                    LifeColorUtil.getColor(resource.palette, Color.TRANSPARENT)
-                    albumArtBitmap = resource.bitmap?.let { ImageUtil.resizeBitmap(it, 2048) }
-                    setImageBitmap(
-                        albumArtBitmap,
-                        LifeColorUtil.getColor(
-                            resource.palette,
-                            defaultFooterColor()
+            .into(
+                object : ImageViewTarget<BitmapPaletteWrapper>(binding.editorImage) {
+                    override fun onResourceReady(
+                        resource: BitmapPaletteWrapper,
+                        transition: Transition<in BitmapPaletteWrapper>?,
+                    ) {
+                        LifeColorUtil.getColor(resource.palette, Color.TRANSPARENT)
+                        albumArtBitmap = resource.bitmap?.let { ImageUtil.resizeBitmap(it, 2048) }
+                        setImageBitmap(
+                            albumArtBitmap,
+                            LifeColorUtil.getColor(resource.palette, defaultFooterColor()),
                         )
-                    )
-                    deleteAlbumArt = false
-                    dataChanged()
-                    setResult(Activity.RESULT_OK)
-                }
+                        deleteAlbumArt = false
+                        dataChanged()
+                        setResult(Activity.RESULT_OK)
+                    }
 
-                override fun onLoadFailed(errorDrawable: Drawable?) {
-                    super.onLoadFailed(errorDrawable)
-                    showToast(R.string.error_load_failed, Toast.LENGTH_LONG)
-                }
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        super.onLoadFailed(errorDrawable)
+                        showToast(R.string.error_load_failed, Toast.LENGTH_LONG)
+                    }
 
-                override fun setResource(resource: BitmapPaletteWrapper?) {}
-            })
+                    override fun setResource(resource: BitmapPaletteWrapper?) {}
+                }
+            )
     }
 
     companion object {

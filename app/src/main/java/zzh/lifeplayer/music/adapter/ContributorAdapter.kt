@@ -20,32 +20,26 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.extensions.openUrl
 import zzh.lifeplayer.music.model.Contributor
 import zzh.lifeplayer.music.views.RetroShapeableImageView
-import com.bumptech.glide.Glide
 
-class ContributorAdapter(
-    private var contributors: List<Contributor>,
-) : RecyclerView.Adapter<ContributorAdapter.ViewHolder>() {
+class ContributorAdapter(private var contributors: List<Contributor>) :
+    RecyclerView.Adapter<ContributorAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return if (viewType == HEADER) {
             ViewHolder(
-                LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_contributor_header,
-                    parent,
-                    false
-                )
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_contributor_header, parent, false)
             )
-        } else ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_contributor,
-                parent,
-                false
+        } else
+            ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_contributor, parent, false)
             )
-        )
     }
 
     companion object {
@@ -64,9 +58,7 @@ class ContributorAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val contributor = contributors[position]
         holder.bindData(contributor)
-        holder.itemView.setOnClickListener {
-            it?.context?.openUrl(contributors[position].link)
-        }
+        holder.itemView.setOnClickListener { it?.context?.openUrl(contributors[position].link) }
     }
 
     override fun getItemCount(): Int {

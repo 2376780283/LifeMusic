@@ -13,12 +13,10 @@ import com.github.dhaval2404.imagepicker.util.IntentUtils
  * Select image from Storage
  *
  * @author Dhaval Patel
- * @version 1.0
  * @since 04 January 2019
+ * @version 1.0
  */
-class GalleryProvider(
-    activity: ImagePickerActivity,
-) : BaseProvider(activity) {
+class GalleryProvider(activity: ImagePickerActivity) : BaseProvider(activity) {
     companion object {
         private const val GALLERY_INTENT_REQ_CODE = 4261
     }
@@ -33,16 +31,12 @@ class GalleryProvider(
         mimeTypes = bundle.getStringArray(ImagePicker.EXTRA_MIME_TYPES) ?: emptyArray()
     }
 
-    /**
-     * Start Gallery Capture Intent
-     */
+    /** Start Gallery Capture Intent */
     fun startIntent() {
         startGalleryIntent()
     }
 
-    /**
-     * Start Gallery Intent
-     */
+    /** Start Gallery Intent */
     private fun startGalleryIntent() {
         val galleryIntent = IntentUtils.getGalleryIntent(activity, mimeTypes)
         activity.startActivityForResult(galleryIntent, GALLERY_INTENT_REQ_CODE)
@@ -55,11 +49,7 @@ class GalleryProvider(
      * @param resultCode For success it should be {@link Activity#RESULT_OK}
      * @param data Result Intent
      */
-    fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-    ) {
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == GALLERY_INTENT_REQ_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 handleResult(data)
@@ -69,9 +59,7 @@ class GalleryProvider(
         }
     }
 
-    /**
-     * This method will be called when final result fot this provider is enabled.
-     */
+    /** This method will be called when final result fot this provider is enabled. */
     private fun handleResult(data: Intent?) {
         val uri = data?.data
         if (uri != null) {
@@ -83,8 +71,8 @@ class GalleryProvider(
     }
 
     /**
-     * Take a persistable URI permission grant that has been offered. Once
-     * taken, the permission grant will be remembered across device reboots.
+     * Take a persistable URI permission grant that has been offered. Once taken, the permission
+     * grant will be remembered across device reboots.
      */
     private fun takePersistableUriPermission(uri: Uri) {
         contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)

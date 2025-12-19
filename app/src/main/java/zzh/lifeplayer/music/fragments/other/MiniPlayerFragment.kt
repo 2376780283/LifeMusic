@@ -24,6 +24,8 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
+import kotlin.math.abs
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.databinding.FragmentMiniPlayerBinding
 import zzh.lifeplayer.music.extensions.accentColor
@@ -36,16 +38,18 @@ import zzh.lifeplayer.music.glide.LifeGlideExtension.songCoverOptions
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.MusicProgressViewUpdateHelper
 import zzh.lifeplayer.music.helper.PlayPauseButtonOnClickHandler
-import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.LifeUtil
-import com.bumptech.glide.Glide
-import kotlin.math.abs
+import zzh.lifeplayer.music.util.PreferenceUtil
 
-open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_player),
-    MusicProgressViewUpdateHelper.Callback, View.OnClickListener {
+open class MiniPlayerFragment :
+    AbsMusicServiceFragment(R.layout.fragment_mini_player),
+    MusicProgressViewUpdateHelper.Callback,
+    View.OnClickListener {
 
     private var _binding: FragmentMiniPlayerBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
+
     private lateinit var progressViewUpdateHelper: MusicProgressViewUpdateHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,10 +110,10 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
         binding.miniPlayerTitle.isSelected = true
         binding.miniPlayerTitle.text = builder
 
-//        binding.title.isSelected = true
-//        binding.title.text = song.title
-//        binding.text.isSelected = true
-//        binding.text.text = song.artistName
+        //        binding.title.isSelected = true
+        //        binding.title.text = song.title
+        //        binding.text.isSelected = true
+        //        binding.text.text = song.artistName
     }
 
     private fun updateSongCover() {
@@ -161,26 +165,29 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
 
     class FlingPlayBackController(context: Context) : View.OnTouchListener {
 
-        private var flingPlayBackController = GestureDetector(context,
-            object : GestureDetector.SimpleOnGestureListener() {
-                override fun onFling(
-                    e1: MotionEvent?,
-                    e2: MotionEvent,
-                    velocityX: Float,
-                    velocityY: Float
-                ): Boolean {
-                    if (abs(velocityX) > abs(velocityY)) {
-                        if (velocityX < 0) {
-                            MusicPlayerRemote.playNextSong()
-                            return true
-                        } else if (velocityX > 0) {
-                            MusicPlayerRemote.playPreviousSong()
-                            return true
+        private var flingPlayBackController =
+            GestureDetector(
+                context,
+                object : GestureDetector.SimpleOnGestureListener() {
+                    override fun onFling(
+                        e1: MotionEvent?,
+                        e2: MotionEvent,
+                        velocityX: Float,
+                        velocityY: Float,
+                    ): Boolean {
+                        if (abs(velocityX) > abs(velocityY)) {
+                            if (velocityX < 0) {
+                                MusicPlayerRemote.playNextSong()
+                                return true
+                            } else if (velocityX > 0) {
+                                MusicPlayerRemote.playPreviousSong()
+                                return true
+                            }
                         }
+                        return false
                     }
-                    return false
-                }
-            })
+                },
+            )
 
         @SuppressLint("ClickableViewAccessibility")
         override fun onTouch(v: View, event: MotionEvent): Boolean {

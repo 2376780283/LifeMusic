@@ -19,6 +19,7 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.core.text.parseAsHtml
 import androidx.fragment.app.DialogFragment
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import zzh.lifeplayer.music.EXTRA_PLAYLIST
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.db.PlaylistEntity
@@ -27,7 +28,6 @@ import zzh.lifeplayer.music.extensions.extraNotNull
 import zzh.lifeplayer.music.extensions.materialDialog
 import zzh.lifeplayer.music.fragments.LibraryViewModel
 import zzh.lifeplayer.music.fragments.ReloadType
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class DeletePlaylistDialog : DialogFragment() {
 

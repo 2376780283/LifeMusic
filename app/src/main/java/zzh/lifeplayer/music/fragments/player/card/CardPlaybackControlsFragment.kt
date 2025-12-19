@@ -37,9 +37,9 @@ import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 class CardPlaybackControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_card_player_playback_controls) {
 
-
     private var _binding: FragmentCardPlayerPlaybackControlsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val seekBar: SeekBar
         get() = binding.progressSlider
@@ -68,12 +68,8 @@ class CardPlaybackControlsFragment :
         setUpPlayPauseFab()
         binding.title.isSelected = true
         binding.text.isSelected = true
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
     }
 
     private fun updateSong() {
@@ -114,8 +110,7 @@ class CardPlaybackControlsFragment :
     }
 
     override fun setColor(color: MediaNotificationProcessor) {
-        if (!ATHUtil.isWindowBackgroundDark(requireContext())
-        ) {
+        if (!ATHUtil.isWindowBackgroundDark(requireContext())) {
             lastPlaybackControlsColor = MaterialValueHelper.getSecondaryTextColor(activity, true)
             lastDisabledPlaybackControlsColor =
                 MaterialValueHelper.getSecondaryDisabledTextColor(activity, true)
@@ -131,16 +126,17 @@ class CardPlaybackControlsFragment :
         updatePlayPauseColor()
         updateProgressTextColor()
 
-        val colorFinal = if (PreferenceUtil.isAdaptiveColor) {
-            color.primaryTextColor
-        } else {
-            accentColor().ripAlpha()
-        }
+        val colorFinal =
+            if (PreferenceUtil.isAdaptiveColor) {
+                color.primaryTextColor
+            } else {
+                accentColor().ripAlpha()
+            }
         binding.image.setColorFilter(colorFinal, PorterDuff.Mode.SRC_IN)
         TintHelper.setTintAuto(
             binding.mediaButton.playPauseButton,
             MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.isColorLight(colorFinal)),
-            false
+            false,
         )
         TintHelper.setTintAuto(binding.mediaButton.playPauseButton, colorFinal, true)
 
@@ -166,7 +162,9 @@ class CardPlaybackControlsFragment :
         if (MusicPlayerRemote.isPlaying) {
             binding.mediaButton.playPauseButton.setImageResource(R.drawable.ic_pause)
         } else {
-            binding.mediaButton.playPauseButton.setImageResource(R.drawable.ic_play_arrow_white_32dp)
+            binding.mediaButton.playPauseButton.setImageResource(
+                R.drawable.ic_play_arrow_white_32dp
+            )
         }
     }
 

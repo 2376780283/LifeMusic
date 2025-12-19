@@ -20,19 +20,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import zzh.lifeplayer.music.R
-import zzh.lifeplayer.music.adapter.song.PlayingQueueAdapter
-import zzh.lifeplayer.music.fragments.base.AbsRecyclerViewFragment
-import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager
 import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchActionGuardManager
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
+import zzh.lifeplayer.music.R
+import zzh.lifeplayer.music.adapter.song.PlayingQueueAdapter
+import zzh.lifeplayer.music.fragments.base.AbsRecyclerViewFragment
+import zzh.lifeplayer.music.helper.MusicPlayerRemote
 
-/**
- * Created by hemanths on 2019-12-08.
- */
+/** Created by hemanths on 2019-12-08. */
 class PlayingQueueRVFragment : AbsRecyclerViewFragment<PlayingQueueAdapter, LinearLayoutManager>() {
 
     private lateinit var wrappedAdapter: RecyclerView.Adapter<*>
@@ -41,6 +39,7 @@ class PlayingQueueRVFragment : AbsRecyclerViewFragment<PlayingQueueAdapter, Line
     private var recyclerViewTouchActionGuardManager: RecyclerViewTouchActionGuardManager? = null
     override val titleRes: Int
         get() = R.string.now_playing_queue
+
     override val isShuffleVisible: Boolean
         get() = false
 
@@ -52,9 +51,7 @@ class PlayingQueueRVFragment : AbsRecyclerViewFragment<PlayingQueueAdapter, Line
 
     private fun setupToolbar() {
         toolbar.apply {
-            setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
+            setNavigationOnClickListener { findNavController().navigateUp() }
             setNavigationIcon(R.drawable.ic_arrow_back)
         }
     }
@@ -69,7 +66,8 @@ class PlayingQueueRVFragment : AbsRecyclerViewFragment<PlayingQueueAdapter, Line
         wrappedAdapter =
             recyclerViewDragDropManager?.createWrappedAdapter(adapter!!) as RecyclerView.Adapter<*>
         wrappedAdapter =
-            recyclerViewSwipeManager?.createWrappedAdapter(wrappedAdapter) as RecyclerView.Adapter<*>
+            recyclerViewSwipeManager?.createWrappedAdapter(wrappedAdapter)
+                as RecyclerView.Adapter<*>
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = wrappedAdapter
         recyclerView.itemAnimator = animator
@@ -89,7 +87,7 @@ class PlayingQueueRVFragment : AbsRecyclerViewFragment<PlayingQueueAdapter, Line
             requireActivity() as AppCompatActivity,
             MusicPlayerRemote.playingQueue.toMutableList(),
             MusicPlayerRemote.position,
-            R.layout.item_queue
+            R.layout.item_queue,
         )
     }
 
@@ -148,8 +146,7 @@ class PlayingQueueRVFragment : AbsRecyclerViewFragment<PlayingQueueAdapter, Line
     }
 
     companion object {
-        @JvmField
-        val TAG: String = PlayingQueueRVFragment::class.java.simpleName
+        @JvmField val TAG: String = PlayingQueueRVFragment::class.java.simpleName
 
         @JvmStatic
         fun newInstance(): PlayingQueueRVFragment {

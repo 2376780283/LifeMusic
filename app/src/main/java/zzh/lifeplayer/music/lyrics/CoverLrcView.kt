@@ -1,6 +1,5 @@
 package zzh.lifeplayer.music.lyrics
 
-import android.util.TypedValue
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,6 +12,7 @@ import android.text.StaticLayout
 import android.text.TextPaint
 import android.text.format.DateUtils
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
@@ -21,22 +21,18 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Scroller
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.withSave
-import zzh.lifeplayer.music.R
-import kotlinx.coroutines.*
 import java.io.File
 import java.lang.Runnable
 import kotlin.math.abs
+import kotlinx.coroutines.*
+import zzh.lifeplayer.music.R
 
-import zzh.lifeplayer.music.util.PreferenceUtil.lyricsfontsize
-/**
- * 歌词 Created by wcy on 2015/11/9.
- */
+/** 歌词 Created by wcy on 2015/11/9. */
 @SuppressLint("StaticFieldLeak")
-class CoverLrcView @JvmOverloads constructor(
-    context: Context?,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-) : View(context, attrs, defStyleAttr) {
+class CoverLrcView
+@JvmOverloads
+constructor(context: Context?, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    View(context, attrs, defStyleAttr) {
     private val mLrcEntryList: MutableList<LrcEntry> = ArrayList()
     private val mLrcPaint = TextPaint()
     private val mTimePaint = TextPaint()
@@ -65,7 +61,8 @@ class CoverLrcView @JvmOverloads constructor(
     private var isTouching = false
     private var isFling = false
     private var mTextGravity // 歌词显示位置，靠左/居中/靠右
-            = 0
+     =
+        0
     private val hideTimelineRunnable = Runnable {
         if (hasLrc() && isShowTimeline) {
             isShowTimeline = false
@@ -127,7 +124,7 @@ class CoverLrcView @JvmOverloads constructor(
                         0,
                         0,
                         getOffset(mLrcEntryList.size - 1).toInt(),
-                        getOffset(0).toInt()
+                        getOffset(0).toInt(),
                     )
                     isFling = true
                     return true
@@ -136,16 +133,17 @@ class CoverLrcView @JvmOverloads constructor(
             }
 
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                if (hasLrc()
-                    && isShowTimeline
-                    && mPlayDrawable!!.bounds.contains(e.x.toInt(), e.y.toInt())
+                if (
+                    hasLrc() &&
+                        isShowTimeline &&
+                        mPlayDrawable!!.bounds.contains(e.x.toInt(), e.y.toInt())
                 ) {
                     val centerLine = centerLine
                     val centerLineTime = mLrcEntryList[centerLine].time
                     // onPlayClick 消费了才更新 UI
-                    if (mOnPlayClickListener != null && mOnPlayClickListener!!.onPlayClick(
-                            centerLineTime
-                        )
+                    if (
+                        mOnPlayClickListener != null &&
+                            mOnPlayClickListener!!.onPlayClick(centerLineTime)
                     ) {
                         isShowTimeline = false
                         removeCallbacks(hideTimelineRunnable)
@@ -163,64 +161,73 @@ class CoverLrcView @JvmOverloads constructor(
 
     private fun init(attrs: AttributeSet?) {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.LrcView)
-         
-        mCurrentTextSize = ta.getDimension(
-            R.styleable.LrcView_lrcTextSize, resources.getDimension(R.dimen.lrc_current_text_size)
-        )       
-        mNormalTextSize = ta.getDimension(
-            R.styleable.LrcView_lrcNormalTextSize,
-            resources.getDimension(R.dimen.lrc_text_size)
-        )     
+
+        mCurrentTextSize =
+            ta.getDimension(
+                R.styleable.LrcView_lrcTextSize,
+                resources.getDimension(R.dimen.lrc_current_text_size),
+            )
+        mNormalTextSize =
+            ta.getDimension(
+                R.styleable.LrcView_lrcNormalTextSize,
+                resources.getDimension(R.dimen.lrc_text_size),
+            )
         if (mNormalTextSize == 0f) {
             mNormalTextSize = mCurrentTextSize
         }
-        mDividerHeight = ta.getDimension(
-            R.styleable.LrcView_lrcDividerHeight,
-            resources.getDimension(R.dimen.lrc_divider_height)
-        )
+        mDividerHeight =
+            ta.getDimension(
+                R.styleable.LrcView_lrcDividerHeight,
+                resources.getDimension(R.dimen.lrc_divider_height),
+            )
         val defDuration = resources.getInteger(R.integer.lrc_animation_duration)
         mAnimationDuration =
             ta.getInt(R.styleable.LrcView_lrcAnimationDuration, defDuration).toLong()
         mAnimationDuration =
             if (mAnimationDuration < 0) defDuration.toLong() else mAnimationDuration
-        mNormalTextColor = ta.getColor(
-            R.styleable.LrcView_lrcNormalTextColor,
-            ContextCompat.getColor(context, R.color.lrc_normal_text_color)
-        )
-        mCurrentTextColor = ta.getColor(
-            R.styleable.LrcView_lrcCurrentTextColor,
-            ContextCompat.getColor(context, R.color.lrc_current_text_color)
-        )
-        mTimelineTextColor = ta.getColor(
-            R.styleable.LrcView_lrcTimelineTextColor,
-            ContextCompat.getColor(context, R.color.lrc_timeline_text_color)
-        )
+        mNormalTextColor =
+            ta.getColor(
+                R.styleable.LrcView_lrcNormalTextColor,
+                ContextCompat.getColor(context, R.color.lrc_normal_text_color),
+            )
+        mCurrentTextColor =
+            ta.getColor(
+                R.styleable.LrcView_lrcCurrentTextColor,
+                ContextCompat.getColor(context, R.color.lrc_current_text_color),
+            )
+        mTimelineTextColor =
+            ta.getColor(
+                R.styleable.LrcView_lrcTimelineTextColor,
+                ContextCompat.getColor(context, R.color.lrc_timeline_text_color),
+            )
         mDefaultLabel = ta.getString(R.styleable.LrcView_lrcLabel)
         mDefaultLabel =
             if (mDefaultLabel.isNullOrEmpty()) context.getString(R.string.empty) else mDefaultLabel
         mLrcPadding = ta.getDimension(R.styleable.LrcView_lrcPadding, 0f)
-        mTimelineColor = ta.getColor(
-            R.styleable.LrcView_lrcTimelineColor,
-            ContextCompat.getColor(context, R.color.lrc_timeline_color)
-        )
-        val timelineHeight = ta.getDimension(
-            R.styleable.LrcView_lrcTimelineHeight,
-            resources.getDimension(R.dimen.lrc_timeline_height)
-        )
+        mTimelineColor =
+            ta.getColor(
+                R.styleable.LrcView_lrcTimelineColor,
+                ContextCompat.getColor(context, R.color.lrc_timeline_color),
+            )
+        val timelineHeight =
+            ta.getDimension(
+                R.styleable.LrcView_lrcTimelineHeight,
+                resources.getDimension(R.dimen.lrc_timeline_height),
+            )
         mPlayDrawable = ta.getDrawable(R.styleable.LrcView_lrcPlayDrawable)
         mPlayDrawable =
-            if (mPlayDrawable == null) ContextCompat.getDrawable(
-                context,
-                R.drawable.ic_play_arrow
-            ) else mPlayDrawable
-        mTimeTextColor = ta.getColor(
-            R.styleable.LrcView_lrcTimeTextColor,
-            ContextCompat.getColor(context, R.color.lrc_time_text_color)
-        )
-        val timeTextSize = ta.getDimension(
-            R.styleable.LrcView_lrcTimeTextSize,
-            resources.getDimension(R.dimen.lrc_time_text_size)
-        )
+            if (mPlayDrawable == null) ContextCompat.getDrawable(context, R.drawable.ic_play_arrow)
+            else mPlayDrawable
+        mTimeTextColor =
+            ta.getColor(
+                R.styleable.LrcView_lrcTimeTextColor,
+                ContextCompat.getColor(context, R.color.lrc_time_text_color),
+            )
+        val timeTextSize =
+            ta.getDimension(
+                R.styleable.LrcView_lrcTimeTextSize,
+                resources.getDimension(R.dimen.lrc_time_text_size),
+            )
         mTextGravity = ta.getInteger(R.styleable.LrcView_lrcTextGravity, LrcEntry.GRAVITY_CENTER)
         ta.recycle()
         mDrawableWidth = resources.getDimension(R.dimen.lrc_drawable_width).toInt()
@@ -265,12 +272,15 @@ class CoverLrcView @JvmOverloads constructor(
     }
 
     fun setDraggable(draggable: Boolean, onPlayClickListener: OnPlayClickListener?) {
-        mOnPlayClickListener = if (draggable) {
-            requireNotNull(onPlayClickListener) { "if draggable == true, onPlayClickListener must not be null" }
-            onPlayClickListener
-        } else {
-            null
-        }
+        mOnPlayClickListener =
+            if (draggable) {
+                requireNotNull(onPlayClickListener) {
+                    "if draggable == true, onPlayClickListener must not be null"
+                }
+                onPlayClickListener
+            } else {
+                null
+            }
     }
 
     fun setLabel(label: String?) {
@@ -285,21 +295,16 @@ class CoverLrcView @JvmOverloads constructor(
             reset()
             viewScope.launch(Dispatchers.IO) {
                 val lrcEntries = LrcUtils.parseLrc(arrayOf(lrcFile, null))
-                withContext(Dispatchers.Main) {
-                    onLrcLoaded(lrcEntries)
-                }
+                withContext(Dispatchers.Main) { onLrcLoaded(lrcEntries) }
             }
         }
     }
-    
+
     fun setLyricFontSize(spSize: Float) {
-      mNormalTextSize = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_SP,
-        spSize,
-        resources.displayMetrics
-       )
-       mCurrentTextSize = mNormalTextSize * 1.2f // float 类型
-       invalidate()
+        mNormalTextSize =
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spSize, resources.displayMetrics)
+        mCurrentTextSize = mNormalTextSize * 1.2f // float 类型
+        invalidate()
     }
 
     fun loadLrc(lrcText: String?) {
@@ -307,9 +312,7 @@ class CoverLrcView @JvmOverloads constructor(
             reset()
             viewScope.launch(Dispatchers.IO) {
                 val lrcEntries = LrcUtils.parseLrc(arrayOf(lrcText, null))
-                withContext(Dispatchers.Main) {
-                    onLrcLoaded(lrcEntries)
-                }
+                withContext(Dispatchers.Main) { onLrcLoaded(lrcEntries) }
             }
         }
     }
@@ -354,15 +357,17 @@ class CoverLrcView @JvmOverloads constructor(
         if (!hasLrc()) {
             mLrcPaint.color = mCurrentTextColor
             @Suppress("Deprecation")
-            @SuppressLint("DrawAllocation") val staticLayout = StaticLayout(
-                mDefaultLabel,
-                mLrcPaint,
-                lrcWidth.toInt(),
-                Layout.Alignment.ALIGN_CENTER,
-                1f,
-                0f,
-                false
-            )
+            @SuppressLint("DrawAllocation")
+            val staticLayout =
+                StaticLayout(
+                    mDefaultLabel,
+                    mLrcPaint,
+                    lrcWidth.toInt(),
+                    Layout.Alignment.ALIGN_CENTER,
+                    1f,
+                    0f,
+                    false,
+                )
             drawText(canvas, staticLayout, centerY.toFloat())
             return
         }
@@ -379,8 +384,8 @@ class CoverLrcView @JvmOverloads constructor(
         var y = 0f
         for (i in mLrcEntryList.indices) {
             if (i > 0) {
-                y += ((mLrcEntryList[i - 1].height + mLrcEntryList[i].height shr 1)
-                        + mDividerHeight)
+                y +=
+                    ((mLrcEntryList[i - 1].height + mLrcEntryList[i].height shr 1) + mDividerHeight)
             }
             if (i == mCurrentLine) {
                 mLrcPaint.textSize = mCurrentTextSize
@@ -416,9 +421,7 @@ class CoverLrcView @JvmOverloads constructor(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_UP
-            || event.action == MotionEvent.ACTION_CANCEL
-        ) {
+        if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
             isTouching = false
             if (hasLrc() && !isFling) {
                 adjustCenter()
@@ -495,15 +498,16 @@ class CoverLrcView @JvmOverloads constructor(
     private fun smoothScrollTo(line: Int, duration: Long = mAnimationDuration) {
         val offset = getOffset(line)
         endAnimation()
-        mAnimator = ValueAnimator.ofFloat(mOffset, offset).apply {
-            this.duration = duration
-            interpolator = AccelerateDecelerateInterpolator()
-            addUpdateListener { animation: ValueAnimator ->
-                mOffset = animation.animatedValue as Float
-                invalidate()
+        mAnimator =
+            ValueAnimator.ofFloat(mOffset, offset).apply {
+                this.duration = duration
+                interpolator = AccelerateDecelerateInterpolator()
+                addUpdateListener { animation: ValueAnimator ->
+                    mOffset = animation.animatedValue as Float
+                    invalidate()
+                }
+                start()
             }
-            start()
-        }
     }
 
     private fun endAnimation() {
@@ -548,8 +552,8 @@ class CoverLrcView @JvmOverloads constructor(
         if (mLrcEntryList[line].offset == Float.MIN_VALUE) {
             var offset = (height / 2).toFloat()
             for (i in 1..line) {
-                offset -= ((mLrcEntryList[i - 1].height + mLrcEntryList[i].height shr 1)
-                        + mDividerHeight)
+                offset -=
+                    ((mLrcEntryList[i - 1].height + mLrcEntryList[i].height shr 1) + mDividerHeight)
             }
             mLrcEntryList[line].offset = offset
         }
@@ -579,6 +583,4 @@ class CoverLrcView @JvmOverloads constructor(
     init {
         init(attrs)
     }
-   
-   
 }

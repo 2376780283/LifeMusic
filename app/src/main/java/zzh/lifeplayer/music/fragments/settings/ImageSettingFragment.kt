@@ -20,10 +20,7 @@ import androidx.preference.Preference
 import zzh.lifeplayer.music.AUTO_DOWNLOAD_IMAGES_POLICY
 import zzh.lifeplayer.music.R
 
-/**
- * @author Hemanth S (h4h13).
- */
-
+/** @author Hemanth S (h4h13). */
 class ImageSettingFragment : AbsSettingsFragment() {
     override fun invalidateSettings() {
         val autoDownloadImagesPolicy: Preference = findPreference(AUTO_DOWNLOAD_IMAGES_POLICY)!!

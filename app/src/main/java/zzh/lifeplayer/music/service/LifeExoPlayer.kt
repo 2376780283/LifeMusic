@@ -25,9 +25,7 @@ class LifeExoPlayer(context: Context) : AudioManagerPlayback(context), Player.Li
     private var player: ExoPlayer = ExoPlayer.Builder(context).build()
     override var callbacks: PlaybackCallbacks? = null
 
-    /**
-     * @return True if the player is ready to go, false otherwise
-     */
+    /** @return True if the player is ready to go, false otherwise */
     override var isInitialized = false
         private set
 
@@ -39,11 +37,7 @@ class LifeExoPlayer(context: Context) : AudioManagerPlayback(context), Player.Li
      * @param song The song object you want to play
      * @return True if the `player` has been prepared and is ready to play, false otherwise
      */
-    override fun setDataSource(
-        song: Song,
-        force: Boolean,
-        completion: (success: Boolean) -> Unit,
-    ) {
+    override fun setDataSource(song: Song, force: Boolean, completion: (success: Boolean) -> Unit) {
         isInitialized = false
         val mediaItem = MediaItem.fromUri(song.uri)
         try {
@@ -54,19 +48,21 @@ class LifeExoPlayer(context: Context) : AudioManagerPlayback(context), Player.Li
                         .setUsage(C.USAGE_MEDIA)
                         .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
                         .build(),
-                    false
+                    false,
                 )
                 player.playbackParameters = PlaybackParameters(playbackSpeed, playbackPitch)
 
-                player.addListener(object : Player.Listener {
-                    override fun onPlaybackStateChanged(state: Int) {
-                        if (state == Player.STATE_READY) {
-                            player.removeListener(this)
-                            isInitialized = true
-                            completion(true)
+                player.addListener(
+                    object : Player.Listener {
+                        override fun onPlaybackStateChanged(state: Int) {
+                            if (state == Player.STATE_READY) {
+                                player.removeListener(this)
+                                isInitialized = true
+                                completion(true)
+                            }
                         }
                     }
-                })
+                )
                 player.addListener(this)
                 player.prepare()
             }
@@ -83,9 +79,7 @@ class LifeExoPlayer(context: Context) : AudioManagerPlayback(context), Player.Li
      */
     override fun setNextDataSource(path: Uri?) {}
 
-    /**
-     * Starts or resumes playback.
-     */
+    /** Starts or resumes playback. */
     override fun start(): Boolean {
         super.start()
         return try {
@@ -97,26 +91,20 @@ class LifeExoPlayer(context: Context) : AudioManagerPlayback(context), Player.Li
         }
     }
 
-    /**
-     * Resets the MediaPlayer to its uninitialized state.
-     */
+    /** Resets the MediaPlayer to its uninitialized state. */
     override fun stop() {
         super.stop()
         player.stop()
         isInitialized = false
     }
 
-    /**
-     * Releases resources associated with this MediaPlayer object.
-     */
+    /** Releases resources associated with this MediaPlayer object. */
     override fun release() {
         stop()
         player.release()
     }
 
-    /**
-     * Pauses playback. Call start() to resume.
-     */
+    /** Pauses playback. Call start() to resume. */
     override fun pause(): Boolean {
         super.pause()
         return try {
@@ -127,9 +115,7 @@ class LifeExoPlayer(context: Context) : AudioManagerPlayback(context), Player.Li
         }
     }
 
-    /**
-     * Checks whether the MultiPlayer is playing.
-     */
+    /** Checks whether the MultiPlayer is playing. */
     override val isPlaying: Boolean
         get() = isInitialized && player.isPlaying
 
@@ -141,11 +127,12 @@ class LifeExoPlayer(context: Context) : AudioManagerPlayback(context), Player.Li
     override fun duration(): Int {
         return if (!this.isInitialized) {
             -1
-        } else try {
-            player.duration.toInt()
-        } catch (e: Exception) {
-            -1
-        }
+        } else
+            try {
+                player.duration.toInt()
+            } catch (e: Exception) {
+                -1
+            }
     }
 
     /**
@@ -156,11 +143,12 @@ class LifeExoPlayer(context: Context) : AudioManagerPlayback(context), Player.Li
     override fun position(): Int {
         return if (!this.isInitialized) {
             -1
-        } else try {
-            player.currentPosition.toInt()
-        } catch (e: Exception) {
-            -1
-        }
+        } else
+            try {
+                player.currentPosition.toInt()
+            } catch (e: Exception) {
+                -1
+            }
     }
 
     /**
@@ -208,8 +196,7 @@ class LifeExoPlayer(context: Context) : AudioManagerPlayback(context), Player.Li
      * @return The current audio session ID.
      */
     override val audioSessionId: Int
-        @OptIn(UnstableApi::class)
-        get() = player.audioSessionId
+        @OptIn(UnstableApi::class) get() = player.audioSessionId
 
     override fun onPlaybackStateChanged(state: Int) {
         if (state == Player.STATE_ENDED) {

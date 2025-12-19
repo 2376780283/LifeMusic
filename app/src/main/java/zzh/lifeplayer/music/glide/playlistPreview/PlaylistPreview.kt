@@ -7,8 +7,11 @@ import zzh.lifeplayer.music.model.Song
 
 class PlaylistPreview(val playlistWithSongs: PlaylistWithSongs) {
 
-    val playlistEntity: PlaylistEntity get() = playlistWithSongs.playlistEntity
-    val songs: List<Song> get() = playlistWithSongs.songs.toSongs()
+    val playlistEntity: PlaylistEntity
+        get() = playlistWithSongs.playlistEntity
+
+    val songs: List<Song>
+        get() = playlistWithSongs.songs.toSongs()
 
     override fun equals(other: Any?): Boolean {
         println("Glide equals $this $other")

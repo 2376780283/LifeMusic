@@ -19,6 +19,7 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
+import android.widget.SeekBar
 import android.widget.TextView
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
@@ -32,16 +33,13 @@ import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.PlayPauseButtonOnClickHandler
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import android.widget.SeekBar
 
-/**
- * Created by hemanths on 2019-10-04.
- */
-
+/** Created by hemanths on 2019-10-04. */
 class PeekPlayerControlFragment : AbsPlayerControlsFragment(R.layout.fragment_peek_control_player) {
 
     private var _binding: FragmentPeekControlPlayerBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val seekBar: SeekBar
         get() = binding.progressSlider
@@ -64,10 +62,7 @@ class PeekPlayerControlFragment : AbsPlayerControlsFragment(R.layout.fragment_pe
     override val songCurrentProgress: TextView
         get() = binding.songCurrentProgress
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentPeekControlPlayerBinding.bind(view)
         setUpPlayPauseFab()

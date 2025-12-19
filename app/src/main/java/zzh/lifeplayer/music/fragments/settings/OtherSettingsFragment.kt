@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.preference.Preference
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import zzh.lifeplayer.appthemehelper.common.prefs.supportv7.ATEListPreference
 import zzh.lifeplayer.music.LANGUAGE_NAME
 import zzh.lifeplayer.music.LAST_ADDED_CUTOFF
@@ -13,7 +14,6 @@ import zzh.lifeplayer.music.extensions.installLanguageAndRecreate
 import zzh.lifeplayer.music.fragments.LibraryViewModel
 import zzh.lifeplayer.music.fragments.ReloadType.HomeSections
 import zzh.lifeplayer.music.util.PreferenceUtil
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class OtherSettingsFragment : AbsSettingsFragment() {
     private val libraryViewModel by activityViewModel<LibraryViewModel>()
@@ -49,9 +49,7 @@ class OtherSettingsFragment : AbsSettingsFragment() {
                 // Install the languages from Play Store first and then set the application locale
                 requireActivity().installLanguageAndRecreate(newValue.toString()) {
                     AppCompatDelegate.setApplicationLocales(
-                        LocaleListCompat.forLanguageTags(
-                            newValue as? String
-                        )
+                        LocaleListCompat.forLanguageTags(newValue as? String)
                     )
                 }
             }

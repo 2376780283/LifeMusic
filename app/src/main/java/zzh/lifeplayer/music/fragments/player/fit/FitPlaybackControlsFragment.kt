@@ -37,7 +37,8 @@ class FitPlaybackControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_fit_playback_controls) {
 
     private var _binding: FragmentFitPlaybackControlsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val seekBar: SeekBar
         get() = binding.progressSlider
@@ -68,12 +69,8 @@ class FitPlaybackControlsFragment :
         binding.title.isSelected = true
         binding.text.isSelected = true
 
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
     }
 
     private fun updateSong() {
@@ -124,11 +121,12 @@ class FitPlaybackControlsFragment :
                 MaterialValueHelper.getPrimaryDisabledTextColor(activity, false)
         }
 
-        val colorFinal = if (PreferenceUtil.isAdaptiveColor) {
-            color.primaryTextColor
-        } else {
-            accentColor().ripAlpha()
-        }
+        val colorFinal =
+            if (PreferenceUtil.isAdaptiveColor) {
+                color.primaryTextColor
+            } else {
+                accentColor().ripAlpha()
+            }
 
         volumeFragment?.setTintable(colorFinal)
 
@@ -142,7 +140,7 @@ class FitPlaybackControlsFragment :
         TintHelper.setTintAuto(
             binding.playPauseButton,
             MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.isColorLight(i)),
-            false
+            false,
         )
         TintHelper.setTintAuto(binding.playPauseButton, i, true)
     }
@@ -167,7 +165,8 @@ class FitPlaybackControlsFragment :
     }
 
     public override fun show() {
-        binding.playPauseButton.animate()
+        binding.playPauseButton
+            .animate()
             .scaleX(1f)
             .scaleY(1f)
             .rotation(360f)

@@ -16,6 +16,7 @@ package zzh.lifeplayer.music.auto
 import android.content.Context
 import android.content.res.Resources
 import android.support.v4.media.MediaBrowserCompat
+import java.lang.ref.WeakReference
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.model.CategoryInfo
@@ -24,12 +25,8 @@ import zzh.lifeplayer.music.repository.*
 import zzh.lifeplayer.music.service.MusicService
 import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
-import java.lang.ref.WeakReference
 
-
-/**
- * Created by Beesham Sarendranauth (Beesham)
- */
+/** Created by Beesham Sarendranauth (Beesham) */
 class AutoMusicProvider(
     private val mContext: Context,
     private val songsRepository: SongRepository,
@@ -37,7 +34,7 @@ class AutoMusicProvider(
     private val artistsRepository: ArtistRepository,
     private val genresRepository: GenreRepository,
     private val playlistsRepository: PlaylistRepository,
-    private val topPlayedRepository: TopPlayedRepository
+    private val topPlayedRepository: TopPlayedRepository,
 ) {
     private var mMusicService: WeakReference<MusicService>? = null
 
@@ -51,71 +48,75 @@ class AutoMusicProvider(
             AutoMediaIDHelper.MEDIA_ID_ROOT -> {
                 mediaItems.addAll(getRootChildren(resources))
             }
-            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_PLAYLIST -> for (playlist in playlistsRepository.playlists()) {
-                mediaItems.add(
-                    AutoMediaItem.with(mContext)
-                        .path(AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_PLAYLIST, playlist.id)
-                        .icon(R.drawable.ic_playlist_play)
-                        .title(playlist.name)
-                        .subTitle(playlist.getInfoString(mContext))
-                        .asPlayable()
-                        .build()
-                )
-            }
-            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_ALBUM -> for (album in albumsRepository.albums()) {
-                mediaItems.add(
-                    AutoMediaItem.with(mContext)
-                        .path(mediaId, album.id)
-                        .title(album.title)
-                        .subTitle(album.albumArtist ?: album.artistName)
-                        .icon(MusicUtil.getMediaStoreAlbumCoverUri(album.id))
-                        .asPlayable()
-                        .build()
-                )
-            }
-            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_ARTIST -> for (artist in artistsRepository.artists()) {
-                mediaItems.add(
-                    AutoMediaItem.with(mContext)
-                        .asPlayable()
-                        .path(mediaId, artist.id)
-                        .title(artist.name)
-                        .build()
-                )
-            }
-            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_ALBUM_ARTIST -> for (artist in artistsRepository.albumArtists()) {
-                mediaItems.add(
-                    AutoMediaItem.with(mContext)
-                        .asPlayable()
-                        // we just pass album id here as we don't have album artist id's
-                        .path(mediaId, artist.safeGetFirstAlbum().id)
-                        .title(artist.name)
-                        .build()
-                )
-            }
-            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_GENRE -> for (genre in genresRepository.genres()) {
-                mediaItems.add(
-                    AutoMediaItem.with(mContext)
-                        .asPlayable()
-                        .path(mediaId, genre.id)
-                        .title(genre.name)
-                        .build()
-                )
-            }
+            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_PLAYLIST ->
+                for (playlist in playlistsRepository.playlists()) {
+                    mediaItems.add(
+                        AutoMediaItem.with(mContext)
+                            .path(AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_PLAYLIST, playlist.id)
+                            .icon(R.drawable.ic_playlist_play)
+                            .title(playlist.name)
+                            .subTitle(playlist.getInfoString(mContext))
+                            .asPlayable()
+                            .build()
+                    )
+                }
+            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_ALBUM ->
+                for (album in albumsRepository.albums()) {
+                    mediaItems.add(
+                        AutoMediaItem.with(mContext)
+                            .path(mediaId, album.id)
+                            .title(album.title)
+                            .subTitle(album.albumArtist ?: album.artistName)
+                            .icon(MusicUtil.getMediaStoreAlbumCoverUri(album.id))
+                            .asPlayable()
+                            .build()
+                    )
+                }
+            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_ARTIST ->
+                for (artist in artistsRepository.artists()) {
+                    mediaItems.add(
+                        AutoMediaItem.with(mContext)
+                            .asPlayable()
+                            .path(mediaId, artist.id)
+                            .title(artist.name)
+                            .build()
+                    )
+                }
+            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_ALBUM_ARTIST ->
+                for (artist in artistsRepository.albumArtists()) {
+                    mediaItems.add(
+                        AutoMediaItem.with(mContext)
+                            .asPlayable()
+                            // we just pass album id here as we don't have album artist id's
+                            .path(mediaId, artist.safeGetFirstAlbum().id)
+                            .title(artist.name)
+                            .build()
+                    )
+                }
+            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_GENRE ->
+                for (genre in genresRepository.genres()) {
+                    mediaItems.add(
+                        AutoMediaItem.with(mContext)
+                            .asPlayable()
+                            .path(mediaId, genre.id)
+                            .title(genre.name)
+                            .build()
+                    )
+                }
             AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_QUEUE ->
-                mMusicService?.get()?.playingQueue
-                    ?.let {
-                        for (song in it) {
-                            mediaItems.add(
-                                AutoMediaItem.with(mContext)
-                                    .asPlayable()
-                                    .path(mediaId, song.id)
-                                    .title(song.title)
-                                    .subTitle(song.artistName)
-                                    .icon(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId))
-                                    .build()
-                            )
-                        }
+                mMusicService?.get()?.playingQueue?.let {
+                    for (song in it) {
+                        mediaItems.add(
+                            AutoMediaItem.with(mContext)
+                                .asPlayable()
+                                .path(mediaId, song.id)
+                                .title(song.title)
+                                .subTitle(song.artistName)
+                                .icon(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId))
+                                .build()
+                        )
                     }
+                }
             else -> {
                 getPlaylistChildren(mediaId, mediaItems)
             }
@@ -125,27 +126,24 @@ class AutoMusicProvider(
 
     private fun getPlaylistChildren(
         mediaId: String?,
-        mediaItems: MutableList<MediaBrowserCompat.MediaItem>
+        mediaItems: MutableList<MediaBrowserCompat.MediaItem>,
     ) {
-        val songs = when (mediaId) {
-            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_TOP_TRACKS -> {
-                topPlayedRepository.topTracks()
+        val songs =
+            when (mediaId) {
+                AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_TOP_TRACKS -> {
+                    topPlayedRepository.topTracks()
+                }
+                AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_HISTORY -> {
+                    topPlayedRepository.recentlyPlayedTracks()
+                }
+                AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_SUGGESTIONS -> {
+                    topPlayedRepository.notRecentlyPlayedTracks().take(8)
+                }
+                else -> {
+                    emptyList()
+                }
             }
-            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_HISTORY -> {
-                topPlayedRepository.recentlyPlayedTracks()
-            }
-            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_SUGGESTIONS -> {
-                topPlayedRepository.notRecentlyPlayedTracks().take(8)
-            }
-            else -> {
-                emptyList()
-            }
-        }
-        songs.forEach { song ->
-            mediaItems.add(
-                getPlayableSong(mediaId, song)
-            )
-        }
+        songs.forEach { song -> mediaItems.add(getPlayableSong(mediaId, song)) }
     }
 
     private fun getRootChildren(resources: Resources): List<MediaBrowserCompat.MediaItem> {
@@ -161,7 +159,8 @@ class AutoMusicProvider(
                                 .path(AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_ALBUM)
                                 .gridLayout(true)
                                 .icon(R.drawable.ic_album)
-                                .title(resources.getString(R.string.albums)).build()
+                                .title(resources.getString(R.string.albums))
+                                .build()
                         )
                     }
                     CategoryInfo.Category.Artists -> {
@@ -171,7 +170,8 @@ class AutoMusicProvider(
                                     .asBrowsable()
                                     .path(AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_ALBUM_ARTIST)
                                     .icon(R.drawable.ic_album_artist)
-                                    .title(resources.getString(R.string.album_artist)).build()
+                                    .title(resources.getString(R.string.album_artist))
+                                    .build()
                             )
                         } else {
                             mediaItems.add(
@@ -179,7 +179,8 @@ class AutoMusicProvider(
                                     .asBrowsable()
                                     .path(AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_ARTIST)
                                     .icon(R.drawable.ic_artist)
-                                    .title(resources.getString(R.string.artists)).build()
+                                    .title(resources.getString(R.string.artists))
+                                    .build()
                             )
                         }
                     }
@@ -189,7 +190,8 @@ class AutoMusicProvider(
                                 .asBrowsable()
                                 .path(AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_GENRE)
                                 .icon(R.drawable.ic_guitar)
-                                .title(resources.getString(R.string.genres)).build()
+                                .title(resources.getString(R.string.genres))
+                                .build()
                         )
                     }
                     CategoryInfo.Category.Playlists -> {
@@ -198,11 +200,11 @@ class AutoMusicProvider(
                                 .asBrowsable()
                                 .path(AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_PLAYLIST)
                                 .icon(R.drawable.ic_playlist_play)
-                                .title(resources.getString(R.string.playlists)).build()
+                                .title(resources.getString(R.string.playlists))
+                                .build()
                         )
                     }
-                    else -> {
-                    }
+                    else -> {}
                 }
             }
         }
@@ -222,7 +224,8 @@ class AutoMusicProvider(
                 .icon(R.drawable.ic_queue_music)
                 .title(resources.getString(R.string.queue))
                 .subTitle(MusicUtil.getPlaylistInfoString(mContext, MusicPlayerRemote.playingQueue))
-                .asBrowsable().build()
+                .asBrowsable()
+                .build()
         )
         mediaItems.add(
             AutoMediaItem.with(mContext)
@@ -231,12 +234,10 @@ class AutoMusicProvider(
                 .icon(R.drawable.ic_trending_up)
                 .title(resources.getString(R.string.my_top_tracks))
                 .subTitle(
-                    MusicUtil.getPlaylistInfoString(
-                        mContext,
-                        topPlayedRepository.topTracks()
-                    )
+                    MusicUtil.getPlaylistInfoString(mContext, topPlayedRepository.topTracks())
                 )
-                .asBrowsable().build()
+                .asBrowsable()
+                .build()
         )
         mediaItems.add(
             AutoMediaItem.with(mContext)
@@ -247,12 +248,12 @@ class AutoMusicProvider(
                 .subTitle(
                     MusicUtil.getPlaylistInfoString(
                         mContext,
-                        topPlayedRepository.notRecentlyPlayedTracks().takeIf {
-                            it.size > 9
-                        } ?: emptyList()
+                        topPlayedRepository.notRecentlyPlayedTracks().takeIf { it.size > 9 }
+                            ?: emptyList(),
                     )
                 )
-                .asBrowsable().build()
+                .asBrowsable()
+                .build()
         )
         mediaItems.add(
             AutoMediaItem.with(mContext)
@@ -263,10 +264,11 @@ class AutoMusicProvider(
                 .subTitle(
                     MusicUtil.getPlaylistInfoString(
                         mContext,
-                        topPlayedRepository.recentlyPlayedTracks()
+                        topPlayedRepository.recentlyPlayedTracks(),
                     )
                 )
-                .asBrowsable().build()
+                .asBrowsable()
+                .build()
         )
         return mediaItems
     }

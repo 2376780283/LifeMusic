@@ -13,8 +13,7 @@
  */
 package zzh.lifeplayer.music.glide.audiocover
 
-/** @author Karim Abou Zeid (kabouzeid)
- */
+/** @author Karim Abou Zeid (kabouzeid) */
 class AudioFileCover(val filePath: String) {
 
     init {
@@ -26,7 +25,7 @@ class AudioFileCover(val filePath: String) {
     }
 
     override fun equals(other: Any?): Boolean {
-/*        return if (other is AudioFileCover) {
+        /*        return if (other is AudioFileCover) {
             other.filePath == filePath
         } else false  */
         if (this === other) return true
@@ -36,6 +35,5 @@ class AudioFileCover(val filePath: String) {
 
     override fun toString(): String {
         return "AudioFileCover(filePath='$filePath')"
-        
     }
 }

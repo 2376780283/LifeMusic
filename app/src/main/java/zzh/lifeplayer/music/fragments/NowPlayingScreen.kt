@@ -18,12 +18,12 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import zzh.lifeplayer.music.R
 
-enum class NowPlayingScreen constructor(
-    @param:StringRes @field:StringRes
-    val titleRes: Int,
+enum class NowPlayingScreen
+constructor(
+    @param:StringRes @field:StringRes val titleRes: Int,
     @param:DrawableRes @field:DrawableRes val drawableResId: Int,
     val id: Int,
-    val defaultCoverTheme: AlbumCoverStyle?
+    val defaultCoverTheme: AlbumCoverStyle?,
 ) {
     // Some Now playing themes look better with particular Album cover theme
 

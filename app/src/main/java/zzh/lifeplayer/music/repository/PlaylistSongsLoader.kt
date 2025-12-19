@@ -27,29 +27,18 @@ import zzh.lifeplayer.music.extensions.getStringOrNull
 import zzh.lifeplayer.music.model.PlaylistSong
 import zzh.lifeplayer.music.model.Song
 
-/**
- * Created by hemanths on 16/08/17.
- */
+/** Created by hemanths on 16/08/17. */
 @Suppress("Deprecation")
 object PlaylistSongsLoader {
 
     @JvmStatic
     fun getPlaylistSongList(context: Context, playlistId: Long): List<Song> {
         val songs = mutableListOf<Song>()
-        val cursor =
-            makePlaylistSongCursor(
-                context,
-                playlistId
-            )
+        val cursor = makePlaylistSongCursor(context, playlistId)
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                songs.add(
-                    getPlaylistSongFromCursorImpl(
-                        cursor,
-                        playlistId
-                    )
-                )
+                songs.add(getPlaylistSongFromCursorImpl(cursor, playlistId))
             } while (cursor.moveToNext())
         }
         cursor?.close()
@@ -87,7 +76,7 @@ object PlaylistSongsLoader {
             playlistId,
             idInPlaylist,
             composer,
-            albumArtist
+            albumArtist,
         )
     }
 
@@ -107,10 +96,13 @@ object PlaylistSongsLoader {
                     AudioColumns.ALBUM, // 8
                     AudioColumns.ARTIST_ID, // 9
                     AudioColumns.ARTIST, // 10
-                    Members._ID,//11
-                    AudioColumns.COMPOSER,//12
-                    "album_artist"//13
-                ), IS_MUSIC, null, Members.DEFAULT_SORT_ORDER
+                    Members._ID, // 11
+                    AudioColumns.COMPOSER, // 12
+                    "album_artist", // 13
+                ),
+                IS_MUSIC,
+                null,
+                Members.DEFAULT_SORT_ORDER,
             )
         } catch (e: SecurityException) {
             return null

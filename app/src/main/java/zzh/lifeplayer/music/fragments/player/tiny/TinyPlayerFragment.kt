@@ -11,6 +11,7 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.getSystemService
+import kotlin.math.abs
 import zzh.lifeplayer.appthemehelper.util.ToolbarContentTintHelper
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.R
@@ -28,12 +29,12 @@ import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.ViewUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import kotlin.math.abs
 
-class TinyPlayerFragment : AbsPlayerFragment(R.layout.fragment_tiny_player),
-    MusicProgressViewUpdateHelper.Callback {
+class TinyPlayerFragment :
+    AbsPlayerFragment(R.layout.fragment_tiny_player), MusicProgressViewUpdateHelper.Callback {
     private var _binding: FragmentTinyPlayerBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     private var lastColor: Int = 0
     private var toolbarColor: Int = 0
@@ -71,11 +72,10 @@ class TinyPlayerFragment : AbsPlayerFragment(R.layout.fragment_tiny_player),
             ToolbarContentTintHelper.colorizeToolbar(
                 binding.playerToolbar,
                 color.secondaryTextColor,
-                requireActivity()
+                requireActivity(),
             )
         }
     }
-
 
     override fun onFavoriteToggled() {
         toggleFavorite(MusicPlayerRemote.currentSong)
@@ -122,12 +122,8 @@ class TinyPlayerFragment : AbsPlayerFragment(R.layout.fragment_tiny_player),
 
         setUpPlayerToolbar()
         setUpSubFragments()
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
         playerToolbar().drawAboveSystemBars()
     }
 
@@ -141,7 +137,9 @@ class TinyPlayerFragment : AbsPlayerFragment(R.layout.fragment_tiny_player),
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.apply {
             inflateMenu(R.menu.menu_player)
-            setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
             setOnMenuItemClickListener(this@TinyPlayerFragment)
         }
     }
@@ -178,10 +176,12 @@ class TinyPlayerFragment : AbsPlayerFragment(R.layout.fragment_tiny_player),
             animatorSet.interpolator = LinearInterpolator()
             animatorSet.start()
         }
-        binding.playerSongTotalTime.text = String.format(
-            "%s/%s", MusicUtil.getReadableDurationString(total.toLong()),
-            MusicUtil.getReadableDurationString(progress.toLong())
-        )
+        binding.playerSongTotalTime.text =
+            String.format(
+                "%s/%s",
+                MusicUtil.getReadableDurationString(total.toLong()),
+                MusicUtil.getReadableDurationString(progress.toLong()),
+            )
     }
 
     inner class ProgressHelper(context: Context) : View.OnTouchListener {
@@ -192,37 +192,40 @@ class TinyPlayerFragment : AbsPlayerFragment(R.layout.fragment_tiny_player),
         private var gestureDetector: GestureDetector
 
         init {
-            gestureDetector = GestureDetector(context, object :
-                GestureDetector.SimpleOnGestureListener() {
+            gestureDetector =
+                GestureDetector(
+                    context,
+                    object : GestureDetector.SimpleOnGestureListener() {
 
-                override fun onLongPress(e: MotionEvent) {
-                    if (abs(e.y - initialY) <= 2) {
-                        vibrate()
-                        isDragEnabled = true
-                        binding.progressBar.parent.requestDisallowInterceptTouchEvent(true)
-                        animator.pause()
-                    }
-                    super.onLongPress(e)
-                }
-
-                override fun onFling(
-                    e1: MotionEvent?,
-                    e2: MotionEvent,
-                    velocityX: Float,
-                    velocityY: Float
-                ): Boolean {
-                    if (abs(velocityX) > abs(velocityY)) {
-                        if (velocityX < 0) {
-                            MusicPlayerRemote.playNextSong()
-                            return true
-                        } else if (velocityX > 0) {
-                            MusicPlayerRemote.playPreviousSong()
-                            return true
+                        override fun onLongPress(e: MotionEvent) {
+                            if (abs(e.y - initialY) <= 2) {
+                                vibrate()
+                                isDragEnabled = true
+                                binding.progressBar.parent.requestDisallowInterceptTouchEvent(true)
+                                animator.pause()
+                            }
+                            super.onLongPress(e)
                         }
-                    }
-                    return false
-                }
-            })
+
+                        override fun onFling(
+                            e1: MotionEvent?,
+                            e2: MotionEvent,
+                            velocityX: Float,
+                            velocityY: Float,
+                        ): Boolean {
+                            if (abs(velocityX) > abs(velocityY)) {
+                                if (velocityX < 0) {
+                                    MusicPlayerRemote.playNextSong()
+                                    return true
+                                } else if (velocityX > 0) {
+                                    MusicPlayerRemote.playPreviousSong()
+                                    return true
+                                }
+                            }
+                            return false
+                        }
+                    },
+                )
         }
 
         @SuppressLint("ClickableViewAccessibility")
@@ -248,12 +251,10 @@ class TinyPlayerFragment : AbsPlayerFragment(R.layout.fragment_tiny_player),
                     if (isDragEnabled) {
                         val diffY = (initialY - event.y).toInt()
                         progress =
-                            initialProgress + diffY * (binding.progressBar.max / displayHeight) // Multiplier
+                            initialProgress +
+                                diffY * (binding.progressBar.max / displayHeight) // Multiplier
                         if (progress > 0 && progress < binding.progressBar.max) {
-                            onUpdateProgressViews(
-                                progress,
-                                MusicPlayerRemote.songDurationMillis
-                            )
+                            onUpdateProgressViews(progress, MusicPlayerRemote.songDurationMillis)
                         }
                     }
                 }

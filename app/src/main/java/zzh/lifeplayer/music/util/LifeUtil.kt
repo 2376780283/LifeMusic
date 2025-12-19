@@ -16,11 +16,11 @@ package zzh.lifeplayer.music.util
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Point
-import zzh.lifeplayer.music.App.Companion.getContext
 import java.net.InetAddress
 import java.net.NetworkInterface
 import java.text.DecimalFormat
 import java.util.*
+import zzh.lifeplayer.music.App.Companion.getContext
 
 object LifeUtil {
     fun formatValue(numValue: Float): String {
@@ -48,9 +48,8 @@ object LifeUtil {
     val statusBarHeight: Int
         get() {
             var result = 0
-            val resourceId = getContext()
-                .resources
-                .getIdentifier("status_bar_height", "dimen", "android")
+            val resourceId =
+                getContext().resources.getIdentifier("status_bar_height", "dimen", "android")
             if (resourceId > 0) {
                 result = getContext().resources.getDimensionPixelSize(resourceId)
             }
@@ -60,9 +59,8 @@ object LifeUtil {
     val navigationBarHeight: Int
         get() {
             var result = 0
-            val resourceId = getContext()
-                .resources
-                .getIdentifier("navigation_bar_height", "dimen", "android")
+            val resourceId =
+                getContext().resources.getIdentifier("navigation_bar_height", "dimen", "android")
             if (resourceId > 0) {
                 result = getContext().resources.getDimensionPixelSize(resourceId)
             }
@@ -70,11 +68,12 @@ object LifeUtil {
         }
 
     val isLandscape: Boolean
-        get() = (getContext().resources.configuration.orientation
-                == Configuration.ORIENTATION_LANDSCAPE)
+        get() =
+            (getContext().resources.configuration.orientation ==
+                Configuration.ORIENTATION_LANDSCAPE)
+
     val isTablet: Boolean
-        get() = (getContext().resources.configuration.smallestScreenWidthDp
-                >= 600)
+        get() = (getContext().resources.configuration.smallestScreenWidthDp >= 600)
 
     fun getIpAddress(useIPv4: Boolean): String? {
         try {
@@ -96,22 +95,17 @@ object LifeUtil {
                                     return if (delim < 0) {
                                         sAddr.uppercase()
                                     } else {
-                                        sAddr.substring(
-                                            0,
-                                            delim
-                                        ).uppercase()
+                                        sAddr.substring(0, delim).uppercase()
                                     }
                                 }
                             }
                         } else {
                             return null
                         }
-
                     }
                 }
             }
-        } catch (ignored: Exception) {
-        }
+        } catch (ignored: Exception) {}
         return ""
     }
 }

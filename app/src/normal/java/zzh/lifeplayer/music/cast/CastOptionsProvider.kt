@@ -2,10 +2,10 @@
 
 package zzh.lifeplayer.music.cast
 
-//import android.content.Context
+// import android.content.Context
 
 class CastOptionsProvider {
-/*
+    /*
     override fun getCastOptions(context: Context): CastOptions {
         val mediaOptions = CastMediaOptions.Builder().setNotificationOptions(null).build()
         return CastOptions.Builder()

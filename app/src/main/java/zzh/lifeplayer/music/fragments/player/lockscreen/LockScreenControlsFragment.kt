@@ -19,6 +19,7 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageButton
 import android.widget.TextView
+import com.google.android.material.slider.Slider
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
@@ -33,16 +34,14 @@ import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.PlayPauseButtonOnClickHandler
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.google.android.material.slider.Slider
 
-/**
- * @author Hemanth S (h4h13).
- */
+/** @author Hemanth S (h4h13). */
 class LockScreenControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_lock_screen_playback_controls) {
 
     private var _binding: FragmentLockScreenPlaybackControlsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val progressSlider: Slider
         get() = binding.progressSlider
@@ -107,22 +106,22 @@ class LockScreenControlsFragment :
 
         val colorBg = ATHUtil.resolveColor(context, android.R.attr.colorBackground)
         if (ColorUtil.isColorLight(colorBg)) {
-            lastPlaybackControlsColor =
-                MaterialValueHelper.getSecondaryTextColor(context, true)
+            lastPlaybackControlsColor = MaterialValueHelper.getSecondaryTextColor(context, true)
             lastDisabledPlaybackControlsColor =
                 MaterialValueHelper.getSecondaryDisabledTextColor(context, true)
         } else {
-            lastPlaybackControlsColor =
-                MaterialValueHelper.getPrimaryTextColor(context, false)
+            lastPlaybackControlsColor = MaterialValueHelper.getPrimaryTextColor(context, false)
             lastDisabledPlaybackControlsColor =
                 MaterialValueHelper.getPrimaryDisabledTextColor(context, false)
         }
 
-        val colorFinal = if (PreferenceUtil.isAdaptiveColor) {
-            color.primaryTextColor
-        } else {
-            textColorSecondary()
-        }.ripAlpha()
+        val colorFinal =
+            if (PreferenceUtil.isAdaptiveColor) {
+                    color.primaryTextColor
+                } else {
+                    textColorSecondary()
+                }
+                .ripAlpha()
 
         volumeFragment?.setTintable(colorFinal)
         binding.progressSlider.applyColor(colorFinal)
@@ -137,7 +136,7 @@ class LockScreenControlsFragment :
         TintHelper.setTintAuto(
             binding.playPauseButton,
             MaterialValueHelper.getPrimaryTextColor(context, isDark),
-            false
+            false,
         )
         TintHelper.setTintAuto(binding.playPauseButton, colorFinal, true)
     }
@@ -155,7 +154,8 @@ class LockScreenControlsFragment :
     }
 
     public override fun show() {
-        binding.playPauseButton.animate()
+        binding.playPauseButton
+            .animate()
             .scaleX(1f)
             .scaleY(1f)
             .rotation(360f)

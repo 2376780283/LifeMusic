@@ -8,6 +8,13 @@ import android.media.PlaybackParams
 import android.net.Uri
 import android.os.PowerManager
 import androidx.core.net.toUri
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.extensions.showToast
 import zzh.lifeplayer.music.extensions.uri
@@ -19,25 +26,18 @@ import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.PreferenceUtil.playbackPitch
 import zzh.lifeplayer.music.util.PreferenceUtil.playbackSpeed
 import zzh.lifeplayer.music.util.logE
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 
 /** @author Prathamesh M */
 
 /*
-* To make Crossfade work we need two MediaPlayer's
-* Basically, we switch back and forth between those two mp's
-* e.g. When song is about to end (Reaches Crossfade duration) we let current mediaplayer
-* play but with decreasing volume and start the player with the next song with increasing volume
-* and vice versa for upcoming song and so on.
-*/
-class CrossFadePlayer(context: Context) : AudioManagerPlayback(context),
-    MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
+ * To make Crossfade work we need two MediaPlayer's
+ * Basically, we switch back and forth between those two mp's
+ * e.g. When song is about to end (Reaches Crossfade duration) we let current mediaplayer
+ * play but with decreasing volume and start the player with the next song with increasing volume
+ * and vice versa for upcoming song and so on.
+ */
+class CrossFadePlayer(context: Context) :
+    AudioManagerPlayback(context), MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
 
     private var currentPlayer: CurrentPlayer = CurrentPlayer.NOT_SET
     private var player1 = MediaPlayer()
@@ -135,11 +135,7 @@ class CrossFadePlayer(context: Context) : AudioManagerPlayback(context),
     override val isPlaying: Boolean
         get() = mIsInitialized && getCurrentPlayer()?.isPlaying == true
 
-    override fun setDataSource(
-        song: Song,
-        force: Boolean,
-        completion: (success: Boolean) -> Unit,
-    ) {
+    override fun setDataSource(song: Song, force: Boolean, completion: (success: Boolean) -> Unit) {
         if (force) hasDataSource = false
         mIsInitialized = false
         /* We've already set DataSource if initialized is true in setNextDataSource */
@@ -188,27 +184,30 @@ class CrossFadePlayer(context: Context) : AudioManagerPlayback(context),
     override fun duration(): Int {
         return if (!mIsInitialized) {
             -1
-        } else try {
-            getCurrentPlayer()?.duration!!
-        } catch (e: IllegalStateException) {
-            e.printStackTrace()
-            -1
-        }
+        } else
+            try {
+                getCurrentPlayer()?.duration!!
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
+                -1
+            }
     }
 
     /**
      * Gets the current position in audio.
+     *
      * @return The position in milliseconds
      */
     override fun position(): Int {
         return if (!mIsInitialized) {
             -1
-        } else try {
-            getCurrentPlayer()?.currentPosition!!
-        } catch (e: IllegalStateException) {
-            e.printStackTrace()
-            -1
-        }
+        } else
+            try {
+                getCurrentPlayer()?.currentPosition!!
+            } catch (e: IllegalStateException) {
+                e.printStackTrace()
+                -1
+            }
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
@@ -251,11 +250,12 @@ class CrossFadePlayer(context: Context) : AudioManagerPlayback(context),
 
     private fun crossFade(fadeInMp: MediaPlayer, fadeOutMp: MediaPlayer) {
         isCrossFading = true
-        crossFadeAnimator = createFadeAnimator(context, fadeInMp, fadeOutMp) {
-            crossFadeAnimator = null
-            durationListener.start()
-            isCrossFading = false
-        }
+        crossFadeAnimator =
+            createFadeAnimator(context, fadeInMp, fadeOutMp) {
+                crossFadeAnimator = null
+                durationListener.start()
+                isCrossFading = false
+            }
         crossFadeAnimator?.start()
     }
 
@@ -294,7 +294,7 @@ class CrossFadePlayer(context: Context) : AudioManagerPlayback(context),
     enum class CurrentPlayer {
         PLAYER_ONE,
         PLAYER_TWO,
-        NOT_SET
+        NOT_SET,
     }
 
     inner class DurationListener : CoroutineScope by crossFadeScope() {
@@ -328,7 +328,6 @@ class CrossFadePlayer(context: Context) : AudioManagerPlayback(context),
                     setDataSourceImpl(player, nextSong.uri.toString()) { success ->
                         if (success) switchPlayer()
                     }
-
                 }
                 // So we have to use the previously stored nextDataSource value
                 else if (!nextDataSource.isNullOrEmpty()) {
@@ -345,7 +344,9 @@ class CrossFadePlayer(context: Context) : AudioManagerPlayback(context),
         getNextPlayer()?.start()
         crossFade(getNextPlayer()!!, getCurrentPlayer()!!)
         currentPlayer =
-            if (currentPlayer == CurrentPlayer.PLAYER_ONE || currentPlayer == CurrentPlayer.NOT_SET) {
+            if (
+                currentPlayer == CurrentPlayer.PLAYER_ONE || currentPlayer == CurrentPlayer.NOT_SET
+            ) {
                 CurrentPlayer.PLAYER_TWO
             } else {
                 CurrentPlayer.PLAYER_ONE
@@ -382,8 +383,7 @@ class CrossFadePlayer(context: Context) : AudioManagerPlayback(context),
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                     .build()
             )
-            player.playbackParams =
-                PlaybackParams().setSpeed(playbackSpeed).setPitch(playbackPitch)
+            player.playbackParams = PlaybackParams().setSpeed(playbackSpeed).setPitch(playbackPitch)
 
             player.setOnPreparedListener {
                 player.setOnPreparedListener(null)

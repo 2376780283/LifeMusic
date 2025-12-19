@@ -18,10 +18,16 @@ class AudioFader {
             endAction: (animator: Animator) -> Unit, /* Code to run when Animator Ends*/
         ): Animator? {
             // Get Global animator scale
-            val animScale = Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f)
+            val animScale =
+                Settings.Global.getFloat(
+                    context.contentResolver,
+                    Settings.Global.ANIMATOR_DURATION_SCALE,
+                    1f,
+                )
 
-            // Set duration according to the global animation scale, so cross-fade actually lasts for the duration set by the user
-            val duration = (PreferenceUtil.crossFadeDuration * 1000 ) / animScale
+            // Set duration according to the global animation scale, so cross-fade actually lasts
+            // for the duration set by the user
+            val duration = (PreferenceUtil.crossFadeDuration * 1000) / animScale
             if (duration == 0F) {
                 return null
             }
@@ -29,14 +35,15 @@ class AudioFader {
                 this.duration = duration.toLong()
                 addUpdateListener { animation: ValueAnimator ->
                     fadeInMp.setVolume(
-                        animation.animatedValue as Float, animation.animatedValue as Float
+                        animation.animatedValue as Float,
+                        animation.animatedValue as Float,
                     )
-                    fadeOutMp.setVolume(1 - animation.animatedValue as Float,
-                        1 - animation.animatedValue as Float)
+                    fadeOutMp.setVolume(
+                        1 - animation.animatedValue as Float,
+                        1 - animation.animatedValue as Float,
+                    )
                 }
-                doOnEnd {
-                    endAction(it)
-                }
+                doOnEnd { endAction(it) }
             }
         }
 
@@ -57,9 +64,7 @@ class AudioFader {
             animator.addUpdateListener { animation: ValueAnimator ->
                 playback.setVolume(animation.animatedValue as Float)
             }
-            animator.doOnEnd {
-                callback?.run()
-            }
+            animator.doOnEnd { callback?.run() }
             animator.start()
         }
     }

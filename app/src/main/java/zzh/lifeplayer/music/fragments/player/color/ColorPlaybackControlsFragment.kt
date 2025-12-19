@@ -23,6 +23,8 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageButton
 import android.widget.TextView
+import com.google.android.material.slider.Slider
+import kotlin.math.sqrt
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.TintHelper
 import zzh.lifeplayer.music.R
@@ -37,14 +39,13 @@ import zzh.lifeplayer.music.fragments.base.goToArtist
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.google.android.material.slider.Slider
-import kotlin.math.sqrt
 
 class ColorPlaybackControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_color_player_playback_controls) {
 
     private var _binding: FragmentColorPlayerPlaybackControlsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val progressSlider: Slider
         get() = binding.progressSlider
@@ -74,12 +75,8 @@ class ColorPlaybackControlsFragment :
         setUpPlayPauseFab()
         binding.title.isSelected = true
         binding.text.isSelected = true
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
     }
 
     private fun updateSong() {
@@ -162,7 +159,8 @@ class ColorPlaybackControlsFragment :
     }
 
     public override fun show() {
-        binding.playPauseButton.animate()
+        binding.playPauseButton
+            .animate()
             .scaleX(1f)
             .scaleY(1f)
             .rotation(360f)
@@ -185,15 +183,14 @@ class ColorPlaybackControlsFragment :
         val y = (location[1] + binding.playPauseButton.measuredHeight / 2)
         val endRadius = sqrt((x * x + y * y).toFloat())
         val startRadius =
-            binding.playPauseButton.measuredWidth.coerceAtMost(binding.playPauseButton.measuredHeight)
-        return ViewAnimationUtils.createCircularReveal(
-            view, x, y, startRadius.toFloat(),
-            endRadius
-        ).apply {
-            duration = 300
-            interpolator = AccelerateInterpolator()
-        }
-
+            binding.playPauseButton.measuredWidth.coerceAtMost(
+                binding.playPauseButton.measuredHeight
+            )
+        return ViewAnimationUtils.createCircularReveal(view, x, y, startRadius.toFloat(), endRadius)
+            .apply {
+                duration = 300
+                interpolator = AccelerateInterpolator()
+            }
     }
 
     override fun onDestroyView() {

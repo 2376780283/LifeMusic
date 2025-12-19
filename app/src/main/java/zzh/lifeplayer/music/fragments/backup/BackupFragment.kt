@@ -13,6 +13,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.input.input
+import java.io.File
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.backup.BackupAdapter
 import zzh.lifeplayer.music.databinding.FragmentBackupBinding
@@ -23,10 +27,6 @@ import zzh.lifeplayer.music.extensions.showToast
 import zzh.lifeplayer.music.helper.BackupHelper
 import zzh.lifeplayer.music.helper.sanitize
 import zzh.lifeplayer.music.util.Share
-import com.afollestad.materialdialogs.input.input
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.io.File
 
 class BackupFragment : Fragment(R.layout.fragment_backup), BackupAdapter.BackupClickedListener {
 
@@ -34,7 +34,8 @@ class BackupFragment : Fragment(R.layout.fragment_backup), BackupAdapter.BackupC
     private var backupAdapter: BackupAdapter? = null
 
     private var _binding: FragmentBackupBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,26 +43,23 @@ class BackupFragment : Fragment(R.layout.fragment_backup), BackupAdapter.BackupC
         initAdapter()
         setupRecyclerview()
         backupViewModel.backupsLiveData.observe(viewLifecycleOwner) {
-            if (it.isNotEmpty())
-                backupAdapter?.swapDataset(it)
-            else
-                backupAdapter?.swapDataset(listOf())
+            if (it.isNotEmpty()) backupAdapter?.swapDataset(it)
+            else backupAdapter?.swapDataset(listOf())
         }
         backupViewModel.loadBackups()
-        val openFilePicker = registerForActivityResult(ActivityResultContracts.OpenDocument()) {
-            lifecycleScope.launch(Dispatchers.IO) {
-                it?.let {
-                    startActivity(Intent(context, RestoreActivity::class.java).apply {
-                        data = it
-                    })
+        val openFilePicker =
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    it?.let {
+                        startActivity(
+                            Intent(context, RestoreActivity::class.java).apply { data = it }
+                        )
+                    }
                 }
             }
-        }
         binding.createBackup.accentOutlineColor()
         binding.restoreBackup.accentColor()
-        binding.createBackup.setOnClickListener {
-            showCreateBackupDialog()
-        }
+        binding.createBackup.setOnClickListener { showCreateBackupDialog() }
         binding.restoreBackup.setOnClickListener {
             openFilePicker.launch(arrayOf("application/octet-stream"))
         }
@@ -69,12 +67,14 @@ class BackupFragment : Fragment(R.layout.fragment_backup), BackupAdapter.BackupC
 
     private fun initAdapter() {
         backupAdapter = BackupAdapter(requireActivity(), ArrayList(), this)
-        backupAdapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onChanged() {
-                super.onChanged()
-                checkIsEmpty()
+        backupAdapter?.registerAdapterDataObserver(
+            object : RecyclerView.AdapterDataObserver() {
+                override fun onChanged() {
+                    super.onChanged()
+                    checkIsEmpty()
+                }
             }
-        })
+        )
     }
 
     private fun checkIsEmpty() {
@@ -109,9 +109,9 @@ class BackupFragment : Fragment(R.layout.fragment_backup), BackupAdapter.BackupC
 
     override fun onBackupClicked(file: File) {
         lifecycleScope.launch {
-            startActivity(Intent(context, RestoreActivity::class.java).apply {
-                data = file.toUri()
-            })
+            startActivity(
+                Intent(context, RestoreActivity::class.java).apply { data = file.toUri() }
+            )
         }
     }
 
@@ -136,8 +136,7 @@ class BackupFragment : Fragment(R.layout.fragment_backup), BackupAdapter.BackupC
                     title(res = R.string.action_rename)
                     input(prefill = file.nameWithoutExtension) { _, text ->
                         // Text submitted with the action button
-                        val renamedFile =
-                            File(file.parent, "$text${BackupHelper.APPEND_EXTENSION}")
+                        val renamedFile = File(file.parent, "$text${BackupHelper.APPEND_EXTENSION}")
                         if (!renamedFile.exists()) {
                             file.renameTo(renamedFile)
                             backupViewModel.loadBackups()

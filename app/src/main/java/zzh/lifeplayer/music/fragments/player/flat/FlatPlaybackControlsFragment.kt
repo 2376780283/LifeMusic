@@ -40,7 +40,8 @@ class FlatPlaybackControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_flat_player_playback_controls), Callback {
 
     private var _binding: FragmentFlatPlayerPlaybackControlsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val seekBar: SeekBar
         get() = binding.progressSlider
@@ -69,16 +70,13 @@ class FlatPlaybackControlsFragment :
         binding.playPauseButton.setOnClickListener(PlayPauseButtonOnClickHandler())
         binding.title.isSelected = true
         binding.text.isSelected = true
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
     }
 
     public override fun show() {
-        binding.playPauseButton.animate()
+        binding.playPauseButton
+            .animate()
             .scaleX(1f)
             .scaleY(1f)
             .setInterpolator(DecelerateInterpolator())
@@ -106,11 +104,12 @@ class FlatPlaybackControlsFragment :
                 MaterialValueHelper.getPrimaryDisabledTextColor(requireContext(), true)
         }
 
-        val colorFinal = if (PreferenceUtil.isAdaptiveColor) {
-            color.primaryTextColor
-        } else {
-            accentColor().ripAlpha()
-        }
+        val colorFinal =
+            if (PreferenceUtil.isAdaptiveColor) {
+                color.primaryTextColor
+            } else {
+                accentColor().ripAlpha()
+            }
 
         updateTextColors(colorFinal)
         volumeFragment?.setTintable(colorFinal)

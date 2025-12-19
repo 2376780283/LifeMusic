@@ -22,43 +22,42 @@ import java.io.IOException
 import java.io.InputStream
 
 class AudioFileCoverFetcher(private val model: AudioFileCover) : DataFetcher<InputStream> {
-    
+
     private var stream: InputStream? = null
-    
+
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in InputStream>) {
         var retriever: MediaMetadataRetriever? = null
-        
+
         try {
             retriever = MediaMetadataRetriever()
             retriever.setDataSource(model.filePath)
-            
+
             val embeddedPicture = retriever.embeddedPicture
             if (embeddedPicture != null && embeddedPicture.isNotEmpty()) {
                 stream = ByteArrayInputStream(embeddedPicture)
                 callback.onDataReady(stream!!)
                 return
             }
-            
+
             stream = AudioFileCoverUtils.fallback(model.filePath)
             if (stream != null) {
                 callback.onDataReady(stream!!)
                 return
             }
-            
+
             callback.onLoadFailed(
                 NoSuchElementException("No cover art found for file: ${model.filePath}")
             )
-            
         } catch (e: Exception) {
             handleFallbackOrFail(callback, e)
         } finally {
             retriever?.let { safeReleaseRetriever(it) }
         }
     }
-    
+
     private fun handleFallbackOrFail(
         callback: DataFetcher.DataCallback<in InputStream>,
-        originalException: Exception
+        originalException: Exception,
     ) {
         try {
             stream = AudioFileCoverUtils.fallback(model.filePath)
@@ -71,25 +70,22 @@ class AudioFileCoverFetcher(private val model: AudioFileCover) : DataFetcher<Inp
             callback.onLoadFailed(originalException)
         }
     }
-    
+
     private fun safeReleaseRetriever(retriever: MediaMetadataRetriever) {
         try {
             retriever.release()
-        } catch (e: Exception) {
-        }
+        } catch (e: Exception) {}
     }
 
     override fun cleanup() {
         if (stream != null) {
             try {
                 stream?.close()
-            } catch (ignore: IOException) {
-            }
+            } catch (ignore: IOException) {}
         }
     }
 
-    override fun cancel() {
-    }
+    override fun cancel() {}
 
     override fun getDataClass(): Class<InputStream> {
         return InputStream::class.java

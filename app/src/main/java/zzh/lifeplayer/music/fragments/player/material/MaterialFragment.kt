@@ -37,7 +37,8 @@ class MaterialFragment : AbsPlayerFragment(R.layout.fragment_material) {
     private lateinit var playbackControlsFragment: MaterialControlsFragment
 
     private var _binding: FragmentMaterialBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     private var valueAnimator: ValueAnimator? = null
 
@@ -46,26 +47,20 @@ class MaterialFragment : AbsPlayerFragment(R.layout.fragment_material) {
             valueAnimator?.cancel()
         }
 
-        valueAnimator = ValueAnimator.ofObject(
-            ArgbEvaluator(),
-            surfaceColor(),
-            i
-        )
+        valueAnimator = ValueAnimator.ofObject(ArgbEvaluator(), surfaceColor(), i)
         valueAnimator?.addUpdateListener { animation ->
             if (isAdded) {
-                val drawable = DrawableGradient(
-                    GradientDrawable.Orientation.TOP_BOTTOM,
-                    intArrayOf(
-                        animation.animatedValue as Int,
-                        surfaceColor()
-                    ), 0
-                )
+                val drawable =
+                    DrawableGradient(
+                        GradientDrawable.Orientation.TOP_BOTTOM,
+                        intArrayOf(animation.animatedValue as Int, surfaceColor()),
+                        0,
+                    )
                 binding.colorGradientBackground.background = drawable
             }
         }
         valueAnimator?.setDuration(ViewUtil.RETRO_MUSIC_ANIM_TIME.toLong())?.start()
     }
-
 
     override fun onShow() {
         playbackControlsFragment.show()
@@ -85,7 +80,7 @@ class MaterialFragment : AbsPlayerFragment(R.layout.fragment_material) {
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             colorControlNormal(),
-            requireActivity()
+            requireActivity(),
         )
 
         if (PreferenceUtil.isAdaptiveColor) {
@@ -122,13 +117,11 @@ class MaterialFragment : AbsPlayerFragment(R.layout.fragment_material) {
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.apply {
             inflateMenu(R.menu.menu_player)
-            setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
             setOnMenuItemClickListener(this@MaterialFragment)
-            ToolbarContentTintHelper.colorizeToolbar(
-                this,
-                colorControlNormal(),
-                requireActivity()
-            )
+            ToolbarContentTintHelper.colorizeToolbar(this, colorControlNormal(), requireActivity())
         }
     }
 

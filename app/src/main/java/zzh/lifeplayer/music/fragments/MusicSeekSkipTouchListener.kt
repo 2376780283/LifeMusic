@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewConfiguration
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import zzh.lifeplayer.music.helper.MusicPlayerRemote
-import kotlinx.coroutines.*
 import kotlin.math.abs
+import kotlinx.coroutines.*
+import zzh.lifeplayer.music.helper.MusicPlayerRemote
 
 /**
  * @param activity, Activity
@@ -34,25 +34,26 @@ class MusicSeekSkipTouchListener(val activity: FragmentActivity, val next: Boole
                 startX = event.x
                 startY = event.y
                 initialPosition = MusicPlayerRemote.songProgressMillis
-                job = activity.lifecycleScope.launch(Dispatchers.Default) {
-                    counter = 0
-                    while (isActive) {
-                        delay(500)
-                        wasSeeking = true
-                        var seekingDuration = initialPosition
-                        if (next) {
-                            seekingDuration += 5000 * (counter.floorDiv(2) + 1)
-                        } else {
-                            seekingDuration -= 5000 * (counter.floorDiv(2) + 1)
+                job =
+                    activity.lifecycleScope.launch(Dispatchers.Default) {
+                        counter = 0
+                        while (isActive) {
+                            delay(500)
+                            wasSeeking = true
+                            var seekingDuration = initialPosition
+                            if (next) {
+                                seekingDuration += 5000 * (counter.floorDiv(2) + 1)
+                            } else {
+                                seekingDuration -= 5000 * (counter.floorDiv(2) + 1)
+                            }
+                            // Ensure we don't seek to negative positions
+                            seekingDuration = seekingDuration.coerceAtLeast(0)
+                            withContext(Dispatchers.Main) {
+                                MusicPlayerRemote.seekTo(seekingDuration)
+                            }
+                            counter += 1
                         }
-                        // Ensure we don't seek to negative positions
-                        seekingDuration = seekingDuration.coerceAtLeast(0)
-                        withContext(Dispatchers.Main) {
-                            MusicPlayerRemote.seekTo(seekingDuration)
-                        }
-                        counter += 1
                     }
-                }
             }
             MotionEvent.ACTION_UP -> {
                 job?.cancel()

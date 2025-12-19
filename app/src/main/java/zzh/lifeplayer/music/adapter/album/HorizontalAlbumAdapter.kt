@@ -17,6 +17,7 @@ package zzh.lifeplayer.music.adapter.album
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
+import com.bumptech.glide.Glide
 import zzh.lifeplayer.music.glide.LifeGlideExtension
 import zzh.lifeplayer.music.glide.LifeGlideExtension.albumCoverOptions
 import zzh.lifeplayer.music.glide.LifeGlideExtension.asBitmapPalette
@@ -26,15 +27,12 @@ import zzh.lifeplayer.music.interfaces.IAlbumClickListener
 import zzh.lifeplayer.music.model.Album
 import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.bumptech.glide.Glide
 
 class HorizontalAlbumAdapter(
     activity: FragmentActivity,
     dataSet: List<Album>,
-    albumClickListener: IAlbumClickListener
-) : AlbumAdapter(
-    activity, dataSet, HorizontalAdapterHelper.LAYOUT_RES, albumClickListener
-) {
+    albumClickListener: IAlbumClickListener,
+) : AlbumAdapter(activity, dataSet, HorizontalAdapterHelper.LAYOUT_RES, albumClickListener) {
 
     override fun createViewHolder(view: View, viewType: Int): ViewHolder {
         val params = view.layoutParams as ViewGroup.MarginLayoutParams
@@ -43,8 +41,10 @@ class HorizontalAlbumAdapter(
     }
 
     override fun setColors(color: MediaNotificationProcessor, holder: ViewHolder) {
-        // holder.title?.setTextColor(ATHUtil.resolveColor(activity, android.R.attr.textColorPrimary))
-        // holder.text?.setTextColor(ATHUtil.resolveColor(activity, android.R.attr.textColorSecondary))
+        // holder.title?.setTextColor(ATHUtil.resolveColor(activity,
+        // android.R.attr.textColorPrimary))
+        // holder.text?.setTextColor(ATHUtil.resolveColor(activity,
+        // android.R.attr.textColorSecondary))
     }
 
     override fun loadAlbumCover(album: Album, holder: ViewHolder) {
@@ -53,11 +53,13 @@ class HorizontalAlbumAdapter(
             .asBitmapPalette()
             .albumCoverOptions(album.safeGetFirstSong())
             .load(LifeGlideExtension.getSongModel(album.safeGetFirstSong()))
-            .into(object : LifeMusicColoredTarget(holder.image!!) {
-                override fun onColorReady(colors: MediaNotificationProcessor) {
-                    setColors(colors, holder)
+            .into(
+                object : LifeMusicColoredTarget(holder.image!!) {
+                    override fun onColorReady(colors: MediaNotificationProcessor) {
+                        setColors(colors, holder)
+                    }
                 }
-            })
+            )
     }
 
     override fun getAlbumText(album: Album): String {

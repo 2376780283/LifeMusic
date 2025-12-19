@@ -39,21 +39,15 @@ class AppShortcutLauncherActivity : Activity() {
         super.onCreate(savedInstanceState)
         when (extraNotNull(KEY_SHORTCUT_TYPE, SHORTCUT_TYPE_NONE).value) {
             SHORTCUT_TYPE_SHUFFLE_ALL -> {
-                startServiceWithPlaylist(
-                    SHUFFLE_MODE_SHUFFLE, ShuffleAllPlaylist()
-                )
+                startServiceWithPlaylist(SHUFFLE_MODE_SHUFFLE, ShuffleAllPlaylist())
                 DynamicShortcutManager.reportShortcutUsed(this, ShuffleAllShortcutType.id)
             }
             SHORTCUT_TYPE_TOP_TRACKS -> {
-                startServiceWithPlaylist(
-                    SHUFFLE_MODE_NONE, TopTracksPlaylist()
-                )
+                startServiceWithPlaylist(SHUFFLE_MODE_NONE, TopTracksPlaylist())
                 DynamicShortcutManager.reportShortcutUsed(this, TopTracksShortcutType.id)
             }
             SHORTCUT_TYPE_LAST_ADDED -> {
-                startServiceWithPlaylist(
-                    SHUFFLE_MODE_NONE, LastAddedPlaylist()
-                )
+                startServiceWithPlaylist(SHUFFLE_MODE_NONE, LastAddedPlaylist())
                 DynamicShortcutManager.reportShortcutUsed(this, LastAddedShortcutType.id)
             }
         }
@@ -64,10 +58,8 @@ class AppShortcutLauncherActivity : Activity() {
         val intent = Intent(this, MusicService::class.java)
         intent.action = ACTION_PLAY_PLAYLIST
 
-        val bundle = bundleOf(
-            INTENT_EXTRA_PLAYLIST to playlist,
-            INTENT_EXTRA_SHUFFLE_MODE to shuffleMode
-        )
+        val bundle =
+            bundleOf(INTENT_EXTRA_PLAYLIST to playlist, INTENT_EXTRA_SHUFFLE_MODE to shuffleMode)
         intent.setPackage(this.packageName)
 
         intent.putExtras(bundle)

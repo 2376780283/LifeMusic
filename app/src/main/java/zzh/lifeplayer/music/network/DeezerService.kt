@@ -1,7 +1,8 @@
 package zzh.lifeplayer.music.network
 
 import android.content.Context
-import zzh.lifeplayer.music.model.DeezerResponse
+import java.io.File
+import java.util.*
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -11,8 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import retrofit2.http.GET
 import retrofit2.http.Query
-import java.io.File
-import java.util.*
+import zzh.lifeplayer.music.model.DeezerResponse
 
 private const val BASE_QUERY_ARTIST = "search/artist"
 private const val BASE_URL = "https://api.deezer.com/"
@@ -20,14 +20,10 @@ private const val BASE_URL = "https://api.deezer.com/"
 interface DeezerService {
 
     @GET("$BASE_QUERY_ARTIST&limit=1")
-    fun getArtistImage(
-        @Query("q") artistName: String
-    ): Call<DeezerResponse>
+    fun getArtistImage(@Query("q") artistName: String): Call<DeezerResponse>
 
     companion object {
-        operator fun invoke(
-            client: okhttp3.Call.Factory
-        ): DeezerService {
+        operator fun invoke(client: okhttp3.Call.Factory): DeezerService {
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .callFactory(client)
@@ -36,15 +32,12 @@ interface DeezerService {
                 .create()
         }
 
-        fun createDefaultOkHttpClient(
-            context: Context
-        ): OkHttpClient.Builder = OkHttpClient.Builder()
-            .cache(createDefaultCache(context))
-            .addInterceptor(createCacheControlInterceptor())
+        fun createDefaultOkHttpClient(context: Context): OkHttpClient.Builder =
+            OkHttpClient.Builder()
+                .cache(createDefaultCache(context))
+                .addInterceptor(createCacheControlInterceptor())
 
-        private fun createDefaultCache(
-            context: Context
-        ): Cache? {
+        private fun createDefaultCache(context: Context): Cache? {
             val cacheDir = File(context.applicationContext.cacheDir.absolutePath, "/okhttp-deezer/")
             if (cacheDir.mkdir() or cacheDir.isDirectory) {
                 return Cache(cacheDir, 1024 * 1024 * 10)
@@ -54,14 +47,18 @@ interface DeezerService {
 
         private fun createCacheControlInterceptor(): Interceptor {
             return Interceptor { chain ->
-                val modifiedRequest = chain.request().newBuilder()
-                    .addHeader(
-                        "Cache-Control",
-                        String.format(
-                            Locale.getDefault(),
-                            "max-age=31536000, max-stale=31536000"
+                val modifiedRequest =
+                    chain
+                        .request()
+                        .newBuilder()
+                        .addHeader(
+                            "Cache-Control",
+                            String.format(
+                                Locale.getDefault(),
+                                "max-age=31536000, max-stale=31536000",
+                            ),
                         )
-                    ).build()
+                        .build()
                 chain.proceed(modifiedRequest)
             }
         }

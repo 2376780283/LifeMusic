@@ -14,8 +14,8 @@ import java.io.File
  * Create Image Picker Object
  *
  * @author Dhaval Patel
- * @version 1.0
  * @since 04 January 2019
+ * @version 1.0
  */
 open class ImagePicker {
     companion object {
@@ -43,20 +43,16 @@ open class ImagePicker {
          *
          * @param activity Activity Instance
          */
-        @JvmStatic
-        fun with(activity: Activity): Builder = Builder(activity)
+        @JvmStatic fun with(activity: Activity): Builder = Builder(activity)
 
         /**
          * Use this to use ImagePicker in Fragment Class
          *
          * @param fragment Fragment Instance
          */
-        @JvmStatic
-        fun with(fragment: Fragment): Builder = Builder(fragment)
+        @JvmStatic fun with(fragment: Fragment): Builder = Builder(fragment)
 
-        /**
-         * Get error message from intent
-         */
+        /** Get error message from intent */
         @JvmStatic
         fun getError(data: Intent?): String {
             val error = data?.getStringExtra(EXTRA_ERROR)
@@ -68,9 +64,7 @@ open class ImagePicker {
         }
     }
 
-    class Builder(
-        private val activity: Activity,
-    ) {
+    class Builder(private val activity: Activity) {
         private var fragment: Fragment? = null
 
         // Image Provider
@@ -99,9 +93,7 @@ open class ImagePicker {
 
         private var imageProviderInterceptor: ((ImageProvider) -> Unit)? = null
 
-        /**
-         * Dialog dismiss event listener
-         */
+        /** Dialog dismiss event listener */
         private var dismissListener: DismissListener? = null
 
         /**
@@ -113,33 +105,25 @@ open class ImagePicker {
          */
         private var saveDir: String? = null
 
-        /**
-         * Call this while picking image for fragment.
-         */
+        /** Call this while picking image for fragment. */
         constructor(fragment: Fragment) : this(fragment.requireActivity()) {
             this.fragment = fragment
         }
 
-        /**
-         * Specify Image Provider (Camera, Gallery or Both)
-         */
+        /** Specify Image Provider (Camera, Gallery or Both) */
         fun provider(imageProvider: ImageProvider): Builder {
             this.imageProvider = imageProvider
             return this
         }
 
-        /**
-         * Only Capture image using Camera.
-         */
+        /** Only Capture image using Camera. */
         // @Deprecated("Please use provider(ImageProvider.CAMERA) instead")
         fun cameraOnly(): Builder {
             this.imageProvider = ImageProvider.CAMERA
             return this
         }
 
-        /**
-         * Only Pick image from gallery.
-         */
+        /** Only Pick image from gallery. */
         // @Deprecated("Please use provider(ImageProvider.GALLERY) instead")
         fun galleryOnly(): Builder {
             this.imageProvider = ImageProvider.GALLERY
@@ -148,8 +132,9 @@ open class ImagePicker {
 
         /**
          * Restrict mime types during gallery fetching, for instance if you do not want GIF images,
-         * you can use arrayOf("image/png","image/jpeg","image/jpg")
-         * by default array is empty, which indicates no additional restrictions, just images
+         * you can use arrayOf("image/png","image/jpeg","image/jpg") by default array is empty,
+         * which indicates no additional restrictions, just images
+         *
          * @param mimeTypes
          */
         fun galleryMimeTypes(mimeTypes: Array<String>): Builder {
@@ -158,42 +143,28 @@ open class ImagePicker {
         }
 
         /**
-         * Set an aspect ratio for crop bounds.
-         * User won't see the menu with other ratios options.
+         * Set an aspect ratio for crop bounds. User won't see the menu with other ratios options.
          *
          * @param x aspect ratio X
          * @param y aspect ratio Y
          */
-        fun crop(
-            x: Float,
-            y: Float,
-        ): Builder {
+        fun crop(x: Float, y: Float): Builder {
             cropX = x
             cropY = y
             return crop()
         }
 
-        /**
-         * Crop an image and let user set the aspect ratio.
-         */
+        /** Crop an image and let user set the aspect ratio. */
         fun crop(): Builder {
             this.crop = true
             return this
         }
 
-        /**
-         * Crop Square Image, Useful for Profile Image.
-         *
-         */
+        /** Crop Square Image, Useful for Profile Image. */
         fun cropSquare(): Builder = crop(1f, 1f)
 
-        /**
-         * Max Width and Height of final image
-         */
-        fun maxResultSize(
-            width: Int,
-            height: Int,
-        ): Builder {
+        /** Max Width and Height of final image */
+        fun maxResultSize(width: Int, height: Int): Builder {
             this.maxWidth = width
             this.maxHeight = height
             return this
@@ -230,7 +201,7 @@ open class ImagePicker {
         }
 
         /**
-         * Intercept Selected ImageProvider,  Useful for Analytics
+         * Intercept Selected ImageProvider, Useful for Analytics
          *
          * @param interceptor ImageProvider Interceptor
          */
@@ -239,17 +210,13 @@ open class ImagePicker {
             return this
         }
 
-        /**
-         * Sets the callback that will be called when the dialog is dismissed for any reason.
-         */
+        /** Sets the callback that will be called when the dialog is dismissed for any reason. */
         fun setDismissListener(listener: DismissListener): Builder {
             this.dismissListener = listener
             return this
         }
 
-        /**
-         * Sets the callback that will be called when the dialog is dismissed for any reason.
-         */
+        /** Sets the callback that will be called when the dialog is dismissed for any reason. */
         fun setDismissListener(listener: (() -> Unit)): Builder {
             this.dismissListener =
                 object : DismissListener {
@@ -260,16 +227,12 @@ open class ImagePicker {
             return this
         }
 
-        /**
-         * Start Image Picker Activity
-         */
+        /** Start Image Picker Activity */
         fun start() {
             start(REQUEST_CODE)
         }
 
-        /**
-         * Start Image Picker Activity
-         */
+        /** Start Image Picker Activity */
         fun start(reqCode: Int) {
             if (imageProvider == ImageProvider.BOTH) {
                 // Pick Image Provider if not specified
@@ -282,7 +245,7 @@ open class ImagePicker {
         /**
          * Prefer {@see createIntentFromDialog} over this method, as
          *
-         *  Only used with ImageProvider.GALLERY or ImageProvider.CAMERA
+         * Only used with ImageProvider.GALLERY or ImageProvider.CAMERA
          */
         private fun createIntent(): Intent {
             val intent = Intent(activity, ImagePickerActivity::class.java)
@@ -290,9 +253,7 @@ open class ImagePicker {
             return intent
         }
 
-        /**
-         * Get Intent
-         */
+        /** Get Intent */
         fun createIntent(onResult: (Intent) -> Unit) {
             if (imageProvider == ImageProvider.BOTH) {
                 DialogHelper.showChooseAppDialog(
@@ -313,9 +274,7 @@ open class ImagePicker {
             }
         }
 
-        /**
-         * Pick Image Provider if not specified
-         */
+        /** Pick Image Provider if not specified */
         private fun showImageProviderDialog(reqCode: Int) {
             DialogHelper.showChooseAppDialog(
                 activity,
@@ -332,9 +291,7 @@ open class ImagePicker {
             )
         }
 
-        /**
-         * Get Bundle for ImagePickerActivity
-         */
+        /** Get Bundle for ImagePickerActivity */
         private fun getBundle(): Bundle =
             Bundle().apply {
                 putSerializable(EXTRA_IMAGE_PROVIDER, imageProvider)
@@ -352,9 +309,7 @@ open class ImagePicker {
                 putString(EXTRA_SAVE_DIRECTORY, saveDir)
             }
 
-        /**
-         * Start ImagePickerActivity with given Argument
-         */
+        /** Start ImagePickerActivity with given Argument */
         private fun startActivity(reqCode: Int) {
             val intent = Intent(activity, ImagePickerActivity::class.java)
             intent.putExtras(getBundle())

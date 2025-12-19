@@ -14,10 +14,7 @@
 
 package zzh.lifeplayer.music.model
 
-data class Album(
-    val id: Long,
-    val songs: List<Song>
-) {
+data class Album(val id: Long, val songs: List<Song>) {
 
     val title: String
         get() = safeGetFirstSong().albumName
@@ -47,5 +44,4 @@ data class Album(
     companion object {
         val empty = Album(-1, emptyList())
     }
-
 }

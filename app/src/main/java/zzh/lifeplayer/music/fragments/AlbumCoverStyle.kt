@@ -21,7 +21,7 @@ import zzh.lifeplayer.music.R
 enum class AlbumCoverStyle(
     @StringRes val titleRes: Int,
     @DrawableRes val drawableResId: Int,
-    val id: Int
+    val id: Int,
 ) {
     Card(R.string.card, R.drawable.np_blur_card, 3),
     Circle(R.string.circular, R.drawable.np_circle, 2),

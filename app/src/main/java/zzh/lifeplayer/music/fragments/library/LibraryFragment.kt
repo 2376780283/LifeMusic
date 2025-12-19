@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.core.text.parseAsHtml
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -24,7 +23,8 @@ import zzh.lifeplayer.music.util.PreferenceUtil
 class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library) {
 
     private var _binding: FragmentLibraryBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,11 +37,7 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library) {
         mainActivity.setSupportActionBar(binding.toolbar)
         mainActivity.supportActionBar?.title = null
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigate(
-                R.id.action_search,
-                null,
-                navOptions
-            )
+            findNavController().navigate(R.id.action_search, null, navOptions)
         }
         setupNavigationController()
         setupTitle()
@@ -80,25 +76,19 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library) {
             requireContext(),
             binding.toolbar,
             menu,
-            getToolbarBackgroundColor(binding.toolbar)
+            getToolbarBackgroundColor(binding.toolbar),
         )
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_settings -> findNavController().navigate(
-                R.id.settings_fragment,
-                null,
-                navOptions
-            )
-            R.id.action_import_playlist -> ImportPlaylistDialog().show(
-                childFragmentManager,
-                "ImportPlaylist"
-            )
-            R.id.action_add_to_playlist -> CreatePlaylistDialog.create(emptyList()).show(
-                childFragmentManager,
-                "ShowCreatePlaylistDialog"
-            )
+            R.id.action_settings ->
+                findNavController().navigate(R.id.settings_fragment, null, navOptions)
+            R.id.action_import_playlist ->
+                ImportPlaylistDialog().show(childFragmentManager, "ImportPlaylist")
+            R.id.action_add_to_playlist ->
+                CreatePlaylistDialog.create(emptyList())
+                    .show(childFragmentManager, "ShowCreatePlaylistDialog")
         }
         return false
     }

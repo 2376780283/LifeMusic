@@ -2,9 +2,7 @@ package zzh.lifeplayer.music.fragments.home
 
 import zzh.lifeplayer.music.databinding.FragmentHomeBinding
 
-class HomeBinding(
-    homeBinding: FragmentHomeBinding
-) {
+class HomeBinding(homeBinding: FragmentHomeBinding) {
     val root = homeBinding.root
     val container = homeBinding.container
     val contentContainer = homeBinding.contentContainer

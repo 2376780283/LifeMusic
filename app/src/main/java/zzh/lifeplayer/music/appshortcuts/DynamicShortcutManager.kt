@@ -28,15 +28,15 @@ import zzh.lifeplayer.music.appshortcuts.shortcuttype.TopTracksShortcutType
 
 @TargetApi(Build.VERSION_CODES.N_MR1)
 class DynamicShortcutManager(private val context: Context) {
-    private val shortcutManager: ShortcutManager? =
-        this.context.getSystemService()
+    private val shortcutManager: ShortcutManager? = this.context.getSystemService()
 
     private val defaultShortcuts: List<ShortcutInfo>
-        get() = listOf(
-            ShuffleAllShortcutType(context).shortcutInfo,
-            TopTracksShortcutType(context).shortcutInfo,
-            LastAddedShortcutType(context).shortcutInfo
-        )
+        get() =
+            listOf(
+                ShuffleAllShortcutType(context).shortcutInfo,
+                TopTracksShortcutType(context).shortcutInfo,
+                LastAddedShortcutType(context).shortcutInfo,
+            )
 
     fun initDynamicShortcuts() {
         // if (shortcutManager.dynamicShortcuts.size == 0) {
@@ -56,7 +56,7 @@ class DynamicShortcutManager(private val context: Context) {
             shortLabel: String,
             longLabel: String,
             icon: Icon,
-            intent: Intent
+            intent: Intent,
         ): ShortcutInfo {
             return ShortcutInfo.Builder(context, id)
                 .setShortLabel(shortLabel)

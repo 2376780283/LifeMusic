@@ -15,19 +15,14 @@ import java.io.InputStream
 import java.io.OutputStream
 
 /**
- * This file was taken from
- *     https://gist.github.com/HBiSoft/15899990b8cd0723c3a894c1636550a8
+ * This file was taken from https://gist.github.com/HBiSoft/15899990b8cd0723c3a894c1636550a8
  *
  * Later on it was modified from the below resource:
- *     https://raw.githubusercontent.com/iPaulPro/aFileChooser/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
- *     https://raw.githubusercontent.com/iPaulPro/aFileChooser/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
+ * https://raw.githubusercontent.com/iPaulPro/aFileChooser/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
+ * https://raw.githubusercontent.com/iPaulPro/aFileChooser/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
  */
-
 object FileUriUtils {
-    fun getRealPath(
-        context: Context,
-        uri: Uri,
-    ): String? {
+    fun getRealPath(context: Context, uri: Uri): String? {
         var path = getPathFromLocalUri(context, uri)
         if (path == null) {
             path = getPathFromRemoteUri(context, uri)
@@ -35,10 +30,7 @@ object FileUriUtils {
         return path
     }
 
-    private fun getPathFromLocalUri(
-        context: Context,
-        uri: Uri,
-    ): String? {
+    private fun getPathFromLocalUri(context: Context, uri: Uri): String? {
         val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
         // DocumentProvider
@@ -75,12 +67,7 @@ object FileUriUtils {
             return if (isGooglePhotosUri(uri)) {
                 uri.lastPathSegment
             } else {
-                getDataColumn(
-                    context,
-                    uri,
-                    null,
-                    null,
-                )
+                getDataColumn(context, uri, null, null)
             }
         } else if ("file".equals(uri.scheme!!, ignoreCase = true)) {
             return uri.path
@@ -113,10 +100,7 @@ object FileUriUtils {
         return null
     }
 
-    private fun getDownloadDocument(
-        context: Context,
-        uri: Uri,
-    ): String? {
+    private fun getDownloadDocument(context: Context, uri: Uri): String? {
         val fileName = getFilePath(context, uri)
         if (fileName != null) {
             val path =
@@ -138,10 +122,7 @@ object FileUriUtils {
         return getDataColumn(context, contentUri, null, null)
     }
 
-    private fun getMediaDocument(
-        context: Context,
-        uri: Uri,
-    ): String? {
+    private fun getMediaDocument(context: Context, uri: Uri): String? {
         val docId = DocumentsContract.getDocumentId(uri)
         val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val type = split[0]
@@ -161,10 +142,7 @@ object FileUriUtils {
         return getDataColumn(context, contentUri, selection, selectionArgs)
     }
 
-    private fun getFilePath(
-        context: Context,
-        uri: Uri,
-    ): String? {
+    private fun getFilePath(context: Context, uri: Uri): String? {
         var cursor: Cursor? = null
         val projection = arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
 
@@ -180,10 +158,7 @@ object FileUriUtils {
         return null
     }
 
-    private fun getPathFromRemoteUri(
-        context: Context,
-        uri: Uri,
-    ): String? {
+    private fun getPathFromRemoteUri(context: Context, uri: Uri): String? {
         // The code below is why Java now has try-with-resources and the Files utility.
         var file: File? = null
         var inputStream: InputStream? = null
@@ -199,12 +174,10 @@ object FileUriUtils {
                 inputStream.copyTo(outputStream, bufferSize = 4 * 1024)
                 success = true
             }
-        } catch (ignored: IOException) {
-        } finally {
+        } catch (ignored: IOException) {} finally {
             try {
                 inputStream?.close()
-            } catch (ignored: IOException) {
-            }
+            } catch (ignored: IOException) {}
 
             try {
                 outputStream?.close()
@@ -222,23 +195,27 @@ object FileUriUtils {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.
      */
-    private fun isExternalStorageDocument(uri: Uri): Boolean = "com.android.externalstorage.documents" == uri.authority
+    private fun isExternalStorageDocument(uri: Uri): Boolean =
+        "com.android.externalstorage.documents" == uri.authority
 
     /**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is DownloadsProvider.
      */
-    private fun isDownloadsDocument(uri: Uri): Boolean = "com.android.providers.downloads.documents" == uri.authority
+    private fun isDownloadsDocument(uri: Uri): Boolean =
+        "com.android.providers.downloads.documents" == uri.authority
 
     /**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is MediaProvider.
      */
-    private fun isMediaDocument(uri: Uri): Boolean = "com.android.providers.media.documents" == uri.authority
+    private fun isMediaDocument(uri: Uri): Boolean =
+        "com.android.providers.media.documents" == uri.authority
 
     /**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is Google Photos.
      */
-    private fun isGooglePhotosUri(uri: Uri): Boolean = "com.google.android.apps.photos.content" == uri.authority
+    private fun isGooglePhotosUri(uri: Uri): Boolean =
+        "com.google.android.apps.photos.content" == uri.authority
 }

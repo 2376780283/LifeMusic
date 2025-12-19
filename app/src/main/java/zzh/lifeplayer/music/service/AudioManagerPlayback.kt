@@ -20,65 +20,71 @@ abstract class AudioManagerPlayback(val context: Context) : Playback {
 
     private val audioManager: AudioManager? = context.getSystemService()
     private var isPausedByTransientLossOfFocus = false
-    private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
-        when (focusChange) {
-            AudioManager.AUDIOFOCUS_GAIN -> {
-                if (!isPlaying && isPausedByTransientLossOfFocus) {
-                    start()
-                    callbacks?.onPlayStateChanged()
-                    isPausedByTransientLossOfFocus = false
+    private val audioFocusListener =
+        AudioManager.OnAudioFocusChangeListener { focusChange ->
+            when (focusChange) {
+                AudioManager.AUDIOFOCUS_GAIN -> {
+                    if (!isPlaying && isPausedByTransientLossOfFocus) {
+                        start()
+                        callbacks?.onPlayStateChanged()
+                        isPausedByTransientLossOfFocus = false
+                    }
+                    setVolume(Volume.NORMAL)
                 }
-                setVolume(Volume.NORMAL)
-            }
 
-            AudioManager.AUDIOFOCUS_LOSS -> {
-                // Lost focus for an unbounded amount of time: stop playback and release media playback
-                if (!isAudioFocusEnabled) {
+                AudioManager.AUDIOFOCUS_LOSS -> {
+                    // Lost focus for an unbounded amount of time: stop playback and release media
+                    // playback
+                    if (!isAudioFocusEnabled) {
+                        pause()
+                        callbacks?.onPlayStateChanged()
+                    }
+                }
+
+                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                    // Lost focus for a short time, but we have to stop
+                    // playback. We don't release the media playback because playback
+                    // is likely to resume
+                    val wasPlaying = isPlaying
                     pause()
                     callbacks?.onPlayStateChanged()
+                    isPausedByTransientLossOfFocus = wasPlaying
+                }
+
+                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+                    // Lost focus for a short time, but it's ok to keep playing
+                    // at an attenuated level
+                    setVolume(Volume.DUCK)
                 }
             }
-
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                // Lost focus for a short time, but we have to stop
-                // playback. We don't release the media playback because playback
-                // is likely to resume
-                val wasPlaying = isPlaying
-                pause()
-                callbacks?.onPlayStateChanged()
-                isPausedByTransientLossOfFocus = wasPlaying
-            }
-
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                // Lost focus for a short time, but it's ok to keep playing
-                // at an attenuated level
-                setVolume(Volume.DUCK)
-            }
         }
-    }
     private val audioFocusRequest: AudioFocusRequestCompat =
         AudioFocusRequestCompat.Builder(AudioManagerCompat.AUDIOFOCUS_GAIN)
             .setOnAudioFocusChangeListener(audioFocusListener)
             .setAudioAttributes(
                 AudioAttributesCompat.Builder()
-                    .setContentType(AudioAttributesCompat.CONTENT_TYPE_MUSIC).build()
-            ).build()
+                    .setContentType(AudioAttributesCompat.CONTENT_TYPE_MUSIC)
+                    .build()
+            )
+            .build()
 
     private val becomingNoisyReceiverIntentFilter =
         IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
 
     private var becomingNoisyReceiverRegistered = false
-    private val becomingNoisyReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (intent.action != null
-                && intent.action == AudioManager.ACTION_AUDIO_BECOMING_NOISY
-            ) {
-                val serviceIntent = Intent(context, MusicService::class.java)
-                serviceIntent.action = MusicService.ACTION_PAUSE
-                context.startService(serviceIntent)
+    private val becomingNoisyReceiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                if (
+                    intent.action != null &&
+                        intent.action == AudioManager.ACTION_AUDIO_BECOMING_NOISY
+                ) {
+                    val serviceIntent = Intent(context, MusicService::class.java)
+                    serviceIntent.action = MusicService.ACTION_PAUSE
+                    context.startService(serviceIntent)
+                }
             }
         }
-    }
 
     protected fun unregisterBecomingNoisyReceiver() {
         if (becomingNoisyReceiverRegistered) {
@@ -93,17 +99,15 @@ abstract class AudioManagerPlayback(val context: Context) : Playback {
                 context,
                 becomingNoisyReceiver,
                 becomingNoisyReceiverIntentFilter,
-                ContextCompat.RECEIVER_EXPORTED
+                ContextCompat.RECEIVER_EXPORTED,
             )
             becomingNoisyReceiverRegistered = true
         }
     }
 
     protected fun requestFocus(): Boolean {
-        return AudioManagerCompat.requestAudioFocus(
-            audioManager!!,
-            audioFocusRequest
-        ) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+        return AudioManagerCompat.requestAudioFocus(audioManager!!, audioFocusRequest) ==
+            AudioManager.AUDIOFOCUS_REQUEST_GRANTED
     }
 
     protected fun abandonFocus() {
@@ -133,12 +137,12 @@ abstract class AudioManagerPlayback(val context: Context) : Playback {
 
     object Volume {
         /**
-         * The volume we set the media player to when we lose audio focus, but are
-         * allowed to reduce the volume instead of stopping playback.
+         * The volume we set the media player to when we lose audio focus, but are allowed to reduce
+         * the volume instead of stopping playback.
          */
         const val DUCK = 0.2f
 
-        /** The volume we set the media player when we have audio focus.  */
+        /** The volume we set the media player when we have audio focus. */
         const val NORMAL = 1.0f
     }
 }

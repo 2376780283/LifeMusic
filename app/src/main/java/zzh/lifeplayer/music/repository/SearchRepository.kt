@@ -35,18 +35,19 @@ class RealSearchRepository(
         if (query.isNullOrEmpty()) return results
         query.let { searchString ->
 
-            /** Songs **/
-            val songs: List<Song> = if (filter == Filter.SONGS || filter == Filter.NO_FILTER) {
-                songRepository.songs(searchString)
-            } else {
-                emptyList()
-            }
+            /** Songs * */
+            val songs: List<Song> =
+                if (filter == Filter.SONGS || filter == Filter.NO_FILTER) {
+                    songRepository.songs(searchString)
+                } else {
+                    emptyList()
+                }
             if (songs.isNotEmpty()) {
                 results.add(context.resources.getString(R.string.songs))
                 results.addAll(songs)
             }
 
-            /** Artists **/
+            /** Artists * */
             val artists: List<Artist> =
                 if (filter == Filter.ARTISTS || filter == Filter.NO_FILTER) {
                     artistRepository.artists(searchString)
@@ -58,18 +59,19 @@ class RealSearchRepository(
                 results.addAll(artists)
             }
 
-            /** Albums **/
-            val albums: List<Album> = if (filter == Filter.ALBUMS || filter == Filter.NO_FILTER) {
-                albumRepository.albums(searchString)
-            } else {
-                emptyList()
-            }
+            /** Albums * */
+            val albums: List<Album> =
+                if (filter == Filter.ALBUMS || filter == Filter.NO_FILTER) {
+                    albumRepository.albums(searchString)
+                } else {
+                    emptyList()
+                }
             if (albums.isNotEmpty()) {
                 results.add(context.resources.getString(R.string.albums))
                 results.addAll(albums)
             }
 
-            /** Album-Artists **/
+            /** Album-Artists * */
             val albumArtists: List<Artist> =
                 if (filter == Filter.ALBUM_ARTISTS || filter == Filter.NO_FILTER) {
                     artistRepository.albumArtists(searchString)
@@ -81,22 +83,25 @@ class RealSearchRepository(
                 results.addAll(albumArtists)
             }
 
-            /** Genres **/
-            val genres: List<Genre> = if (filter == Filter.GENRES || filter == Filter.NO_FILTER) {
-                genreRepository.genres(query)
-            } else {
-                emptyList()
-            }
+            /** Genres * */
+            val genres: List<Genre> =
+                if (filter == Filter.GENRES || filter == Filter.NO_FILTER) {
+                    genreRepository.genres(query)
+                } else {
+                    emptyList()
+                }
             if (genres.isNotEmpty()) {
                 results.add(context.resources.getString(R.string.genres))
                 results.addAll(genres)
             }
 
-            /** Playlists **/
+            /** Playlists * */
             val playlist: List<PlaylistWithSongs> =
                 if (filter == Filter.PLAYLISTS || filter == Filter.NO_FILTER) {
                     roomRepository.playlistWithSongs().filter { playlist ->
-                        playlist.playlistEntity.playlistName.lowercase().contains(searchString.lowercase())
+                        playlist.playlistEntity.playlistName
+                            .lowercase()
+                            .contains(searchString.lowercase())
                     }
                 } else {
                     emptyList()

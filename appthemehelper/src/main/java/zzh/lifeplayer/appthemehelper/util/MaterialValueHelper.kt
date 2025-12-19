@@ -10,52 +10,64 @@ object MaterialValueHelper {
     @SuppressLint("PrivateResource")
     @JvmStatic
     @ColorInt
-    fun getPrimaryTextColor(
-        context: Context?,
-        dark: Boolean,
-    ): Int =
+    fun getPrimaryTextColor(context: Context?, dark: Boolean): Int =
         if (dark) {
-            ContextCompat.getColor(context!!, androidx.appcompat.R.color.primary_text_default_material_light)
+            ContextCompat.getColor(
+                context!!,
+                androidx.appcompat.R.color.primary_text_default_material_light,
+            )
         } else {
-            ContextCompat.getColor(context!!, androidx.appcompat.R.color.primary_text_default_material_dark)
+            ContextCompat.getColor(
+                context!!,
+                androidx.appcompat.R.color.primary_text_default_material_dark,
+            )
         }
 
     @SuppressLint("PrivateResource")
     @JvmStatic
     @ColorInt
-    fun getSecondaryTextColor(
-        context: Context?,
-        dark: Boolean,
-    ): Int =
+    fun getSecondaryTextColor(context: Context?, dark: Boolean): Int =
         if (dark) {
-            ContextCompat.getColor(context!!, androidx.appcompat.R.color.secondary_text_default_material_light)
+            ContextCompat.getColor(
+                context!!,
+                androidx.appcompat.R.color.secondary_text_default_material_light,
+            )
         } else {
-            ContextCompat.getColor(context!!, androidx.appcompat.R.color.secondary_text_default_material_dark)
+            ContextCompat.getColor(
+                context!!,
+                androidx.appcompat.R.color.secondary_text_default_material_dark,
+            )
         }
 
     @SuppressLint("PrivateResource")
     @JvmStatic
     @ColorInt
-    fun getPrimaryDisabledTextColor(
-        context: Context?,
-        dark: Boolean,
-    ): Int =
+    fun getPrimaryDisabledTextColor(context: Context?, dark: Boolean): Int =
         if (dark) {
-            ContextCompat.getColor(context!!, androidx.appcompat.R.color.primary_text_disabled_material_light)
+            ContextCompat.getColor(
+                context!!,
+                androidx.appcompat.R.color.primary_text_disabled_material_light,
+            )
         } else {
-            ContextCompat.getColor(context!!, androidx.appcompat.R.color.primary_text_disabled_material_dark)
+            ContextCompat.getColor(
+                context!!,
+                androidx.appcompat.R.color.primary_text_disabled_material_dark,
+            )
         }
 
     @SuppressLint("PrivateResource")
     @JvmStatic
     @ColorInt
-    fun getSecondaryDisabledTextColor(
-        context: Context?,
-        dark: Boolean,
-    ): Int =
+    fun getSecondaryDisabledTextColor(context: Context?, dark: Boolean): Int =
         if (dark) {
-            ContextCompat.getColor(context!!, androidx.appcompat.R.color.secondary_text_disabled_material_light)
+            ContextCompat.getColor(
+                context!!,
+                androidx.appcompat.R.color.secondary_text_disabled_material_light,
+            )
         } else {
-            ContextCompat.getColor(context!!, androidx.appcompat.R.color.secondary_text_disabled_material_dark)
+            ContextCompat.getColor(
+                context!!,
+                androidx.appcompat.R.color.secondary_text_disabled_material_dark,
+            )
         }
 }

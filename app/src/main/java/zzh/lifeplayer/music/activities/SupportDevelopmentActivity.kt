@@ -24,10 +24,10 @@ import zzh.lifeplayer.music.extensions.setStatusBarColorAuto
 import zzh.lifeplayer.music.extensions.setTaskDescriptionColorAuto
 import zzh.lifeplayer.music.extensions.surfaceColor
 
-
 class SupportDevelopmentActivity : AbsThemeActivity() {
 
     lateinit var binding: ActivityDonationBinding
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             onBackPressedDispatcher.onBackPressed()
@@ -46,9 +46,7 @@ class SupportDevelopmentActivity : AbsThemeActivity() {
 
         setupToolbar()
 
-        binding.kofi.setOnClickListener {
-            openUrl(KOFI_URL)
-        }
+        binding.kofi.setOnClickListener { openUrl(KOFI_URL) }
     }
 
     private fun setupToolbar() {

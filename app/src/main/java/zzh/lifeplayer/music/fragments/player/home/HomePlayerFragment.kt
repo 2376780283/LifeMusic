@@ -29,13 +29,14 @@ import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 
-class HomePlayerFragment : AbsPlayerFragment(R.layout.fragment_home_player),
-    MusicProgressViewUpdateHelper.Callback {
+class HomePlayerFragment :
+    AbsPlayerFragment(R.layout.fragment_home_player), MusicProgressViewUpdateHelper.Callback {
     private var lastColor: Int = 0
     private lateinit var progressViewUpdateHelper: MusicProgressViewUpdateHelper
 
     private var _binding: FragmentHomePlayerBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,11 +63,9 @@ class HomePlayerFragment : AbsPlayerFragment(R.layout.fragment_home_player),
         return binding.playerToolbar
     }
 
-    override fun onShow() {
-    }
+    override fun onShow() {}
 
-    override fun onHide() {
-    }
+    override fun onHide() {}
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -97,7 +96,7 @@ class HomePlayerFragment : AbsPlayerFragment(R.layout.fragment_home_player),
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             Color.WHITE,
-            requireActivity()
+            requireActivity(),
         )
     }
 
@@ -118,13 +117,15 @@ class HomePlayerFragment : AbsPlayerFragment(R.layout.fragment_home_player),
 
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.inflateMenu(R.menu.menu_player)
-        binding.playerToolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+        binding.playerToolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
         binding.playerToolbar.setOnMenuItemClickListener(this)
 
         ToolbarContentTintHelper.colorizeToolbar(
             binding.playerToolbar,
             colorControlNormal(),
-            requireActivity()
+            requireActivity(),
         )
     }
 

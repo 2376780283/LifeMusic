@@ -24,7 +24,8 @@ class ColorFragment : AbsPlayerFragment(R.layout.fragment_color_player) {
     private lateinit var playbackControlsFragment: ColorPlaybackControlsFragment
     private var valueAnimator: ValueAnimator? = null
     private var _binding: FragmentColorPlayerBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override fun playerToolbar(): Toolbar {
         return binding.playerToolbar
@@ -42,15 +43,13 @@ class ColorFragment : AbsPlayerFragment(R.layout.fragment_color_player) {
         binding.colorGradientBackground.setBackgroundColor(color.backgroundColor)
         val animator =
             playbackControlsFragment.createRevealAnimator(binding.colorGradientBackground)
-        animator.doOnEnd {
-            _binding?.root?.setBackgroundColor(color.backgroundColor)
-        }
+        animator.doOnEnd { _binding?.root?.setBackgroundColor(color.backgroundColor) }
         animator.start()
         binding.playerToolbar.post {
             ToolbarContentTintHelper.colorizeToolbar(
                 binding.playerToolbar,
                 color.secondaryTextColor,
-                requireActivity()
+                requireActivity(),
             )
         }
     }
@@ -94,7 +93,7 @@ class ColorFragment : AbsPlayerFragment(R.layout.fragment_color_player) {
         setUpPlayerToolbar()
         val playerAlbumCoverFragment: PlayerAlbumCoverFragment =
             whichFragment(R.id.playerAlbumCoverFragment)
-       playerAlbumCoverFragment.setCallbacks(this)
+        playerAlbumCoverFragment.setCallbacks(this)
         playerToolbar().drawAboveSystemBars()
     }
 
@@ -105,13 +104,11 @@ class ColorFragment : AbsPlayerFragment(R.layout.fragment_color_player) {
     private fun setUpPlayerToolbar() {
         binding.playerToolbar.apply {
             inflateMenu(R.menu.menu_player)
-            setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+            setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
             setOnMenuItemClickListener(this@ColorFragment)
-            ToolbarContentTintHelper.colorizeToolbar(
-                this,
-                colorControlNormal(),
-                requireActivity()
-            )
+            ToolbarContentTintHelper.colorizeToolbar(this, colorControlNormal(), requireActivity())
         }
     }
 

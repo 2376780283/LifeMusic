@@ -5,20 +5,20 @@ import android.content.res.Configuration
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.core.view.updateLayoutParams
-import zzh.lifeplayer.music.databinding.CollapsingAppbarLayoutBinding
-import zzh.lifeplayer.music.databinding.SimpleAppbarLayoutBinding
-import zzh.lifeplayer.music.util.PreferenceUtil
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.shape.MaterialShapeDrawable
 import dev.chrisbanes.insetter.applyInsetter
+import zzh.lifeplayer.music.databinding.CollapsingAppbarLayoutBinding
+import zzh.lifeplayer.music.databinding.SimpleAppbarLayoutBinding
+import zzh.lifeplayer.music.util.PreferenceUtil
+
 // appbar 状态 类 😰
-class TopAppBarLayout @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = -1,
-) : AppBarLayout(context, attrs, defStyleAttr) {
+class TopAppBarLayout
+@JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = -1) :
+    AppBarLayout(context, attrs, defStyleAttr) {
     private var simpleAppbarBinding: SimpleAppbarLayoutBinding? = null
     private var collapsingAppbarBinding: CollapsingAppbarLayoutBinding? = null
 
@@ -33,14 +33,11 @@ class TopAppBarLayout @JvmOverloads constructor(
             if (isLandscape) {
                 fitsSystemWindows = false
             }
-
         } else {
             simpleAppbarBinding =
                 SimpleAppbarLayoutBinding.inflate(LayoutInflater.from(context), this, true)
             simpleAppbarBinding?.root?.applyInsetter {
-                type(navigationBars = true) {
-                    padding(horizontal = true)
-                }
+                type(navigationBars = true) { padding(horizontal = true) }
             }
             statusBarForeground = MaterialShapeDrawable.createWithElevationOverlay(context)
         }
@@ -53,18 +50,20 @@ class TopAppBarLayout @JvmOverloads constructor(
     }
 
     val toolbar: MaterialToolbar
-        get() = if (mode == AppBarMode.COLLAPSING) {
-            collapsingAppbarBinding?.toolbar!!
-        } else {
-            simpleAppbarBinding?.toolbar!!
-        }
+        get() =
+            if (mode == AppBarMode.COLLAPSING) {
+                collapsingAppbarBinding?.toolbar!!
+            } else {
+                simpleAppbarBinding?.toolbar!!
+            }
 
     var title: CharSequence
-        get() = if (mode == AppBarMode.COLLAPSING) {
-            collapsingAppbarBinding?.collapsingToolbarLayout?.title.toString()
-        } else {
-            simpleAppbarBinding?.toolbar?.title.toString()
-        }
+        get() =
+            if (mode == AppBarMode.COLLAPSING) {
+                collapsingAppbarBinding?.collapsingToolbarLayout?.title.toString()
+            } else {
+                simpleAppbarBinding?.toolbar?.title.toString()
+            }
         set(value) {
             if (mode == AppBarMode.COLLAPSING) {
                 collapsingAppbarBinding?.collapsingToolbarLayout?.title = value
@@ -75,6 +74,6 @@ class TopAppBarLayout @JvmOverloads constructor(
 
     enum class AppBarMode {
         COLLAPSING,
-        SIMPLE
+        SIMPLE,
     }
 }

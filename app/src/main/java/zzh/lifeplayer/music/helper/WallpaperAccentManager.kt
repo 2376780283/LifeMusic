@@ -11,9 +11,7 @@ import zzh.lifeplayer.music.util.PreferenceUtil
 class WallpaperAccentManager(val context: Context) {
 
     private val onColorsChangedListener by lazy {
-        WallpaperManager.OnColorsChangedListener { _, _ ->
-            updateColors()
-        }
+        WallpaperManager.OnColorsChangedListener { _, _ -> updateColors() }
     }
 
     fun init() {
@@ -23,7 +21,7 @@ class WallpaperAccentManager(val context: Context) {
                 if (PreferenceUtil.wallpaperAccent) {
                     addOnColorsChangedListener(
                         onColorsChangedListener,
-                        Handler(Looper.getMainLooper())
+                        Handler(Looper.getMainLooper()),
                     )
                 }
             }
@@ -39,8 +37,9 @@ class WallpaperAccentManager(val context: Context) {
 
     private fun updateColors() {
         if (VersionUtils.hasOreoMR1()) {
-            val colors = WallpaperManager.getInstance(context)
-                .getWallpaperColors(WallpaperManager.FLAG_SYSTEM)
+            val colors =
+                WallpaperManager.getInstance(context)
+                    .getWallpaperColors(WallpaperManager.FLAG_SYSTEM)
             if (colors != null) {
                 val primaryColor = colors.primaryColor.toArgb()
                 ThemeStore.editTheme(context).wallpaperColor(context, primaryColor).commit()

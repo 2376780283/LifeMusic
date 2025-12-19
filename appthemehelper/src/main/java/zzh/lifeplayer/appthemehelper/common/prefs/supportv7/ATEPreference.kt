@@ -22,21 +22,18 @@ import androidx.preference.Preference
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 
 class ATEPreference
-    @JvmOverloads
-    constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0,
-        defStyleRes: Int = 0,
-    ) : Preference(context, attrs, defStyleAttr, defStyleRes) {
-        init {
-            icon?.colorFilter =
-                BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                    ATHUtil.resolveColor(
-                        context,
-                        android.R.attr.colorControlNormal,
-                    ),
-                    BlendModeCompat.SRC_IN,
-                )
-        }
+@JvmOverloads
+constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0,
+) : Preference(context, attrs, defStyleAttr, defStyleRes) {
+    init {
+        icon?.colorFilter =
+            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                ATHUtil.resolveColor(context, android.R.attr.colorControlNormal),
+                BlendModeCompat.SRC_IN,
+            )
     }
+}

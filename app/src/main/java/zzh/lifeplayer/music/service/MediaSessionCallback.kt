@@ -17,6 +17,8 @@ package zzh.lifeplayer.music.service
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.media.session.MediaSessionCompat
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import zzh.lifeplayer.music.auto.AutoMediaIDHelper
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.helper.MusicPlayerRemote.cycleRepeatMode
@@ -32,16 +34,10 @@ import zzh.lifeplayer.music.service.MusicService.Companion.TOGGLE_SHUFFLE
 import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.logD
 import zzh.lifeplayer.music.util.logE
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-/**
- * Created by hemanths on 2019-08-01.
- */
-
-class MediaSessionCallback(
-    private val musicService: MusicService,
-) : MediaSessionCompat.Callback(), KoinComponent {
+/** Created by hemanths on 2019-08-01. */
+class MediaSessionCallback(private val musicService: MusicService) :
+    MediaSessionCompat.Callback(), KoinComponent {
 
     private val songRepository by inject<SongRepository>()
     private val albumRepository by inject<AlbumRepository>()
@@ -90,14 +86,17 @@ class MediaSessionCallback(
             AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_HISTORY,
             AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_SUGGESTIONS,
             AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_TOP_TRACKS,
-            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_QUEUE,
-            -> {
-                val tracks: List<Song> = when (category) {
-                    AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_HISTORY -> topPlayedRepository.recentlyPlayedTracks()
-                    AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_SUGGESTIONS -> topPlayedRepository.recentlyPlayedTracks()
-                    AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_TOP_TRACKS -> topPlayedRepository.recentlyPlayedTracks()
-                    else -> musicService.playingQueue
-                }
+            AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_QUEUE -> {
+                val tracks: List<Song> =
+                    when (category) {
+                        AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_HISTORY ->
+                            topPlayedRepository.recentlyPlayedTracks()
+                        AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_SUGGESTIONS ->
+                            topPlayedRepository.recentlyPlayedTracks()
+                        AutoMediaIDHelper.MEDIA_ID_MUSICS_BY_TOP_TRACKS ->
+                            topPlayedRepository.recentlyPlayedTracks()
+                        else -> musicService.playingQueue
+                    }
                 songs.addAll(tracks)
                 var songIndex = MusicUtil.indexOfSongInList(tracks, itemId)
                 if (songIndex == -1) {
@@ -121,25 +120,19 @@ class MediaSessionCallback(
             if (mediaFocus == MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE) {
                 val artistQuery = extras.getString(MediaStore.EXTRA_MEDIA_ARTIST)
                 if (artistQuery != null) {
-                    artistRepository.artists(artistQuery).forEach {
-                        songs.addAll(it.songs)
-                    }
+                    artistRepository.artists(artistQuery).forEach { songs.addAll(it.songs) }
                 }
             } else if (mediaFocus == MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE) {
                 val albumQuery = extras.getString(MediaStore.EXTRA_MEDIA_ALBUM)
                 if (albumQuery != null) {
-                    albumRepository.albums(albumQuery).forEach {
-                        songs.addAll(it.songs)
-                    }
+                    albumRepository.albums(albumQuery).forEach { songs.addAll(it.songs) }
                 }
             }
         }
 
         if (songs.isEmpty()) {
             // No focus found, search by query for song title
-            query?.also {
-                songs.addAll(songRepository.songs(it))
-            }
+            query?.also { songs.addAll(songRepository.songs(it)) }
         }
 
         musicService.openQueue(songs, 0, true)
@@ -149,8 +142,7 @@ class MediaSessionCallback(
 
     override fun onPrepare() {
         super.onPrepare()
-        if (musicService.currentSong != Song.emptySong)
-            musicService.restoreState(::onPlay)
+        if (musicService.currentSong != Song.emptySong) musicService.restoreState(::onPlay)
     }
 
     override fun onPlay() {

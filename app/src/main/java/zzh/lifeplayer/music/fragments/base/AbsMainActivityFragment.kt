@@ -20,12 +20,12 @@ import androidx.annotation.LayoutRes
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import zzh.lifeplayer.music.activities.MainActivity
 import zzh.lifeplayer.music.fragments.LibraryViewModel
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : AbsMusicServiceFragment(layout),
-    MenuProvider {
+abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
+    AbsMusicServiceFragment(layout), MenuProvider {
     val libraryViewModel: LibraryViewModel by activityViewModel()
 
     val mainActivity: MainActivity

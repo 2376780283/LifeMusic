@@ -17,11 +17,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 
-class HeightFitSquareLayout  @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr){
+class HeightFitSquareLayout
+@JvmOverloads
+constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    FrameLayout(context, attrs, defStyleAttr) {
     private var forceSquare = true
 
     fun setForceSquare(forceSquare: Boolean) {

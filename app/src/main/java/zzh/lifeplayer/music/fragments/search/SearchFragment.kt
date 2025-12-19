@@ -30,30 +30,30 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.transition.MaterialFadeThrough
+import java.util.*
+import kotlinx.coroutines.Job
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.adapter.SearchAdapter
 import zzh.lifeplayer.music.databinding.FragmentSearchBinding
 import zzh.lifeplayer.music.extensions.*
 import zzh.lifeplayer.music.fragments.base.AbsMainActivityFragment
 import zzh.lifeplayer.music.util.PreferenceUtil
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.transition.MaterialFadeThrough
-import kotlinx.coroutines.Job
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
-import java.util.*
 
-
-class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search),
-    ChipGroup.OnCheckedStateChangeListener {
+class SearchFragment :
+    AbsMainActivityFragment(R.layout.fragment_search), ChipGroup.OnCheckedStateChangeListener {
     companion object {
         const val QUERY = "query"
     }
 
     private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     private lateinit var searchAdapter: SearchAdapter
     private var query: String? = null
@@ -77,8 +77,7 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search),
         }
         binding.searchView.apply {
             doAfterTextChanged {
-                if (!it.isNullOrEmpty())
-                    search(it.toString())
+                if (!it.isNullOrEmpty()) search(it.toString())
                 else {
                     TransitionManager.beginDelayedTransition(binding.appBarLayout)
                     binding.voiceSearch.isVisible = true
@@ -89,21 +88,15 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search),
         }
         binding.keyboardPopup.apply {
             accentColor()
-            setOnClickListener {
-                binding.searchView.focusAndShowKeyboard()
-            }
+            setOnClickListener { binding.searchView.focusAndShowKeyboard() }
         }
         if (savedInstanceState != null) {
             query = savedInstanceState.getString(QUERY)
         }
-        libraryViewModel.getSearchResult().observe(viewLifecycleOwner) {
-            showData(it)
-        }
+        libraryViewModel.getSearchResult().observe(viewLifecycleOwner) { showData(it) }
         setupChips()
         postponeEnterTransition()
-        view.doOnPreDraw {
-            startPostponedEnterTransition()
-        }
+        view.doOnPreDraw { startPostponedEnterTransition() }
         libraryViewModel.getFabMargin().observe(viewLifecycleOwner) {
             binding.keyboardPopup.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = it
@@ -123,19 +116,15 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search),
     private fun setupChips() {
         val chips = binding.searchFilterGroup.children.map { it as Chip }
         if (!PreferenceUtil.materialYou) {
-            val states = arrayOf(
-                intArrayOf(-android.R.attr.state_checked),
-                intArrayOf(android.R.attr.state_checked)
-            )
+            val states =
+                arrayOf(
+                    intArrayOf(-android.R.attr.state_checked),
+                    intArrayOf(android.R.attr.state_checked),
+                )
 
-            val colors = intArrayOf(
-                android.R.color.transparent,
-                accentColor().addAlpha(0.5F)
-            )
+            val colors = intArrayOf(android.R.color.transparent, accentColor().addAlpha(0.5F))
 
-            chips.forEach {
-                it.chipBackgroundColor = ColorStateList(states, colors)
-            }
+            chips.forEach { it.chipBackgroundColor = ColorStateList(states, colors) }
         }
         binding.searchFilterGroup.setOnCheckedStateChangeListener(this)
     }
@@ -158,25 +147,29 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search),
 
     private fun setupRecyclerView() {
         searchAdapter = SearchAdapter(requireActivity(), emptyList())
-        searchAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onChanged() {
-                super.onChanged()
-                binding.empty.isVisible = searchAdapter.itemCount < 1
+        searchAdapter.registerAdapterDataObserver(
+            object : RecyclerView.AdapterDataObserver() {
+                override fun onChanged() {
+                    super.onChanged()
+                    binding.empty.isVisible = searchAdapter.itemCount < 1
+                }
             }
-        })
+        )
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = searchAdapter
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (dy > 0) {
-                        binding.keyboardPopup.shrink()
-                    } else if (dy < 0) {
-                        binding.keyboardPopup.extend()
+            addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        if (dy > 0) {
+                            binding.keyboardPopup.shrink()
+                        } else if (dy < 0) {
+                            binding.keyboardPopup.extend()
+                        }
                     }
                 }
-            })
+            )
         }
     }
 
@@ -206,7 +199,7 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search),
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
         )
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_prompt))
@@ -245,8 +238,7 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search),
 
     private fun hideKeyboard(view: View?) {
         if (view != null) {
-            val imm =
-                requireContext().getSystemService<InputMethodManager>()
+            val imm = requireContext().getSystemService<InputMethodManager>()
             imm?.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
@@ -267,7 +259,7 @@ enum class Filter {
     ALBUM_ARTISTS,
     GENRES,
     PLAYLISTS,
-    NO_FILTER
+    NO_FILTER,
 }
 
 fun TextInputEditText.clearText() {

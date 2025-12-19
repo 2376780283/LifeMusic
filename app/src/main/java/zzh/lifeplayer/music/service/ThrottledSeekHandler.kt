@@ -14,14 +14,11 @@
 
 package zzh.lifeplayer.music.service
 
-
 import android.os.Handler
 import zzh.lifeplayer.music.service.MusicService.Companion.PLAY_STATE_CHANGED
 
-class ThrottledSeekHandler(
-    private val musicService: MusicService,
-    private val handler: Handler
-) : Runnable {
+class ThrottledSeekHandler(private val musicService: MusicService, private val handler: Handler) :
+    Runnable {
 
     fun notifySeek() {
         musicService.updateMediaSessionPlaybackState()

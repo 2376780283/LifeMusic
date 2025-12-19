@@ -17,10 +17,10 @@ package zzh.lifeplayer.music.helper
 import android.app.SearchManager
 import android.os.Bundle
 import android.provider.MediaStore
-import zzh.lifeplayer.music.model.Song
-import zzh.lifeplayer.music.repository.RealSongRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import zzh.lifeplayer.music.model.Song
+import zzh.lifeplayer.music.repository.RealSongRepository
 
 object SearchQueryHelper : KoinComponent {
     private const val TITLE_SELECTION = "lower(" + MediaStore.Audio.AudioColumns.TITLE + ") = ?"
@@ -39,106 +39,91 @@ object SearchQueryHelper : KoinComponent {
 
         var songs = listOf<Song>()
         if (artistName != null && albumName != null && titleName != null) {
-            songs = songRepository.songs(
-                songRepository.makeSongCursor(
-                    ARTIST_SELECTION + AND + ALBUM_SELECTION + AND + TITLE_SELECTION,
-                    arrayOf(
-                        artistName.lowercase(),
-                        albumName.lowercase(),
-                        titleName.lowercase()
+            songs =
+                songRepository.songs(
+                    songRepository.makeSongCursor(
+                        ARTIST_SELECTION + AND + ALBUM_SELECTION + AND + TITLE_SELECTION,
+                        arrayOf(
+                            artistName.lowercase(),
+                            albumName.lowercase(),
+                            titleName.lowercase(),
+                        ),
                     )
                 )
-            )
         }
         if (songs.isNotEmpty()) {
             return songs
         }
         if (artistName != null && titleName != null) {
-            songs = songRepository.songs(
-                songRepository.makeSongCursor(
-                    ARTIST_SELECTION + AND + TITLE_SELECTION,
-                    arrayOf(
-                        artistName.lowercase(),
-                        titleName.lowercase()
+            songs =
+                songRepository.songs(
+                    songRepository.makeSongCursor(
+                        ARTIST_SELECTION + AND + TITLE_SELECTION,
+                        arrayOf(artistName.lowercase(), titleName.lowercase()),
                     )
                 )
-            )
         }
         if (songs.isNotEmpty()) {
             return songs
         }
         if (albumName != null && titleName != null) {
-            songs = songRepository.songs(
-                songRepository.makeSongCursor(
-                    ALBUM_SELECTION + AND + TITLE_SELECTION,
-                    arrayOf(
-                        albumName.lowercase(),
-                        titleName.lowercase()
+            songs =
+                songRepository.songs(
+                    songRepository.makeSongCursor(
+                        ALBUM_SELECTION + AND + TITLE_SELECTION,
+                        arrayOf(albumName.lowercase(), titleName.lowercase()),
                     )
                 )
-            )
         }
         if (songs.isNotEmpty()) {
             return songs
         }
         if (artistName != null) {
-            songs = songRepository.songs(
-                songRepository.makeSongCursor(
-                    ARTIST_SELECTION,
-                    arrayOf(artistName.lowercase())
+            songs =
+                songRepository.songs(
+                    songRepository.makeSongCursor(ARTIST_SELECTION, arrayOf(artistName.lowercase()))
                 )
-            )
         }
         if (songs.isNotEmpty()) {
             return songs
         }
         if (albumName != null) {
-            songs = songRepository.songs(
-                songRepository.makeSongCursor(
-                    ALBUM_SELECTION,
-                    arrayOf(albumName.lowercase())
+            songs =
+                songRepository.songs(
+                    songRepository.makeSongCursor(ALBUM_SELECTION, arrayOf(albumName.lowercase()))
                 )
-            )
         }
         if (songs.isNotEmpty()) {
             return songs
         }
         if (titleName != null) {
-            songs = songRepository.songs(
-                songRepository.makeSongCursor(
-                    TITLE_SELECTION,
-                    arrayOf(titleName.lowercase())
+            songs =
+                songRepository.songs(
+                    songRepository.makeSongCursor(TITLE_SELECTION, arrayOf(titleName.lowercase()))
                 )
-            )
         }
         if (songs.isNotEmpty()) {
             return songs
         }
-        songs = songRepository.songs(
-            songRepository.makeSongCursor(
-                ARTIST_SELECTION,
-                arrayOf(query.lowercase())
+        songs =
+            songRepository.songs(
+                songRepository.makeSongCursor(ARTIST_SELECTION, arrayOf(query.lowercase()))
             )
-        )
 
         if (songs.isNotEmpty()) {
             return songs
         }
-        songs = songRepository.songs(
-            songRepository.makeSongCursor(
-                ALBUM_SELECTION,
-                arrayOf(query.lowercase())
+        songs =
+            songRepository.songs(
+                songRepository.makeSongCursor(ALBUM_SELECTION, arrayOf(query.lowercase()))
             )
-        )
         if (songs.isNotEmpty()) {
             return songs
         }
-        songs = songRepository.songs(
-            songRepository.makeSongCursor(
-                TITLE_SELECTION,
-                arrayOf(query.lowercase())
+        songs =
+            songRepository.songs(
+                songRepository.makeSongCursor(TITLE_SELECTION, arrayOf(query.lowercase()))
             )
-        )
         return songs.ifEmpty { ArrayList() }
     }
 }

@@ -14,9 +14,7 @@
  */
 package zzh.lifeplayer.music.interfaces
 
-/**
- * @author Aidan Follestad (afollestad)
- */
+/** @author Aidan Follestad (afollestad) */
 interface IPaletteColorHolder {
     val paletteColor: Int
 }

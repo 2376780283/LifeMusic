@@ -5,9 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 
-/**
- * @author Aidan Follestad (afollestad), Karim Abou Zeid (kabouzeid)
- */
+/** @author Aidan Follestad (afollestad), Karim Abou Zeid (kabouzeid) */
 open class ATHActivity : AppCompatActivity() {
     private var updateTime: Long = -1
 
@@ -28,7 +26,8 @@ open class ATHActivity : AppCompatActivity() {
     }
 
     fun postRecreate() {
-        // hack to prevent java.lang.RuntimeException: Performing pause of activity that is not resumed
+        // hack to prevent java.lang.RuntimeException: Performing pause of activity that is not
+        // resumed
         // makes sure recreate() is called right after and not in onResume()
         Handler(Looper.getMainLooper()).post { recreate() }
     }

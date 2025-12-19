@@ -46,7 +46,6 @@ object ViewUtil {
         }
     }
 
-
     fun setProgressDrawable(progressSlider: ProgressBar, newColor: Int) {
 
         val layerDrawable = progressSlider.progressDrawable as LayerDrawable
@@ -58,20 +57,20 @@ object ViewUtil {
         val background = layerDrawable.findDrawableByLayerId(android.R.id.background)
         val primaryColor =
             ATHUtil.resolveColor(progressSlider.context, android.R.attr.windowBackground)
-        background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-            MaterialValueHelper.getPrimaryDisabledTextColor(
-                progressSlider.context,
-                ColorUtil.isColorLight(primaryColor)
-            ), SRC_IN
-        )
+        background.colorFilter =
+            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                MaterialValueHelper.getPrimaryDisabledTextColor(
+                    progressSlider.context,
+                    ColorUtil.isColorLight(primaryColor),
+                ),
+                SRC_IN,
+            )
 
         val secondaryProgress = layerDrawable.findDrawableByLayerId(android.R.id.secondaryProgress)
         secondaryProgress?.colorFilter =
             BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                ColorUtil.withAlpha(
-                    newColor,
-                    0.65f
-                ), SRC_IN
+                ColorUtil.withAlpha(newColor, 0.65f),
+                SRC_IN,
             )
     }
 

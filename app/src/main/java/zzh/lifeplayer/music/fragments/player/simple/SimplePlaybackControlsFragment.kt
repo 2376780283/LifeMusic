@@ -36,15 +36,13 @@ import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
 
-/**
- * @author Hemanth S (h4h13).
- */
-
+/** @author Hemanth S (h4h13). */
 class SimplePlaybackControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_simple_controls_fragment) {
 
     private var _binding: FragmentSimpleControlsFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val shuffleButton: ImageButton
         get() = binding.shuffleButton
@@ -82,16 +80,10 @@ class SimplePlaybackControlsFragment :
         _binding = FragmentSimpleControlsFragmentBinding.bind(view)
         setUpPlayPauseFab()
         binding.title.isSelected = true
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
 
-        binding.title.setOnClickListener {
-            goToAlbum(requireActivity())
-        }
-        binding.text.setOnClickListener {
-            goToArtist(requireActivity())
-        }
+        binding.title.setOnClickListener { goToAlbum(requireActivity()) }
+        binding.text.setOnClickListener { goToArtist(requireActivity()) }
     }
 
     private fun updateSong() {
@@ -113,7 +105,8 @@ class SimplePlaybackControlsFragment :
     }
 
     public override fun show() {
-        binding.playPauseButton.animate()
+        binding.playPauseButton
+            .animate()
             .scaleX(1f)
             .scaleY(1f)
             .rotation(360f)
@@ -130,11 +123,12 @@ class SimplePlaybackControlsFragment :
     }
 
     override fun onUpdateProgressViews(progress: Int, total: Int) {
-        binding.songCurrentProgress.text = String.format(
-            "%s / %s",
-            MusicUtil.getReadableDurationString(progress.toLong()),
-            MusicUtil.getReadableDurationString(total.toLong())
-        )
+        binding.songCurrentProgress.text =
+            String.format(
+                "%s / %s",
+                MusicUtil.getReadableDurationString(progress.toLong()),
+                MusicUtil.getReadableDurationString(total.toLong()),
+            )
     }
 
     override fun setColor(color: MediaNotificationProcessor) {
@@ -151,11 +145,12 @@ class SimplePlaybackControlsFragment :
                 MaterialValueHelper.getPrimaryDisabledTextColor(requireContext(), false)
         }
 
-        val colorFinal = if (PreferenceUtil.isAdaptiveColor) {
-            color.primaryTextColor
-        } else {
-            accentColor()
-        }
+        val colorFinal =
+            if (PreferenceUtil.isAdaptiveColor) {
+                color.primaryTextColor
+            } else {
+                accentColor()
+            }
 
         volumeFragment?.setTintable(colorFinal)
 
@@ -163,9 +158,9 @@ class SimplePlaybackControlsFragment :
             binding.playPauseButton,
             MaterialValueHelper.getPrimaryTextColor(
                 requireContext(),
-                ColorUtil.isColorLight(colorFinal)
+                ColorUtil.isColorLight(colorFinal),
             ),
-            false
+            false,
         )
         TintHelper.setTintAuto(binding.playPauseButton, colorFinal, true)
         binding.text.setTextColor(colorFinal)

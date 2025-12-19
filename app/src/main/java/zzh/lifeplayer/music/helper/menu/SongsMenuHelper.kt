@@ -16,6 +16,12 @@ package zzh.lifeplayer.music.helper.menu
 
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.dialogs.AddToPlaylistDialog
 import zzh.lifeplayer.music.dialogs.DeleteSongsDialog
@@ -23,19 +29,9 @@ import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.repository.RealRepository
 import zzh.lifeplayer.music.util.MusicUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 
 object SongsMenuHelper : KoinComponent {
-    fun handleMenuClick(
-        activity: FragmentActivity,
-        songs: List<Song>,
-        menuItemId: Int
-    ): Boolean {
+    fun handleMenuClick(activity: FragmentActivity, songs: List<Song>, menuItemId: Int): Boolean {
         when (menuItemId) {
             R.id.action_play_next -> {
                 MusicPlayerRemote.playNext(songs)
@@ -59,7 +55,7 @@ object SongsMenuHelper : KoinComponent {
                 activity.startActivity(
                     Intent.createChooser(
                         MusicUtil.createShareMultipleSongIntent(activity, songs),
-                        null
+                        null,
                     )
                 )
                 return true

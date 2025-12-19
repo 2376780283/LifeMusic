@@ -12,7 +12,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package zzh.lifeplayer.music.service
 
 import android.content.Context
@@ -36,11 +35,8 @@ import zzh.lifeplayer.music.service.MusicService.Companion.ACTION_SKIP
 import zzh.lifeplayer.music.service.MusicService.Companion.ACTION_STOP
 import zzh.lifeplayer.music.service.MusicService.Companion.ACTION_TOGGLE_PAUSE
 
-
 /**
- * Used to control headset playback.
- * Single press: pause/resume
- * Double press: actionNext track
+ * Used to control headset playback. Single press: pause/resume Double press: actionNext track
  * Triple press: previous track
  */
 class MediaButtonIntentReceiver : MediaButtonReceiver() {
@@ -63,50 +59,52 @@ class MediaButtonIntentReceiver : MediaButtonReceiver() {
         private var mClickCounter = 0
         private var mLastClickTime: Long = 0
 
-        private val mHandler = object : Handler(Looper.getMainLooper()) {
+        private val mHandler =
+            object : Handler(Looper.getMainLooper()) {
 
-            override fun handleMessage(msg: Message) {
-                when (msg.what) {
-                    MSG_HEADSET_DOUBLE_CLICK_TIMEOUT -> {
-                        val clickCount = msg.arg1
+                override fun handleMessage(msg: Message) {
+                    when (msg.what) {
+                        MSG_HEADSET_DOUBLE_CLICK_TIMEOUT -> {
+                            val clickCount = msg.arg1
 
-                        if (DEBUG) Log.v(TAG, "Handling headset click, count = $clickCount")
-                        val command = when (clickCount) {
-                            1 -> ACTION_TOGGLE_PAUSE
-                            2 -> ACTION_SKIP
-                            3 -> ACTION_REWIND
-                            else -> null
-                        }
+                            if (DEBUG) Log.v(TAG, "Handling headset click, count = $clickCount")
+                            val command =
+                                when (clickCount) {
+                                    1 -> ACTION_TOGGLE_PAUSE
+                                    2 -> ACTION_SKIP
+                                    3 -> ACTION_REWIND
+                                    else -> null
+                                }
 
-                        if (command != null) {
-                            val context = msg.obj as Context
-                            startService(context, command)
+                            if (command != null) {
+                                val context = msg.obj as Context
+                                startService(context, command)
+                            }
                         }
                     }
+                    releaseWakeLockIfHandlerIdle()
                 }
-                releaseWakeLockIfHandlerIdle()
             }
-        }
 
         fun handleIntent(context: Context, intent: Intent): Boolean {
             println("Intent Action: ${intent.action}")
             val intentAction = intent.action
             if (Intent.ACTION_MEDIA_BUTTON == intentAction) {
-                val event = intent.extras?.let { BundleCompat.getParcelable(it, Intent.EXTRA_KEY_EVENT, KeyEvent::class.java) }
-                    ?: return false
+                val event =
+                    intent.extras?.let {
+                        BundleCompat.getParcelable(it, Intent.EXTRA_KEY_EVENT, KeyEvent::class.java)
+                    } ?: return false
 
                 val keycode = event.keyCode
                 val action = event.action
-                val eventTime = if (event.eventTime != 0L)
-                    event.eventTime
-                else
-                    System.currentTimeMillis()
+                val eventTime =
+                    if (event.eventTime != 0L) event.eventTime else System.currentTimeMillis()
 
                 var command: String? = null
                 when (keycode) {
                     KeyEvent.KEYCODE_MEDIA_STOP -> command = ACTION_STOP
-                    KeyEvent.KEYCODE_HEADSETHOOK, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> command =
-                        ACTION_TOGGLE_PAUSE
+                    KeyEvent.KEYCODE_HEADSETHOOK,
+                    KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> command = ACTION_TOGGLE_PAUSE
 
                     KeyEvent.KEYCODE_MEDIA_NEXT -> command = ACTION_SKIP
                     KeyEvent.KEYCODE_MEDIA_PREVIOUS -> command = ACTION_REWIND
@@ -123,7 +121,10 @@ class MediaButtonIntentReceiver : MediaButtonReceiver() {
 
                             // The service may or may not be running, but we need to send it
                             // a command.
-                            if (keycode == KeyEvent.KEYCODE_HEADSETHOOK || keycode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
+                            if (
+                                keycode == KeyEvent.KEYCODE_HEADSETHOOK ||
+                                    keycode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
+                            ) {
                                 if (eventTime - mLastClickTime >= DOUBLE_CLICK) {
                                     mClickCounter = 0
                                 }
@@ -132,9 +133,13 @@ class MediaButtonIntentReceiver : MediaButtonReceiver() {
                                 if (DEBUG) Log.v(TAG, "Got headset click, count = $mClickCounter")
                                 mHandler.removeMessages(MSG_HEADSET_DOUBLE_CLICK_TIMEOUT)
 
-                                val msg = mHandler.obtainMessage(
-                                    MSG_HEADSET_DOUBLE_CLICK_TIMEOUT, mClickCounter, 0, context
-                                )
+                                val msg =
+                                    mHandler.obtainMessage(
+                                        MSG_HEADSET_DOUBLE_CLICK_TIMEOUT,
+                                        mClickCounter,
+                                        0,
+                                        context,
+                                    )
 
                                 val delay = (if (mClickCounter < 3) DOUBLE_CLICK else 0).toLong()
                                 if (mClickCounter >= 3) {
@@ -167,10 +172,11 @@ class MediaButtonIntentReceiver : MediaButtonReceiver() {
             if (wakeLock == null) {
                 val appContext = context.applicationContext
                 val pm = appContext.getSystemService<PowerManager>()
-                wakeLock = pm?.newWakeLock(
-                    PowerManager.PARTIAL_WAKE_LOCK,
-                    "RetroMusicApp:Wakelock headset button"
-                )
+                wakeLock =
+                    pm?.newWakeLock(
+                        PowerManager.PARTIAL_WAKE_LOCK,
+                        "RetroMusicApp:Wakelock headset button",
+                    )
                 wakeLock!!.setReferenceCounted(false)
             }
             if (DEBUG) Log.v(TAG, "Acquiring wake lock and sending " + msg.what)

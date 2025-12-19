@@ -41,7 +41,11 @@ fun Context.scaledDrawable(@DrawableRes id: Int, width: Int, height: Int): Drawa
 }
 
 fun Drawable.toBitmap(scaleFactor: Float, config: Bitmap.Config? = null): Bitmap {
-    return toBitmap((intrinsicHeight*scaleFactor).toInt(), (intrinsicWidth*scaleFactor).toInt(), config)
+    return toBitmap(
+        (intrinsicHeight * scaleFactor).toInt(),
+        (intrinsicWidth * scaleFactor).toInt(),
+        config,
+    )
 }
 
 fun Drawable.getBitmapDrawable(): Bitmap {

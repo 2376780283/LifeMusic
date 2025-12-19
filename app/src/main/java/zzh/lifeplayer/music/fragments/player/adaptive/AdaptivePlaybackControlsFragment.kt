@@ -18,6 +18,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import com.google.android.material.slider.Slider
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
@@ -29,13 +30,13 @@ import zzh.lifeplayer.music.fragments.base.AbsPlayerControlsFragment
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.util.PreferenceUtil
 import zzh.lifeplayer.music.util.color.MediaNotificationProcessor
-import com.google.android.material.slider.Slider
 
 class AdaptivePlaybackControlsFragment :
     AbsPlayerControlsFragment(R.layout.fragment_adaptive_player_playback_controls) {
 
     private var _binding: FragmentAdaptivePlayerPlaybackControlsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override val progressSlider: Slider
         get() = binding.progressSlider
@@ -99,11 +100,9 @@ class AdaptivePlaybackControlsFragment :
     }
 
     override fun setColor(color: MediaNotificationProcessor) {
-        if (ColorUtil.isColorLight(
-                ATHUtil.resolveColor(
-                    requireContext(),
-                    android.R.attr.windowBackground
-                )
+        if (
+            ColorUtil.isColorLight(
+                ATHUtil.resolveColor(requireContext(), android.R.attr.windowBackground)
             )
         ) {
             lastPlaybackControlsColor = MaterialValueHelper.getSecondaryTextColor(activity, true)
@@ -120,16 +119,18 @@ class AdaptivePlaybackControlsFragment :
         updatePrevNextColor()
         updatePlayPauseColor()
 
-        val colorFinal = if (PreferenceUtil.isAdaptiveColor) {
-            color.primaryTextColor
-        } else {
-            accentColor()
-        }.ripAlpha()
+        val colorFinal =
+            if (PreferenceUtil.isAdaptiveColor) {
+                    color.primaryTextColor
+                } else {
+                    accentColor()
+                }
+                .ripAlpha()
 
         TintHelper.setTintAuto(
             binding.playPauseButton,
             MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.isColorLight(colorFinal)),
-            false
+            false,
         )
         TintHelper.setTintAuto(binding.playPauseButton, colorFinal, true)
         binding.progressSlider.applyColor(colorFinal)

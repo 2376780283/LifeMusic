@@ -5,7 +5,7 @@ import android.provider.MediaStore
 
 object Constants {
     const val PRO_VERSION_PRODUCT_ID = "pro_version"
-    const val RATE_ON_GOOGLE_PLAY =""
+    const val RATE_ON_GOOGLE_PLAY = ""
     const val TRANSLATE = ""
     const val WEBSITE = ""
     const val GITHUB_PROJECT = ""
@@ -18,26 +18,31 @@ object Constants {
     const val PINTEREST = ""
     const val AUDIO_SCROBBLER_URL = "https://ws.audioscrobbler.com/2.0/"
     const val IS_MUSIC =
-        MediaStore.Audio.AudioColumns.IS_MUSIC + "=1" + " AND " + MediaStore.Audio.AudioColumns.TITLE + " != ''"
+        MediaStore.Audio.AudioColumns.IS_MUSIC +
+            "=1" +
+            " AND " +
+            MediaStore.Audio.AudioColumns.TITLE +
+            " != ''"
 
     const val DATA = "_data"
 
     @Suppress("Deprecation")
-    val baseProjection = arrayOf(
-        BaseColumns._ID, // 0
-        MediaStore.Audio.AudioColumns.TITLE, // 1
-        MediaStore.Audio.AudioColumns.TRACK, // 2
-        MediaStore.Audio.AudioColumns.YEAR, // 3
-        MediaStore.Audio.AudioColumns.DURATION, // 4
-        DATA, // 5
-        MediaStore.Audio.AudioColumns.DATE_MODIFIED, // 6
-        MediaStore.Audio.AudioColumns.ALBUM_ID, // 7
-        MediaStore.Audio.AudioColumns.ALBUM, // 8
-        MediaStore.Audio.AudioColumns.ARTIST_ID, // 9
-        MediaStore.Audio.AudioColumns.ARTIST, // 10
-        MediaStore.Audio.AudioColumns.COMPOSER, // 11
-        ALBUM_ARTIST // 12
-    )
+    val baseProjection =
+        arrayOf(
+            BaseColumns._ID, // 0
+            MediaStore.Audio.AudioColumns.TITLE, // 1
+            MediaStore.Audio.AudioColumns.TRACK, // 2
+            MediaStore.Audio.AudioColumns.YEAR, // 3
+            MediaStore.Audio.AudioColumns.DURATION, // 4
+            DATA, // 5
+            MediaStore.Audio.AudioColumns.DATE_MODIFIED, // 6
+            MediaStore.Audio.AudioColumns.ALBUM_ID, // 7
+            MediaStore.Audio.AudioColumns.ALBUM, // 8
+            MediaStore.Audio.AudioColumns.ARTIST_ID, // 9
+            MediaStore.Audio.AudioColumns.ARTIST, // 10
+            MediaStore.Audio.AudioColumns.COMPOSER, // 11
+            ALBUM_ARTIST, // 12
+        )
     const val NUMBER_OF_TOP_TRACKS = 99
 }
 
@@ -74,7 +79,6 @@ const val ADAPTIVE_COLOR_APP = "adaptive_color_app"
 const val HOME_ARTIST_GRID_STYLE = "home_artist_grid_style"
 const val HOME_ALBUM_GRID_STYLE = "home_album_grid_style"
 const val TOGGLE_ADD_CONTROLS = "toggle_add_controls"
-
 
 const val ALBUM_COVER_STYLE = "album_cover_style_id"
 const val ALBUM_COVER_TRANSFORM = "album_cover_transform"
@@ -147,4 +151,4 @@ const val SWIPE_ANYWHERE_NOW_PLAYING = "swipe_anywhere_now_playing"
 const val PAUSE_HISTORY = "pause_history"
 const val MANAGE_AUDIO_FOCUS = "manage_audio_focus"
 const val SWIPE_DOWN_DISMISS = "swipe_to_dismiss"
-const val ENABLE_SEARCH_PLAYLIST= "enable_search_playlist"
+const val ENABLE_SEARCH_PLAYLIST = "enable_search_playlist"

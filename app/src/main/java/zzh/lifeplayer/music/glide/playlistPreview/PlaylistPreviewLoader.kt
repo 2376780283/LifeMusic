@@ -14,12 +14,9 @@ class PlaylistPreviewLoader(val context: Context) : ModelLoader<PlaylistPreview,
         model: PlaylistPreview,
         width: Int,
         height: Int,
-        options: Options
+        options: Options,
     ): LoadData<Bitmap> {
-        return LoadData(
-            ObjectKey(model),
-            PlaylistPreviewFetcher(context, model)
-        )
+        return LoadData(ObjectKey(model), PlaylistPreviewFetcher(context, model))
     }
 
     override fun handles(model: PlaylistPreview): Boolean {
@@ -27,7 +24,9 @@ class PlaylistPreviewLoader(val context: Context) : ModelLoader<PlaylistPreview,
     }
 
     class Factory(val context: Context) : ModelLoaderFactory<PlaylistPreview, Bitmap> {
-        override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<PlaylistPreview, Bitmap> {
+        override fun build(
+            multiFactory: MultiModelLoaderFactory
+        ): ModelLoader<PlaylistPreview, Bitmap> {
             return PlaylistPreviewLoader(context)
         }
 

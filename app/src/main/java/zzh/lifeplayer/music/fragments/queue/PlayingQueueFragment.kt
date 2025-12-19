@@ -21,6 +21,11 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
+import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager
+import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchActionGuardManager
+import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import zzh.lifeplayer.appthemehelper.util.ColorUtil
 import zzh.lifeplayer.appthemehelper.util.MaterialValueHelper
 import zzh.lifeplayer.appthemehelper.util.ToolbarContentTintHelper
@@ -33,16 +38,13 @@ import zzh.lifeplayer.music.fragments.base.AbsMusicServiceFragment
 import zzh.lifeplayer.music.helper.MusicPlayerRemote
 import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.ThemedFastScroller
-import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
-import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
-import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager
-import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchActionGuardManager
-import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 
 class PlayingQueueFragment : AbsMusicServiceFragment(R.layout.fragment_playing_queue) {
 
     private var _binding: FragmentPlayingQueueBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
+
     private var wrappedAdapter: RecyclerView.Adapter<*>? = null
     private var recyclerViewDragDropManager: RecyclerViewDragDropManager? = null
     private var recyclerViewSwipeManager: RecyclerViewSwipeManager? = null
@@ -57,7 +59,7 @@ class PlayingQueueFragment : AbsMusicServiceFragment(R.layout.fragment_playing_q
         val duration = MusicPlayerRemote.getQueueDurationMillis(MusicPlayerRemote.position)
         return MusicUtil.buildInfoString(
             resources.getString(R.string.up_next),
-            MusicUtil.getReadableDurationString(duration)
+            MusicUtil.getReadableDurationString(duration),
         )
     }
 
@@ -68,9 +70,7 @@ class PlayingQueueFragment : AbsMusicServiceFragment(R.layout.fragment_playing_q
         setupToolbar()
         setUpRecyclerView()
 
-        binding.clearQueue.setOnClickListener {
-            MusicPlayerRemote.clearQueue()
-        }
+        binding.clearQueue.setOnClickListener { MusicPlayerRemote.clearQueue() }
         checkForPadding()
         mainActivity.collapsePanel()
     }
@@ -80,17 +80,17 @@ class PlayingQueueFragment : AbsMusicServiceFragment(R.layout.fragment_playing_q
         recyclerViewDragDropManager = RecyclerViewDragDropManager()
         recyclerViewSwipeManager = RecyclerViewSwipeManager()
 
-        playingQueueAdapter = PlayingQueueAdapter(
-            requireActivity(),
-            MusicPlayerRemote.playingQueue.toMutableList(),
-            MusicPlayerRemote.position,
-            R.layout.item_queue
-        )
+        playingQueueAdapter =
+            PlayingQueueAdapter(
+                requireActivity(),
+                MusicPlayerRemote.playingQueue.toMutableList(),
+                MusicPlayerRemote.position,
+                R.layout.item_queue,
+            )
         wrappedAdapter = recyclerViewDragDropManager?.createWrappedAdapter(playingQueueAdapter!!)
         wrappedAdapter = wrappedAdapter?.let { recyclerViewSwipeManager?.createWrappedAdapter(it) }
 
         linearLayoutManager = LinearLayoutManager(requireContext())
-
 
         binding.recyclerView.apply {
             layoutManager = linearLayoutManager
@@ -102,21 +102,22 @@ class PlayingQueueFragment : AbsMusicServiceFragment(R.layout.fragment_playing_q
         }
         linearLayoutManager.scrollToPositionWithOffset(MusicPlayerRemote.position + 1, 0)
 
-        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0) {
-                    binding.clearQueue.shrink()
-                } else if (dy < 0) {
-                    binding.clearQueue.extend()
+        binding.recyclerView.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (dy > 0) {
+                        binding.clearQueue.shrink()
+                    } else if (dy < 0) {
+                        binding.clearQueue.extend()
+                    }
                 }
             }
-        })
+        )
         ThemedFastScroller.create(binding.recyclerView)
     }
 
-    private fun checkForPadding() {
-    }
+    private fun checkForPadding() {}
 
     override fun onQueueChanged() {
         if (MusicPlayerRemote.playingQueue.isEmpty()) {
@@ -178,8 +179,7 @@ class PlayingQueueFragment : AbsMusicServiceFragment(R.layout.fragment_playing_q
         }
         playingQueueAdapter = null
         super.onDestroy()
-        if (MusicPlayerRemote.playingQueue.isNotEmpty())
-            mainActivity.expandPanel()
+        if (MusicPlayerRemote.playingQueue.isNotEmpty()) mainActivity.expandPanel()
     }
 
     private fun setupToolbar() {
@@ -187,19 +187,18 @@ class PlayingQueueFragment : AbsMusicServiceFragment(R.layout.fragment_playing_q
         binding.appBarLayout.toolbar.isTitleCentered = false
         binding.clearQueue.backgroundTintList = ColorStateList.valueOf(accentColor())
         ColorStateList.valueOf(
-            MaterialValueHelper.getPrimaryTextColor(
-                requireContext(),
-                ColorUtil.isColorLight(accentColor())
+                MaterialValueHelper.getPrimaryTextColor(
+                    requireContext(),
+                    ColorUtil.isColorLight(accentColor()),
+                )
             )
-        ).apply {
-            binding.clearQueue.setTextColor(this)
-            binding.clearQueue.iconTint = this
-        }
+            .apply {
+                binding.clearQueue.setTextColor(this)
+                binding.clearQueue.iconTint = this
+            }
         binding.appBarLayout.pinWhenScrolled()
         binding.appBarLayout.toolbar.apply {
-            setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
+            setNavigationOnClickListener { findNavController().navigateUp() }
             setTitle(R.string.now_playing_queue)
             setTitleTextAppearance(context, R.style.ToolbarTextAppearanceNormal)
             setNavigationIcon(R.drawable.ic_arrow_back)
@@ -207,4 +206,3 @@ class PlayingQueueFragment : AbsMusicServiceFragment(R.layout.fragment_playing_q
         }
     }
 }
-

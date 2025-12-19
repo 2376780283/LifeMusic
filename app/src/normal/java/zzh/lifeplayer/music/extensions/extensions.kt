@@ -3,7 +3,6 @@
 package zzh.lifeplayer.music.extensions
 
 import android.content.Context
-import android.view.Menu
 import androidx.fragment.app.FragmentActivity
 
 fun FragmentActivity.installLanguageAndRecreate(code: String, onInstallComplete: () -> Unit) {

@@ -2,17 +2,14 @@ package zzh.lifeplayer.music.model
 
 import android.content.Context
 import android.os.Parcelable
-import zzh.lifeplayer.music.repository.RealPlaylistRepository
-import zzh.lifeplayer.music.util.MusicUtil
 import kotlinx.parcelize.Parcelize
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
+import zzh.lifeplayer.music.repository.RealPlaylistRepository
+import zzh.lifeplayer.music.util.MusicUtil
 
 @Parcelize
-open class Playlist(
-    val id: Long,
-    val name: String
-) : Parcelable, KoinComponent {
+open class Playlist(val id: Long, val name: String) : Parcelable, KoinComponent {
 
     companion object {
         val empty = Playlist(-1, "")
@@ -26,10 +23,7 @@ open class Playlist(
     open fun getInfoString(context: Context): String {
         val songCount = getSongs().size
         val songCountString = MusicUtil.getSongCountString(context, songCount)
-        return MusicUtil.buildInfoString(
-            songCountString,
-            ""
-        )
+        return MusicUtil.buildInfoString(songCountString, "")
     }
 
     override fun equals(other: Any?): Boolean {

@@ -24,29 +24,19 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(indices = [Index(value = ["playlist_creator_id", "id"], unique = true)])
 class SongEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "song_key")
-    val songPrimaryKey: Long = 0L,
-    @ColumnInfo(name = "playlist_creator_id")
-    val playlistCreatorId: Long,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "song_key") val songPrimaryKey: Long = 0L,
+    @ColumnInfo(name = "playlist_creator_id") val playlistCreatorId: Long,
     val id: Long,
     val title: String,
-    @ColumnInfo(name = "track_number")
-    val trackNumber: Int,
+    @ColumnInfo(name = "track_number") val trackNumber: Int,
     val year: Int,
     val duration: Long,
     val data: String,
-    @ColumnInfo(name = "date_modified")
-    val dateModified: Long,
-    @ColumnInfo(name = "album_id")
-    val albumId: Long,
-    @ColumnInfo(name = "album_name")
-    val albumName: String,
-    @ColumnInfo(name = "artist_id")
-    val artistId: Long,
-    @ColumnInfo(name = "artist_name")
-    val artistName: String,
+    @ColumnInfo(name = "date_modified") val dateModified: Long,
+    @ColumnInfo(name = "album_id") val albumId: Long,
+    @ColumnInfo(name = "album_name") val albumName: String,
+    @ColumnInfo(name = "artist_id") val artistId: Long,
+    @ColumnInfo(name = "artist_name") val artistName: String,
     val composer: String?,
-    @ColumnInfo(name = "album_artist")
-    val albumArtist: String?
+    @ColumnInfo(name = "album_artist") val albumArtist: String?,
 ) : Parcelable

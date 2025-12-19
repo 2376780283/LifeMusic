@@ -38,7 +38,7 @@ interface GenreRepository {
 
 class RealGenreRepository(
     private val contentResolver: ContentResolver,
-    private val songRepository: RealSongRepository
+    private val songRepository: RealSongRepository,
 ) : GenreRepository {
 
     override fun genres(query: String): List<Genre> {
@@ -62,15 +62,11 @@ class RealGenreRepository(
     }
 
     private fun getSongCount(genreId: Long): Int {
-        contentResolver.query(
-            Genres.Members.getContentUri("external", genreId),
-            null,
-            null,
-            null,
-            null
-        ).use {
-            return it?.count ?: 0
-        }
+        contentResolver
+            .query(Genres.Members.getContentUri("external", genreId), null, null, null, null)
+            .use {
+                return it?.count ?: 0
+            }
     }
 
     private fun getGenreFromCursor(cursor: Cursor): Genre {
@@ -82,7 +78,11 @@ class RealGenreRepository(
 
     private fun getSongsWithNoGenre(): List<Song> {
         val selection =
-            BaseColumns._ID + " NOT IN " + "(SELECT " + Genres.Members.AUDIO_ID + " FROM audio_genres_map)"
+            BaseColumns._ID +
+                " NOT IN " +
+                "(SELECT " +
+                Genres.Members.AUDIO_ID +
+                " FROM audio_genres_map)"
         return songRepository.songs(songRepository.makeSongCursor(selection, null))
     }
 
@@ -93,7 +93,7 @@ class RealGenreRepository(
                 baseProjection,
                 IS_MUSIC,
                 null,
-                PreferenceUtil.songSortOrder
+                PreferenceUtil.songSortOrder,
             )
         } catch (e: SecurityException) {
             return null
@@ -123,7 +123,7 @@ class RealGenreRepository(
                 projection,
                 null,
                 null,
-                PreferenceUtil.genreSortOrder
+                PreferenceUtil.genreSortOrder,
             )
         } catch (e: SecurityException) {
             return null
@@ -138,7 +138,7 @@ class RealGenreRepository(
                 projection,
                 Genres.NAME + " = ?",
                 arrayOf(query),
-                PreferenceUtil.genreSortOrder
+                PreferenceUtil.genreSortOrder,
             )
         } catch (e: SecurityException) {
             return null

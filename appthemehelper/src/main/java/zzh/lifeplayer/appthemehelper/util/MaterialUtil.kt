@@ -19,10 +19,7 @@ object MaterialUtil {
         val colorState = ColorStateList.valueOf(color)
         val textColor =
             ColorStateList.valueOf(
-                MaterialValueHelper.getPrimaryTextColor(
-                    context,
-                    ColorUtil.isColorLight(color),
-                ),
+                MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.isColorLight(color))
             )
 
         if (background) {
@@ -51,10 +48,7 @@ object MaterialUtil {
 
     @JvmOverloads
     @JvmStatic
-    fun setTint(
-        textInputLayout: TextInputLayout,
-        background: Boolean = true,
-    ) {
+    fun setTint(textInputLayout: TextInputLayout, background: Boolean = true) {
         val context = textInputLayout.context
         val accentColor = ThemeStore.accentColor(context)
         val colorState = ColorStateList.valueOf(accentColor)

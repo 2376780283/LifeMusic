@@ -5,18 +5,19 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.color.ColorCallback
 import zzh.lifeplayer.appthemehelper.ThemeStore
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.appshortcuts.DynamicShortcutManager
 import zzh.lifeplayer.music.databinding.FragmentSettingsBinding
 import zzh.lifeplayer.music.extensions.findNavController
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.color.ColorCallback
 
 class SettingsFragment : Fragment(R.layout.fragment_settings), ColorCallback {
     private var _binding: FragmentSettingsBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = FragmentSettingsBinding.bind(view)
@@ -40,18 +41,19 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), ColorCallback {
     }
 
     private fun getStringFromDestination(currentDestination: NavDestination): String {
-        val idRes = when (currentDestination.id) {
-            R.id.mainSettingsFragment -> R.string.action_settings
-            R.id.audioSettings -> R.string.pref_header_audio
-            R.id.imageSettingFragment -> R.string.pref_header_images          
-            R.id.nowPlayingSettingsFragment -> R.string.now_playing
-            R.id.otherSettingsFragment -> R.string.others
-            R.id.personalizeSettingsFragment -> R.string.personalize
-            R.id.themeSettingsFragment -> R.string.general_settings_title
-            R.id.aboutActivity -> R.string.action_about
-            R.id.backup_fragment -> R.string.backup_restore_title
-            else -> R.id.action_settings
-        }
+        val idRes =
+            when (currentDestination.id) {
+                R.id.mainSettingsFragment -> R.string.action_settings
+                R.id.audioSettings -> R.string.pref_header_audio
+                R.id.imageSettingFragment -> R.string.pref_header_images
+                R.id.nowPlayingSettingsFragment -> R.string.now_playing
+                R.id.otherSettingsFragment -> R.string.others
+                R.id.personalizeSettingsFragment -> R.string.personalize
+                R.id.themeSettingsFragment -> R.string.general_settings_title
+                R.id.aboutActivity -> R.string.action_about
+                R.id.backup_fragment -> R.string.backup_restore_title
+                else -> R.id.action_settings
+            }
         return getString(idRes)
     }
 

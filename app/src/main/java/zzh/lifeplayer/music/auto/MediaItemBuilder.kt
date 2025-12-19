@@ -8,7 +8,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
 
-
 internal object AutoMediaItem {
     fun with(context: Context): Builder {
         return Builder(context)
@@ -17,6 +16,7 @@ internal object AutoMediaItem {
     internal class Builder(private val mContext: Context) {
         private var mBuilder: MediaDescriptionCompat.Builder?
         private var mFlags = 0
+
         fun path(fullPath: String): Builder {
             mBuilder?.setMediaId(fullPath)
             return this
@@ -43,26 +43,24 @@ internal object AutoMediaItem {
 
         fun icon(iconDrawableId: Int): Builder {
             mBuilder?.setIconBitmap(
-                    ResourcesCompat.getDrawable(
-                        mContext.resources,
-                        iconDrawableId,
-                        mContext.theme
-                    )?.toBitmap()
+                ResourcesCompat.getDrawable(mContext.resources, iconDrawableId, mContext.theme)
+                    ?.toBitmap()
             )
             return this
         }
 
         fun gridLayout(isGrid: Boolean): Builder {
 
-            val hints = bundleOf(
-                CONTENT_STYLE_SUPPORTED to true,
-                CONTENT_STYLE_BROWSABLE_HINT to
+            val hints =
+                bundleOf(
+                    CONTENT_STYLE_SUPPORTED to true,
+                    CONTENT_STYLE_BROWSABLE_HINT to
                         if (isGrid) CONTENT_STYLE_GRID_ITEM_HINT_VALUE
                         else CONTENT_STYLE_LIST_ITEM_HINT_VALUE,
-                CONTENT_STYLE_PLAYABLE_HINT to
+                    CONTENT_STYLE_PLAYABLE_HINT to
                         if (isGrid) CONTENT_STYLE_GRID_ITEM_HINT_VALUE
-                        else CONTENT_STYLE_LIST_ITEM_HINT_VALUE
-            )
+                        else CONTENT_STYLE_LIST_ITEM_HINT_VALUE,
+                )
             mBuilder?.setExtras(hints)
             return this
         }
@@ -87,14 +85,16 @@ internal object AutoMediaItem {
         init {
             mBuilder = MediaDescriptionCompat.Builder()
         }
-        companion  object{
+
+        companion object {
             // Hints - see https://developer.android.com/training/cars/media#default-content-style
             const val CONTENT_STYLE_SUPPORTED = "android.media.browse.CONTENT_STYLE_SUPPORTED"
-            const val CONTENT_STYLE_BROWSABLE_HINT = "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT"
-            const val CONTENT_STYLE_PLAYABLE_HINT = "android.media.browse.CONTENT_STYLE_PLAYABLE_HINT"
+            const val CONTENT_STYLE_BROWSABLE_HINT =
+                "android.media.browse.CONTENT_STYLE_BROWSABLE_HINT"
+            const val CONTENT_STYLE_PLAYABLE_HINT =
+                "android.media.browse.CONTENT_STYLE_PLAYABLE_HINT"
             const val CONTENT_STYLE_LIST_ITEM_HINT_VALUE = 1
             const val CONTENT_STYLE_GRID_ITEM_HINT_VALUE = 2
         }
-
     }
 }

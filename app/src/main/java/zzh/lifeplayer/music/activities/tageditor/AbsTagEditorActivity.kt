@@ -22,6 +22,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.io.File
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.jaudiotagger.audio.AudioFile
+import org.jaudiotagger.audio.AudioFileIO
+import org.jaudiotagger.tag.FieldKey
+import org.koin.android.ext.android.inject
 import zzh.lifeplayer.appthemehelper.util.VersionUtils
 import zzh.lifeplayer.music.R
 import zzh.lifeplayer.music.R.drawable
@@ -35,15 +44,6 @@ import zzh.lifeplayer.music.model.AudioTagInfo
 import zzh.lifeplayer.music.repository.Repository
 import zzh.lifeplayer.music.util.logD
 import zzh.lifeplayer.music.util.logE
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.jaudiotagger.audio.AudioFile
-import org.jaudiotagger.audio.AudioFileIO
-import org.jaudiotagger.tag.FieldKey
-import org.koin.android.ext.android.inject
-import java.io.File
 
 abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
     abstract val editorImage: ImageView
@@ -52,6 +52,7 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
     lateinit var saveFab: MaterialButton
     protected var id: Long = 0
         private set
+
     private var paletteColorPrimary: Int = 0
     private var songPaths: List<String>? = null
     private var savedSongPaths: List<String>? = null
@@ -59,7 +60,9 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
     private var savedTags: Map<FieldKey, String>? = null
     private var savedArtworkInfo: ArtworkInfo? = null
     private var _binding: VB? = null
-    protected val binding: VB get() = _binding!!
+    protected val binding: VB
+        get() = _binding!!
+
     private var cacheFiles = listOf<File>()
 
     abstract val bindingInflater: (LayoutInflater) -> VB
@@ -86,7 +89,9 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
     internal val albumArtist: String?
         get() {
             return try {
-                getAudioFile(songPaths!![0]).tagOrCreateAndSetDefault.getFirst(FieldKey.ALBUM_ARTIST)
+                getAudioFile(songPaths!![0])
+                    .tagOrCreateAndSetDefault
+                    .getFirst(FieldKey.ALBUM_ARTIST)
             } catch (e: Exception) {
                 logE(e)
                 null
@@ -102,6 +107,7 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
                 null
             }
         }
+
     protected val composer: String?
         get() {
             return try {
@@ -135,7 +141,9 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
     protected val albumArtistName: String?
         get() {
             return try {
-                getAudioFile(songPaths!![0]).tagOrCreateAndSetDefault.getFirst(FieldKey.ALBUM_ARTIST)
+                getAudioFile(songPaths!![0])
+                    .tagOrCreateAndSetDefault
+                    .getFirst(FieldKey.ALBUM_ARTIST)
             } catch (e: Exception) {
                 logE(e)
                 null
@@ -201,7 +209,7 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
                     return BitmapFactory.decodeByteArray(
                         artworkBinaryData,
                         0,
-                        artworkBinaryData.size
+                        artworkBinaryData.size,
                     )
                 }
                 return null
@@ -231,11 +239,12 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
             finish()
         }
         setUpViews()
-        launcher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                writeToFiles(getSongUris(), cacheFiles)
+        launcher =
+            registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
+                if (it.resultCode == Activity.RESULT_OK) {
+                    writeToFiles(getSongUris(), cacheFiles)
+                }
             }
-        }
     }
 
     private fun setUpViews() {
@@ -247,16 +256,19 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
 
     private fun setUpImageView() {
         loadCurrentImage()
-        items = listOf(
-            getString(R.string.pick_from_local_storage),
-            getString(R.string.web_search),
-            getString(R.string.remove_cover)
-        )
+        items =
+            listOf(
+                getString(R.string.pick_from_local_storage),
+                getString(R.string.web_search),
+                getString(R.string.remove_cover),
+            )
         editorImage.setOnClickListener { show }
     }
 
     private fun startImagePicker() {
-        pickArtworkImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        pickArtworkImage.launch(
+            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+        )
     }
 
     protected abstract fun loadCurrentImage()
@@ -316,14 +328,24 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
     }
 
     private fun showFab() {
-        saveFab.animate().setDuration(500).setInterpolator(OvershootInterpolator()).scaleX(1f)
-            .scaleY(1f).start()
+        saveFab
+            .animate()
+            .setDuration(500)
+            .setInterpolator(OvershootInterpolator())
+            .scaleX(1f)
+            .scaleY(1f)
+            .start()
         saveFab.isEnabled = true
     }
 
     private fun hideFab() {
-        saveFab.animate().setDuration(500).setInterpolator(OvershootInterpolator()).scaleX(0.0f)
-            .scaleY(0.0f).start()
+        saveFab
+            .animate()
+            .setDuration(500)
+            .setInterpolator(OvershootInterpolator())
+            .scaleX(0.0f)
+            .scaleY(0.0f)
+            .start()
         saveFab.isEnabled = false
     }
 
@@ -343,7 +365,7 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
 
     protected fun writeValuesToFiles(
         fieldKeyValueMap: Map<FieldKey, String>,
-        artworkInfo: ArtworkInfo?
+        artworkInfo: ArtworkInfo?,
     ) {
         hideSoftKeyboard()
 
@@ -351,13 +373,11 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
         logD(fieldKeyValueMap)
         GlobalScope.launch {
             if (VersionUtils.hasR()) {
-                cacheFiles = TagWriter.writeTagsToFilesR(
-                    this@AbsTagEditorActivity, AudioTagInfo(
-                        songPaths,
-                        fieldKeyValueMap,
-                        artworkInfo
+                cacheFiles =
+                    TagWriter.writeTagsToFilesR(
+                        this@AbsTagEditorActivity,
+                        AudioTagInfo(songPaths, fieldKeyValueMap, artworkInfo),
                     )
-                )
 
                 if (cacheFiles.isNotEmpty()) {
                     val pendingIntent =
@@ -366,11 +386,8 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
                 }
             } else {
                 TagWriter.writeTagsToFiles(
-                    this@AbsTagEditorActivity, AudioTagInfo(
-                        songPaths,
-                        fieldKeyValueMap,
-                        artworkInfo
-                    )
+                    this@AbsTagEditorActivity,
+                    AudioTagInfo(songPaths, fieldKeyValueMap, artworkInfo),
                 )
             }
         }
@@ -379,23 +396,18 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
     private fun writeTags(paths: List<String>?) {
         GlobalScope.launch {
             if (VersionUtils.hasR()) {
-                cacheFiles = TagWriter.writeTagsToFilesR(
-                    this@AbsTagEditorActivity, AudioTagInfo(
-                        paths,
-                        savedTags,
-                        savedArtworkInfo
+                cacheFiles =
+                    TagWriter.writeTagsToFilesR(
+                        this@AbsTagEditorActivity,
+                        AudioTagInfo(paths, savedTags, savedArtworkInfo),
                     )
-                )
                 val pendingIntent = MediaStore.createWriteRequest(contentResolver, getSongUris())
 
                 launcher.launch(IntentSenderRequest.Builder(pendingIntent).build())
             } else {
                 TagWriter.writeTagsToFiles(
-                    this@AbsTagEditorActivity, AudioTagInfo(
-                        paths,
-                        savedTags,
-                        savedArtworkInfo
-                    )
+                    this@AbsTagEditorActivity,
+                    AudioTagInfo(paths, savedTags, savedArtworkInfo),
                 )
             }
         }
@@ -419,23 +431,17 @@ abstract class AbsTagEditorActivity<VB : ViewBinding> : AbsBaseActivity() {
         if (cacheFiles.size == songUris.size) {
             for (i in cacheFiles.indices) {
                 contentResolver.openOutputStream(songUris[i])?.use { output ->
-                    cacheFiles[i].inputStream().use { input ->
-                        input.copyTo(output)
-                    }
+                    cacheFiles[i].inputStream().use { input -> input.copyTo(output) }
                 }
             }
         }
-        lifecycleScope.launch {
-            TagWriter.scan(this@AbsTagEditorActivity, getSongPaths())
-        }
+        lifecycleScope.launch { TagWriter.scan(this@AbsTagEditorActivity, getSongPaths()) }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         // Delete Cache Files
-        cacheFiles.forEach { file ->
-            file.delete()
-        }
+        cacheFiles.forEach { file -> file.delete() }
     }
 
     companion object {

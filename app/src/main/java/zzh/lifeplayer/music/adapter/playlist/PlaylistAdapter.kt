@@ -24,6 +24,8 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isGone
 import androidx.core.view.setPadding
 import androidx.fragment.app.FragmentActivity
+import com.bumptech.glide.Glide
+import me.zhanghai.android.fastscroll.PopupTextProvider
 import zzh.lifeplayer.appthemehelper.util.ATHUtil
 import zzh.lifeplayer.appthemehelper.util.TintHelper
 import zzh.lifeplayer.music.R
@@ -42,18 +44,18 @@ import zzh.lifeplayer.music.interfaces.IPlaylistClickListener
 import zzh.lifeplayer.music.model.Song
 import zzh.lifeplayer.music.util.MusicUtil
 import zzh.lifeplayer.music.util.PreferenceUtil
-import com.bumptech.glide.Glide
-import me.zhanghai.android.fastscroll.PopupTextProvider
 
 class PlaylistAdapter(
     override val activity: FragmentActivity,
     var dataSet: List<PlaylistWithSongs>,
     private var itemLayoutRes: Int,
-    private val listener: IPlaylistClickListener
-) : AbsMultiSelectAdapter<PlaylistAdapter.ViewHolder, PlaylistWithSongs>(
-    activity,
-    R.menu.menu_playlists_selection
-), PopupTextProvider {
+    private val listener: IPlaylistClickListener,
+) :
+    AbsMultiSelectAdapter<PlaylistAdapter.ViewHolder, PlaylistWithSongs>(
+        activity,
+        R.menu.menu_playlists_selection,
+    ),
+    PopupTextProvider {
 
     init {
         setHasStableIds(true)
@@ -86,13 +88,17 @@ class PlaylistAdapter(
     }
 
     override fun getPopupText(position: Int): String {
-        val sectionName: String = when (PreferenceUtil.playlistSortOrder) {
-            PlaylistSortOrder.PLAYLIST_A_Z, PlaylistSortOrder.PLAYLIST_Z_A -> dataSet[position].playlistEntity.playlistName
-            PlaylistSortOrder.PLAYLIST_SONG_COUNT, PlaylistSortOrder.PLAYLIST_SONG_COUNT_DESC -> dataSet[position].songs.size.toString()
-            else -> {
-                return ""
+        val sectionName: String =
+            when (PreferenceUtil.playlistSortOrder) {
+                PlaylistSortOrder.PLAYLIST_A_Z,
+                PlaylistSortOrder.PLAYLIST_Z_A -> dataSet[position].playlistEntity.playlistName
+                PlaylistSortOrder.PLAYLIST_SONG_COUNT,
+                PlaylistSortOrder.PLAYLIST_SONG_COUNT_DESC ->
+                    dataSet[position].songs.size.toString()
+                else -> {
+                    return ""
+                }
             }
-        }
         return MusicUtil.getSectionName(sectionName)
     }
 
@@ -113,11 +119,12 @@ class PlaylistAdapter(
         }
     }
 
-    private fun getIconRes(): Drawable = TintHelper.createTintedDrawable(
-        activity,
-        R.drawable.ic_playlist_play,
-        ATHUtil.resolveColor(activity, android.R.attr.colorControlNormal)
-    )
+    private fun getIconRes(): Drawable =
+        TintHelper.createTintedDrawable(
+            activity,
+            R.drawable.ic_playlist_play,
+            ATHUtil.resolveColor(activity, android.R.attr.colorControlNormal),
+        )
 
     override fun getItemCount(): Int {
         return dataSet.size
@@ -133,19 +140,14 @@ class PlaylistAdapter(
 
     override fun onMultipleItemAction(menuItem: MenuItem, selection: List<PlaylistWithSongs>) {
         when (menuItem.itemId) {
-            else -> SongsMenuHelper.handleMenuClick(
-                activity,
-                getSongList(selection),
-                menuItem.itemId
-            )
+            else ->
+                SongsMenuHelper.handleMenuClick(activity, getSongList(selection), menuItem.itemId)
         }
     }
 
     private fun getSongList(playlists: List<PlaylistWithSongs>): List<Song> {
         val songs = mutableListOf<Song>()
-        playlists.forEach {
-            songs.addAll(it.songs.toSongs())
-        }
+        playlists.forEach { songs.addAll(it.songs.toSongs()) }
         return songs
     }
 

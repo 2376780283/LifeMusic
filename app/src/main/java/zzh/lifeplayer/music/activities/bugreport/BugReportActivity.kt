@@ -71,7 +71,6 @@ open class BugReportActivity : AbsThemeActivity() {
     }
 
     companion object {
-        private const val ISSUE_TRACKER_LINK =
-            "https://github.com/2376780283/LifeMusic/issues"
+        private const val ISSUE_TRACKER_LINK = "https://github.com/2376780283/LifeMusic/issues"
     }
 }

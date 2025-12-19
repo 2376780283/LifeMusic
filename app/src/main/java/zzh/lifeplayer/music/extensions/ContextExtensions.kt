@@ -17,9 +17,11 @@ fun Context.showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
 }
 
-val Context.isLandscape: Boolean get() = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+val Context.isLandscape: Boolean
+    get() = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-val Context.isTablet: Boolean get() = resources.configuration.smallestScreenWidthDp >= 600
+val Context.isTablet: Boolean
+    get() = resources.configuration.smallestScreenWidthDp >= 600
 
 fun Context.getTintedDrawable(@DrawableRes id: Int, @ColorInt color: Int): Drawable {
     return ContextCompat.getDrawable(this, id)?.tint(color)!!

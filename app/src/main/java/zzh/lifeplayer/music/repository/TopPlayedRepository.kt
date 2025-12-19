@@ -26,11 +26,7 @@ import zzh.lifeplayer.music.providers.HistoryStore
 import zzh.lifeplayer.music.providers.SongPlayCountStore
 import zzh.lifeplayer.music.util.PreferenceUtil
 
-
-/**
- * Created by hemanths on 16/08/17.
- */
-
+/** Created by hemanths on 16/08/17. */
 interface TopPlayedRepository {
     fun recentlyPlayedTracks(): List<Song>
 
@@ -47,7 +43,7 @@ class RealTopPlayedRepository(
     private val context: Context,
     private val songRepository: RealSongRepository,
     private val albumRepository: RealAlbumRepository,
-    private val artistRepository: RealArtistRepository
+    private val artistRepository: RealArtistRepository,
 ) : TopPlayedRepository {
 
     override fun recentlyPlayedTracks(): List<Song> {
@@ -59,22 +55,21 @@ class RealTopPlayedRepository(
     }
 
     override fun notRecentlyPlayedTracks(): List<Song> {
-        val allSongs = mutableListOf<Song>().apply {
-            addAll(
-                songRepository.songs(
-                    songRepository.makeSongCursor(
-                        null, null,
-                        MediaStore.Audio.Media.DATE_ADDED + " ASC"
+        val allSongs =
+            mutableListOf<Song>().apply {
+                addAll(
+                    songRepository.songs(
+                        songRepository.makeSongCursor(
+                            null,
+                            null,
+                            MediaStore.Audio.Media.DATE_ADDED + " ASC",
+                        )
                     )
                 )
-            )
-        }
-        val playedSongs = songRepository.songs(
-            makePlayedTracksCursorAndClearUpDatabase()
-        )
-        val notRecentlyPlayedSongs = songRepository.songs(
-            makeNotRecentTracksCursorAndClearUpDatabase()
-        )
+            }
+        val playedSongs = songRepository.songs(makePlayedTracksCursorAndClearUpDatabase())
+        val notRecentlyPlayedSongs =
+            songRepository.songs(makeNotRecentTracksCursorAndClearUpDatabase())
         allSongs.removeAll(playedSongs.toSet())
         allSongs.addAll(notRecentlyPlayedSongs)
         return allSongs
@@ -87,7 +82,6 @@ class RealTopPlayedRepository(
     override fun topArtists(): List<Artist> {
         return artistRepository.splitIntoArtists(topAlbums())
     }
-
 
     private fun makeTopTracksCursorAndClearUpDatabase(): Cursor? {
         val retCursor = makeTopTracksCursorImpl()
@@ -107,10 +101,7 @@ class RealTopPlayedRepository(
         // first get the top results ids from the internal database
         val songs = HistoryStore.getInstance(context).queryRecentIds()
         songs.use {
-            return makeSortedCursor(
-                it,
-                it.getColumnIndex(HistoryStore.RecentStoreColumns.ID)
-            )
+            return makeSortedCursor(it, it.getColumnIndex(HistoryStore.RecentStoreColumns.ID))
         }
     }
 
@@ -122,14 +113,12 @@ class RealTopPlayedRepository(
         cursor.use { songs ->
             return makeSortedCursor(
                 songs,
-                songs.getColumnIndex(SongPlayCountStore.SongPlayCountColumns.ID)
+                songs.getColumnIndex(SongPlayCountStore.SongPlayCountColumns.ID),
             )
         }
     }
 
-    private fun makeSortedCursor(
-        cursor: Cursor?, idColumn: Int
-    ): SortedLongCursor? {
+    private fun makeSortedCursor(cursor: Cursor?, idColumn: Int): SortedLongCursor? {
 
         if (cursor != null && cursor.moveToFirst()) {
             // create the list of ids to select against
@@ -158,11 +147,7 @@ class RealTopPlayedRepository(
             val songCursor = songRepository.makeSongCursor(selection.toString(), null)
             if (songCursor != null) {
                 // now return the wrapped TopTracksCursor to handle sorting given order
-                return SortedLongCursor(
-                    songCursor,
-                    order,
-                    BaseColumns._ID
-                )
+                return SortedLongCursor(songCursor, order, BaseColumns._ID)
             }
         }
 
@@ -172,27 +157,27 @@ class RealTopPlayedRepository(
     private fun makeRecentTracksCursorAndClearUpDatabase(): Cursor? {
         return makeRecentTracksCursorAndClearUpDatabaseImpl(
             ignoreCutoffTime = false,
-            reverseOrder = false
+            reverseOrder = false,
         )
     }
 
     private fun makePlayedTracksCursorAndClearUpDatabase(): Cursor? {
         return makeRecentTracksCursorAndClearUpDatabaseImpl(
             ignoreCutoffTime = true,
-            reverseOrder = false
+            reverseOrder = false,
         )
     }
 
     private fun makeNotRecentTracksCursorAndClearUpDatabase(): Cursor? {
         return makeRecentTracksCursorAndClearUpDatabaseImpl(
             ignoreCutoffTime = false,
-            reverseOrder = true
+            reverseOrder = true,
         )
     }
 
     private fun makeRecentTracksCursorAndClearUpDatabaseImpl(
         ignoreCutoffTime: Boolean,
-        reverseOrder: Boolean
+        reverseOrder: Boolean,
     ): SortedLongCursor? {
         val retCursor = makeRecentTracksCursorImpl(ignoreCutoffTime, reverseOrder)
         // clean up the databases with any ids not found
@@ -210,17 +195,15 @@ class RealTopPlayedRepository(
 
     private fun makeRecentTracksCursorImpl(
         ignoreCutoffTime: Boolean,
-        reverseOrder: Boolean
+        reverseOrder: Boolean,
     ): SortedLongCursor? {
         val cutoff =
-            (if (ignoreCutoffTime) 0 else PreferenceUtil.getRecentlyPlayedCutoffTimeMillis()).toLong()
+            (if (ignoreCutoffTime) 0 else PreferenceUtil.getRecentlyPlayedCutoffTimeMillis())
+                .toLong()
         val songs =
             HistoryStore.getInstance(context).queryRecentIds(cutoff * if (reverseOrder) -1 else 1)
         return songs.use {
-            makeSortedCursor(
-                it,
-                it.getColumnIndex(HistoryStore.RecentStoreColumns.ID)
-            )
+            makeSortedCursor(it, it.getColumnIndex(HistoryStore.RecentStoreColumns.ID))
         }
     }
 }
